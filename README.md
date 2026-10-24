@@ -139,7 +139,7 @@ Mede a taxa de transferência e latência física real dos discos evitando disto
 Diagnóstico de adaptadores de rede, qualidade de sinal Wi-Fi ou conexão cabeada, IP local, IP público e provedor. Inclui velocímetro de Download e Upload integrado via **Cloudflare Global Edge Network**, jitter, latência mundial e ações de reparo rápido em 1 clique (Limpar DNS, Renovar IP, Reset Winsock, Reset TCP/IP).
 
 <p align="center">
-  <img src="docs/screenshots/11_network_speed_ping.png" alt="Central de Rede e SpeedTest" width="950">
+ 
 </p>
 
 ---
