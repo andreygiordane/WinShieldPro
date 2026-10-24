@@ -48,14 +48,18 @@ Não é necessário instalar Python, dependências ou compiladores para utilizar
 Painel de comando principal com diagnóstico instantâneo de processador, uso e alocação de RAM, partição do sistema, badges S.M.A.R.T. de integridade física dos discos e especificações de placa-mãe, BIOS e TPM.
 
 <p align="center">
-  <img src="docs/screenshots/01_dashboard_dark.png" alt="Dashboard Modo Escuro" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194019" src="https://github.com/user-attachments/assets/1097f47e-018d-4239-b619-3265c4ed45ce" />
+  
+
+
 </p>
 
 <details>
   <summary><strong>🌓 Alternância de Tema: Modo Claro (Light Theme)</strong> (Clique para expandir)</summary>
   <br>
   <p align="center">
-    <img src="docs/screenshots/02_dashboard_light.png" alt="Dashboard Modo Claro" width="950">
+   <img width="1917" height="1079" alt="Captura de tela 2026-10-23 194026" src="https://github.com/user-attachments/assets/7429099a-434d-4e8a-9552-81962f37c172" />
+
   </p>
 </details>
 
@@ -65,7 +69,8 @@ Painel de comando principal com diagnóstico instantâneo de processador, uso e 
 Extração de nível de engenharia de arquitetura de CPU: litografia de fabricação, codinome (ex: *AMD Zen 3 Vermeer / Intel Raptor Lake*), multiplicador de clock dinâmico, conjunto de instruções (x86-64, AVX2, FMA3, AES, SHA) e mapeamento hierárquico de caches L1 D-Cache, L1 I-Cache, L2 e L3 unificado.
 
 <p align="center">
-  <img src="docs/screenshots/03_core_engine_cpu.png" alt="WinShield CoreEngine CPU" width="950">
+  <img width="1916" height="1079" alt="Captura de tela 2026-10-23 194033" src="https://github.com/user-attachments/assets/6ef6ba6d-acde-456a-9dfa-e00ebd0a4385" />
+
 </p>
 
 ---
@@ -74,7 +79,8 @@ Extração de nível de engenharia de arquitetura de CPU: litografia de fabrica�
 Mapeamento de GPU dedicada e integrada: Die, contagem de transistores, núcleos de computação (CUDA Cores / Stream Processors), barramento de memória GDDR6/X, largura de banda em GB/s e sensores de temperatura de GPU, Hotspot, consumo em Watts e clocks em tempo real.
 
 <p align="center">
-  <img src="docs/screenshots/04_vision_engine_gpu.png" alt="WinShield VisionEngine GPU" width="950">
+  <img width="1917" height="1079" alt="Captura de tela 2026-10-23 194038" src="https://github.com/user-attachments/assets/c24db587-f985-40eb-8249-a46e0191f3e9" />
+
 </p>
 
 ---
@@ -83,7 +89,8 @@ Mapeamento de GPU dedicada e integrada: Die, contagem de transistores, núcleos 
 Mapeamento de pentes físicos nos slots da placa-mãe (SPD), frequência real em MHz, tensão em Volts, part número e número de série dos módulos. Conta com botão de **Purga de Cache Standby** e teste de integridade física de células de memória (*RAMGuard™86 Architecture*).
 
 <p align="center">
-  <img src="docs/screenshots/05_ramguard_memory.png" alt="WinShield RAMGuard" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194046" src="https://github.com/user-attachments/assets/47974dc8-828f-468c-a9bc-8cf94165a683" />
+
 </p>
 
 ---
@@ -92,7 +99,8 @@ Mapeamento de pentes físicos nos slots da placa-mãe (SPD), frequência real em
 Auditoria de barramento Plug & Play (PnP), identificação de drivers homologados Microsoft WHQL e **pareamento inteligente com servidores de grandes fabricantes**. O WinShield Pro consulta as CDNs oficiais da **NVIDIA**, **AMD**, **Intel** e **Realtek**, permitindo baixar e instalar os drivers mais recentes diretamente pela interface.
 
 <p align="center">
-  <img src="docs/screenshots/06_devices_manager.png" alt="Gerenciador de Dispositivos e Drivers" width="950">
+ <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194058" src="https://github.com/user-attachments/assets/0581287f-17e2-43a2-a95b-0cbf947abf22" />
+
 </p>
 
 ---
@@ -101,7 +109,8 @@ Auditoria de barramento Plug & Play (PnP), identificação de drivers homologado
 Bateria de estresse multithread paralelo com carga combinada de CPU, FPU, Caches, Memória RAM e GPU. Conta com osciloscópio térmico por núcleo em tempo real e sensor automatizado de **CPU Thermal Throttling**.
 
 <p align="center">
-  <img src="docs/screenshots/07_stresspulse_stability.png" alt="WinShield StressPulse" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194105" src="https://github.com/user-attachments/assets/43b076f5-51b7-4914-8433-dfc48c88b88f" />
+
 </p>
 
 ---
@@ -111,14 +120,16 @@ Bateria de estresse multithread paralelo com carga combinada de CPU, FPU, Caches
 * **SurfaceScan:** Varredura física em **1.200 blocos LBA** com I/O direto (`FILE_FLAG_NO_BUFFERING`) identificando blocos rápidos (< 12ms), normais, lentos (> 180ms) e danificados (Bad Blocks / CRC).
 
 <p align="center">
-  <img src="docs/screenshots/08_diskguard_smart.png" alt="WinShield DiskGuard" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194111" src="https://github.com/user-attachments/assets/29e51053-ee91-468f-8c06-5c7a2c31cde4" />
+
 </p>
 
 <details>
   <summary><strong>🔍 Visualizar Grade de Superfície LBA (SurfaceScan)</strong> (Clique para expandir)</summary>
   <br>
   <p align="center">
-    <img src="docs/screenshots/09_surfacescan_sectors.png" alt="WinShield SurfaceScan" width="950">
+   <img width="1916" height="1079" alt="Captura de tela 2026-10-23 194118" src="https://github.com/user-attachments/assets/586906d1-7151-433b-9510-7ff6d2d9b8a1" />
+
   </p>
 </details>
 
@@ -130,7 +141,8 @@ Mede a taxa de transferência e latência física real dos discos evitando disto
 * **RND4K Q32T1 / Q1T1:** Leitura e gravação aleatória de 4 KiB com cálculo real de **IOPS** e microssegundos ($\mu\text{s}$).
 
 <p align="center">
-  <img src="docs/screenshots/10_diskspeed_turbo.png" alt="WinShield DiskSpeed Turbo" width="950">
+  <img width="1917" height="1079" alt="Captura de tela 2026-10-23 194129" src="https://github.com/user-attachments/assets/e9e9eb60-8897-46ec-9a4f-b175f1b945da" />
+
 </p>
 
 ---
@@ -139,7 +151,8 @@ Mede a taxa de transferência e latência física real dos discos evitando disto
 Diagnóstico de adaptadores de rede, qualidade de sinal Wi-Fi ou conexão cabeada, IP local, IP público e provedor. Inclui velocímetro de Download e Upload integrado via **Cloudflare Global Edge Network**, jitter, latência mundial e ações de reparo rápido em 1 clique (Limpar DNS, Renovar IP, Reset Winsock, Reset TCP/IP).
 
 <p align="center">
- 
+ <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194137" src="https://github.com/user-attachments/assets/b3a1ceb7-d1ec-4ab4-8550-d8c6ca19069b" />
+
 </p>
 
 ---
@@ -148,7 +161,8 @@ Diagnóstico de adaptadores de rede, qualidade de sinal Wi-Fi ou conexão cabead
 Motor de alta performance em C (`psutil` + `Win32 EnumWindows`) capaz de mapear centenas de processos em **0,14s**. Separa de forma inteligente entre **Softwares do Usuário** e **Serviços do Windows**, associando janelas abertas, consumo de memória, ícones de marca e atalhos rápidos para Finalizar ou Desinstalar.
 
 <p align="center">
-  <img src="docs/screenshots/12_running_apps.png" alt="Gerenciador de Aplicativos em Execução" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194151" src="https://github.com/user-attachments/assets/fdc74937-c279-45bf-94c2-1818a4081e9f" />
+
 </p>
 
 ---
@@ -157,7 +171,8 @@ Motor de alta performance em C (`psutil` + `Win32 EnumWindows`) capaz de mapear 
 Mapeia o Registro do Windows (HKLM 32/64 bits e HKCU) localizando softwares instalados e **aplicativos ocultos (`SystemComponent = 1`)**. Permite desocultar programas no Painel de Controle, gerenciar pacotes AppX / UWP da Microsoft Store, serviços de terceiros e programas na Inicialização Automática (Startup).
 
 <p align="center">
-  <img src="docs/screenshots/13_software_audit.png" alt="Auditoria de Programas Ocultos" width="950">
+ <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194200" src="https://github.com/user-attachments/assets/79c4fa39-9143-4a7b-853c-033a6e26f07b" />
+
 </p>
 
 ---
@@ -166,7 +181,8 @@ Mapeia o Registro do Windows (HKLM 32/64 bits e HKCU) localizando softwares inst
 Módulo de segurança com varredura heurística em tempo real contra ataques de *Masquerade* (binários com nomes críticos como `svchost.exe` fora do System32), scanner de scripts e executáveis não assinados em `%TEMP%`, varredura profunda de integridade do System32 e integração direta com o **Microsoft Defender**.
 
 <p align="center">
-  <img src="docs/screenshots/14_threathunter_antivirus.png" alt="Antivírus e ThreatHunter" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194209" src="https://github.com/user-attachments/assets/de41219d-09c3-472d-8677-3f80f79398dd" />
+
 </p>
 
 ---
@@ -175,7 +191,8 @@ Módulo de segurança com varredura heurística em tempo real contra ataques de 
 Varredura segura e exclusão de gigabytes acumulados em arquivos temporários (`%TEMP%`, `Windows\Temp`), cache de instaladores do Windows Update (`SoftwareDistribution`), relatórios de erro e despejos de memória (`WER` / `CrashDumps`), miniaturas do Explorer, logs CBS/DISM e caches de navegadores (Chrome, Edge, Brave e Firefox).
 
 <p align="center">
-  <img src="docs/screenshots/15_deep_cleaner.png" alt="Limpeza Profunda do Sistema" width="950">
+ <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194218" src="https://github.com/user-attachments/assets/23c49597-b589-46e5-a54d-bbfb9df12a09" />
+
 </p>
 
 ---
@@ -184,7 +201,8 @@ Varredura segura e exclusão de gigabytes acumulados em arquivos temporários (`
 Desbloqueia e ativa com 1 clique o plano oculto **Desempenho Máximo (Ultimate Performance)** do Windows para resposta instantânea de CPU sem estacionamento de núcleos (Core Parking). Permite gerenciar esquemas instalados e criar planos personalizados com frequências dinâmicas.
 
 <p align="center">
-  <img src="docs/screenshots/16_power_manager.png" alt="Planos de Energia e Turbo" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194224" src="https://github.com/user-attachments/assets/6d2cac96-75a7-4fad-932a-443ade00fbdb" />
+
 </p>
 
 ---
@@ -199,7 +217,8 @@ Motor inteligente que identifica a configuração do computador e recomenda otim
 * **Debloat do Windows:** Desativação de telemetrias nativas de rastreamento (`DiagTrack` e `dmwappushservice`).
 
 <p align="center">
-  <img src="docs/screenshots/17_system_optimizer.png" alt="Otimizações do Sistema e Debloat" width="950">
+  <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194232" src="https://github.com/user-attachments/assets/e411585f-2d34-4cf6-847b-9fa954d7719d" />
+
 </p>
 
 ---
@@ -208,7 +227,8 @@ Motor inteligente que identifica a configuração do computador e recomenda otim
 Console de execução de comandos com elevação administrativa automática, atalhos de diagnósticos em 1 clique (`netstat`, maiores consumidores de RAM, volumes de disco) e visualização de saída estruturada.
 
 <p align="center">
-  <img src="docs/screenshots/18_terminal_powershell.png" alt="Terminal PowerShell e CMD" width="950">
+ <img width="1919" height="1079" alt="Captura de tela 2026-10-23 194241" src="https://github.com/user-attachments/assets/cc4a6292-1dc4-40ec-b7fe-9a84b92d7a49" />
+
 </p>
 
 ---
