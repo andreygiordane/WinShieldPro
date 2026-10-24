@@ -1,0 +1,315 @@
+<section id="view-optimize" class="view-panel hidden space-y-6">
+                <!-- PERFIL ADAPTATIVO DE HARDWARE (DETECTA O HARDWARE REAL DA MÁQUINA) -->
+                <div class="bg-dark-850 p-6 rounded-3xl border border-cyan-500/30 shadow-xl space-y-5 relative overflow-hidden">
+                    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
+
+                    <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-800 pb-4 relative z-10">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-indigo-600/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 flex-shrink-0 shadow-lg shadow-cyan-500/10">
+                                <i data-lucide="cpu" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Motor Adaptativo de Hardware</span>
+                                    <span id="opt-hw-chassis-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700">Detectando...</span>
+                                </div>
+                                <h2 id="opt-hw-profile-title" class="text-lg font-extrabold text-white mt-1">Analisando Arquitetura de Hardware desta Máquina...</h2>
+                                <p id="opt-hw-profile-desc" class="text-xs text-slate-300 mt-0.5">Identificando CPU, topologia de RAM, GPU e tipo de armazenamento (NVMe/SSD/HDD) para selecionar os serviços ideais de otimização.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <button onclick="loadOptimizationProfile(true)"
+                                class="btn-action-secondary px-3.5 py-2.5 rounded-xl text-xs font-bold text-cyan-300 border-cyan-500/40 hover:border-cyan-400 flex items-center gap-1.5">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                <span>Reanalisar Hardware</span>
+                            </button>
+                            <button onclick="runHardwareAdaptivePipeline()"
+                                class="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition">
+                                <i data-lucide="wand-2" class="w-4 h-4"></i>
+                                <span>Otimizar para Meu Hardware</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RESUMO DO HARDWARE DETECTADO -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono relative z-10">
+                        <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block font-sans">Processador Detectado</span>
+                            <strong id="opt-hw-cpu" class="text-white truncate block">--</strong>
+                            <span id="opt-hw-threads" class="text-[10px] text-cyan-400">0C / 0T</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block font-sans">Memória RAM Física</span>
+                            <strong id="opt-hw-ram" class="text-indigo-300 truncate block">0 GB</strong>
+                            <span id="opt-hw-ram-tier" class="text-[10px] text-slate-400">Calculando perfil...</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block font-sans">Acelerador Gráfico (GPU)</span>
+                            <strong id="opt-hw-gpu" class="text-emerald-300 truncate block">--</strong>
+                            <span id="opt-hw-gpu-type" class="text-[10px] text-slate-400">Barramento PCIe/WDDM</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block font-sans">Armazenamento Primário</span>
+                            <strong id="opt-hw-storage" class="text-amber-300 truncate block">--</strong>
+                            <span id="opt-hw-storage-model" class="text-[10px] text-slate-400 truncate block">--</span>
+                        </div>
+                    </div>
+
+                    <!-- CATÁLOGO DINÂMICO DE SERVIÇOS ADAPTADOS AO HARDWARE -->
+                    <div class="space-y-3 relative z-10">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Serviços de Otimização Adaptados ao Seu Hardware (Recomendados em Destaque)</span>
+                            </h3>
+                            <span id="opt-recommended-count" class="text-[11px] font-mono text-cyan-400 font-bold">-- recomendados</span>
+                        </div>
+                        <div id="opt-adaptive-services-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">
+                            <!-- Preenchido dinamicamente por loadOptimizationProfile() -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BANNER HERO: OTIMIZAÇÃO COMPLETA & DEBLOAT -->
+                <div
+                    class="bg-gradient-to-r from-purple-950/60 via-dark-850 to-indigo-950/60 p-6 rounded-3xl border border-purple-500/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-1.5">
+                        <span
+                            class="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30 inline-flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-3 h-3 text-purple-400"></i>
+                            <span data-i18n="optimize.hero_badge">Pipeline Automatizado</span>
+                        </span>
+                        <h2 class="text-xl font-extrabold text-white" data-i18n="optimize.hero_title">Otimização
+                            Completa do Sistema & Debloat</h2>
+                        <p class="text-xs text-slate-300 max-w-xl leading-relaxed" data-i18n="optimize.hero_desc">
+                            Executa a rotina profissional de otimização em 6 etapas: Ponto de restauração, desativação
+                            de telemetria e coleta em segundo plano, redução de latência de menus, Modo de Jogo com
+                            HAGS, TRIM em SSDs e limpeza de memória RAM.
+                        </p>
+                    </div>
+                    <button onclick="runCompleteOptimizationPipeline()"
+                        class="flex-shrink-0 px-6 py-3.5 rounded-2xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-xl shadow-purple-500/25 flex items-center justify-center gap-2 transform hover:scale-105 transition">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span data-i18n="optimize.btn_run_all">Executar Otimização Completa</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- SFC -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-3">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.sfc_title">SFC /SCANNOW</h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.sfc_desc">Verifica e repara a
+                                integridade de todos os binários protegidos do Windows.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('sfc')"
+                            class="mt-5 btn-action-primary w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_sfc">Executar SFC</span>
+                        </button>
+                    </div>
+
+                    <!-- DISM RESTOREHEALTH -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+                                <i data-lucide="cpu" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.dism_title">DISM RestoreHealth
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.dism_desc">Repara a imagem de
+                                componentes oficial do Windows via repositório limpo.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('dism')"
+                            class="mt-5 btn-action-primary w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_dism">Executar DISM</span>
+                        </button>
+                    </div>
+
+                    <!-- TELEMETRIA DEBLOAT -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-rose-500/30 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-3">
+                                <i data-lucide="eye-off" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.telem_title">Desativar
+                                Telemetria (Debloat)</h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.telem_desc">Desativa DiagTrack e
+                                coleta de dados em segundo plano que consomem CPU e disco.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('telemetry')"
+                            class="mt-5 btn-action-danger w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_telem">Desativar Telemetria</span>
+                        </button>
+                    </div>
+
+                    <!-- TRIM & OTIMIZAR UNIDADES -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center mb-3">
+                                <i data-lucide="fast-forward" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.trim_title">TRIM & Otimizar
+                                Discos</h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.trim_desc">Dispara o comando TRIM
+                                nativo para restaurar velocidade máxima de escrita em SSDs.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('trim')"
+                            class="mt-5 btn-action-success w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="fast-forward" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_trim">Executar TRIM</span>
+                        </button>
+                    </div>
+
+                    <!-- LIMPEZA DE RAM -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+                                <i data-lucide="activity" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.ram_title">Limpeza de Memória
+                                RAM</h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.ram_desc">Esvazia o working set e
+                                descarta páginas em standby sem fechar programas.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('clean_ram')"
+                            class="mt-5 btn-action-success w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_ram">Liberar RAM</span>
+                        </button>
+                    </div>
+
+                    <!-- PONTO DE RESTAURAÇÃO -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-3">
+                                <i data-lucide="bookmark" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white" data-i18n="optimize.restore_title">Ponto de
+                                Restauração</h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="optimize.restore_desc">Cria um snapshot de
+                                segurança oficial do Windows para recuperação rápida.</p>
+                        </div>
+                        <button onclick="runSingleOptimizationModal('restore_point')"
+                            class="mt-5 btn-action-secondary text-cyan-300 border-cyan-500/40 hover:border-cyan-400 w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="optimize.btn_restore">Criar Snapshot</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MÓDULOS AVANÇADOS DE PERFORMANCE, KERNEL, JOGOS & REDE -->
+                <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                                <i data-lucide="cpu" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white" data-i18n="optimize.adv_section_title">Aceleração Avançada de Kernel, Jogos, NTFS & Rede</h3>
+                                <p class="text-[11px] text-slate-400" data-i18n="optimize.adv_section_desc">Módulos adicionais de baixa latência, limpeza de componentes WinSxS e reparo estrutural.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">5 MÓDULOS EXTRAS</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+                        <!-- EFEITOS VISUAIS DE ALTA RESPOSTA -->
+                        <div class="bg-dark-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/25 flex items-center justify-center mb-2.5">
+                                    <i data-lucide="zap" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white" data-i18n="optimize.vfx_title">Resposta Visual 0ms</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" data-i18n="optimize.vfx_desc">Zera o atraso de menus (MenuShowDelay=0) e ajusta o Explorer para máxima fluidez.</p>
+                            </div>
+                            <button onclick="runSingleOptimizationModal('visual_fx')"
+                                class="mt-4 btn-action-primary w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="optimize.btn_vfx">Aplicar Latência 0ms</span>
+                            </button>
+                        </div>
+
+                        <!-- MODO DE JOGO & HAGS GPU -->
+                        <div class="bg-dark-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/25 flex items-center justify-center mb-2.5">
+                                    <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white" data-i18n="optimize.game_title">Modo Jogo & GPU HAGS</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" data-i18n="optimize.game_desc">Ativa AutoGameMode e Agendamento de GPU Acelerado por Hardware (HwSchMode=2).</p>
+                            </div>
+                            <button onclick="runSingleOptimizationModal('game_mode')"
+                                class="mt-4 btn-action-primary w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i data-lucide="gamepad-2" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="optimize.btn_game">Ativar HAGS & Game</span>
+                            </button>
+                        </div>
+
+                        <!-- LIMPEZA PROFUNDA WINSXS -->
+                        <div class="bg-dark-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/25 flex items-center justify-center mb-2.5">
+                                    <i data-lucide="layers" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white" data-i18n="optimize.winsxs_title">Limpeza WinSxS (DISM)</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" data-i18n="optimize.winsxs_desc">Remove versões obsoletas de pacotes de atualização na pasta C:\Windows\WinSxS.</p>
+                            </div>
+                            <button onclick="runSingleOptimizationModal('dism_cleanup')"
+                                class="mt-4 btn-action-primary w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="optimize.btn_winsxs">Limpar WinSxS</span>
+                            </button>
+                        </div>
+
+                        <!-- CHKDSK ONLINE NTFS -->
+                        <div class="bg-dark-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 flex items-center justify-center mb-2.5">
+                                    <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white" data-i18n="optimize.chkdsk_title">Verificação NTFS Online</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" data-i18n="optimize.chkdsk_desc">Executa chkdsk C: /scan online sem reiniciar para diagnosticar erros no sistema de arquivos.</p>
+                            </div>
+                            <button onclick="runSingleOptimizationModal('chkdsk')"
+                                class="mt-4 btn-action-success w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="optimize.btn_chkdsk">Verificar Disco C:</span>
+                            </button>
+                        </div>
+
+                        <!-- RESET DE PILHA DE REDE -->
+                        <div class="bg-dark-900/90 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 flex items-center justify-center mb-2.5">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white" data-i18n="optimize.netreset_title">Reset Pilha TCP/IP</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" data-i18n="optimize.netreset_desc">Redefine Winsock, pilha TCP/IP, renova concessão DHCP e limpa cache DNS.</p>
+                            </div>
+                            <button onclick="runSingleOptimizationModal('network_reset')"
+                                class="mt-4 btn-action-secondary text-cyan-300 border-cyan-500/40 hover:border-cyan-400 w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="optimize.btn_netreset">Resetar Rede</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- ============================================================= -->
+            <!-- VIEW 9: TERMINAL (CMD & POWERSHELL ADMINISTRATIVO) -->
+            <!-- ============================================================= -->

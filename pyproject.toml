@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "winshield-pro"
+version = "6.2.0"
+description = "WinShield Pro Enterprise - Sistema Profissional de Otimização e Estabilidade para Windows"
+authors = [{ name = "Andrey Giordane" }]
+license = { text = "Proprietary" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "psutil>=5.9.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

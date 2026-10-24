@@ -1,0 +1,105 @@
+# ==============================================================================
+# .gitignore - WinShield Pro Enterprise
+# ==============================================================================
+
+# --- SEGURANÇA, CREDENCIAIS E CERTIFICADOS DIGITAIS (NUNCA COMMITTAR) ---
+*.pfx
+*.p12
+*.cer
+*.crt
+*.key
+*.pem
+*.der
+*.keystore
+*.jks
+*.p8
+*.pkcs12
+AndreyGiordane_CodeSigning.pfx
+AndreyGiordane_PublicKey.cer
+certificates/*.pfx
+certificates/*.cer
+certificates/*.p12
+certificates/*.key
+certificates/*.pem
+certificates/*.crt
+certificates/*.der
+credentials/
+secrets/
+certs/
+
+# --- VARIÁVEIS DE AMBIENTE & CONFIGURAÇÕES LOCAIS ---
+.env
+.env.local
+.env.*
+!.env.example
+
+# --- COMPILAÇÃO & BUILD ARTIFACTS (PyInstaller / Executáveis) ---
+build/
+dist/*
+!dist/WinShieldPro.exe
+*.spec.bak
+WinShieldProBuild/
+*.dll
+*.so
+*.dylib
+!backend/bin/*.exe
+
+# --- PYTHON (Bytecode & Caches) ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# --- TESTES & COBERTURA ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+
+# --- SCRATCH & ARQUIVOS TEMPORÁRIOS DE DESENVOLVIMENTO ---
+scratch/
+*.corrupt_copy
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# --- LOGS & QUARENTENA ---
+*.log
+logs/
+quarantine/
+WinShield_Quarantine/
+C:\WinShield_Quarantine/
+
+# --- AMBIENTES DE DESENVOLVIMENTO & EDITORES (IDE) ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- ARQUIVOS DO SISTEMA OPERACIONAL ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes

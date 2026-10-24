@@ -1,0 +1,181 @@
+<section id="view-vision" class="view-panel hidden space-y-6">
+                <!-- SUB-MENU DAS ABAS DO VISION ENGINE™ -->
+                <div
+                    class="bg-dark-850 p-3 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 overflow-x-auto">
+                        <button onclick="switchVisionSubTab('card')" id="vision-subtab-btn-card"
+                            class="subtab-btn vision-subtab-btn active">
+                            <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="vision.tab_gpu">Placa Gráfica (Graphics Card)</span>
+                        </button>
+                        <button onclick="switchVisionSubTab('sensors')" id="vision-subtab-btn-sensors"
+                            class="subtab-btn vision-subtab-btn">
+                            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="vision.tab_sensors">Sensores em Tempo Real (Sensors)</span>
+                        </button>
+                    </div>
+                    <button onclick="loadVisionInfo()"
+                        class="btn-action-secondary flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span data-i18n="vision.btn_refresh">Atualizar Vision Engine™</span>
+                    </button>
+                </div>
+
+                <!-- SUBVIEW 1: GRAPHICS CARD SPECS -->
+                <div id="vision-subview-card" class="vision-subview space-y-4">
+                    <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                            <div>
+                                <span class="text-[10px] text-slate-500 uppercase font-mono block"
+                                    data-i18n="vision.adapter_name">Nome do Adaptador Gráfico</span>
+                                <h2 id="vision-card-name" class="text-xl font-black text-white">Detectando Adaptador Gráfico...
+                                </h2>
+                            </div>
+                            <span id="vision-card-vram"
+                                class="text-xs px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-400 font-mono font-bold border border-emerald-500/30">0
+                                MB</span>
+                        </div>
+
+                        <!-- GRID DE ESPECIFICAÇÕES VISION ENGINE™ ENTERPRISE -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.architecture">Arquitetura / GPU</span>
+                                <strong id="vision-card-arch" class="text-slate-200">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans">Litografia / Die</span>
+                                <strong id="vision-card-process" class="text-slate-200">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.transistors">Transistores</span>
+                                <strong id="vision-card-transistors" class="text-slate-200">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans">Shaders / Compute Units</span>
+                                <strong id="vision-card-cores" class="text-emerald-400 text-sm">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.bus_width">Barramento VRAM</span>
+                                <strong id="vision-card-bus" class="text-slate-200">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.bandwidth">Largura de Banda</span>
+                                <strong id="vision-card-bandwidth" class="text-cyan-400">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.driver_ver">Versão do Driver</span>
+                                <strong id="vision-card-driver" class="text-slate-200">--</strong>
+                            </div>
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
+                                <span class="text-slate-500 text-[10px] block font-sans"
+                                    data-i18n="vision.resolution">Resolução / Tela</span>
+                                <strong id="vision-card-res" class="text-slate-200">--</strong>
+                            </div>
+                        </div>
+
+                        <!-- RECURSOS AVANÇADOS -->
+                        <div class="p-4 rounded-xl bg-dark-900 border border-slate-800 text-xs">
+                            <span
+                                class="text-xs font-bold text-emerald-400 uppercase tracking-wide block mb-2 font-sans"
+                                data-i18n="vision.features">Recursos Gráficos & Computacionais Suportados</span>
+                            <div id="vision-features-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+                                <div class="flex items-center gap-1.5 text-slate-400"><i data-lucide="loader"
+                                        class="w-3.5 h-3.5 text-emerald-400 animate-spin"></i> Detectando recursos da GPU...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBVIEW 2: LIVE SENSORS -->
+                <div id="vision-subview-sensors" class="vision-subview hidden space-y-4">
+                    <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                                Telemetria em Tempo Real (WDDM / GPU Sensors)
+                            </h3>
+                            <span class="text-[11px] text-slate-400 font-mono">Atualização contínua a cada 1.5s</span>
+                        </div>
+
+                        <!-- GRID DE SENSORES -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- GPU TEMP -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block"
+                                        data-i18n="vision.temp">Temperatura da GPU</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">Monitoramento térmico</span>
+                                </div>
+                                <span id="vision-sensor-temp" class="text-2xl font-black font-mono text-emerald-400">--
+                                    °C</span>
+                            </div>
+
+                            <!-- HOT SPOT TEMP -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block">GPU Hot Spot</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">Ponto mais quente da
+                                        matriz</span>
+                                </div>
+                                <span id="vision-sensor-hotspot" class="text-2xl font-black font-mono text-amber-400">--
+                                    °C</span>
+                            </div>
+
+                            <!-- GPU USAGE -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block" data-i18n="vision.load">Carga da
+                                        GPU (Usage)</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">Processamento gráfico
+                                        ativo</span>
+                                </div>
+                                <span id="vision-sensor-usage" class="text-2xl font-black font-mono text-cyan-400">0
+                                    %</span>
+                            </div>
+
+                            <!-- VRAM USAGE -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block"
+                                        data-i18n="vision.vram_used">Memória de Vídeo Utilizada</span>
+                                    <span id="vision-sensor-vram-sub" class="text-[10px] text-slate-500 font-mono">0 /
+                                        0 MB</span>
+                                </div>
+                                <span id="vision-sensor-vram" class="text-2xl font-black font-mono text-indigo-400">0
+                                    MB</span>
+                            </div>
+
+                            <!-- POWER DRAW -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block" data-i18n="vision.power">Consumo
+                                        de Energia (Power)</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">Telemetria de energia</span>
+                                </div>
+                                <span id="vision-sensor-power" class="text-2xl font-black font-mono text-yellow-400">--
+                                    W</span>
+                            </div>
+
+                            <!-- CLOCKS -->
+                            <div class="bench-card p-4 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-300 block">Clock GPU / Memória</span>
+                                    <span id="vision-sensor-memclock"
+                                        class="text-[10px] text-slate-500 font-mono">Memória: -- MHz</span>
+                                </div>
+                                <span id="vision-sensor-coreclock"
+                                    class="text-xl font-black font-mono text-emerald-400">-- MHz</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW: TELEMETRIA PROFUNDA DE MEMÓRIA & WINSHIELD RAMGUARD™ PRO -->
+            <!-- ============================================================= -->

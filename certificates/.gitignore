@@ -1,0 +1,4 @@
+# Ignorar todos os certificados, chaves privadas e arquivos nesta pasta
+*
+!.gitignore
+!README.md

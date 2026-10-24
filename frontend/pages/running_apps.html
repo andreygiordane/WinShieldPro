@@ -1,0 +1,123 @@
+<section id="view-running-apps" class="view-panel hidden space-y-4">
+                <!-- BARRA DE CONTROLE SUPERIOR -->
+                <div
+                    class="bg-dark-850 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                            <i data-lucide="app-window" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <span data-i18n="apps.header_title">Programas em Execução & Gerenciador</span>
+                                <span id="running-apps-count-badge"
+                                    class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">0
+                                    Ativos</span>
+                            </h3>
+                            <p class="text-xs text-slate-400" data-i18n="apps.header_desc">Separe aplicativos instalados
+                                de serviços do sistema, visualize consumo e encerre processos com segurança.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- FILTRO POR CATEGORIA (MEUS APPS vs SERVIÇOS DO WINDOWS) -->
+                        <div class="flex items-center p-1 rounded-xl bg-dark-900 border border-slate-800 text-xs gap-1">
+                            <button onclick="setRunningAppsCategoryFilter('user_app')" id="filter-apps-user"
+                                class="px-3 py-1.5 rounded-lg font-bold bg-blue-600 text-white shadow-sm transition flex items-center gap-1.5">
+                                <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="apps.tab_my_apps">Meus Aplicativos</span>
+                                <span id="badge-count-user-apps"
+                                    class="px-1.5 py-0.2 rounded-md bg-blue-400/20 text-[10px]">0</span>
+                            </button>
+                            <button onclick="setRunningAppsCategoryFilter('windows_service')" id="filter-apps-service"
+                                class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                                <i data-lucide="cog" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="apps.tab_services" data-i18n="audit.tab_services">Serviços do
+                                    Windows</span>
+                                <span id="badge-count-services"
+                                    class="px-1.5 py-0.2 rounded-md bg-slate-700/50 text-[10px]">0</span>
+                            </button>
+                            <button onclick="setRunningAppsCategoryFilter('all')" id="filter-apps-all"
+                                class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
+                                <span data-i18n="apps.tab_all">Todos</span>
+                            </button>
+                        </div>
+
+                        <!-- BUSCA RÁPIDA -->
+                        <div class="relative">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
+                            <input type="text" id="running-apps-search" oninput="renderRunningAppsTable()"
+                                placeholder="Buscar aplicativo ou janela..."
+                                data-i18n-placeholder="apps.search_placeholder"
+                                class="bg-dark-900 border border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500 w-44 sm:w-56">
+                        </div>
+
+                        <button onclick="loadRunningApps(true)"
+                            class="btn-action-secondary px-3 py-1.5 rounded-xl text-xs font-bold text-cyan-300 border-cyan-500/40 hover:border-cyan-400 flex items-center gap-1.5">
+                            <i data-lucide="refresh-cw" id="btn-refresh-apps-icon" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="apps.refresh">Atualizar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARDS DE ESTATÍSTICAS RÁPIDAS -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-dark-850 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 uppercase font-semibold"
+                                data-i18n="apps.stat_user_apps">Meus Aplicativos Instalados</span>
+                            <h4 id="stat-apps-user-count" class="text-2xl font-black text-emerald-400 mt-0.5">0</h4>
+                        </div>
+                        <i data-lucide="layout-grid" class="w-8 h-8 text-emerald-500/30"></i>
+                    </div>
+                    <div class="bg-dark-850 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 uppercase font-semibold"
+                                data-i18n="apps.stat_services">Serviços do Windows Ativos</span>
+                            <h4 id="stat-apps-services-count" class="text-2xl font-black text-indigo-400 mt-0.5">0</h4>
+                        </div>
+                        <i data-lucide="server" class="w-8 h-8 text-indigo-500/30"></i>
+                    </div>
+                    <div class="bg-dark-850 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-400 uppercase font-semibold"
+                                data-i18n="apps.stat_ram">RAM Total em Aplicativos</span>
+                            <h4 id="stat-apps-ram" class="text-2xl font-black text-cyan-400 mt-0.5">0 MB</h4>
+                        </div>
+                        <i data-lucide="activity" class="w-8 h-8 text-cyan-500/30"></i>
+                    </div>
+                </div>
+
+                <!-- TABELA DE PROGRAMAS E SERVIÇOS -->
+                <div class="bg-dark-850 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr
+                                    class="bg-dark-800/80 text-slate-400 uppercase border-b border-slate-700/80 font-mono">
+                                    <th class="py-3 px-4 font-sans" data-i18n="apps.th_app">Aplicativo / Processo</th>
+                                    <th class="py-3 px-4 font-sans" data-i18n="apps.th_category">Categoria</th>
+                                    <th class="py-3 px-4 font-sans" data-i18n="apps.th_window">Janela Ativa na Área de
+                                        Trabalho</th>
+                                    <th class="py-3 px-4 font-sans" data-i18n="apps.th_ram">Consumo de RAM</th>
+                                    <th class="py-3 px-4 font-sans text-right" data-i18n="apps.th_action">Ações Rápidas
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="running-apps-tbody" class="divide-y divide-slate-800/60 font-sans">
+                                <tr>
+                                    <td colspan="5" class="py-8 text-center text-slate-400">
+                                        <i data-lucide="loader"
+                                            class="w-6 h-6 animate-spin mx-auto text-cyan-400 mb-2"></i>
+                                        <p data-i18n="apps.loading">Mapeando programas e serviços em execução...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW 4: AUDITORIA DE PROGRAMAS -->
+            <!-- ============================================================= -->

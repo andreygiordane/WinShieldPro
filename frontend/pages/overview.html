@@ -1,0 +1,244 @@
+<section id="view-overview" class="view-panel space-y-6">
+                <!-- COMMAND CENTER HERO BAR & QUICK LAUNCH DOCK -->
+                <div class="command-hero-banner p-4 sm:p-5 rounded-2xl border border-cyan-500/25 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-blue-600/20 to-indigo-600/20 border border-cyan-400/35 flex items-center justify-center flex-shrink-0 shadow-lg shadow-cyan-500/10">
+                            <i data-lucide="radar" class="w-5 h-5 text-cyan-400"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold uppercase tracking-widest bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span data-i18n="overview.cmd_badge">CENTRAL DE COMANDO ATIVA</span>
+                                </span>
+                                <span class="text-[10px] font-mono text-slate-400 hidden sm:inline">WINSHIELD KERNEL v6.2</span>
+                            </div>
+                            <h2 class="text-xs sm:text-sm font-bold text-white mt-1 truncate" data-i18n="overview.cmd_title">
+                                Monitoramento de Kernel, Segurança & Telemetria em Tempo Real
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                        <button onclick="switchTab('optimize')" class="clickable-chip px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 flex-1 sm:flex-initial justify-center">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i>
+                            <span data-i18n="overview.qa_optimize">Otimizar & Debloat</span>
+                        </button>
+                        <button onclick="switchTab('clean')" class="clickable-chip px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 flex-1 sm:flex-initial justify-center">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-teal-400"></i>
+                            <span data-i18n="overview.qa_clean">Limpeza Profunda</span>
+                        </button>
+                        <button onclick="switchTab('antivirus')" class="clickable-chip px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 flex-1 sm:flex-initial justify-center">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span data-i18n="overview.qa_antivirus">Caça a Ameaças</span>
+                        </button>
+                        <button onclick="switchTab('network')" class="clickable-chip px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 flex-1 sm:flex-initial justify-center">
+                            <i data-lucide="wifi" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span data-i18n="overview.qa_network">Rede & SpeedTest</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARDS TOP -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <!-- CPU -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="overview.cpu_usage">Uso do Processador</span>
+                            <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-between mb-2">
+                                <h3 id="overview-cpu-val" class="text-3xl font-extrabold text-white">0%</h3>
+                                <span id="overview-cpu-threads" class="text-xs font-mono text-slate-400">0
+                                    Threads</span>
+                            </div>
+                            <div class="w-full bg-dark-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div id="overview-cpu-bar"
+                                    class="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-500"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p id="overview-cpu-name" class="text-[11px] text-slate-400 mt-3 truncate">Detectando CPU...</p>
+                    </div>
+
+                    <!-- MEMÓRIA RAM -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="overview.ram_usage">Memória RAM</span>
+                            <i data-lucide="activity" class="w-5 h-5 text-indigo-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-between mb-2">
+                                <h3 id="overview-ram-val" class="text-3xl font-extrabold text-white">0%</h3>
+                                <span id="overview-ram-detail" class="text-xs font-mono text-slate-400">0 / 0 GB</span>
+                            </div>
+                            <div class="w-full bg-dark-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div id="overview-ram-bar"
+                                    class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p id="overview-ram-speed" class="text-[11px] text-slate-400 mt-3 truncate">Slots &
+                            Frequência...</p>
+                    </div>
+
+                    <!-- DISCO C: -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="overview.disk_system">Unidade Sistema (C:)</span>
+                            <i data-lucide="hard-drive" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-between mb-2">
+                                <h3 id="overview-disk-c-val" class="text-3xl font-extrabold text-white">--%</h3>
+                                <span id="overview-disk-c-free" class="text-xs font-mono text-emerald-400">--
+                                    Livre</span>
+                            </div>
+                            <div class="w-full bg-dark-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div id="overview-disk-c-bar"
+                                    class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-500"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p id="overview-disk-c-model" class="text-[11px] text-slate-400 mt-3 truncate"
+                            data-i18n="overview.ssd_primary">SSD Principal</p>
+                    </div>
+
+                    <!-- SAÚDE GERAL DOS DISCOS (100% FIEL) -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="overview.storage_health">Saúde do Armazenamento</span>
+                            <i data-lucide="heart-pulse" class="w-5 h-5 text-rose-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-between mb-1.5">
+                                <h3 id="overview-health-val" class="text-3xl font-extrabold text-emerald-400">--%</h3>
+                                <span id="overview-health-status"
+                                    class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">CALCULANDO...</span>
+                            </div>
+                            <p id="overview-health-summary" class="text-xs text-slate-400 truncate"
+                                data-i18n="overview.smart_realtime">S.M.A.R.T. & NVMe em tempo real</p>
+                            <!-- Badges de cada disco físico conectado -->
+                            <div id="overview-disk-health-badges" class="mt-2.5 flex flex-wrap gap-1.5">
+                                <!-- Populado via JS -->
+                            </div>
+                        </div>
+                        <button onclick="switchTab('disk-health')"
+                            class="mt-3 w-full py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 hover:border-cyan-300 font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                            <i data-lucide="heart-pulse" class="w-4 h-4 text-cyan-400"></i>
+                            <span data-i18n="overview.btn_full_diag">Ver Diagnóstico Completo & Integridade</span>
+                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ESPECIFICAÇÕES DO HARDWARE & VOLUMES -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- DETALHES DO COMPUTADOR -->
+                    <div class="lg:col-span-2 bg-dark-850 p-6 rounded-2xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i data-lucide="cpu" class="w-4 h-4 text-cyan-400"></i>
+                                Especificações do Sistema & Placa-Mãe
+                            </h2>
+                            <span class="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Telemetria de Kernel & CIM
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                            <!-- OS -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.os_title">Sistema Operacional</span>
+                                <span id="spec-os" class="text-slate-200 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Build -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.os_build">Edição & Compilação (Build / UBR)</span>
+                                <span id="spec-build" class="text-slate-200 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Data de Instalacao -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.os_install">Instalação do Windows</span>
+                                <span id="spec-install-date" class="text-slate-200 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Motherboard -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.motherboard">Placa-Mãe (Motherboard)</span>
+                                <span id="spec-board" class="text-cyan-300 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- BIOS -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.bios_version">Versão da BIOS & Data</span>
+                                <span id="spec-bios" class="text-slate-200 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Segurança Hardware -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.security_hardware">Segurança de Hardware</span>
+                                <span id="spec-security" class="text-emerald-400 font-semibold">TPM 2.0 & Secure
+                                    Boot</span>
+                            </div>
+                            <!-- Processador -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.cpu_main">Processador Principal</span>
+                                <span id="spec-cpu" class="text-amber-300 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Placa de Vídeo -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.gpu_dedicated">Placa de Vídeo Dedicada (GPU)</span>
+                                <span id="spec-gpu" class="text-emerald-300 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Memória RAM -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.ram_physical">Memória RAM Física</span>
+                                <span id="spec-ram" class="text-indigo-300 font-semibold">Carregando...</span>
+                            </div>
+                            <!-- Computador / Usuário -->
+                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800/80">
+                                <span class="text-slate-500 block text-[10px] uppercase font-sans"
+                                    data-i18n="overview.computer_session">Computador & Sessão</span>
+                                <span id="spec-user" class="text-slate-200 font-semibold">Carregando...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VOLUMES / PARTIÇÕES ATIVAS -->
+                    <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i>
+                                Unidades de Disco Conectadas
+                            </h2>
+                            <div id="overview-volumes-list" class="space-y-3">
+                                <!-- Populado via JS -->
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800 mt-4 flex justify-between items-center text-xs">
+                            <button onclick="switchTab('disk-bench')"
+                                class="w-full py-2.5 px-4 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 hover:border-emerald-300 font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                                <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
+                                <span data-i18n="overview.btn_speed_test">Executar Teste de Velocidade de
+                                    Leitura/Escrita</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW: SILICON CORE™ (PROCESSADOR, CACHE, PLACA-MÃE, RAM & BENCH) -->
+            <!-- ============================================================= -->

@@ -1,0 +1,125 @@
+<section id="view-power" class="view-panel hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center mb-3">
+                                <i data-lucide="zap" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Desempenho Máximo (Ultimate)</h3>
+                            <p class="text-xs text-slate-400 mt-1">Desbloqueia o plano nativo oculto do Windows para
+                                resposta instantânea de CPU sem throttling.</p>
+                        </div>
+                        <button onclick="setPowerPlan('ultimate')"
+                            class="mt-5 btn-action-warning w-full py-2.5 rounded-xl text-xs font-bold shadow-lg flex items-center justify-center gap-1.5">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                            <span>Ativar Desempenho Máximo</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-3">
+                                <i data-lucide="activity" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Alto Desempenho Padrão</h3>
+                            <p class="text-xs text-slate-400 mt-1">Garante que a CPU trabalhe na frequência base sem
+                                estacionar núcleos em standby.</p>
+                        </div>
+                        <button onclick="setPowerPlan('high')"
+                            class="mt-5 btn-action-primary w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                            <span>Ativar Alto Desempenho</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+                                <i data-lucide="leaf" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Equilibrado (Recomendado)</h3>
+                            <p class="text-xs text-slate-400 mt-1">Alterna dinamicamente a frequência da CPU conforme
+                                demanda para menor temperatura.</p>
+                        </div>
+                        <button onclick="setPowerPlan('balanced')"
+                            class="mt-5 btn-action-success w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
+                            <i data-lucide="leaf" class="w-3.5 h-3.5"></i>
+                            <span>Ativar Equilibrado</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CRIAR PLANO CUSTOMIZADO -->
+                <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i> Criar Plano Customizado (powercfg)
+                    </h3>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="text-xs text-slate-400 block mb-1">Nome do Esquema:</label>
+                            <input type="text" id="custom-plan-name" value="WinShield Turbo Ultra"
+                                class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Desligar Monitor:</label>
+                            <select id="custom-plan-monitor"
+                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                <option value="0">Nunca (0 min)</option>
+                                <option value="15">15 minutos</option>
+                                <option value="30">30 minutos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Suspender Computador:</label>
+                            <select id="custom-plan-standby"
+                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                <option value="0">Nunca (0 min)</option>
+                                <option value="30">30 minutos</option>
+                                <option value="60">60 minutos</option>
+                            </select>
+                        </div>
+                        <button onclick="createCustomPlan()"
+                            class="mt-5 btn-action-primary px-5 py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span>Criar & Ativar Agora</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LISTA DE ESQUEMAS POWERCFG -->
+                <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="list" class="w-4 h-4 text-amber-400"></i> Esquemas Instalados no Windows
+                            (powercfg /list)
+                        </h3>
+                        <button onclick="loadPowerSchemes()"
+                            class="btn-action-secondary text-amber-300 border-amber-500/40 hover:border-amber-400 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                            <span>Atualizar</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs font-mono">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-slate-400 uppercase">
+                                    <th class="py-2.5 px-3">GUID</th>
+                                    <th class="py-2.5 px-3 font-sans">Nome do Esquema</th>
+                                    <th class="py-2.5 px-3">Status</th>
+                                    <th class="py-2.5 px-3 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="power-schemes-body" class="divide-y divide-slate-800">
+                                <!-- Populado dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW 8: OTIMIZAÇÃO & DEBLOAT -->
+            <!-- ============================================================= -->

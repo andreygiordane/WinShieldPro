@@ -1,0 +1,26 @@
+# Configuração de normalização de finais de linha (Git Attributes)
+
+# Comportamento padrão: auto-detecção
+* text=auto
+
+# Scripts e código-fonte em formato Unix (LF)
+*.py text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.txt text eol=lf
+
+# Scripts batch do Windows exigem CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binários e imagens
+*.png binary
+*.webp binary
+*.ico binary
+*.exe binary

@@ -1,0 +1,297 @@
+<section id="view-network" class="view-panel hidden space-y-6">
+                <!-- STATUS TOP CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <!-- ADAPTADOR ATIVO -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="network.adapter_card">Adaptador Ativo</span>
+                            <i data-lucide="wifi" id="net-card-type-icon" class="w-5 h-5 text-cyan-400"></i>
+                        </div>
+                        <div>
+                            <h3 id="net-adapter-name" class="text-base font-bold text-white truncate">Detectando...</h3>
+                            <span id="net-adapter-type"
+                                class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Wi-Fi
+                                / Ethernet</span>
+                        </div>
+                        <div class="mt-3 text-xs text-slate-400 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span id="net-status-text" class="text-emerald-300 font-semibold"
+                                data-i18n="network.connected">Conectado à Internet</span>
+                        </div>
+                    </div>
+
+                    <!-- SINAL WI-FI (SE ATIVO) -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="network.signal_card">Sinal & Frequência</span>
+                            <i data-lucide="radio" class="w-5 h-5 text-indigo-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-between mb-1.5">
+                                <h3 id="net-wifi-signal-val" class="text-3xl font-extrabold text-white">--%</h3>
+                                <span id="net-wifi-ssid"
+                                    class="text-xs font-mono text-indigo-400 truncate max-w-[120px]">SSID</span>
+                            </div>
+                            <div class="w-full bg-dark-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div id="net-wifi-signal-bar"
+                                    class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-2 rounded-full transition-all duration-500"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p id="net-wifi-details" class="text-[11px] text-slate-400 mt-3 truncate">Canal • Protocolo</p>
+                    </div>
+
+                    <!-- IP LOCAL & GATEWAY -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="network.ip_card">Endereço IP & Gateway</span>
+                            <i data-lucide="server" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400">IP Local: <span id="net-local-ip"
+                                    class="font-mono font-bold text-white">0.0.0.0</span></div>
+                            <div class="text-xs text-slate-400 mt-1">Gateway: <span id="net-gateway-ip"
+                                    class="font-mono text-emerald-400">0.0.0.0</span></div>
+                        </div>
+                        <p id="net-dns-text" class="text-[11px] text-slate-400 mt-2 truncate font-mono">DNS: 8.8.8.8</p>
+                    </div>
+
+                    <!-- IP PÚBLICO & PROVEDOR -->
+                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase"
+                                data-i18n="network.public_card">IP Público & Provedor</span>
+                            <i data-lucide="globe" class="w-5 h-5 text-amber-400"></i>
+                        </div>
+                        <div>
+                            <h3 id="net-public-ip" class="text-xl font-bold font-mono text-amber-300">--.--.--.--</h3>
+                            <p id="net-isp-name" class="text-xs text-slate-300 mt-1 truncate">Provedor ISP</p>
+                        </div>
+                        <button onclick="loadNetworkInfo(true)"
+                            class="mt-3 text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                            <span data-i18n="network.refresh">Atualizar Dados</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TESTE DE PING & TESTE DE VELOCIDADE -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- TESTES DE PING (2 COLUNAS) -->
+                    <div class="lg:col-span-2 bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                                    <span data-i18n="network.ping_title">Auditoria de Latência & Ping Global</span>
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-0.5" data-i18n="network.ping_desc">Mede latência em
+                                    milissegundos, jitter e perda de pacotes com servidores mundiais.</p>
+                            </div>
+                            <button onclick="runPingAll()" id="btn-ping-all"
+                                class="btn-action-primary px-4 py-2 rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="network.ping_all_btn">Testar Todos os Servidores</span>
+                            </button>
+                        </div>
+
+                        <!-- TESTE PERSONALIZADO -->
+                        <div class="flex gap-2">
+                            <input type="text" id="custom-ping-input"
+                                placeholder="Digite um IP ou Host (ex: google.com, 1.1.1.1, 192.168.0.1)..."
+                                class="flex-1 bg-dark-950 border border-slate-700 rounded-xl px-4 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
+                            <button onclick="runCustomPing()" id="btn-ping-custom"
+                                class="btn-action-secondary px-5 py-2 rounded-xl text-xs font-bold border-slate-700 hover:border-cyan-400 text-slate-200 flex items-center gap-1.5">
+                                <i data-lucide="search" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                <span data-i18n="network.ping_custom_btn">Testar Host</span>
+                            </button>
+                        </div>
+
+                        <!-- RESULTADOS DO PING -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs font-sans">
+                                <thead>
+                                    <tr
+                                        class="text-slate-400 border-b border-slate-800 text-[11px] uppercase tracking-wider">
+                                        <th class="py-2.5 px-3">Servidor</th>
+                                        <th class="py-2.5 px-3">Host / IP</th>
+                                        <th class="py-2.5 px-3">Pacotes</th>
+                                        <th class="py-2.5 px-3">Perda</th>
+                                        <th class="py-2.5 px-3">Mín / Máx</th>
+                                        <th class="py-2.5 px-3">Latência Média</th>
+                                        <th class="py-2.5 px-3">Qualidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ping-results-body"
+                                    class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                                    <tr>
+                                        <td colspan="7" class="py-6 text-center text-slate-500 font-sans">Clique em
+                                            "Testar Todos os Servidores" para medir o ping em tempo real.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TESTE DE VELOCIDADE REAL (ESTILO SPEEDTEST / FAST / NPERF) -->
+                    <div
+                        class="bg-dark-850 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
+                                    <span data-i18n="network.speed_title">SpeedTest Pro (nPerf / Ookla Engine)</span>
+                                </h3>
+                                <span id="speed-test-status" class="text-[11px] font-mono text-cyan-400 font-semibold">Pronto</span>
+                            </div>
+
+                            <!-- INDICADORES DE FASE (PING -> DOWNLOAD -> UPLOAD) -->
+                            <div class="grid grid-cols-3 gap-1.5 text-[10px] font-mono font-bold text-center">
+                                <div id="st-pill-ping" class="py-1.5 px-2 rounded-lg bg-dark-900 border border-slate-800 text-slate-400 transition">1. SERVIDOR &amp; PING</div>
+                                <div id="st-pill-dl" class="py-1.5 px-2 rounded-lg bg-dark-900 border border-slate-800 text-slate-400 transition">2. DOWNLOAD</div>
+                                <div id="st-pill-ul" class="py-1.5 px-2 rounded-lg bg-dark-900 border border-slate-800 text-slate-400 transition">3. UPLOAD</div>
+                            </div>
+
+                            <!-- VELOCÍMETRO INTERATIVO SVG ESTILO SPEEDTEST / FAST -->
+                            <div class="p-4 rounded-2xl bg-dark-900/90 border border-slate-800 flex flex-col items-center justify-center relative overflow-hidden">
+                                <svg class="w-48 h-28 overflow-visible" viewBox="0 0 200 115">
+                                    <defs>
+                                        <linearGradient id="speedGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#10b981" />
+                                            <stop offset="50%" stop-color="#06b6d4" />
+                                            <stop offset="100%" stop-color="#6366f1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Trilha de fundo -->
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(148, 163, 184, 0.16)" stroke-width="14" stroke-linecap="round" />
+                                    <!-- Arco ativo (comprimento total = 251.3) -->
+                                    <path id="speedtest-gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#speedGaugeGrad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" style="transition: stroke-dashoffset 0.22s ease-out;" />
+                                </svg>
+                                <div class="-mt-12 text-center relative z-10">
+                                    <span id="speedtest-live-phase" class="text-[10px] font-mono uppercase tracking-wider text-cyan-400 block">VELOCIDADE EM TEMPO REAL</span>
+                                    <div class="flex items-baseline justify-center gap-1 mt-0.5">
+                                        <span id="speedtest-live-mbps" class="text-3xl font-black font-mono text-white">0.0</span>
+                                        <span class="text-xs font-bold text-slate-400">Mbps</span>
+                                    </div>
+                                    <span id="speedtest-isp-badge" class="text-[10px] font-mono text-slate-400 block mt-1 truncate max-w-[220px]">Detectando servidor mais próximo...</span>
+                                </div>
+                                <!-- Barra de progresso da medição -->
+                                <div class="w-full bg-dark-950 rounded-full h-1.5 overflow-hidden border border-slate-800 mt-3">
+                                    <div id="speedtest-progress-bar" class="bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 h-1.5 rounded-full transition-all duration-200" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <!-- SERVIDOR MAIS PRÓXIMO & PROVEDOR (ESTILO SPEEDTEST OOKLA / NPERF) -->
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono p-2.5 rounded-2xl bg-dark-900/80 border border-slate-800">
+                                <div class="flex items-center gap-2 overflow-hidden">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="server" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    </div>
+                                    <div class="truncate">
+                                        <span class="text-[9px] uppercase text-slate-400 block font-sans font-bold leading-none mb-0.5">Servidor Mais Próximo</span>
+                                        <span id="speedtest-server-name" class="font-bold text-slate-200 truncate block text-xs" title="Servidor detectado">Localizando servidor...</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 overflow-hidden">
+                                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    </div>
+                                    <div class="truncate">
+                                        <span class="text-[9px] uppercase text-slate-400 block font-sans font-bold leading-none mb-0.5">Seu Provedor &amp; Cidade</span>
+                                        <span id="speedtest-client-location" class="font-bold text-slate-200 truncate block text-xs" title="Provedor local">Identificando ISP...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <!-- DOWNLOAD -->
+                                <div class="p-3.5 rounded-2xl bg-dark-900 border border-slate-800 text-center">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400 flex items-center justify-center gap-1">
+                                        <i data-lucide="arrow-down-circle" class="w-3 h-3 text-emerald-400"></i>
+                                        <span data-i18n="network.download">Download</span>
+                                    </span>
+                                    <div class="mt-1 flex items-baseline justify-center gap-1">
+                                        <span id="speed-download-val"
+                                            class="text-2xl font-extrabold text-emerald-400 font-mono">0.0</span>
+                                        <span class="text-xs text-slate-400 font-bold">Mbps</span>
+                                    </div>
+                                </div>
+                                <!-- UPLOAD -->
+                                <div class="p-3.5 rounded-2xl bg-dark-900 border border-slate-800 text-center">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400 flex items-center justify-center gap-1">
+                                        <i data-lucide="arrow-up-circle" class="w-3 h-3 text-cyan-400"></i>
+                                        <span data-i18n="network.upload">Upload</span>
+                                    </span>
+                                    <div class="mt-1 flex items-baseline justify-center gap-1">
+                                        <span id="speed-upload-val"
+                                            class="text-2xl font-extrabold text-cyan-400 font-mono">0.0</span>
+                                        <span class="text-xs text-slate-400 font-bold">Mbps</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 text-xs font-mono text-center">
+                                <div class="p-2.5 rounded-xl bg-dark-900/60 border border-slate-850">
+                                    <span class="text-slate-500 text-[10px] block">PING (LATÊNCIA)</span>
+                                    <span id="speed-ping-val" class="text-white font-bold">0.0 ms</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-dark-900/60 border border-slate-850">
+                                    <span class="text-slate-500 text-[10px] block">JITTER (VARIAÇÃO)</span>
+                                    <span id="speed-jitter-val" class="text-white font-bold">0.0 ms</span>
+                                </div>
+                            </div>
+
+                            <!-- CLASSIFICAÇÃO DE QUALIDADE ESTILO NPERF -->
+                            <div class="grid grid-cols-3 gap-2 text-[10px] font-mono text-center">
+                                <div class="p-2 rounded-xl bg-dark-900 border border-slate-800">
+                                    <span class="text-slate-500 block font-sans">Streaming 4K</span>
+                                    <strong id="st-qual-stream" class="text-slate-300">--</strong>
+                                </div>
+                                <div class="p-2 rounded-xl bg-dark-900 border border-slate-800">
+                                    <span class="text-slate-500 block font-sans">Gaming Online</span>
+                                    <strong id="st-qual-gaming" class="text-slate-300">--</strong>
+                                </div>
+                                <div class="p-2 rounded-xl bg-dark-900 border border-slate-800">
+                                    <span class="text-slate-500 block font-sans">Videochamada</span>
+                                    <strong id="st-qual-calls" class="text-slate-300">--</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button onclick="runSpeedTest()" id="btn-speed-test"
+                                class="btn-action-success btn-animated w-full py-3 rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-2">
+                                <i data-lucide="gauge" class="w-4 h-4"></i>
+                                <span data-i18n="network.btn_start_speed">INICIAR TESTE DE VELOCIDADE</span>
+                            </button>
+
+                            <!-- FERRAMENTAS RÁPIDAS DE REPARO -->
+                            <div class="mt-4 pt-3 border-t border-slate-800 space-y-1.5">
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block mb-2"
+                                    data-i18n="network.repair_title">Reparo Rápido de Conexão</span>
+                                <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+                                    <button onclick="runNetworkRepair('flush_dns')"
+                                        class="p-2 rounded-xl bg-dark-900 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-white transition text-center truncate">Limpar
+                                        DNS</button>
+                                    <button onclick="runNetworkRepair('renew_ip')"
+                                        class="p-2 rounded-xl bg-dark-900 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-white transition text-center truncate">Renovar
+                                        IP</button>
+                                    <button onclick="runNetworkRepair('reset_winsock')"
+                                        class="p-2 rounded-xl bg-dark-900 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-white transition text-center truncate">Reset
+                                        Winsock</button>
+                                    <button onclick="runNetworkRepair('reset_stack')"
+                                        class="p-2 rounded-xl bg-dark-900 border border-slate-800 hover:border-rose-500/40 text-rose-300 hover:text-rose-200 transition text-center truncate">Reset
+                                        Pilha TCP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW 11: DISPOSITIVOS & CENTRAL DE DRIVERS                    -->
+            <!-- ============================================================= -->
