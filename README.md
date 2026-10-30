@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/andreygiordane/WinShieldPro/raw/main/dist/WinShieldPro.exe">
+  <a href="https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe">
     <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.0_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
   </a>
 </p>
@@ -50,7 +50,7 @@ A metodologia de cada medição está em [METODOLOGIA_DOS_TESTES.md](METODOLOGIA
 
 Não é necessário instalar Python, dependências ou compiladores para utilizar o WinShield Pro:
 
-* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.0 Standalone)](https://github.com/andreygiordane/WinShieldPro/raw/main/dist/WinShieldPro.exe)**
+* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.0 Standalone)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe)**
 * 🔒 **Assinado Digitalmente:** Binário assinado via certificado Authenticode por *Andrey Giordane*.
 * 🛡️ **Zero Dependências Externas:** Executável portátil integrado (*Single File*) pronto para rodar.
 
