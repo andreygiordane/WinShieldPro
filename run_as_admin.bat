@@ -1,6 +1,6 @@
 @echo off
 :: ============================================================================
-:: WinShield Pro v6.2 - Launcher com Auto-Elevação UAC (Privilégios de Administrador)
+:: WinShield Pro v7.0 - Launcher com Auto-Elevação UAC (Privilégios de Administrador)
 :: Execução 100% invisível sem janelas de console persistentes
 :: ============================================================================
 title WinShield Pro - Verificando Privilégios de Administrador...

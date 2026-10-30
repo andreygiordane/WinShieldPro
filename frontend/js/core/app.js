@@ -54,7 +54,7 @@ lucide.createIcons();
                 "brand.app_name": "WinShield Pro",
                 "brand.dev_label": "Desenvolvido por",
                 "brand.subtitle": "Hardware, Segurança & Otimizador",
-                "nav.search_placeholder": "Buscar módulo (Ctrl+K)...",
+                "nav.search_placeholder": "Buscar (Ctrl+K)",
                 "nav.group_hardware": "HARDWARE",
                 "nav.overview": "Geral",
                 "nav.silicon": "Processador",
@@ -76,6 +76,7 @@ lucide.createIcons();
                 "nav.clean": "Limpeza",
                 "nav.power": "Energia",
                 "nav.optimize": "Otimização",
+                "nav.maintenance": "Manutenção",
                 "nav.group_advanced": "AVANÇADO",
                 "nav.terminal": "Terminal",
                 "side.telemetry": "TELEMETRIA",
@@ -84,18 +85,18 @@ lucide.createIcons();
                 "header.theme_light": "Claro",
                 "header.theme_auto": "Auto",
                 "header.console": "Console",
-                "console.title": "Console de Operações em Tempo Real (Minimizado)",
+                "console.title": "Registro de operações",
                 "console.title_open": "Console de Operações em Tempo Real",
-                "console.save": "Salvar Log (.log)",
+                "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v6.2",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
                 "splash.status_loading3": "Carregando motores de disco e segurança...",
                 "splash.progress_ready": "SISTEMA PRONTO PARA ACESSO",
-                "splash.subtitle": "Proteção inteligente para o seu ambiente.",
+                "splash.subtitle": "Diagnóstico, benchmark e manutenção do Windows",
                 "splash.check1": "Permissões de Kernel & Admin",
                 "splash.check2": "Telemetria & Sensores",
                 "splash.check3": "S.M.A.R.T. & Discos",
@@ -105,7 +106,7 @@ lucide.createIcons();
                 "splash.status_ready": "PRONTO",
                 "splash.status_init": "INICIALIZADO",
                 "splash.dont_show": "Não exibir na inicialização",
-                "splash.enter": "Entrar no Sistema",
+                "splash.enter": "Entrar",
                 "modals.btn_cancel": "Cancelar",
                 "modals.btn_confirm": "Confirmar",
                 "modals.kill_title": "Finalizar Tarefa",
@@ -136,107 +137,107 @@ lucide.createIcons();
                 "overview.ram_physical": "Memória RAM Física",
                 "overview.computer_session": "Computador & Sessão",
                 "overview.btn_speed_test": "Executar Teste de Velocidade de Leitura/Escrita",
-                "silicon.tab_cpu": "CPU (Processador)",
-                "silicon.tab_mainboard": "Mainboard (Placa-Mãe)",
-                "silicon.tab_memory": "Memory & SPD (RAM)",
-                "silicon.tab_bench": "Silicon Core™ Benchmark",
-                "silicon.btn_refresh": "Atualizar Silicon Core™",
-                "silicon.cpu_name": "Nome do Processador",
+                "silicon.tab_cpu": "Processador",
+                "silicon.tab_mainboard": "Placa-mãe",
+                "silicon.tab_memory": "Memória e SPD",
+                "silicon.tab_bench": "Benchmark",
+                "silicon.btn_refresh": "Atualizar",
+                "silicon.cpu_name": "Processador",
                 "silicon.codename": "Codinome",
                 "silicon.litography": "Litografia",
                 "silicon.socket": "Soquete",
-                "silicon.cores_threads": "Núcleos / Threads",
-                "silicon.instructions": "Conjunto de Instruções Suportadas",
+                "silicon.cores_threads": "Núcleos / threads",
+                "silicon.instructions": "Instruções suportadas",
                 "silicon.clocks": "Relógios em Tempo Real (Clocks)",
                 "silicon.multiplier": "Multiplicador",
-                "silicon.mb_specs": "Especificações da Placa-Mãe",
-                "silicon.mb_chipset": "Fabricante & Chipset",
-                "silicon.mb_mfr": "Fabricante:",
-                "silicon.mb_model": "Modelo:",
+                "silicon.mb_specs": "Placa-mãe",
+                "silicon.mb_chipset": "Fabricante e chipset",
+                "silicon.mb_mfr": "Fabricante",
+                "silicon.mb_model": "Modelo",
                 "silicon.mb_pcie": "Barramento PCI-e:",
-                "silicon.mb_bios": "BIOS & Firmware",
-                "silicon.mb_vendor": "Desenvolvedora:",
-                "silicon.mb_ver": "Versão:",
-                "silicon.mb_date": "Data de Lançamento:",
-                "silicon.ram_config": "Configuração Geral de Memória RAM",
-                "silicon.ram_total": "Capacidade Total",
+                "silicon.mb_bios": "BIOS / UEFI",
+                "silicon.mb_vendor": "Fornecedor",
+                "silicon.mb_ver": "Versão",
+                "silicon.mb_date": "Data",
+                "silicon.ram_config": "Configuração de memória",
+                "silicon.ram_total": "Capacidade",
                 "silicon.ram_channels": "Canais",
-                "silicon.ram_slots": "Slots Utilizados",
-                "silicon.btn_start_bench": "INICIAR TESTE DE CPU",
-                "vision.tab_gpu": "Placa Gráfica (Graphics Card)",
-                "vision.tab_sensors": "Sensores em Tempo Real (Sensors)",
-                "vision.btn_refresh": "Atualizar Vision Engine™",
-                "vision.adapter_name": "Nome do Adaptador Gráfico",
-                "vision.architecture": "Arquitetura / GPU",
+                "silicon.ram_slots": "Slots ocupados",
+                "silicon.btn_start_bench": "Iniciar benchmark",
+                "vision.tab_gpu": "Especificações",
+                "vision.tab_sensors": "Sensores",
+                "vision.btn_refresh": "Atualizar",
+                "vision.adapter_name": "Adaptador de vídeo",
+                "vision.architecture": "Arquitetura",
                 "vision.transistors": "Transistores",
-                "vision.bus_width": "Barramento VRAM",
-                "vision.bandwidth": "Largura de Banda",
-                "vision.driver_ver": "Versão do Driver",
-                "vision.resolution": "Resolução / Tela",
-                "vision.features": "Recursos Gráficos & Computacionais Suportados",
-                "vision.temp": "Temperatura da GPU",
-                "vision.load": "Carga da GPU (Usage)",
-                "vision.vram_used": "Memória de Vídeo Utilizada",
-                "vision.power": "Consumo de Energia (Power)",
-                "memory.header_badge": "Memória RAM & Barramento",
-                "memory.total_installed": "Total Instalada",
-                "memory.used": "Em Uso",
+                "vision.bus_width": "Barramento de memória",
+                "vision.bandwidth": "Largura de banda",
+                "vision.driver_ver": "Versão do driver",
+                "vision.resolution": "Resolução",
+                "vision.features": "Recursos suportados",
+                "vision.temp": "Temperatura",
+                "vision.load": "Uso da GPU",
+                "vision.vram_used": "Memória de vídeo em uso",
+                "vision.power": "Consumo",
+                "memory.header_badge": "Memória instalada",
+                "memory.total_installed": "total",
+                "memory.used": "Em uso",
                 "memory.available": "Disponível",
-                "memory.load_label": "Carga Global de Memória RAM",
-                "memory.modules_title": "Pentes de Memória Físicos (SPD & Hardware)",
-                "memory.ramguard_title": "WinShield RAMGuard™ (Diagnóstico de Integridade de Memória)",
-                "memory.ramguard_desc": "Varredura avançada e validação física de integridade de células de RAM para identificar falhas de barramento, degradação de sinal ou telas azuis (BSOD).",
-                "memory.btn_start_test": "Iniciar Teste de Estresse",
-                "memory.btn_stop_test": "Interromper Teste",
-                "memory.btn_refresh": "Atualizar Informações",
-                "memory.test_status_label": "Status do Teste",
-                "memory.test_speed_label": "Velocidade",
-                "memory.test_pattern_label": "Padrão",
+                "memory.load_label": "Em uso agora",
+                "memory.modules_title": "Módulos instalados",
+                "memory.ramguard_title": "Teste de integridade da memória",
+                "memory.ramguard_desc": "Grava e confere padrões em 100% das palavras de 64 bits da área testada. Um único erro indica defeito ou instabilidade.",
+                "memory.btn_start_test": "Iniciar teste",
+                "memory.btn_stop_test": "Parar",
+                "memory.btn_refresh": "Atualizar",
+                "memory.test_status_label": "Estado",
+                "memory.test_speed_label": "Vazão",
+                "memory.test_pattern_label": "Algoritmo atual",
                 "memory.test_errors_label": "Erros",
-                "memory.block_progress": "Progresso por Blocos de Memória",
-                "memory.log_title": "Log em Tempo Real do RAMGuard™",
-                "disk_health.btn_rescan": "Reescanear Discos",
-                "disk_health.tab_smart": "S.M.A.R.T. & NVMe Log",
-                "disk_health.tab_surface": "SurfaceScan (1.200 Blocos)",
-                "disk_health.tab_align": "Recursos & Alinhamento 4K",
+                "memory.block_progress": "Progresso",
+                "memory.log_title": "Registro",
+                "disk_health.btn_rescan": "Reler discos",
+                "disk_health.tab_smart": "Atributos S.M.A.R.T.",
+                "disk_health.tab_surface": "Varredura de superfície",
+                "disk_health.tab_align": "Recursos e alinhamento",
                 "disk_health.temperature": "Temperatura",
-                "disk_health.power_on_hours": "Tempo Ligado",
-                "disk_health.total_written": "Total Gravado",
-                "disk_health.th_attr": "Nome do Atributo",
+                "disk_health.power_on_hours": "Horas ligado",
+                "disk_health.total_written": "Total gravado",
+                "disk_health.th_attr": "Atributo",
                 "disk_health.th_current": "Atual",
                 "disk_health.th_worst": "Pior",
                 "disk_health.th_threshold": "Limite",
-                "disk_health.th_raw": "Valor Bruto (Raw)",
-                "disk_health.btn_start_scan": "INICIAR VARREDURA SURFACESCAN",
-                "disk_health.btn_stop_scan": "INTERROMPER VARREDURA",
-                "disk_health.bad_sectors": "Setores Danificados",
-                "disk_health.read_speed": "Velocidade de Leitura",
-                "disk_health.elapsed_time": "Tempo Decorrido",
-                "disk_health.remaining_time": "Tempo Restante Est.",
-                "disk_bench.btn_all_tests": "TODOS OS TESTES",
-                "disk_bench.passes": "Repetições (Passes):",
-                "disk_bench.sample_size": "Tamanho da Amostra:",
-                "disk_bench.test_drive": "Unidade de Teste:",
-                "disk_bench.measure_unit": "Unidade de Medição:",
+                "disk_health.th_raw": "Valor bruto",
+                "disk_health.btn_start_scan": "Iniciar varredura",
+                "disk_health.btn_stop_scan": "Parar",
+                "disk_health.bad_sectors": "Regiões com erro",
+                "disk_health.read_speed": "Leitura",
+                "disk_health.elapsed_time": "Decorrido",
+                "disk_health.remaining_time": "Restante",
+                "disk_bench.btn_all_tests": "Executar todos",
+                "disk_bench.passes": "Passes",
+                "disk_bench.sample_size": "Tamanho do arquivo",
+                "disk_bench.test_drive": "Unidade",
+                "disk_bench.measure_unit": "Exibir em",
                 "disk_bench.seq_read": "Leitura Sequencial",
                 "disk_bench.seq_write": "Escrita Sequencial",
                 "disk_bench.rnd_read": "Leitura Aleatória 4K",
                 "disk_bench.rnd_write": "Escrita Aleatória 4K",
                 "apps.header_title": "Programas em Execução & Gerenciador",
-                "apps.header_desc": "Monitore processos ativos no Windows, isole serviços e desinstale programas indesejados.",
-                "apps.stat_user_apps": "Softwares do Usuário",
-                "apps.stat_services": "Serviços do Windows",
-                "apps.stat_ram": "Consumo Total de RAM",
-                "apps.tab_my_apps": "Meus Programas",
-                "apps.tab_services": "Serviços do Windows",
-                "apps.tab_all": "Todos os Processos",
+                "apps.header_desc": "Separe aplicativos instalados de serviços do sistema, visualize consumo e encerre processos com segurança.",
+                "apps.stat_user_apps": "Aplicativos abertos",
+                "apps.stat_services": "Processos do Windows",
+                "apps.stat_ram": "Memória dos aplicativos",
+                "apps.tab_my_apps": "Aplicativos",
+                "apps.tab_services": "Sistema",
+                "apps.tab_all": "Todos",
                 "apps.search_placeholder": "Buscar programa por nome ou PID...",
-                "apps.refresh": "Atualizar Lista",
-                "apps.loading": "Varrendo programas ativos...",
-                "apps.th_app": "Programa / Executável",
+                "apps.refresh": "Atualizar",
+                "apps.loading": "Lendo processos em execução…",
+                "apps.th_app": "Processo",
                 "apps.th_category": "Tipo",
-                "apps.th_ram": "Memória RAM",
-                "apps.th_window": "Título da Janela",
+                "apps.th_ram": "Memória",
+                "apps.th_window": "Janela / caminho",
                 "apps.th_action": "Ações",
                 "apps.btn_kill": "Encerrar",
                 "apps.btn_uninstall": "Desinstalar",
@@ -248,39 +249,39 @@ lucide.createIcons();
                 "audit.tab_appx": "Pacotes Store (AppX)",
                 "audit.tab_services": "Serviços do Windows",
                 "audit.tab_startup": "Inicialização do Sistema",
-                "antivirus.card_defender": "Windows Defender Status",
-                "antivirus.defender_rt": "Proteção em Tempo Real",
-                "antivirus.card_system32": "Varredura System32",
-                "antivirus.system32_title": "Anomalias em Arquivos do Sistema",
-                "antivirus.system32_desc": "Audita executáveis suspeitos alojados em C:\\Windows\\System32.",
-                "antivirus.btn_scan_system32": "Escanear System32",
-                "antivirus.card_heuristics": "Varredura Heurística",
-                "antivirus.heuristics_title": "Processos & Mineradores Ocultos",
-                "antivirus.heuristics_desc": "Detecta comportamento anômalo em segundo plano e scripts maliciosos.",
-                "antivirus.btn_scan_heuristics": "Escanear Heurística",
-                "antivirus.card_cloud": "Inteligência em Nuvem",
-                "antivirus.cloud_title": "Verificação de Hash & Assinatura Digital",
-                "antivirus.cloud_desc": "Cruza hashes de processos com bases mundiais de segurança.",
-                "antivirus.btn_scan_cloud": "Varredura em Nuvem",
-                "antivirus.btn_quick": "Varredura Rápida Completa",
-                "antivirus.tab_all_threats": "Todas as Ameaças",
-                "antivirus.tab_system32": "Anomalias System32",
-                "antivirus.tab_heuristics": "Heurística",
-                "antivirus.tab_cloud": "Nuvem / Hash",
-                "antivirus.no_scan": "Nenhuma varredura executada ainda. Selecione uma opção acima.",
-                "antivirus.th_threat": "Ameaça / Processo",
-                "antivirus.th_risk": "Gravidade",
+                "antivirus.card_defender": "Microsoft Defender",
+                "antivirus.defender_rt": "Executa a verificação do próprio Defender e atualiza as definições.",
+                "antivirus.card_system32": "Anti-Camuflagem & Drivers",
+                "antivirus.system32_title": "System32 e drivers",
+                "antivirus.system32_desc": "Binários em System32 e drivers: separa os assinados por fabricantes dos que não têm assinatura.",
+                "antivirus.btn_scan_system32": "Auditar System32",
+                "antivirus.card_heuristics": "Heurística & RAM",
+                "antivirus.heuristics_title": "Processos suspeitos",
+                "antivirus.heuristics_desc": "Processos ativos rodando de AppData, Temp e pastas públicas.",
+                "antivirus.btn_scan_heuristics": "Analisar processos",
+                "antivirus.card_cloud": "Nuvem Global",
+                "antivirus.cloud_title": "Serviços e processos",
+                "antivirus.cloud_desc": "Auditoria local de todos os serviços instalados e processos: caminho, assinatura e nomes conhecidos de malware.",
+                "antivirus.btn_scan_cloud": "Auditar serviços",
+                "antivirus.btn_quick": "Verificar",
+                "antivirus.tab_all_threats": "Itens suspeitos",
+                "antivirus.tab_system32": "System32",
+                "antivirus.tab_heuristics": "Processos",
+                "antivirus.tab_cloud": "Serviços",
+                "antivirus.no_scan": "Execute uma varredura para listar os resultados.",
+                "antivirus.th_threat": "Arquivo / processo",
+                "antivirus.th_risk": "Nível",
                 "antivirus.th_origin": "Origem",
-                "antivirus.th_diag": "Diagnóstico Detalhado",
-                "antivirus.th_path": "Caminho do Arquivo",
+                "antivirus.th_diag": "Diagnóstico",
+                "antivirus.th_path": "Caminho",
                 "antivirus.th_actions": "Ações",
                 "antivirus.btn_quarantine": "Quarentena",
                 "antivirus.btn_delete": "Excluir Arquivo",
-                "clean.card_title": "Limpeza Profunda do Sistema",
-                "clean.real_numbers_tag": "Exclusão Autêntica e Segura",
-                "clean.areas_title": "Áreas de Limpeza Disponíveis",
-                "clean.btn_analyze": "Analisar Arquivos Temporários",
-                "clean.btn_clean": "Limpar Selecionados",
+                "clean.card_title": "Espaço recuperável",
+                "clean.real_numbers_tag": "Valores medidos",
+                "clean.areas_title": "Categorias",
+                "clean.btn_analyze": "Analisar",
+                "clean.btn_clean": "Limpar selecionados",
                 "clean.recycle_bin": "Lixeira do Windows",
                 "clean.temp_user": "Arquivos Temporários do Usuário",
                 "clean.update_cache": "Cache do Windows Update",
@@ -289,26 +290,26 @@ lucide.createIcons();
                 "power.ultimate_perf": "Desempenho Máximo (Ultimate Performance)",
                 "power.btn_activate": "Ativar Plano",
                 "power.btn_create": "Criar Novo Plano",
-                "optimize.hero_badge": "PIPELINE ENTERPRISE 1-CLIQUE",
-                "optimize.hero_title": "Otimização Completa do Sistema & Debloat Automatizado",
-                "optimize.hero_desc": "Executa em sequência automatizada: Verificação SFC, Reparo de Imagem DISM, Otimização TRIM NVMe/SSD, Liberação de Caches de RAM e Desativação de Telemetrias Invasivas.",
-                "optimize.btn_run_all": "Executar Otimização Completa (Todas as Etapas)",
-                "optimize.sfc_title": "Verificação e Reparo de Arquivos (SFC)",
+                "optimize.hero_badge": "Rotina completa",
+                "optimize.hero_title": "Manutenção completa do sistema",
+                "optimize.hero_desc": "Executa em sequência: ponto de restauração, desativação de telemetria, liberação de RAM, TRIM, SFC e DISM.",
+                "optimize.btn_run_all": "Iniciar rotina completa",
+                "optimize.sfc_title": "SFC /SCANNOW",
                 "optimize.sfc_desc": "Executa sfc /scannow para validar e corrigir integridade de DLLs e arquivos de sistema do Windows.",
                 "optimize.btn_sfc": "Executar SFC",
-                "optimize.dism_title": "Reparo de Imagem do Windows (DISM)",
+                "optimize.dism_title": "DISM RestoreHealth",
                 "optimize.dism_desc": "Executa DISM /Online /Cleanup-Image /RestoreHealth utilizando a biblioteca de componentes oficial.",
                 "optimize.btn_dism": "Executar DISM",
-                "optimize.trim_title": "Otimização TRIM (SSDs & NVMe)",
+                "optimize.trim_title": "TRIM dos SSDs",
                 "optimize.trim_desc": "Envia instruções TRIM para todas as unidades SSD para restabelecer a velocidade máxima de escrita da NAND.",
                 "optimize.btn_trim": "Executar TRIM",
-                "optimize.ram_title": "Liberação de Cache & RAM em Standby",
+                "optimize.ram_title": "Liberar memória RAM",
                 "optimize.ram_desc": "Purga listas de páginas em standby e working-sets vazios sem fechar seus programas em uso.",
                 "optimize.btn_ram": "Otimizar RAM",
                 "optimize.telem_title": "Desativar Telemetria & Rastreamento",
                 "optimize.telem_desc": "Desliga serviços invasivos de diagnóstico, telemetria DiagTrack e rastreamento de experiência do usuário.",
                 "optimize.btn_telem": "Desativar Telemetria",
-                "optimize.restore_title": "Criar Ponto de Restauração",
+                "optimize.restore_title": "Ponto de restauração",
                 "optimize.restore_desc": "Cria um ponto de restauração oficial do Windows antes de aplicar modificações profundas.",
                 "optimize.btn_restore": "Criar Ponto",
                 "optimize.adv_section_title": "Otimizações Avançadas de Kernel, Jogos & Rede",
@@ -319,13 +320,13 @@ lucide.createIcons();
                 "optimize.game_title": "Modo de Jogo & Agendamento GPU (HAGS)",
                 "optimize.game_desc": "Ativa AutoGameMode e Hardware-Accelerated GPU Scheduling (HwSchMode=2) para menor latência.",
                 "optimize.btn_game": "Ativar Modo Jogo",
-                "optimize.winsxs_title": "Limpeza Profunda WinSxS (DISM)",
+                "optimize.winsxs_title": "Limpeza do WinSxS",
                 "optimize.winsxs_desc": "Executa StartComponentCleanup para remover versões antigas de atualizações substituídas do Windows.",
                 "optimize.btn_winsxs": "Limpar WinSxS",
-                "optimize.chkdsk_title": "Verificação Online de Disco (CHKDSK)",
+                "optimize.chkdsk_title": "CHKDSK online (C:)",
                 "optimize.chkdsk_desc": "Escaneia a integridade estrutural do sistema de arquivos NTFS na unidade C: sem exigir reinicialização.",
                 "optimize.btn_chkdsk": "Verificar C:",
-                "optimize.netreset_title": "Reset Completo da Pilha de Rede",
+                "optimize.netreset_title": "Redefinir pilha de rede",
                 "optimize.netreset_desc": "Executa Flush DNS, renova concessão DHCP e redefine catálogos Winsock e pilha TCP/IP.",
                 "optimize.btn_netreset": "Resetar Rede",
                 "overview.cmd_badge": "CENTRAL DE COMANDO ATIVA",
@@ -334,45 +335,45 @@ lucide.createIcons();
                 "overview.qa_clean": "Limpeza Profunda",
                 "overview.qa_antivirus": "Caça a Ameaças",
                 "overview.qa_network": "Rede & SpeedTest",
-                "opt_modal.title": "Otimizador do Sistema & Debloat",
+                "opt_modal.title": "{ const elapsed = ((Date.now() - optModalStartTime) / 1000).toFixed(1); document.getElementById('opt-modal-timer').innerText = `Tempo: ${elapsed}s`; }, 100); } function closeOptimizeModal() { const modal = document.getElementById('optimize-steps-modal'); const box = document.getElementById('optimize-modal-box'); if (optModalTimer) { clearInterval(optModalTimer); optModalTimer = null; } modal.classList.add('opacity-0', 'pointer-events-none'); modal.classList.remove('opacity-100'); box.classList.add('scale-95'); box.classList.remove('scale-100'); } function setOptimizeModalProgress(pct, statusText) { document.getElementById('opt-modal-pct').innerText = `${Math.round(pct)}%`; document.getElementById('opt-modal-progress-bar').style.width = `${pct}%`; if (statusText) document.getElementById('opt-modal-status-text').innerText = statusText; } function appendOptimizeModalLog(line) { const logBox = document.getElementById('opt-modal-log'); logBox.innerText += (logBox.innerText ? '\\n' : '') + line; logBox.scrollTop = logBox.scrollHeight; } let currentAdaptiveProfile = null; async function loadOptimizationProfile(manual = false) { try { const url = manual ? '/api/optimize/profile?force=1' : '/api/optimize/profile'; const res = await fetch(url); const data = await res.json(); if (!data || data.status !== 'success') return; const profObj = data.profile || data; currentAdaptiveProfile = profObj; const hw = profObj.hardware_summary || profObj.hardware || {}; const services = profObj.services || []; const titleEl = document.getElementById('opt-hw-profile-title'); const descEl = document.getElementById('opt-hw-profile-desc'); const chassisBadge = document.getElementById('opt-hw-chassis-badge'); const cpuEl = document.getElementById('opt-hw-cpu'); const threadsEl = document.getElementById('opt-hw-threads'); const ramEl = document.getElementById('opt-hw-ram'); const ramTierEl = document.getElementById('opt-hw-ram-tier'); const gpuEl = document.getElementById('opt-hw-gpu'); const gpuTypeEl = document.getElementById('opt-hw-gpu-type'); const storageEl = document.getElementById('opt-hw-storage'); const storageModelEl = document.getElementById('opt-hw-storage-model'); const recCountEl = document.getElementById('opt-recommended-count'); if (titleEl) titleEl.innerText = hw.profile_name || 'Perfil Adaptado ao Hardware'; if (descEl) descEl.innerText = hw.profile_description || 'Serviços calibrados para a configuração real desta máquina.'; if (chassisBadge) chassisBadge.innerText = `${hw.chassis || 'Desktop'} • ${hw.profile_badge || hw.cpu_vendor || 'x64'}`; if (cpuEl) cpuEl.innerText = hw.cpu || hw.cpu_name || 'Processador Detectado'; if (threadsEl) threadsEl.innerText = `${hw.cores || hw.cpu_cores || '--'} núcleos · ${hw.threads || hw.cpu_threads || '--'} threads`; if (ramEl) ramEl.innerText = `${hw.ram_gb || '--'} GB`; if (ramTierEl) ramTierEl.innerText = hw.ram_gb >= 15 ? 'Alta capacidade (16 GB+)' : 'Capacidade moderada'; if (gpuEl) gpuEl.innerText = hw.gpu || hw.gpu_name || 'GPU Detectada'; if (gpuTypeEl) gpuTypeEl.innerText = hw.is_dedicated_gpu ? 'Dedicada (PCIe)' : 'Integrada'; if (storageEl) storageEl.innerText = hw.storage_type || 'SSD / Disco'; if (storageModelEl) storageModelEl.innerText = 'Unidade do sistema'; if (recCountEl) { const recCnt = services.filter(s => s.recommended && !MAINTENANCE_TASKS.has(s.id || s.key)).length; recCountEl.innerText = `· ${recCnt} recomendados para esta máquina`; } await loadOptimizeStates(); renderOptimizeServices(); if (manual) { showToast(\"Hardware Reanalisado\", `Perfil adaptativo calibrado: ${hw.profile_name || 'OK'}`, \"success\", 2500); } } catch (e) { console.error(\"Erro ao carregar perfil adaptativo:\", e); } } // Ações pontuais (sem configuração gravada) ficam na página Manutenção const MAINTENANCE_TASKS = new Set(['clean_ram', 'trim', 'sfc', 'dism', 'dism_cleanup', 'chkdsk', 'restore_point', 'network_reset']); let optimizeStates = {}; let optimizeFilter = 'all'; async function loadOptimizeStates() { try { const res = await fetch('/api/optimize/state'); const data = await res.json(); optimizeStates = (data && data.state) || {}; } catch (e) { optimizeStates = {}; } } function setOptimizeFilter(f) { optimizeFilter = f; document.querySelectorAll('#opt-filter [data-filter]').forEach(b => b.classList.toggle('active', b.dataset.filter === f)); renderOptimizeServices(); } function renderOptimizeServices() { const gridEl = document.getElementById('opt-adaptive-services-grid'); const services = ((currentAdaptiveProfile && currentAdaptiveProfile.services) || []).filter(x => !MAINTENANCE_TASKS.has(x.id || x.key)); if (!gridEl || services.length === 0) return; const stateOf = s => (optimizeStates[s.id || s.key] || {}); const verifiable = services.filter(s => stateOf(s).applied === true || stateOf(s).applied === false); const applied = verifiable.filter(s => stateOf(s).applied === true); const pending = services.filter(s => stateOf(s).applied === false); const counts = { all: services.length, recommended: services.filter(s => s.recommended).length, pending: pending.length, applied: applied.length }; document.querySelectorAll('#opt-filter [data-count]').forEach(el => { el.innerText = counts[el.dataset.count] ?? 0; }); // Placar: ajustes verificáveis aplicados / total verificável const total = verifiable.length; const ratio = total ? applied.length / total : 0; const arc = document.getElementById('opt-score-arc'); if (arc) arc.style.strokeDashoffset = String(452.4 * (1 - ratio)); const sv = document.getElementById('opt-score-value'); if (sv) sv.innerText = total ? `${applied.length}/${total}` : '—'; const sf = document.getElementById('opt-score-foot'); if (sf) sf.innerText = total ? 'ajustes aplicados' : 'estado indisponível'; const list = services.filter(s => { const ap = stateOf(s).applied; if (optimizeFilter === 'recommended') return s.recommended; if (optimizeFilter === 'pending') return ap === false; if (optimizeFilter === 'applied') return ap === true; return true; }); if (list.length === 0) { gridEl.innerHTML = `",
                 "opt_modal.subtitle": "Executando sequência recomendada de serviços e debloat do Windows...",
-                "opt_modal.log_toggle": "Registro Detalhado da Execução",
-                "opt_modal.btn_done": "Concluído",
-                "terminal.cmd_admin": "Prompt de Comando Administrativo (CMD)",
-                "terminal.ps_admin": "PowerShell Administrativo 5.1 / 7+",
-                "terminal.elevated_badge": "ELEVADO",
-                "terminal.btn_run": "Executar Comando",
-                "terminal.chips_label": "DIAGNÓSTICOS RÁPIDOS (1-CLIQUE)",
-                "terminal.chip_connections": "Conexões de Rede (netstat)",
-                "terminal.chip_top_ram": "Top Processos por RAM",
-                "terminal.chip_disks": "Listar Volumes de Disco",
-                "terminal.chip_defender": "Status Windows Defender",
-                "terminal.btn_copy": "Copiar Saída",
+                "opt_modal.log_toggle": "Saída dos comandos",
+                "opt_modal.btn_done": "Aguarde…",
+                "terminal.cmd_admin": "CMD",
+                "terminal.ps_admin": "PowerShell",
+                "terminal.elevated_badge": "Executado de forma oculta, com os privilégios do WinShield · limite de 60 s",
+                "terminal.btn_run": "Executar",
+                "terminal.chips_label": "Atalhos",
+                "terminal.chip_connections": "Conexões ativas",
+                "terminal.chip_top_ram": "Top 10 em memória",
+                "terminal.chip_disks": "Discos físicos",
+                "terminal.chip_defender": "Status do Defender",
+                "terminal.btn_copy": "Copiar",
                 "terminal.btn_clear": "Limpar",
-                "network.refresh": "Atualizar Dados de Rede",
-                "network.adapter_card": "Adaptador de Rede Principal",
+                "network.refresh": "Atualizar",
+                "network.adapter_card": "Adaptador",
                 "network.connected": "Conectado",
-                "network.ip_card": "Configuração de IP Local",
-                "network.signal_card": "Sinal e Qualidade Wi-Fi",
-                "network.public_card": "IP Público & Operadora",
-                "network.ping_title": "Auditoria de Latência & Conexão (Ping)",
-                "network.ping_desc": "Mede tempo de resposta, jitter e estabilidade contra os maiores provedores de nuvem e DNS do mundo.",
-                "network.ping_all_btn": "Testar Todos os Servidores",
-                "network.ping_custom_btn": "Testar Host Personalizado",
-                "network.speed_title": "Teste Real de Velocidade (Download & Upload)",
+                "network.ip_card": "Endereçamento",
+                "network.signal_card": "Sinal",
+                "network.public_card": "IP público",
+                "network.ping_title": "Latência",
+                "network.ping_desc": "Ping ICMP: mínimo, máximo, média e perda de pacotes.",
+                "network.ping_all_btn": "Testar servidores",
+                "network.ping_custom_btn": "Testar host",
+                "network.speed_title": "Teste de velocidade",
                 "network.download": "Download",
                 "network.upload": "Upload",
-                "network.btn_start_speed": "Iniciar Teste de Velocidade",
-                "network.repair_title": "Reparos Rápidos de Conectividade (1-Clique)",
-                "devices.btn_refresh": "Atualizar Dispositivos",
-                "devices.btn_scan_updates": "Verificar Atualizações de Drivers",
-                "devices.btn_backup": "Fazer Backup de Todos os Drivers",
-                "devices.total_card": "Total de Dispositivos",
-                "devices.display_card": "Controladores de Vídeo",
-                "devices.third_card": "Drivers de Fabricantes Terceiros",
-                "devices.signed_card": "Drivers Assinados Digitalmente",
-                "devices.tab_installed": "Dispositivos & Drivers Instalados",
-                "devices.tab_updates": "Central de Atualizações de Drivers",
+                "network.btn_start_speed": "Iniciar teste (~35 s)",
+                "network.repair_title": "Reparos de conexão",
+                "devices.btn_refresh": "Atualizar",
+                "devices.btn_scan_updates": "Verificar agora",
+                "devices.btn_backup": "Backup (.inf)",
+                "devices.total_card": "Dispositivos",
+                "devices.display_card": "Adaptadores de vídeo",
+                "devices.third_card": "Drivers de terceiros",
+                "devices.signed_card": "Drivers assinados",
+                "devices.tab_installed": "Instalados",
+                "devices.tab_updates": "Atualizações",
                 "devices.update_title": "Central de Atualização de Drivers (Windows Update & Fabricantes)",
                 "devices.update_desc": "Verifica pacotes de drivers homologados pelo Windows Update e utilitários OEM oficiais."
             },
@@ -402,6 +403,7 @@ lucide.createIcons();
                 "nav.clean": "Cleaner",
                 "nav.power": "Power",
                 "nav.optimize": "Optimization",
+                "nav.maintenance": "Maintenance",
                 "nav.group_advanced": "ADVANCED",
                 "nav.terminal": "Terminal",
                 "side.telemetry": "TELEMETRY",
@@ -415,7 +417,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v6.2",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -728,6 +730,7 @@ lucide.createIcons();
                 "nav.clean": "Limpieza",
                 "nav.power": "Energía",
                 "nav.optimize": "Optimización",
+                "nav.maintenance": "Mantenimiento",
                 "nav.group_advanced": "AVANZADO",
                 "nav.terminal": "Terminal",
                 "side.telemetry": "TELEMETRÍA",
@@ -741,7 +744,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v6.2",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -1032,22 +1035,23 @@ lucide.createIcons();
 
         const TAB_TITLES_I18N = {
             'pt': {
-                'overview': { title: 'Visão Geral do PC', sub: 'Diagnóstico e métricas em tempo real da máquina' },
-                'silicon': { title: 'WinShield CoreEngine', sub: 'Especificações profundas de CPU, Caches, Placa-Mãe e Benchmark' },
-                'vision': { title: 'WinShield VisionEngine', sub: 'Arquitetura Gráfica, VRAM, Clock, DirectX, Vulkan e Sensores em Tempo Real' },
-                'memory': { title: 'WinShield RAMGuard™ Pro & RAM', sub: 'Telemetria profunda de pentes físicos, canais e teste de estresse de memória' },
-                'disk-health': { title: 'WinShield DiskGuard & SurfaceScan', sub: 'S.M.A.R.T., Telemetria NVMe, Varredura em 1.200 Blocos e Alinhamento 4K' },
-                'disk-bench': { title: 'WinShield DiskSpeed Turbo', sub: 'Benchmark de Alta Performance (Direct I/O Multi-Pass & Fila Assíncrona de Hardware)' },
-                'running-apps': { title: 'Programas em Execução & Gerenciador', sub: 'Mapeamento de janelas ativas, separação de serviços e desinstalação de softwares' },
-                'audit': { title: 'Programas Ocultos & Auditoria', sub: 'Mapeamento no Registro, AppX da Store, Serviços e Inicialização' },
-                'antivirus': { title: 'Antivírus & Caça a Ameaças', sub: 'Varredura heurística, scanner profundo de System32 e inteligência em nuvem' },
-                'clean': { title: 'Limpeza Profunda do Sistema', sub: 'Exclusão segura de temporários, Lixeira do Windows e caches de navegadores' },
-                'power': { title: 'Planos de Energia & Turbo', sub: 'Desempenho Máximo nativo, criador de esquemas e powercfg' },
-                'optimize': { title: 'Otimizações do Sistema & Debloat', sub: 'Reparos SFC/DISM, TRIM SSD, desativação de telemetria e rede' },
-                'terminal': { title: 'Terminal CMD & PowerShell', sub: 'Execução de comandos administrativos em segundo plano' },
-                'network': { title: 'Central de Rede, Wi-Fi & Ping', sub: 'Diagnósticos de sinal, latência com servidores mundiais e teste de velocidade' },
-                'devices': { title: 'Gerenciador de Dispositivos & Drivers', sub: 'Mapeamento de hardware Plug & Play e central de atualização de drivers' },
-                'stability': { title: 'Teste de Estabilidade do Sistema (StressPulse™)', sub: 'Estresse contínuo de CPU, FPU, Caches e Memória RAM com telemetria e detecção de Throttling' },
+                'overview': { title: 'Visão geral', sub: 'Diagnóstico e métricas em tempo real da máquina' },
+                'silicon': { title: 'Processador', sub: 'Especificações profundas de CPU, Caches, Placa-Mãe e Benchmark' },
+                'vision': { title: 'Placa de vídeo', sub: 'Arquitetura Gráfica, VRAM, Clock, DirectX, Vulkan e Sensores em Tempo Real' },
+                'memory': { title: 'Memória RAM', sub: 'Telemetria profunda de pentes físicos, canais e teste de estresse de memória' },
+                'disk-health': { title: 'Saúde dos discos', sub: 'S.M.A.R.T., Telemetria NVMe, Varredura em 1.200 Blocos e Alinhamento 4K' },
+                'disk-bench': { title: 'Velocidade dos discos', sub: 'Benchmark de Alta Performance (Direct I/O Multi-Pass & Fila Assíncrona de Hardware)' },
+                'running-apps': { title: 'Programas em execução', sub: 'Mapeamento de janelas ativas, separação de serviços e desinstalação de softwares' },
+                'audit': { title: 'Auditoria de software', sub: 'Mapeamento no Registro, AppX da Store, Serviços e Inicialização' },
+                'antivirus': { title: 'Antivírus', sub: 'Varredura heurística, scanner profundo de System32 e inteligência em nuvem' },
+                'clean': { title: 'Limpeza', sub: 'Exclusão segura de temporários, Lixeira do Windows e caches de navegadores' },
+                'power': { title: 'Energia', sub: 'Desempenho Máximo nativo, criador de esquemas e powercfg' },
+                'optimize': { title: 'Otimização', sub: 'Reparos SFC/DISM, TRIM SSD, desativação de telemetria e rede' },
+                'maintenance': { title: 'Manutenção', sub: 'Reparo do Windows, TRIM, liberação de RAM e rede' },
+                'terminal': { title: 'Terminal', sub: 'Execução de comandos administrativos em segundo plano' },
+                'network': { title: 'Rede', sub: 'Diagnósticos de sinal, latência com servidores mundiais e teste de velocidade' },
+                'devices': { title: 'Dispositivos e drivers', sub: 'Mapeamento de hardware Plug & Play e central de atualização de drivers' },
+                'stability': { title: 'Teste de estresse', sub: 'Estresse contínuo de CPU, FPU, Caches e Memória RAM com telemetria e detecção de Throttling' },
             },
             'en': {
                 'overview': { title: 'PC Overview', sub: 'Real-time diagnostic and hardware telemetry' },
@@ -1062,6 +1066,7 @@ lucide.createIcons();
                 'clean': { title: 'Deep System Cleaner', sub: 'Secure deletion of temporary files, Windows Recycle Bin, and browser caches' },
                 'power': { title: 'Power Plans & Hardware Turbo', sub: 'Native Maximum Performance schemes, custom creator and powercfg' },
                 'optimize': { title: 'System Optimizations & Debloat', sub: 'SFC/DISM repairs, SSD TRIM, telemetry debloat and network tweaks' },
+                'maintenance': { title: 'Maintenance', sub: 'Windows repair, TRIM, memory release and network' },
                 'terminal': { title: 'CMD & PowerShell Terminal', sub: 'Administrative background command execution' },
                 'network': { title: 'Network, Wi-Fi & Ping Central', sub: 'Signal diagnostics, world server latency tests, and real bandwidth speed' },
                 'devices': { title: 'Device Manager & Driver Center', sub: 'Plug & Play hardware audit and OEM/Windows Update driver center' },
@@ -1080,6 +1085,7 @@ lucide.createIcons();
                 'clean': { title: 'Limpieza Profunda del Sistema', sub: 'Eliminación segura de archivos temporales, Papelera de Windows y cachés' },
                 'power': { title: 'Planes de Energía y Turbo', sub: 'Esquemas de Máximo Rendimiento, creador personalizado y powercfg' },
                 'optimize': { title: 'Optimizaciones del Sistema y Debloat', sub: 'Reparaciones SFC/DISM, TRIM SSD, desactivación de telemetría y red' },
+                'maintenance': { title: 'Mantenimiento', sub: 'Reparación de Windows, TRIM, liberación de RAM y red' },
                 'terminal': { title: 'Terminal CMD y PowerShell', sub: 'Ejecución de comandos administrativos en segundo plano' },
                 'network': { title: 'Central de Red, Wi-Fi y Ping', sub: 'Diagnóstico de señal, latencia con servidores mundiales y prueba de velocidad' },
                 'devices': { title: 'Gestor de Dispositivos y Drivers', sub: 'Auditoría de hardware Plug & Play y central de actualización de drivers' },
@@ -1097,17 +1103,9 @@ lucide.createIcons();
         }
 
         function applyLanguageButtonStyles() {
-            const isLight = isLightThemeActive();
             ['pt', 'en', 'es'].forEach(l => {
                 const btn = document.getElementById(`lang-btn-${l}`);
-                if (!btn) return;
-                if (l === currentLang) {
-                    btn.className = "px-2 py-1 rounded-lg flex items-center gap-1 font-bold bg-blue-600 text-white shadow-sm transition";
-                } else {
-                    btn.className = isLight
-                        ? "px-2 py-1 rounded-lg flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 transition"
-                        : "px-2 py-1 rounded-lg flex items-center gap-1 font-semibold text-slate-400 hover:text-white transition";
-                }
+                if (btn) btn.classList.toggle('active', l === currentLang);
             });
             if (typeof updateSplashLanguageButtons === 'function') {
                 updateSplashLanguageButtons(currentLang);
@@ -1117,14 +1115,7 @@ lucide.createIcons();
         function applyThemeButtonStyles(mode, effectiveTheme) {
             ['dark', 'light', 'auto'].forEach(m => {
                 const btn = document.getElementById(`theme-btn-${m}`);
-                if (!btn) return;
-                if (m === mode) {
-                    btn.className = "px-2.5 py-1 rounded-lg flex items-center gap-1.5 font-bold bg-blue-600 text-white shadow-sm transition";
-                } else {
-                    btn.className = (effectiveTheme === 'light')
-                        ? "px-2.5 py-1 rounded-lg flex items-center gap-1.5 font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 transition"
-                        : "px-2.5 py-1 rounded-lg flex items-center gap-1.5 font-semibold text-slate-400 hover:text-white transition";
-                }
+                if (btn) btn.classList.toggle('active', m === mode);
             });
         }
 
@@ -1196,12 +1187,7 @@ lucide.createIcons();
             const targetLang = lang || currentLang || 'pt';
             ['pt', 'en', 'es'].forEach(l => {
                 const btn = document.getElementById(`splash-lang-btn-${l}`);
-                if (!btn) return;
-                if (l === targetLang) {
-                    btn.className = "px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-gradient-to-r from-blue-600/60 to-cyan-500/60 border border-cyan-400 text-white shadow-[0_0_12px_rgba(6,182,212,0.4)] scale-105";
-                } else {
-                    btn.className = "px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent";
-                }
+                if (btn) btn.classList.toggle('active', l === targetLang);
             });
         }
 
@@ -1236,40 +1222,62 @@ lucide.createIcons();
             const pctText = document.getElementById('splash-pct-text');
             const statusText = document.getElementById('splash-status-text');
 
-            if (bar) bar.style.width = '20%';
-            if (pctText) pctText.innerText = '20%';
-            if (statusText) statusText.innerText = t('splash.status_loading1') || 'Verificando privilégios de Administrador & Kernel...';
-
-            if (splashTimer) clearTimeout(splashTimer);
-
-            setTimeout(() => {
-                if (bar) bar.style.width = '55%';
-                if (pctText) pctText.innerText = '55%';
-                if (statusText) statusText.innerText = t('splash.status_loading2') || 'Sincronizando telemetria de hardware e sensores...';
-            }, 300);
-
-            setTimeout(() => {
-                if (bar) bar.style.width = '85%';
-                if (pctText) pctText.innerText = '85%';
-                if (statusText) statusText.innerText = t('splash.status_loading3') || 'Carregando motores de disco e segurança...';
-            }, 700);
-
-            setTimeout(() => {
-                if (bar) bar.style.width = '100%';
-                if (pctText) pctText.innerText = '100%';
-                if (statusText) statusText.innerText = t('splash.progress_ready') || 'Sistema pronto para uso!';
-                const enterBtn = document.getElementById('splash-enter-btn');
-                if (enterBtn) {
-                    enterBtn.classList.add('ring-2', 'ring-cyan-400/50');
-                }
-                lucide.createIcons();
-            }, 1150);
+            runSplashChecks();
 
             if (!manual) {
                 splashTimer = setTimeout(() => {
                     closeStartupBanner();
                 }, 10000);
             }
+        }
+
+
+        // Tela de abertura: cada linha mostra um dado REAL lido do backend
+        async function runSplashChecks() {
+            const bar = document.getElementById('splash-progress-bar');
+            const pctText = document.getElementById('splash-pct-text');
+            const statusText = document.getElementById('splash-status-text');
+            const total = 5;
+            let done = 0;
+            const mark = (id, state, value) => {
+                const row = document.getElementById(id);
+                if (!row) return;
+                row.className = `ws-splash-step is-done ${state}`;
+                row.querySelector('.st').innerHTML = `<span class="ws-dot" style="margin:0;background:var(--${state === 'ok' ? 'ok' : state === 'warn' ? 'warn' : 'bad'})"></span>`;
+                row.querySelector('.val').innerText = value;
+                row.querySelector('.val').title = value;
+                done++;
+                const pct = Math.round(done / total * 100);
+                if (bar) bar.style.width = `${pct}%`;
+                if (pctText) pctText.innerText = `${pct}%`;
+                if (window.lucide) lucide.createIcons();
+            };
+            if (bar) bar.style.width = '0%';
+            if (statusText) statusText.innerText = 'Lendo informações do sistema…';
+
+            try {
+                const st = await (await fetch('/api/status')).json();
+                mark('splash-step-admin', st.admin ? 'ok' : 'warn', st.admin ? 'Administrador' : 'Usuário comum — alguns módulos ficam limitados');
+            } catch (e) {
+                mark('splash-step-admin', 'bad', 'Serviço local indisponível');
+            }
+            try {
+                const info = (await (await fetch('/api/system/info')).json()).info || {};
+                mark('splash-step-os', info.os ? 'ok' : 'warn', info.os ? `${info.os} · build ${info.os_build || '—'}` : 'Não identificado');
+                mark('splash-step-cpu', info.cpu ? 'ok' : 'warn', info.cpu ? `${info.cpu} · ${info.cpu_cores || '?'}C/${info.cpu_threads || '?'}T` : 'Não identificado');
+                mark('splash-step-ram', info.ram_total_gb ? 'ok' : 'warn', info.ram_total_gb ? `${info.ram_total_gb} GB instalados` : 'Não identificada');
+                mark('splash-step-gpu', info.gpu_primary ? 'ok' : 'warn', info.gpu_primary || 'Não identificada');
+            } catch (e) {
+                ['splash-step-os', 'splash-step-cpu', 'splash-step-ram', 'splash-step-gpu'].forEach(id => mark(id, 'bad', 'Falha na leitura'));
+            }
+            if (statusText) statusText.innerText = 'Pronto';
+        }
+
+        async function loadSidebarAdminStatus() {
+            try {
+                const st = await (await fetch('/api/status')).json();
+                if (st.version) document.querySelectorAll('.ws-app-version').forEach(el => { el.innerText = st.version; });
+            } catch (e) { }
         }
 
         function closeStartupBanner() {
@@ -1279,10 +1287,12 @@ lucide.createIcons();
             }
             const modal = document.getElementById('startup-splash-modal');
             if (!modal) return;
+            modal.classList.add('is-leaving');
             modal.style.opacity = '0';
             setTimeout(() => {
                 modal.style.display = 'none';
-            }, 450);
+                modal.classList.remove('is-leaving');
+            }, 500);
         }
 
         // =====================================================================
@@ -1343,7 +1353,9 @@ lucide.createIcons();
 
         async function initApp() {
             switchTab('overview');
+            loadSidebarAdminStatus();
             loadSystemInfo();
+            loadOverviewDiskHealth();
             pollLiveMetrics();
             // Lazy-loading leve em segundo plano após inicialização do UI
             setTimeout(() => {
@@ -1375,7 +1387,13 @@ lucide.createIcons();
                 html.classList.remove('light');
             }
 
+            html.style.colorScheme = effectiveTheme;
             localStorage.setItem('winshield_theme', mode);
+            // Canvas não herdam CSS: redesenha os gráficos com as cores do novo tema
+            setTimeout(() => {
+                try { if (typeof renderStressCharts === 'function') renderStressCharts(); } catch (e) { }
+                try { if (window.__lastSectorScan && typeof drawSectorGuardSpeedCurve === 'function') drawSectorGuardSpeedCurve(window.__lastSectorScan); } catch (e) { }
+            }, 30);
 
             applyThemeButtonStyles(mode, effectiveTheme);
             applyLanguageButtonStyles();
@@ -1586,25 +1604,10 @@ lucide.createIcons();
                 }
 
                 // Paleta de cores moderna
-                if (type === 'danger') {
-                    glow.className = "absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl pointer-events-none bg-rose-500/20";
-                    iconBox.className = "relative w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/40 flex items-center justify-center text-rose-400";
-                    iconGlow.className = "absolute inset-0 rounded-2xl bg-rose-500/30 blur-md";
-                    iconEl.setAttribute('data-lucide', itemIcon || 'skull');
-                    btnAction.className = "px-5 py-2.5 rounded-xl text-white text-xs font-bold shadow-lg transition-all flex items-center space-x-1.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-rose-900/40";
-                } else if (type === 'warning') {
-                    glow.className = "absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl pointer-events-none bg-amber-500/20";
-                    iconBox.className = "relative w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400";
-                    iconGlow.className = "absolute inset-0 rounded-2xl bg-amber-500/30 blur-md";
-                    iconEl.setAttribute('data-lucide', itemIcon || 'alert-triangle');
-                    btnAction.className = "px-5 py-2.5 rounded-xl text-white text-xs font-bold shadow-lg transition-all flex items-center space-x-1.5 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 shadow-amber-900/40";
-                } else {
-                    glow.className = "absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl pointer-events-none bg-blue-500/20";
-                    iconBox.className = "relative w-16 h-16 rounded-2xl bg-blue-500/10 border border-cyan-500/40 flex items-center justify-center text-cyan-400";
-                    iconGlow.className = "absolute inset-0 rounded-2xl bg-blue-500/30 blur-md";
-                    iconEl.setAttribute('data-lucide', itemIcon || 'shield-check');
-                    btnAction.className = "px-5 py-2.5 rounded-xl text-white text-xs font-bold shadow-lg transition-all flex items-center space-x-1.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 shadow-blue-900/40";
-                }
+                const tone = type === 'danger' ? 'bad' : (type === 'warning' ? 'warn' : 'brand');
+                iconBox.className = `ws-icon lg ${tone}`;
+                iconEl.setAttribute('data-lucide', itemIcon || (type === 'danger' ? 'skull' : (type === 'warning' ? 'alert-triangle' : 'shield-check')));
+                btnAction.className = type === 'danger' ? 'ws-btn danger' : 'ws-btn primary';
 
                 lucide.createIcons();
                 modal.classList.remove('pointer-events-none', 'opacity-0');
@@ -1651,6 +1654,7 @@ lucide.createIcons();
             'clean': { key: 'nav.group_system', badgeClass: 'bg-teal-500/10 text-teal-400 border-teal-500/25' },
             'power': { key: 'nav.group_system', badgeClass: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25' },
             'optimize': { key: 'nav.group_system', badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/25' },
+            'maintenance': { key: 'nav.group_system', badgeClass: '' },
             'terminal': { key: 'nav.group_system', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' }
         };
 
@@ -1658,8 +1662,8 @@ lucide.createIcons();
             const badge = document.getElementById('page-category-badge');
             if (!badge) return;
             const info = TAB_CATEGORY_MAP[tabId] || TAB_CATEGORY_MAP['overview'];
-            badge.innerText = t(info.key);
-            badge.className = `hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border flex-shrink-0 ${info.badgeClass}`;
+            const label = String(t(info.key) || '').toLowerCase();
+            badge.innerText = label.charAt(0).toUpperCase() + label.slice(1);
         }
 
         function toggleSidebar() {
@@ -1861,7 +1865,7 @@ lucide.createIcons();
             const pageSub = document.getElementById('page-subtitle');
             if (pageTitle) pageTitle.innerText = headerInfo.title;
             if (pageSub) pageSub.innerText = headerInfo.sub;
-            document.title = `${headerInfo.title} - WinShield Pro Enterprise`;
+            document.title = `${headerInfo.title} — WinShield Pro`;
             updatePageCategoryBadge(tabId);
 
             if (tabId === 'memory') loadMemoryInfo();
@@ -1878,11 +1882,13 @@ lucide.createIcons();
             if (tabId === 'antivirus') checkDefenderStatus();
             if (tabId === 'clean' && currentCleanCategories.length === 0) analyzeTempFiles(true);
             if (tabId === 'optimize') loadOptimizationProfile();
+            if (tabId === 'power') loadPowerSchemes();
             if (tabId === 'disk-bench') pollBenchmarkStatus();
             if (tabId === 'network') loadNetworkInfo();
             if (tabId === 'devices') loadDevicesInfo();
             if (tabId === 'stability') {
                 loadStabilityInfo();
+                if (stabilityMode === 'bench') switchStabilityMode('bench');
                 if (!stabilityPollTimer) stabilityPollTimer = setInterval(pollStabilityStatus, 1000);
             } else {
                 if (stabilityPollTimer && !isStabilityTestingActive) {
@@ -2012,24 +2018,8 @@ lucide.createIcons();
                 const match = (k === 'user' && cat === 'user_app') ||
                     (k === 'service' && cat === 'windows_service') ||
                     (k === 'all' && cat === 'all');
-                if (match) {
-                    btn.className = "px-3 py-1.5 rounded-lg font-bold bg-blue-600 text-white shadow-sm transition flex items-center gap-1.5";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5";
-                }
+                btn.classList.toggle('active', match);
             });
-            const badgeUser = document.getElementById('badge-count-user-apps');
-            const badgeServ = document.getElementById('badge-count-services');
-            if (badgeUser) {
-                badgeUser.className = (cat === 'user_app')
-                    ? "px-1.5 py-0.2 rounded-md bg-white/25 text-white text-[10px] font-mono"
-                    : "px-1.5 py-0.2 rounded-md bg-slate-500/15 text-slate-400 text-[10px] font-mono";
-            }
-            if (badgeServ) {
-                badgeServ.className = (cat === 'windows_service')
-                    ? "px-1.5 py-0.2 rounded-md bg-white/25 text-white text-[10px] font-mono"
-                    : "px-1.5 py-0.2 rounded-md bg-slate-500/15 text-slate-400 text-[10px] font-mono";
-            }
             renderRunningAppsTable();
         }
 
@@ -2052,7 +2042,7 @@ lucide.createIcons();
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-slate-400">Nenhum programa ou serviço encontrado correspondente ao filtro.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="ws-empty">Nenhum processo corresponde ao filtro.</td></tr>`;
                 return;
             }
 
@@ -2061,81 +2051,36 @@ lucide.createIcons();
                 const mainTitle = app.titles && app.titles.length > 0 ? app.titles[0] : '';
                 const isUserApp = app.category === 'user_app';
 
-                const catBadge = isUserApp
-                    ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 w-max">
-                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                         ${t('apps.badge_user_app')}
-                       </span>`
-                    : `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 flex items-center gap-1 w-max">
-                         <i data-lucide="cog" class="w-2.5 h-2.5 text-indigo-400"></i>
-                         ${t('apps.badge_service')}
-                       </span>`;
-
-                const ramPill = `<div class="flex items-center space-x-2">
-                    <span class="font-mono font-bold text-slate-200">${app.mem_mb} MB</span>
-                    <div class="w-16 bg-dark-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
-                        <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full" style="width: ${Math.min(100, Math.round((app.mem_mb / 500) * 100))}%"></div>
-                    </div>
-                </div>`;
-
+                const catBadge = `<span class="ws-badge">${isUserApp ? t('apps.badge_user_app') : t('apps.badge_service')}</span>`;
+                const ramPct = Math.min(100, Math.round((app.mem_mb / 1024) * 100));
                 const iconName = app.icon_hint || (isUserApp ? 'app-window' : 'cog');
-                const brandColor = app.brand_color || 'cyan';
-                const brandClassMap = {
-                    amber: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
-                    cyan: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
-                    orange: 'bg-orange-500/15 border-orange-500/30 text-orange-400',
-                    indigo: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
-                    emerald: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-                    blue: 'bg-blue-500/15 border-blue-500/30 text-blue-400',
-                    yellow: 'bg-yellow-500/15 border-yellow-500/30 text-yellow-400',
-                    sky: 'bg-sky-500/15 border-sky-500/30 text-sky-400',
-                    purple: 'bg-purple-500/15 border-purple-500/30 text-purple-400',
-                    slate: 'bg-slate-500/15 border-slate-500/30 text-slate-300'
-                };
-                const badgeTone = brandClassMap[brandColor] || brandClassMap.cyan;
-
                 html += `
-                <tr class="hover:bg-slate-800/30 transition-colors">
-                    <td class="py-3 px-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-lg border ${badgeTone} flex items-center justify-center flex-shrink-0 shadow-sm">
-                                <i data-lucide="${iconName}" class="w-4 h-4"></i>
-                            </div>
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="ws-icon"><i data-lucide="${iconName}"></i></div>
                             <div class="min-w-0">
-                                <p class="font-bold text-white text-xs truncate">${escapeHtml(app.name)}</p>
-                                <p class="text-[10px] font-mono text-slate-400 truncate">${escapeHtml(app.exe)} <span class="text-slate-600">(PID: ${app.main_pid})</span></p>
+                                <div class="ws-strong truncate">${escapeHtml(app.name)}</div>
+                                <div class="ws-mono text-[11.5px] ws-faint truncate">${escapeHtml(app.exe)} · PID ${app.main_pid}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="py-3 px-4">
-                        ${catBadge}
+                    <td>${catBadge}</td>
+                    <td class="max-w-[360px]">
+                        <div class="truncate" title="${escapeHtml(mainTitle)}">${escapeHtml(mainTitle || (isUserApp ? 'Sem janela visível' : 'Segundo plano'))}</div>
+                        ${app.path ? `<div class="ws-mono text-[11px] ws-faint truncate" title="${escapeHtml(app.path)}">${escapeHtml(app.path)}</div>` : ''}
                     </td>
-                    <td class="py-3 px-4">
-                        <div class="space-y-0.5">
-                            <p class="text-xs text-slate-300 font-medium truncate max-w-xs" title="${escapeHtml(mainTitle)}">${escapeHtml(mainTitle || (isUserApp ? 'Sem janela na área de trabalho' : 'Serviço em segundo plano'))}</p>
-                            ${app.path ? `<p class="text-[10px] text-slate-500 font-mono truncate max-w-xs" title="${escapeHtml(app.path)}">${escapeHtml(app.path)}</p>` : ''}
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <span class="ws-mono ws-strong w-16 text-right">${app.mem_mb} MB</span>
+                            <div class="ws-meter thin w-16"><span style="width:${ramPct}%"></span></div>
                         </div>
                     </td>
-                    <td class="py-3 px-4">
-                        ${ramPill}
-                    </td>
-                    <td class="py-3 px-4 text-right">
+                    <td class="text-right">
                         <div class="flex items-center justify-end gap-1.5">
-                            <button onclick="killAppProcess('${app.main_pid}', '${escapeHtml(app.exe)}')" class="btn-action-danger text-[11px] px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm" title="Finalizar processo">
-                                <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
-                                <span>${t('apps.btn_kill')}</span>
-                            </button>
-                            ${app.can_uninstall || isUserApp ? `
-                            <button onclick="uninstallRunningApp('${escapeHtml(app.exe)}')" class="btn-action-secondary text-[11px] px-2.5 py-1.5 rounded-lg text-amber-300 border-amber-500/40 hover:border-amber-400 flex items-center gap-1" title="Desinstalar programa oficial">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                <span>${t('apps.btn_uninstall')}</span>
-                            </button>
-                            ` : ''}
-                            ${app.path ? `
-                            <button onclick="openAppFolder(decodeURIComponent('${encodeURIComponent(app.path || '')}'))" class="btn-action-secondary text-[11px] px-2 py-1.5 rounded-lg text-slate-400 hover:text-white" title="Abrir pasta no Explorer">
-                                <i data-lucide="folder" class="w-3.5 h-3.5"></i>
-                            </button>
-                            ` : ''}
+                            ${app.path ? `<button onclick="openAppFolder(decodeURIComponent('${encodeURIComponent(app.path || '')}'))" class="ws-btn sm ghost" title="Abrir pasta no Explorer">Pasta</button>` : ''}
+                            ${app.can_uninstall || isUserApp ? `<button onclick="uninstallRunningApp('${escapeHtml(app.exe)}')" class="ws-btn sm" title="Desinstalar"><i data-lucide="package-x"></i>${t('apps.btn_uninstall')}</button>` : ''}
+                            <button onclick="killAppProcess('${app.main_pid}', '${escapeHtml(app.exe)}')" class="ws-btn sm danger" title="Finalizar processo"><i data-lucide="x"></i>${t('apps.btn_kill')}</button>
                         </div>
                     </td>
                 </tr>
@@ -2231,7 +2176,7 @@ lucide.createIcons();
                 if (data.status === 'success' && data.info) {
                     const i = data.info;
                     document.getElementById('overview-cpu-name').innerText = i.cpu || 'Processador Detectado';
-                    document.getElementById('overview-cpu-threads').innerText = `${i.cpu_threads || 0} Threads`;
+                    document.getElementById('overview-cpu-threads').innerText = `${i.cpu_cores || 0}C / ${i.cpu_threads || 0}T`;
 
                     // Preenche especificações completas e 100% autênticas
                     document.getElementById('spec-os').innerText = `${i.os || 'Windows'} (${i.cpu_arch || i.arch || '64-bit'})`;
@@ -2307,11 +2252,11 @@ lucide.createIcons();
                             const elVal = document.getElementById('overview-disk-c-val');
                             if (elVal) elVal.innerText = `${cVol.percent}%`;
                             const elFree = document.getElementById('overview-disk-c-free');
-                            if (elFree) elFree.innerText = `${freeGb} GB Livre`;
+                            if (elFree) elFree.innerText = `${freeGb} GB livres`;
                             const elBar = document.getElementById('overview-disk-c-bar');
                             if (elBar) elBar.style.width = `${cVol.percent}%`;
                             const elModel = document.getElementById('overview-disk-c-model');
-                            if (elModel) elModel.innerText = `${cVol.label} (${cVol.letter}:) - ${cVol.fs}`;
+                            if (elModel) elModel.innerText = `${cVol.label || 'Disco local'} · ${cVol.fs} · ${(cVol.total / (1024 ** 3)).toFixed(0)} GB`;
                         }
 
                         const vBox = document.getElementById('overview-volumes-list');
@@ -2321,15 +2266,14 @@ lucide.createIcons();
                                 lv.volumes.forEach(v => {
                                     const totalGb = (v.total / (1024 ** 3)).toFixed(0);
                                     const freeGb = (v.free / (1024 ** 3)).toFixed(1);
+                                    const tone = v.percent >= 90 ? 'bad' : (v.percent >= 75 ? 'warn' : '');
                                     vBox.innerHTML += `
-                                        <div class="p-2.5 rounded-xl bg-dark-900 border border-slate-800 text-xs" data-vol="${v.letter}">
-                                            <div class="flex items-center justify-between mb-1">
-                                                <span class="font-bold text-slate-200">${v.letter}: [${v.label}]</span>
-                                                <span class="font-mono text-slate-400 vol-stat">${freeGb} GB livres de ${totalGb} GB</span>
+                                        <div data-vol="${v.letter}">
+                                            <div class="flex items-center justify-between text-[12.5px] mb-1.5 gap-3">
+                                                <span class="truncate" style="color:var(--text-primary);font-weight:600">${v.letter}: <span class="ws-muted" style="font-weight:400">${escapeHtml(v.label || 'Disco local')} · ${escapeHtml(v.fs || '')}</span></span>
+                                                <span class="ws-mono ws-muted vol-stat whitespace-nowrap">${freeGb} GB livres de ${totalGb} GB</span>
                                             </div>
-                                            <div class="w-full bg-dark-950 rounded-full h-1.5 overflow-hidden">
-                                                <div class="bg-emerald-500 h-1.5 rounded-full vol-bar" style="width: ${v.percent}%"></div>
-                                            </div>
+                                            <div class="ws-meter ${tone}"><span class="vol-bar" style="width: ${v.percent}%"></span></div>
                                         </div>
                                     `;
                                 });
@@ -2370,6 +2314,16 @@ lucide.createIcons();
         // =====================================================================
         // SAÚDE DOS DISCOS (WINSHIELD DISKGUARD & SURFACESCAN)
         // =====================================================================
+        async function loadOverviewDiskHealth() {
+            try {
+                const data = await (await fetch('/api/disks/health')).json();
+                if (data.status === 'success' && data.disks) {
+                    allDisksData = data.disks;
+                    updateOverviewFaithfulHealth();
+                }
+            } catch (e) { }
+        }
+
         async function loadDisksHealth(force = false) {
             try {
                 const url = force ? '/api/disks/health/refresh' : '/api/disks/health';
@@ -2404,38 +2358,19 @@ lucide.createIcons();
             const summaryEl = document.getElementById('overview-health-summary');
             const badgesEl = document.getElementById('overview-disk-health-badges');
 
+            const tone = h => h >= 90 ? 'ok' : (h >= 70 ? 'info' : (h >= 40 ? 'warn' : 'bad'));
             healthValEl.innerText = `${primaryHealth}%`;
-            healthStatusEl.innerText = primaryDisk.health_label ? primaryDisk.health_label.toUpperCase() : (primaryHealth >= 90 ? 'EXCELENTE' : (primaryHealth >= 70 ? 'BOM' : (primaryHealth >= 40 ? 'ATENÇÃO' : 'CRÍTICO')));
+            healthValEl.className = 'ws-stat-value text-[26px]';
+            healthValEl.style.color = `var(--${tone(primaryHealth)})`;
+            const label = primaryDisk.health_label || (primaryHealth >= 90 ? 'Excelente' : (primaryHealth >= 70 ? 'Bom' : (primaryHealth >= 40 ? 'Atenção' : 'Crítico')));
+            healthStatusEl.className = `ws-badge ${tone(primaryHealth)}`;
+            healthStatusEl.innerHTML = `<span class="dot"></span>${escapeHtml(label)}`;
 
-            if (primaryHealth >= 90) {
-                healthValEl.className = "text-3xl font-extrabold text-emerald-400";
-                healthStatusEl.className = "text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300";
-            } else if (primaryHealth >= 70) {
-                healthValEl.className = "text-3xl font-extrabold text-blue-400";
-                healthStatusEl.className = "text-xs font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300";
-            } else if (primaryHealth >= 40) {
-                healthValEl.className = "text-3xl font-extrabold text-amber-400";
-                healthStatusEl.className = "text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300";
-            } else {
-                healthValEl.className = "text-3xl font-extrabold text-rose-400";
-                healthStatusEl.className = "text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300";
-            }
+            summaryEl.innerText = `${primaryDisk.model} · ${primaryDisk.media}`;
 
-            summaryEl.innerText = `${primaryDisk.model} (${primaryDisk.media}) - 100% Fiel`;
-
-            // Mini badges para cada disco físico conectado
-            badgesEl.innerHTML = '';
-            allDisksData.forEach(d => {
-                const badgeColor = d.health >= 90 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
-                    (d.health >= 70 ? 'bg-blue-500/10 text-blue-400 border-blue-500/30' :
-                        (d.health >= 40 ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
-                            'bg-rose-500/10 text-rose-400 border-rose-500/30'));
-                badgesEl.innerHTML += `
-                    <span class="px-2 py-0.5 rounded border text-[10px] font-bold ${badgeColor}">
-                        Disco ${d.index}: ${d.health}% (${d.temperature ? d.temperature + '°C' : d.media})
-                    </span>
-                `;
-            });
+            badgesEl.innerHTML = allDisksData.map(d =>
+                `<span class="ws-badge ${tone(d.health)}" title="${escapeHtml(d.model || '')}">Disco ${d.index}: ${d.health}%${d.temperature ? ` · ${d.temperature} °C` : ''}</span>`
+            ).join('');
         }
 
         function renderDiskHealthSelector() {
@@ -2444,21 +2379,15 @@ lucide.createIcons();
             allDisksData.forEach((d, idx) => {
                 const isSelected = (idx === selectedDiskIndex);
                 const btn = document.createElement('button');
-                btn.className = `subtab-btn flex items-center space-x-2.5 px-4 py-2 rounded-xl text-xs font-bold transition ${isSelected ? 'active' : ''
-                    }`;
+                btn.className = `ws-chip-btn ${isSelected ? 'active' : ''}`;
                 btn.onclick = () => {
                     selectedDiskIndex = idx;
                     renderDiskHealthSelector();
                     renderSelectedDiskHealth();
                     loadDiskFeatures(idx);
                 };
-
-                const healthColor = d.health >= 90 ? 'text-emerald-400' : (d.health >= 70 ? 'text-blue-400' : (d.health >= 40 ? 'text-amber-400' : 'text-rose-400'));
-                btn.innerHTML = `
-                    <i data-lucide="hard-drive" class="w-4 h-4"></i>
-                    <span>Disco ${d.index}: ${escapeHtml(d.model.substring(0, 18))}</span>
-                    <span class="font-mono ${healthColor}">[${d.health}%]</span>
-                `;
+                const tone = d.health >= 90 ? 'ok' : (d.health >= 70 ? 'info' : (d.health >= 40 ? 'warn' : 'bad'));
+                btn.innerHTML = `<i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>Disco ${d.index} · ${escapeHtml(d.model.substring(0, 22))} <span class="ws-mono" style="color:var(--${tone})">${d.health}%</span>`;
                 bar.appendChild(btn);
             });
             lucide.createIcons();
@@ -2500,29 +2429,55 @@ lucide.createIcons();
             document.getElementById('dh-health-percent').innerText = `${health}%`;
             document.getElementById('dh-health-badge').innerText = d.health_label || 'Bom';
 
+            const tone = health >= 90 ? 'ok' : (health >= 70 ? 'info' : (health >= 40 ? 'warn' : 'bad'));
             const gauge = document.getElementById('dh-gauge-box');
-            gauge.className = "w-24 h-24 rounded-2xl flex flex-col items-center justify-center flex-shrink-0 shadow-lg " +
-                (health >= 90 ? "bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400" :
-                    (health >= 70 ? "bg-blue-500/10 border-2 border-blue-500/40 text-blue-400" :
-                        (health >= 40 ? "bg-amber-500/10 border-2 border-amber-500/40 text-amber-400" : "bg-rose-500/10 border-2 border-rose-500/40 text-rose-400")));
+            gauge.className = `ws-ring ${tone === 'info' ? '' : tone}`;
+            const arc = document.getElementById('dh-health-arc');
+            if (arc) arc.style.strokeDashoffset = String(452.4 * (1 - health / 100));
+            const hb = document.getElementById('dh-health-badge');
+            hb.className = `ws-badge ${tone}`;
+            hb.innerHTML = `<span class="dot"></span>${escapeHtml(d.health_label || 'Bom')}`;
 
             // Badges
-            document.getElementById('dh-disk-temp').innerText = d.temperature ? `${d.temperature} °C` : 'N/D';
-            document.getElementById('dh-disk-hours').innerText = d.power_on_hours ? `${d.power_on_hours.toLocaleString()} h` : '—';
+            const setT = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+            const fmtInt = n => Number(n).toLocaleString('pt-BR');
+            const fmtTB = b => b >= 1024 ** 4 ? `${(b / 1024 ** 4).toFixed(2)} TB` : `${(b / 1024 ** 3).toFixed(0)} GB`;
+            const hours = d.power_on_hours;
+            const daysTxt = (() => {
+                if (!hours) return null;
+                const days = Math.floor(hours / 24);
+                const y = Math.floor(days / 365), rest = days % 365;
+                return y > 0 ? `${fmtInt(days)} dias (${y} ano${y > 1 ? 's' : ''} e ${rest} dias)` : `${fmtInt(days)} dias`;
+            })();
+            const vendor = d.manufacturer || 'Não informado pelo disco';
 
-            const writesTb = d.host_writes ? (d.host_writes / (1024 ** 4)).toFixed(2) : null;
-            document.getElementById('dh-disk-writes').innerText = writesTb ? `${writesTb} TB` : '—';
+            setT('dh-disk-temp', d.temperature ? `${d.temperature} °C` : 'N/D');
+            setT('dh-disk-days', hours ? `${fmtInt(Math.floor(hours / 24))} dias` : 'N/D');
+            setT('dh-disk-hours', hours ? `${fmtInt(hours)} horas ligado` : 'horas ligado: N/D');
+            setT('dh-disk-writes', d.host_writes ? fmtTB(d.host_writes) : 'N/D');
+            setT('dh-disk-reads', `lido: ${d.host_reads ? fmtTB(d.host_reads) : 'N/D'}`);
+            setT('dh-disk-cycles', d.power_cycles ? fmtInt(d.power_cycles) : 'N/D');
+            setT('dh-disk-unsafe', `desligamentos inesperados: ${d.unsafe_shutdowns !== null && d.unsafe_shutdowns !== undefined ? fmtInt(d.unsafe_shutdowns) : 'N/D'}`);
+            setT('dh-disk-vendor', vendor);
+            setT('dh-disk-vendor-top', vendor);
+            setT('dh-disk-model-kv', d.model || '—');
+            setT('dh-disk-type', [d.media, d.bus, d.rpm ? `${d.rpm} RPM` : null].filter(Boolean).join(' · ') || '—');
+            setT('dh-disk-hours-kv', hours ? `${fmtInt(hours)} h` : 'N/D');
+            setT('dh-disk-days-kv', daysTxt || 'N/D');
+            setT('dh-disk-wear', d.life !== undefined && d.life !== null ? `${100 - d.life}% usado · fonte: ${d.wear_source || 'S.M.A.R.T.'}` : 'N/D');
+            setT('dh-disk-life', d.life_remaining_days ? `≈ ${fmtInt(d.life_remaining_days)} dias (≈ ${(d.life_remaining_days / 365).toFixed(1)} anos)` : 'N/D');
+            setT('dh-disk-volumes', (d.volumes || []).map(v => `${v.letter}: ${v.label || ''} (${v.fs || ''})`).join(' · ') || '—');
 
             // Diagnóstico textual
             const issuesBox = document.getElementById('dh-issues-list');
             issuesBox.innerHTML = '';
             (d.issues || []).forEach(iss => {
-                const color = iss.level === 'crit' ? 'text-rose-400 font-semibold' : (iss.level === 'warn' ? 'text-amber-300' : 'text-slate-300');
+                const color = iss.level === 'crit' ? 'var(--bad)' : (iss.level === 'warn' ? 'var(--warn)' : 'var(--ok)');
                 const icon = iss.level === 'crit' ? 'alert-triangle' : (iss.level === 'warn' ? 'alert-circle' : 'check-circle');
                 issuesBox.innerHTML += `
-                    <div class="flex items-start gap-2 ${color}">
-                        <i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
-                        <span>${escapeHtml(iss.text)}</span>
+                    <div class="flex items-start gap-2.5">
+                        <span class="ws-dot" style="background:${color}"></span>
+                        <span style="color:var(--text-secondary)">${escapeHtml(iss.text)}</span>
                     </div>
                 `;
             });
@@ -2532,67 +2487,38 @@ lucide.createIcons();
             tbody.innerHTML = '';
 
             if (d.nvme_list && d.nvme_list.length > 0) {
-                document.getElementById('dh-table-title').innerHTML = `
-                    <i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i>
-                    Parâmetros Oficiais NVMe SMART/Health Log (Controller 0x02)
-                `;
-                document.getElementById('dh-smart-table').querySelector('thead').innerHTML = `
-                    <tr class="bg-dark-750 text-slate-400 uppercase tracking-wider sticky top-0 bg-dark-850 z-10 border-b border-slate-700">
-                        <th class="py-2.5 px-3">Parâmetro de Confiabilidade NVMe</th>
-                        <th class="py-2.5 px-3">Valor Reportado pelo Controlador</th>
-                        <th class="py-2.5 px-3">Condição</th>
-                    </tr>
-                `;
+                document.getElementById('dh-table-title').innerText = 'NVMe SMART / Health Log (página 0x02)';
+                document.getElementById('dh-smart-table').querySelector('thead').innerHTML = `<tr><th>Parâmetro</th><th>Valor do controlador</th><th>Condição</th></tr>`;
                 d.nvme_list.forEach(row => {
                     const tr = document.createElement('tr');
                     const valStr = row.bytes ? formatBytes(row.bytes) : escapeHtml(row.value);
-                    const cond = row.status === 'bad' ? '<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">ALERTA</span>' :
-                        (row.status === 'warn' ? '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">ATENÇÃO</span>' :
-                            '<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400">Normal</span>');
-                    tr.className = "hover:bg-dark-750/30 transition";
-                    tr.innerHTML = `
-                        <td class="py-2 px-3 font-sans font-medium text-slate-200">${escapeHtml(row.label)}</td>
-                        <td class="py-2 px-3 font-bold text-white">${valStr}</td>
-                        <td class="py-2 px-3">${cond}</td>
-                    `;
+                    const cond = row.status === 'bad' ? '<span class="ws-badge bad">Alerta</span>' :
+                        (row.status === 'warn' ? '<span class="ws-badge warn">Atenção</span>' : '<span class="ws-badge ok">Normal</span>');
+                    tr.innerHTML = `<td>${escapeHtml(row.label)}</td><td class="ws-mono ws-strong">${valStr}</td><td>${cond}</td>`;
                     tbody.appendChild(tr);
                 });
             } else if (d.smart_list && d.smart_list.length > 0) {
-                document.getElementById('dh-table-title').innerHTML = `
-                    <i data-lucide="list-checks" class="w-4 h-4 text-cyan-400"></i>
-                    Atributos S.M.A.R.T. Padrão ATA/SATA
-                `;
-                document.getElementById('dh-smart-table').querySelector('thead').innerHTML = `
-                    <tr class="bg-dark-750 text-slate-400 uppercase tracking-wider sticky top-0 bg-dark-850 z-10 border-b border-slate-700">
-                        <th class="py-2.5 px-3">ID</th>
-                        <th class="py-2.5 px-3 font-sans" data-i18n="disk_health.th_attr">Nome do Atributo</th>
-                        <th class="py-2.5 px-3" data-i18n="disk_health.th_current">Atual</th>
-                        <th class="py-2.5 px-3" data-i18n="disk_health.th_worst">Pior</th>
-                        <th class="py-2.5 px-3" data-i18n="disk_health.th_threshold">Limite</th>
-                        <th class="py-2.5 px-3" data-i18n="disk_health.th_raw">Valor Bruto (Raw)</th>
-                        <th class="py-2.5 px-3">Status</th>
-                    </tr>
-                `;
+                document.getElementById('dh-table-title').innerText = 'Atributos S.M.A.R.T. (ATA/SATA)';
+                document.getElementById('dh-smart-table').querySelector('thead').innerHTML = `<tr><th>ID</th><th>Atributo</th><th>Atual</th><th>Pior</th><th>Limite</th><th>Valor bruto</th><th>Estado</th></tr>`;
                 d.smart_list.forEach(attr => {
                     const tr = document.createElement('tr');
                     const isWarn = attr.status === 'warn' || attr.status === 'fail';
-                    const statusBadge = attr.status === 'fail' ? '<span class="px-2 py-0.5 rounded bg-rose-600 text-white font-bold">FALHA</span>' :
-                        (attr.status === 'warn' ? '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Aviso</span>' :
-                            '<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400">OK</span>');
-                    tr.className = `hover:bg-dark-750/30 transition ${isWarn ? 'bg-amber-500/5' : ''}`;
+                    const statusBadge = attr.status === 'fail' ? '<span class="ws-badge bad">Falha</span>' :
+                        (attr.status === 'warn' ? '<span class="ws-badge warn">Aviso</span>' : '<span class="ws-badge ok">OK</span>');
+                    if (isWarn) tr.className = 'is-active';
                     tr.innerHTML = `
-                        <td class="py-2 px-3 text-cyan-400 font-bold">${attr.hex}</td>
-                        <td class="py-2 px-3 font-sans font-medium text-slate-200">${escapeHtml(attr.name)}</td>
-                        <td class="py-2 px-3 text-white">${attr.current}</td>
-                        <td class="py-2 px-3 text-slate-400">${attr.worst}</td>
-                        <td class="py-2 px-3 text-slate-500">${attr.threshold || '—'}</td>
-                        <td class="py-2 px-3 text-slate-300">${attr.raw.toLocaleString()}</td>
-                        <td class="py-2 px-3">${statusBadge}</td>
+                        <td class="ws-mono ws-strong">${attr.hex}</td>
+                        <td>${escapeHtml(attr.name)}</td>
+                        <td class="ws-mono">${attr.current}</td>
+                        <td class="ws-mono">${attr.worst}</td>
+                        <td class="ws-mono">${attr.threshold || '—'}</td>
+                        <td class="ws-mono">${attr.raw.toLocaleString()}</td>
+                        <td>${statusBadge}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400 font-sans">Nenhum atributo S.M.A.R.T. exposto pelo driver deste controlador.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="ws-empty">O driver deste controlador não expõe atributos S.M.A.R.T.</td></tr>`;
             }
             lucide.createIcons();
         }
@@ -2631,14 +2557,54 @@ lucide.createIcons();
                     document.getElementById('sectorguard-stop-btn').classList.remove('hidden');
                     initSectorGuardGrid();
                     if (sectorGuardPollTimer) clearInterval(sectorGuardPollTimer);
-                    sectorGuardPollTimer = setInterval(pollSectorGuardScan, 120);
-                    showToast("SurfaceScan Direct I/O", `Iniciando leitura física não-bufferizada no disco ${drive}: (${isQuick ? 'Modo Padrão 512KB/bloco' : 'Modo Profundo 2MB/bloco'})...`, "info");
+                    sectorGuardPollTimer = setInterval(pollSectorGuardScan, 500);
+                    showToast("SurfaceScan", `Leitura física direta do disco de ${drive}: — ${isQuick ? 'modo rápido (32 MiB × 1.200 regiões)' : 'modo completo (100% dos setores; pode levar horas em HDs grandes)'}.`, "info", 5000);
                 } else {
                     showToast("Varredura Ocupada", data.message, "warning");
                 }
             } catch (e) {
                 showToast("Erro ao Iniciar", "Falha ao disparar SurfaceScan: " + e, "error");
             }
+        }
+
+        function drawSectorGuardSpeedCurve(sc) {
+            const canvas = document.getElementById('sectorguard-speed-canvas');
+            if (!canvas) return;
+            const curve = sc.speed_curve || [];
+            const sum = document.getElementById('sectorguard-speed-summary');
+            if (sum) sum.innerText = sc.avg_speed_mb != null ? `mín ${sc.min_speed_mb} · méd ${sc.avg_speed_mb} · máx ${sc.max_speed_mb} MB/s` : 'mín — · méd — · máx — MB/s';
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            const W = Math.max(200, Math.round(rect.width)), H = Math.max(80, Math.round(rect.height));
+            if (canvas.width !== W * dpr || canvas.height !== H * dpr) { canvas.width = W * dpr; canvas.height = H * dpr; }
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            const cs = getComputedStyle(document.documentElement);
+            const grid = cs.getPropertyValue('--border-default').trim() || '#334155';
+            const txt = cs.getPropertyValue('--text-muted').trim() || '#94a3b8';
+            ctx.clearRect(0, 0, W, H);
+            const pl = 48, pr = 8, pt = 8, pb = 18, pw = W - pl - pr, ph = H - pt - pb;
+            const vals = curve.filter(v => v != null);
+            const maxV = Math.max(50, ...vals) * 1.12;
+            ctx.font = '10px "Cascadia Mono", Consolas, monospace'; ctx.fillStyle = txt; ctx.strokeStyle = grid; ctx.lineWidth = 1;
+            ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+            for (let i = 0; i <= 4; i++) {
+                const y = pt + ph * (1 - i / 4);
+                ctx.beginPath(); ctx.moveTo(pl, y); ctx.lineTo(pl + pw, y); ctx.stroke();
+                ctx.fillText(`${Math.round(maxV * i / 4)}`, pl - 6, y);
+            }
+            ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+            ['0%', '25%', '50%', '75%', '100%'].forEach((l, i) => ctx.fillText(l, pl + pw * i / 4, pt + ph + 4));
+            if (!vals.length) return;
+            const n = curve.length || 1200;
+            ctx.beginPath();
+            let started = false;
+            curve.forEach((v, i) => {
+                if (v == null) { started = false; return; }
+                const x = pl + pw * i / (n - 1), y = pt + ph * (1 - v / maxV);
+                if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = cs.getPropertyValue('--brand').trim() || '#5b9bff'; ctx.lineWidth = 1.6; ctx.stroke();
         }
 
         async function stopSectorGuardScan() {
@@ -2651,8 +2617,8 @@ lucide.createIcons();
                 document.getElementById('sectorguard-stop-btn').classList.add('hidden');
                 const ledEl = document.getElementById('sectorguard-io-led');
                 if (ledEl) {
-                    ledEl.className = 'px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1.5';
-                    ledEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-500"></span> AGUARDANDO';
+                    ledEl.className = 'ws-badge';
+                    ledEl.innerHTML = '<span class="dot"></span>Parado';
                 }
                 document.getElementById('sectorguard-status-txt').innerText = "Varredura interrompida pelo usuário.";
                 await fetch('/api/disks/scan/stop', { method: 'POST' });
@@ -2670,7 +2636,8 @@ lucide.createIcons();
                 const sc = data.scan;
 
                 // Atualiza métricas ao vivo
-                document.getElementById('sectorguard-damaged-val').innerText = `${sc.damaged_percent}% (${sc.damaged_blocks} / 1.200)`;
+                const hms = (sec) => { sec = Math.max(0, Math.round(sec || 0)); return [Math.floor(sec / 3600), Math.floor((sec % 3600) / 60), sec % 60].map(v => String(v).padStart(2, '0')).join(':'); };
+                document.getElementById('sectorguard-damaged-val').innerText = `${sc.read_errors || 0} erro(s) em ${sc.damaged_blocks} região(ões)`;
                 document.getElementById('sectorguard-speed-val').innerText = `${sc.current_speed_mb} MB/s`;
 
                 const latEl = document.getElementById('sectorguard-latency-val');
@@ -2694,33 +2661,30 @@ lucide.createIcons();
                 const badEl = document.getElementById('sectorguard-bad-cnt');
                 if (badEl) badEl.innerText = (sc.damaged_blocks || 0).toLocaleString();
 
-                const sec = sc.elapsed_sec || 0;
-                const mm = String(Math.floor(sec / 60)).padStart(2, '0');
-                const ss = String(Math.floor(sec % 60)).padStart(2, '0');
-                document.getElementById('sectorguard-time-val').innerText = `00:${mm}:${ss}`;
+                document.getElementById('sectorguard-time-val').innerText = hms(sc.elapsed_sec);
 
                 // Tempo restante estimado
-                const remSec = sc.remaining_sec || 0;
-                const rmm = String(Math.floor(remSec / 60)).padStart(2, '0');
-                const rss = String(Math.floor(remSec % 60)).padStart(2, '0');
                 const remEl = document.getElementById('sectorguard-remaining-val');
-                if (remEl) remEl.innerText = sc.running ? `00:${rmm}:${rss}` : '--:--';
+                if (remEl) remEl.innerText = sc.running ? hms(sc.remaining_sec) : '--:--';
 
                 // Indicador LED de atividade I/O
                 const ledEl = document.getElementById('sectorguard-io-led');
                 if (ledEl) {
                     if (sc.running) {
-                        ledEl.className = 'px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 animate-pulse';
-                        ledEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span> LENDO DISCO (DIRECT I/O)';
+                        ledEl.className = 'ws-badge brand live';
+                        ledEl.innerHTML = '<span class="dot"></span>Lendo disco';
                     } else {
-                        ledEl.className = 'px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1.5';
-                        ledEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-500"></span> AGUARDANDO';
+                        ledEl.className = 'ws-badge';
+                        ledEl.innerHTML = '<span class="dot"></span>Parado';
                     }
                 }
 
-                const curGb = (sc.scanned_mb / 1024).toFixed(1);
+                const readGb = ((sc.bytes_read_actual_mb || 0) / 1024).toFixed(1);
+                const planGb = ((sc.planned_mb || 0) / 1024).toFixed(1);
                 const totGb = (sc.total_mb / 1024).toFixed(1);
-                document.getElementById('sectorguard-pos-val').innerText = `${curGb} / ${totGb} GB (${sc.progress_percent}%)`;
+                document.getElementById('sectorguard-pos-val').innerText = `${readGb} / ${planGb} GiB lidos de ${totGb} GiB (${Number(sc.progress_percent || 0).toFixed(1)}%)`;
+                window.__lastSectorScan = sc;
+                drawSectorGuardSpeedCurve(sc);
                 document.getElementById('sectorguard-status-txt').innerText = sc.status_text || '';
 
                 // Atualiza blocos visuais na grade destacando o cursor de leitura atual
@@ -2738,11 +2702,12 @@ lucide.createIcons();
                         const val = blocks[i];
                         el.className = 'sectorguard-cell ' + (
                             val === 1 ? 'cell-good' :
-                                (val === 2 ? 'cell-slow' :
-                                    (val === 3 ? 'cell-damaged' : 'cell-untested'))
+                                (val === 4 ? 'cell-normal' :
+                                    (val === 2 ? 'cell-slow' :
+                                        (val === 3 ? 'cell-damaged' : 'cell-untested')))
                         );
-                        if (val > 0 && lats[i] !== undefined) {
-                            el.title = `Bloco #${i + 1} • Latência: ${lats[i]} ms`;
+                        if (val > 0 && sc.speed_curve && sc.speed_curve[i] != null) {
+                            el.title = `Região #${i + 1} • ${sc.speed_curve[i]} MB/s`;
                         }
                     }
                 }
@@ -2752,7 +2717,8 @@ lucide.createIcons();
                     sectorGuardPollTimer = null;
                     document.getElementById('sectorguard-start-btn').classList.remove('hidden');
                     document.getElementById('sectorguard-stop-btn').classList.add('hidden');
-                    showToast("SurfaceScan Concluído", sc.status_text || "Varredura física finalizada com sucesso!", sc.damaged_blocks > 0 ? "warning" : "success");
+                    if (sc.error) showToast("SurfaceScan", sc.error, "error", 7000);
+                    else showToast("SurfaceScan concluído", sc.status_text || "Varredura finalizada.", sc.damaged_blocks > 0 || sc.slow_blocks > 0 ? "warning" : "success", 6000);
                 }
             } catch (e) { }
         }
@@ -2773,19 +2739,12 @@ lucide.createIcons();
                 (feat.alignment || []).forEach(part => {
                     const ok = part.is_4k_aligned;
                     alignBox.innerHTML += `
-                        <div class="p-3 rounded-xl bg-dark-900 border ${ok ? 'border-emerald-500/30' : 'border-rose-500/30'} flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <span class="w-8 h-8 rounded-lg ${ok ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'} flex items-center justify-center font-bold text-xs">
-                                    ${part.letter ? part.letter + ':' : 'Part'}
-                                </span>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">Partição ${part.letter || 'Primária'}: (Offset: ${part.offset_bytes.toLocaleString()} bytes)</h4>
-                                    <p class="text-[11px] ${ok ? 'text-emerald-300' : 'text-rose-300'}">${escapeHtml(part.status_text)}</p>
-                                </div>
+                        <div class="ws-tile flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="ws-strong text-[13px]">Partição ${part.letter ? part.letter + ':' : '(sem letra)'} <span class="ws-mono ws-muted" style="font-weight:400">offset ${Number(part.offset_bytes || 0).toLocaleString('pt-BR')} bytes</span></div>
+                                <div class="ws-stat-foot mt-0.5">${escapeHtml(part.status_text)}</div>
                             </div>
-                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">
-                                ${ok ? '4K ALINHADO (OK)' : 'DESALINHADO'}
-                            </span>
+                            <span class="ws-badge ${ok ? 'ok' : 'bad'}">${ok ? 'Alinhada (4K)' : 'Desalinhada'}</span>
                         </div>
                     `;
                 });
@@ -2795,12 +2754,12 @@ lucide.createIcons();
                 tbody.innerHTML = '';
                 (feat.features || []).forEach(f => {
                     const tr = document.createElement('tr');
-                    tr.className = "hover:bg-dark-750/30 transition";
+                    const yn = (v, y, n) => v === null || v === undefined ? '<span class="ws-badge">N/D</span>' : `<span class="ws-badge ${v ? 'ok' : ''}">${v ? y : n}</span>`;
                     tr.innerHTML = `
-                        <td class="py-2 px-3 font-sans font-medium text-slate-200">${escapeHtml(f.feature)}</td>
-                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${f.supported ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'}">${f.supported ? 'Sim' : 'Não'}</span></td>
-                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${f.active ? 'bg-blue-500/20 text-cyan-300' : 'bg-slate-800 text-slate-400'}">${f.active ? 'Ativado' : 'Desativado'}</span></td>
-                        <td class="py-2 px-3 font-sans text-slate-400">${escapeHtml(f.desc)}</td>
+                        <td class="ws-strong">${escapeHtml(f.feature)}</td>
+                        <td>${yn(f.supported, 'Sim', 'Não')}</td>
+                        <td>${yn(f.active, 'Ativo', 'Inativo')}</td>
+                        <td class="ws-muted">${escapeHtml(f.desc)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -2836,7 +2795,7 @@ lucide.createIcons();
                 // CPU
                 const p = c.processor || {};
                 document.getElementById('silicon-cpu-name').innerText = p.name || 'Processador Detectado';
-                document.getElementById('silicon-cpu-tdp').innerText = p.tdp || '--';
+                document.getElementById('silicon-cpu-tdp').innerText = p.tdp ? `TDP ${p.tdp}` : 'TDP N/D';
                 document.getElementById('silicon-cpu-codename').innerText = p.codename || '--';
                 document.getElementById('silicon-cpu-tech').innerText = p.technology || '--';
                 document.getElementById('silicon-cpu-package').innerText = p.package || '--';
@@ -2845,9 +2804,9 @@ lucide.createIcons();
 
                 // Clocks
                 const clk = c.clocks || {};
-                document.getElementById('silicon-clock-live').innerText = `${clk.live_clock_mhz || 0} MHz`;
-                document.getElementById('silicon-clock-mult').innerText = clk.multiplier || 'x0.0';
-                document.getElementById('silicon-clock-bus').innerText = `${clk.bus_speed_mhz || 100.0} MHz`;
+                document.getElementById('silicon-clock-live').innerText = clk.live_clock_mhz ? `${clk.live_clock_mhz} MHz` : 'N/D';
+                document.getElementById('silicon-clock-mult').innerText = clk.multiplier || 'N/D';
+                document.getElementById('silicon-clock-bus').innerText = clk.bus_speed_mhz ? `${clk.bus_speed_mhz} MHz` : 'N/D';
 
                 // Caches
                 const cch = c.caches || {};
@@ -2873,20 +2832,19 @@ lucide.createIcons();
                 document.getElementById('silicon-mem-type').innerText = mem.type || '--';
                 document.getElementById('silicon-mem-size').innerText = `${mem.size_gb || 0} GB`;
                 document.getElementById('silicon-mem-channels').innerText = mem.channels || '--';
-                document.getElementById('silicon-mem-slots').innerText = `${mem.slots_used || 0} / ${mem.slots_total || 0} Slots`;
+                document.getElementById('silicon-mem-slots').innerText = `${mem.slots_used || 0} / ${mem.slots_total || 0}`;
 
                 // SPD
                 const spdTbody = document.getElementById('silicon-spd-tbody');
-                spdTbody.innerHTML = '';
+                spdTbody.innerHTML = (mem.modules || []).length ? '' : '<tr><td colspan="5" class="ws-empty">O firmware não informou os módulos.</td></tr>';
                 (mem.modules || []).forEach(m => {
                     const tr = document.createElement('tr');
-                    tr.className = "hover:bg-dark-750/30 transition";
                     tr.innerHTML = `
-                        <td class="py-2.5 px-3 text-cyan-400 font-bold">${escapeHtml(m.locator)}</td>
-                        <td class="py-2.5 px-3 text-white font-sans">${escapeHtml(m.manufacturer)}</td>
-                        <td class="py-2.5 px-3 text-slate-300">${escapeHtml(m.part_number)}</td>
-                        <td class="py-2.5 px-3 text-amber-300 font-bold">${m.size_gb} GB</td>
-                        <td class="py-2.5 px-3 text-slate-200">${m.speed_mhz} MHz</td>
+                        <td class="ws-mono ws-strong">${escapeHtml(m.locator)}</td>
+                        <td>${escapeHtml(m.manufacturer)}</td>
+                        <td class="ws-mono">${escapeHtml(m.part_number)}</td>
+                        <td class="ws-mono">${m.size_gb} GB</td>
+                        <td class="ws-mono">${m.speed_mhz} MHz</td>
                     `;
                     spdTbody.appendChild(tr);
                 });
@@ -2917,14 +2875,20 @@ lucide.createIcons();
                     const b = data.bench;
                     const sVal = Number(b.single_thread || 0);
                     const mVal = Number(b.multi_thread || 0);
-                    document.getElementById('silicon-bench-single-val').innerText = sVal.toFixed(1);
-                    document.getElementById('silicon-bench-multi-val').innerText = mVal.toLocaleString();
-                    document.getElementById('silicon-bench-ratio-val').innerText = `${Number(b.ratio || 0).toFixed(2)}x`;
+                    document.getElementById('silicon-bench-single-val').innerText = sVal ? sVal.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) : '—';
+                    document.getElementById('silicon-bench-multi-val').innerText = mVal ? mVal.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) : '—';
+                    document.getElementById('silicon-bench-ratio-val').innerText = b.ratio ? `${Number(b.ratio).toFixed(2)}×` : '—';
                     const sBar = document.getElementById('silicon-bench-single-bar');
-                    if (sBar) sBar.style.width = `${Math.min(100, Math.round((sVal / 800) * 100))}%`;
+                    if (sBar) sBar.style.width = `${Math.min(100, Math.round((sVal / Math.max(sVal, mVal, 1)) * 100))}%`;
                     const mBar = document.getElementById('silicon-bench-multi-bar');
-                    if (mBar) mBar.style.width = `${Math.min(100, Math.round((mVal / 8000) * 100))}%`;
-                    document.getElementById('silicon-bench-status-msg').innerText = b.timestamp ? `✅ Último teste concluído às ${b.timestamp}.` : 'Pronto para executar benchmark.';
+                    if (mBar) mBar.style.width = `${mVal > 0 ? 100 : 0}%`;
+                    const d = b.details || {};
+                    const det = (x) => x ? `${x.threads}T · SHA-256 ${x.sha256_mb_s} MB/s · zlib ${x.zlib_mb_s} MB/s · FPU ${x.fpu_melem_s} Melem/s (${x.seconds}s medidos${x.variation_pct !== null && x.variation_pct !== undefined ? `, variação ${x.variation_pct}%` : ''})` : '';
+                    let msg = 'Pronto para executar (3 s de aquecimento + 20 s medidos por fase, ≈ 50 s no total).';
+                    if (b.running) msg = `Executando fase ${b.phase === 'multi' ? 'multi-thread' : 'single-thread'}… ${b.progress || 0}%`;
+                    else if (b.phase === 'error') msg = 'O benchmark falhou — veja o console de registros.';
+                    else if (b.timestamp) msg = `Concluído em ${b.timestamp}. Single: ${det(d.single)} | Multi: ${det(d.multi)}`;
+                    document.getElementById('silicon-bench-status-msg').innerText = msg;
                     if (b.running) {
                         setTimeout(pollCPUBenchmark, 800);
                     }
@@ -2975,7 +2939,7 @@ lucide.createIcons();
                 const featGrid = document.getElementById('vision-features-grid');
                 if (featGrid && Array.isArray(g.features) && g.features.length > 0) {
                     featGrid.innerHTML = g.features.map(f => `
-                        <div class="flex items-center gap-1.5 text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> ${escapeHtml(f)}</div>
+                        <span class="ws-badge">${escapeHtml(f)}</span>
                     `).join('');
                     lucide.createIcons();
                 }
@@ -3173,8 +3137,8 @@ lucide.createIcons();
                 document.getElementById('bench-progress-bar').style.width = `${pct}%`;
                 document.getElementById('bench-progress-text').innerText = `${pct}%`;
                 document.getElementById('bench-status-phase').innerHTML = b.running
-                    ? `<span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Em Andamento: ${escapeHtml(b.current_test || 'Testando I/O...')}`
-                    : (b.phase === 'finished' ? '<span class="w-2 h-2 rounded-full bg-emerald-400"></span> ✅ Benchmark Concluído com Sucesso!' : '<span class="w-2 h-2 rounded-full bg-slate-400"></span> Benchmark Finalizado');
+                    ? `<span class="ws-badge brand live"><span class="dot"></span>Em execução</span> ${escapeHtml(b.current_test || '')}`
+                    : (b.phase === 'finished' ? '<span class="ws-badge ok"><span class="dot"></span>Concluído</span>' : '<span class="ws-badge">Parado</span>');
                 document.getElementById('bench-status-msg').innerText = b.log_msg || '';
 
                 // Destaca cartão ativo
@@ -3251,27 +3215,22 @@ lucide.createIcons();
             items.forEach((item) => {
                 if (item.is_hidden) hiddenCount++;
                 const tr = document.createElement('tr');
-                tr.className = `hover:bg-dark-750/30 transition cursor-pointer ${item.is_hidden ? 'bg-amber-500/5' : ''}`;
+                tr.className = 'cursor-pointer';
                 tr.onclick = () => {
                     document.querySelectorAll('#audit-table-body tr').forEach(r => r.classList.remove('selected-row'));
                     tr.classList.add('selected-row');
                     selectedAuditItem = item;
                 };
 
-                const isHiddenBadge = item.is_hidden
-                    ? `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">${escapeHtml(item.status)}</span>`
-                    : `<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${escapeHtml(item.status)}</span>`;
+                const isHiddenBadge = `<span class="ws-badge ${item.is_hidden ? 'warn' : ''}">${escapeHtml(item.status)}</span>`;
 
                 tr.innerHTML = `
-                    <td class="py-3 px-4 font-sans font-medium text-slate-200 flex items-center gap-2">
-                        <i data-lucide="${item.is_hidden ? 'eye-off' : 'package'}" class="w-4 h-4 ${item.is_hidden ? 'text-amber-400' : 'text-blue-400'}"></i>
-                        ${escapeHtml(item.nome)}
-                    </td>
-                    <td class="py-3 px-4 text-slate-400">${escapeHtml(item.versao || '—')}</td>
-                    <td class="py-3 px-4 text-slate-400 truncate max-w-[120px]">${escapeHtml(item.editor || '—')}</td>
-                    <td class="py-3 px-4 text-slate-400">${escapeHtml(item.origem || '—')}</td>
-                    <td class="py-3 px-4">${isHiddenBadge}</td>
-                    <td class="py-3 px-4 text-slate-400 truncate max-w-xs" title="${escapeHtml(item.caminho || '')}">${escapeHtml(item.caminho || '—')}</td>
+                    <td class="ws-strong">${item.is_hidden ? '<i data-lucide="eye-off" class="w-3.5 h-3.5 inline mr-1.5" style="color:var(--warn)"></i>' : ''}${escapeHtml(item.nome)}</td>
+                    <td class="ws-mono">${escapeHtml(item.versao || '—')}</td>
+                    <td class="truncate max-w-[180px]">${escapeHtml(item.editor || '—')}</td>
+                    <td>${escapeHtml(item.origem || '—')}</td>
+                    <td>${isHiddenBadge}</td>
+                    <td class="ws-mono text-[11.5px] truncate max-w-[340px]" title="${escapeHtml(item.caminho || '')}">${escapeHtml(item.caminho || '—')}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -3394,33 +3353,29 @@ lucide.createIcons();
                     const loadBarEl = document.getElementById('mem-load-bar');
                     if (loadBarEl) {
                         loadBarEl.style.width = `${m.load_percent}%`;
-                        if (m.load_percent > 85) {
-                            loadBarEl.className = "bg-gradient-to-r from-amber-500 to-rose-500 h-3 rounded-full transition-all duration-500";
-                        } else {
-                            loadBarEl.className = "bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-500";
-                        }
+                        loadBarEl.parentElement.className = `ws-meter ${m.load_percent > 90 ? 'bad' : (m.load_percent > 80 ? 'warn' : '')}`;
                     }
 
                     const pagefileEl = document.getElementById('mem-pagefile-display');
                     if (pagefileEl) {
-                        pagefileEl.innerText = `Arquivo de Paginação (Pagefile): ${m.pagefile_used_gb} GB em uso de ${m.pagefile_total_gb} GB`;
+                        pagefileEl.innerText = `Arquivo de paginação: ${m.pagefile_used_gb} GB em uso de ${m.pagefile_total_gb} GB`;
                     }
 
                     const mods = m.modules || [];
                     const chBadge = document.getElementById('mem-dual-channel-badge');
                     if (chBadge) {
-                        chBadge.innerText = mods.length >= 2 ? 'Dual-Channel Ativo' : (mods.length === 1 ? 'Single-Channel' : 'RAM Ativa');
+                        chBadge.innerText = mods.length ? `${mods.length} módulo(s)` : 'Módulos não informados';
                     }
                     const qSpeed = document.getElementById('mem-quick-speed');
                     if (qSpeed) qSpeed.innerText = (mods[0] && mods[0].speed_mhz) ? `${mods[0].speed_mhz} MHz` : 'N/D';
                     const qSlots = document.getElementById('mem-quick-slots');
-                    if (qSlots) qSlots.innerText = `${mods.length} Pente(s)`;
+                    if (qSlots) qSlots.innerText = `${mods.length}`;
                     const qType = document.getElementById('mem-quick-type');
-                    if (qType) qType.innerText = (mods[0] && mods[0].type) ? mods[0].type : 'SDRAM';
+                    if (qType) qType.innerText = (mods[0] && mods[0].type) ? mods[0].type : 'N/D';
                     const qHealth = document.getElementById('mem-quick-health');
                     if (qHealth) {
-                        qHealth.innerText = m.load_percent > 90 ? 'Carga Alta' : '100% Estável';
-                        qHealth.className = m.load_percent > 90 ? 'text-amber-400 text-xs' : 'text-emerald-400 text-xs';
+                        qHealth.innerText = m.load_percent > 90 ? 'Alta' : (m.load_percent > 80 ? 'Elevada' : 'Normal');
+                        qHealth.style.color = m.load_percent > 90 ? 'var(--bad)' : (m.load_percent > 80 ? 'var(--warn)' : 'var(--ok)');
                     }
 
                     renderMemoryModules(mods);
@@ -3439,58 +3394,40 @@ lucide.createIcons();
             const countEl = document.getElementById('mem-modules-count');
             if (!grid) return;
 
-            if (countEl) countEl.innerText = `${modules.length} Pentes Detectados`;
+            if (countEl) countEl.innerText = `${modules.length} módulo(s) · dados do SMBIOS`;
 
             if (modules.length === 0) {
-                grid.innerHTML = '<p class="col-span-2 text-center py-6 text-slate-500">Nenhum módulo físico retornado pelo barramento WMI.</p>';
+                grid.innerHTML = '<div class="ws-empty">O firmware não informou os módulos de memória (WMI/SMBIOS).</div>';
                 return;
             }
 
-            grid.innerHTML = modules.map((mod, idx) => `
-                <div class="bg-dark-900/80 p-4 rounded-2xl border border-slate-800 relative overflow-hidden group hover:border-cyan-500/30 transition">
-                    <div class="absolute -top-14 -right-14 w-36 h-36 rounded-full bg-cyan-500/10 blur-2xl pointer-events-none"></div>
-
-                    <div class="flex items-start justify-between gap-3 border-b border-slate-800/80 pb-3 relative z-10">
-                        <div class="flex items-start gap-3 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-300 border border-purple-500/20 flex items-center justify-center font-black text-[10px] font-mono leading-none flex-shrink-0">
-                                ${escapeHtml(mod.slot || `DIMM ${idx + 1}`)}
-                            </div>
-                            <div class="min-w-0">
-                                <h4 class="font-bold text-white text-sm flex flex-wrap items-center gap-2">
-                                    <span class="truncate max-w-[180px]">${escapeHtml(mod.manufacturer || 'Kingston')}</span>
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-mono bg-blue-500/20 text-cyan-300 border border-blue-500/30">${escapeHtml(mod.type || 'DDR4')}</span>
-                                </h4>
-                                <p class="text-[11px] text-slate-400 font-mono truncate">${escapeHtml(mod.part_number || 'DDR4-SDRAM')}</p>
-                            </div>
-                        </div>
-
-                        <div class="text-right flex-shrink-0">
-                            <span class="text-xl font-black text-white">${mod.capacity_gb} GB</span>
-                            <p class="text-[10px] text-emerald-400 font-bold font-mono">Integridade Estável</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono mt-3 relative z-10">
-                        <div class="bg-dark-950/80 p-2.5 rounded-xl border border-slate-800">
-                            <span class="text-[10px] text-slate-500 block">Frequência</span>
-                            <span class="font-bold text-cyan-400">${mod.speed_mhz} MHz</span>
-                        </div>
-                        <div class="bg-dark-950/80 p-2.5 rounded-xl border border-slate-800">
-                            <span class="text-[10px] text-slate-500 block">Tensão</span>
-                            <span class="font-bold text-amber-300">${escapeHtml(mod.voltage || '1.20 V')}</span>
-                        </div>
-                        <div class="bg-dark-950/80 p-2.5 rounded-xl border border-slate-800">
-                            <span class="text-[10px] text-slate-500 block">Serial</span>
-                            <span class="font-bold text-slate-300 truncate block">${escapeHtml(mod.serial_number || '—')}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
+            const speed = mod => {
+                const cfg = mod.configured_speed_mhz || mod.speed_mhz;
+                const rated = mod.rated_speed_mhz;
+                if (!cfg) return 'N/D';
+                return rated && rated !== cfg ? `${cfg} MT/s <span class="ws-faint">(nominal ${rated})</span>` : `${cfg} MT/s`;
+            };
+            grid.innerHTML = `
+                <table class="ws-table">
+                    <thead><tr><th>Slot</th><th>Fabricante</th><th>Part number</th><th>Capacidade</th><th>Tipo</th><th>Velocidade</th><th>Tensão</th><th>Serial</th></tr></thead>
+                    <tbody>${modules.map((mod, idx) => `
+                        <tr>
+                            <td class="ws-mono ws-strong">${escapeHtml(mod.slot || `DIMM ${idx + 1}`)}</td>
+                            <td>${escapeHtml(mod.manufacturer || 'Não informado')}</td>
+                            <td class="ws-mono">${escapeHtml(mod.part_number || '—')}</td>
+                            <td class="ws-mono ws-strong">${mod.capacity_gb} GB</td>
+                            <td>${escapeHtml(mod.type || '—')}${mod.form_factor ? ` <span class="ws-faint">${escapeHtml(mod.form_factor)}</span>` : ''}${mod.ecc ? ' <span class="ws-badge">ECC</span>' : ''}</td>
+                            <td class="ws-mono">${speed(mod)}</td>
+                            <td class="ws-mono">${escapeHtml(mod.voltage || 'N/D')}</td>
+                            <td class="ws-mono ws-faint">${escapeHtml(mod.serial_number || '—')}</td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>`;
         }
 
         async function startMemoryTest() {
-            const size = parseInt(document.getElementById('ramguard-size-select').value) || 1024;
+            const sizeRaw = parseInt(document.getElementById('ramguard-size-select').value);
+            const size = Number.isNaN(sizeRaw) ? 0 : sizeRaw;
             const mode = document.getElementById('ramguard-mode-select').value || 'quick';
 
             try {
@@ -3506,7 +3443,7 @@ lucide.createIcons();
                     document.getElementById('btn-stop-ramguard').disabled = false;
 
                     const logBox = document.getElementById('ramguard-log-output');
-                    if (logBox) logBox.innerHTML = `<p class="text-cyan-400">> [${new Date().toLocaleTimeString()}] Teste iniciado: ${size} MB alocados em modo ${mode}.</p>`;
+                    if (logBox) logBox.innerHTML = `<p style="color:var(--brand)">[${new Date().toLocaleTimeString()}] ${escapeHtml(data.message)}</p>`;
 
                     if (ramGuardTimer) clearInterval(ramGuardTimer);
                     ramGuardTimer = setInterval(pollMemoryTest, 800);
@@ -3545,15 +3482,9 @@ lucide.createIcons();
 
                     const stateEl = document.getElementById('ramguard-state');
                     if (stateEl) {
-                        if (st.state === 'running') {
-                            stateEl.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span> Testando Células...';
-                        } else if (st.state === 'completed') {
-                            stateEl.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Concluído com Sucesso';
-                        } else if (st.state === 'cancelled') {
-                            stateEl.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Interrompido';
-                        } else {
-                            stateEl.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> Ocioso';
-                        }
+                        const map = { running: ['var(--brand)', 'Em execução'], completed: [st.errors_found ? 'var(--bad)' : 'var(--ok)', 'Concluído'], cancelled: ['var(--warn)', 'Interrompido'] };
+                        const [col, txt] = map[st.state] || ['var(--text-faint)', 'Ocioso'];
+                        stateEl.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${col}"></span>${txt}`;
                     }
 
                     const passInfoEl = document.getElementById('ramguard-pass-info');
@@ -3563,24 +3494,25 @@ lucide.createIcons();
                     if (speedEl) speedEl.innerText = `${(st.speed_mb_s || 0).toLocaleString()} MB/s`;
 
                     const elapsedEl = document.getElementById('ramguard-elapsed');
-                    if (elapsedEl) elapsedEl.innerText = `Tempo decorrido: ${st.elapsed_seconds || 0}s`;
+                    const fmtT = (sec) => { sec = Math.max(0, Math.round(sec || 0)); const m = Math.floor(sec / 60), s2 = sec % 60; return m > 0 ? `${m} min ${String(s2).padStart(2, '0')} s` : `${s2} s`; };
+                    if (elapsedEl) elapsedEl.innerText = `Decorrido: ${fmtT(st.elapsed_seconds)}${st.state === 'running' && st.eta_seconds != null ? ` · restante ≈ ${fmtT(st.eta_seconds)}` : ''}`;
 
                     const patternEl = document.getElementById('ramguard-pattern');
                     if (patternEl) patternEl.innerText = st.current_pattern || 'Padrão celular ativo';
 
                     const testedMbEl = document.getElementById('ramguard-tested-mb');
-                    if (testedMbEl) testedMbEl.innerText = `Buffer: ${st.tested_mb || 0} MB / ${st.total_mb || 0} MB`;
+                    if (testedMbEl) testedMbEl.innerText = `${(st.tested_mb || 0).toLocaleString('pt-BR')} / ${(st.total_mb || 0).toLocaleString('pt-BR')} MB · ${st.bytes_verified_gb || 0} GB conferidos${st.capped_by_free_memory ? ' · limitado pela RAM livre' : ''}`;
 
                     const errorsEl = document.getElementById('ramguard-errors');
                     if (errorsEl) {
                         errorsEl.innerText = st.errors_found || 0;
-                        errorsEl.className = st.errors_found > 0 ? "text-2xl font-black text-rose-500" : "text-2xl font-black text-emerald-400";
+                        errorsEl.style.color = st.errors_found > 0 ? 'var(--bad)' : (st.state === 'completed' ? 'var(--ok)' : '');
                     }
 
                     const verdictEl = document.getElementById('ramguard-verdict');
                     if (verdictEl) {
-                        verdictEl.innerText = st.errors_found > 0 ? 'FALHA DE HARDWARE DETECTADA' : 'Células 100% Íntegras';
-                        verdictEl.className = st.errors_found > 0 ? 'text-[11px] text-rose-400 font-bold font-mono' : 'text-[11px] text-emerald-400/80 font-mono';
+                        verdictEl.innerText = st.errors_found > 0 ? 'Falha de memória detectada' : (st.state === 'completed' ? 'Nenhum erro — 100% das palavras conferidas' : (st.state === 'running' ? 'Nenhum erro até agora' : 'Aguardando teste'));
+                        verdictEl.style.color = st.errors_found > 0 ? 'var(--bad)' : '';
                     }
 
                     const pctEl = document.getElementById('ramguard-pct-text');
@@ -3590,9 +3522,16 @@ lucide.createIcons();
                     if (barEl) barEl.style.width = `${st.progress_percent}%`;
 
                     const logBox = document.getElementById('ramguard-log-output');
-                    if (logBox && Array.isArray(st.error_log) && st.error_log.length > 0) {
-                        logBox.innerHTML = st.error_log.map(msg => `<p class="${msg.includes('ERRO') ? 'text-rose-400 font-bold' : msg.includes('CONCLUÍDO') ? 'text-emerald-400 font-bold' : 'text-slate-300'}">> ${escapeHtml(msg)}</p>`).join('');
-                        logBox.scrollTop = logBox.scrollHeight;
+                    if (logBox && (Array.isArray(st.results) || Array.isArray(st.error_log))) {
+                        const lines = [];
+                        (st.results || []).forEach(r => lines.push(`<p style="color:${r.errors ? 'var(--bad)' : 'var(--text-secondary)'}">Passe ${r.pass} · ${escapeHtml(r.algorithm)} — ${r.errors ? r.errors + ' erro(s)' : 'OK'} (${r.seconds} s)</p>`));
+                        (st.error_log || []).forEach(msg => lines.push(`<p style="color:var(--bad)">! ${escapeHtml(msg)}</p>`));
+                        if (st.state === 'running' && st.current_algorithm) lines.push(`<p style="color:var(--brand)">Executando: ${escapeHtml(st.current_pattern || st.current_algorithm)}</p>`);
+                        if (st.state !== 'running' && st.current_pattern) lines.push(`<p style="color:${st.errors_found ? 'var(--bad)' : 'var(--ok)'};font-weight:600">${escapeHtml(st.current_pattern)}</p>`);
+                        if (lines.length) {
+                            logBox.innerHTML = lines.join('');
+                            logBox.scrollTop = logBox.scrollHeight;
+                        }
                     }
 
                     if (st.state !== 'running') {
@@ -3620,7 +3559,15 @@ lucide.createIcons();
                 if (data.status === 'success' && data.defender) {
                     const d = data.defender;
                     if (d.available) {
-                        document.getElementById('defender-sig-ver').innerText = `Vacinas: v${d.AntivirusSignatureVersion || 'Atualizada'}`;
+                        const upd = (() => {
+                            const v = d.AntivirusSignatureLastUpdated;
+                            if (!v) return '';
+                            const m = String(v).match(/(\d{9,13})/);
+                            if (!m) return String(v);
+                            const n = Number(m[1]);
+                            return new Date(n > 1e11 ? n : n * 1000).toLocaleString('pt-BR');
+                        })();
+                        document.getElementById('defender-sig-ver').innerText = `Definições ${d.AntivirusSignatureVersion || 'N/D'}${upd ? ' · ' + upd : ''}`;
                     }
                 }
             } catch (e) { }
@@ -3636,11 +3583,11 @@ lucide.createIcons();
 
             const modeBadge = document.getElementById('av-scan-mode-badge');
             if (modeBadge) {
-                modeBadge.innerText = mode === 'deep' ? 'Modo: Varredura Profunda' : 'Modo: Varredura Rápida';
-                modeBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+                modeBadge.innerText = mode === 'deep' ? 'Completa' : 'Rápida';
+                modeBadge.className = 'ws-badge brand';
             }
             const dot = document.getElementById('av-scan-pulse-dot');
-            if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping';
+            if (dot) { dot.className = 'w-2 h-2 rounded-full flex-shrink-0'; dot.style.background = 'var(--brand)'; }
 
             try {
                 const res = await fetch('/api/antivirus/start_scan', {
@@ -3709,7 +3656,7 @@ lucide.createIcons();
                 const logLines = Array.isArray(sc.scan_log) ? sc.scan_log : (Array.isArray(sc.recent_checked) ? sc.recent_checked : []);
                 const logBox = document.getElementById('av-scan-live-log');
                 if (logBox && logLines.length > 0) {
-                    logBox.innerHTML = logLines.map(l => `<p class="truncate text-slate-300">&gt; ${escapeHtml(l)}</p>`).join('');
+                    logBox.innerHTML = logLines.map(l => `<p class="truncate">${escapeHtml(l)}</p>`).join('');
                     logBox.scrollTop = logBox.scrollHeight;
                 }
 
@@ -3742,7 +3689,7 @@ lucide.createIcons();
                     if (sBtn) sBtn.classList.add('hidden');
 
                     const dot = document.getElementById('av-scan-pulse-dot');
-                    if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+                    if (dot) { dot.className = 'w-2 h-2 rounded-full flex-shrink-0'; dot.style.background = 'var(--ok)'; }
 
                     if (allThreats.length === 0 && verifiedOfficialDrivers.length > 0 && threatActiveSubTab === 'all') {
                         switchThreatSubTab('official');
@@ -3778,13 +3725,7 @@ lucide.createIcons();
             document.getElementById('threat-count-badge').innerText = "Analisando processos suspeitos e memória RAM...";
             const tbody = document.getElementById('threat-table-body');
             if (tbody) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-cyan-400 font-sans">
-                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 mb-3 animate-spin">
-                        <i data-lucide="loader" class="w-5 h-5 text-cyan-400"></i>
-                    </div>
-                    <p class="font-bold text-white text-sm">Varredura Heurística em Andamento...</p>
-                    <p class="text-xs text-slate-400 mt-1">Auditando processos em execução, pastas temporárias e assinaturas digitais</p>
-                </td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="ws-empty">Varredura Heurística em Andamento...</td></tr>`;
                 lucide.createIcons();
             }
 
@@ -3826,13 +3767,7 @@ lucide.createIcons();
             document.getElementById('threat-count-badge').innerText = "Auditando assinaturas digitais e fabricantes em System32 / SysWOW64 / Drivers...";
             const tbody = document.getElementById('threat-table-body');
             if (tbody) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-cyan-400 font-sans">
-                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 mb-3 animate-spin">
-                        <i data-lucide="loader" class="w-5 h-5 text-cyan-400"></i>
-                    </div>
-                    <p class="font-bold text-white text-sm">Auditoria Forense System32 &amp; Drivers em Andamento...</p>
-                    <p class="text-xs text-slate-400 mt-1">Verificando certificados Authenticode e separando Drivers Oficiais (NVIDIA, AMD, Intel, Realtek, Microsoft) de binários não assinados</p>
-                </td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="ws-empty">Auditoria Forense System32 &amp; Drivers em Andamento...</td></tr>`;
                 lucide.createIcons();
             }
 
@@ -3904,20 +3839,14 @@ lucide.createIcons();
             const originalHtml = btn ? btn.innerHTML : '';
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i><span>Auditando Serviços & Nuvem...</span>`;
+                btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i><span>Auditando serviços…</span>`;
                 lucide.createIcons();
             }
 
             document.getElementById('threat-count-badge').innerText = "Auditando serviços instalados e consultando inteligência em nuvem...";
             const tbody = document.getElementById('threat-table-body');
             if (tbody) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-purple-400 font-sans">
-                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 mb-3 animate-spin">
-                        <i data-lucide="loader" class="w-5 h-5 text-purple-400"></i>
-                    </div>
-                    <p class="font-bold text-white text-sm">Auditando Serviços Instalados & Consultando Inteligência em Nuvem...</p>
-                    <p class="text-xs text-slate-400 mt-1">Comparando todos os serviços instalados na máquina e processos com feeds de mineradores, malwares e trojans</p>
-                </td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="ws-empty">Auditando serviços instalados e processos…</td></tr>`;
                 lucide.createIcons();
             }
 
@@ -3932,14 +3861,14 @@ lucide.createIcons();
                     diagnostico: item.diagnostico,
                     caminho: item.path,
                     tipo: 'Cloud Threat',
-                    origem: item.is_service ? `Serviço Windows (${item.service_name || 'N/A'})` : 'Nuvem Global Feeds',
+                    origem: item.is_service ? `Serviço Windows (${item.service_name || 'N/A'})` : 'Processo',
                     is_service: !!item.is_service,
                     service_name: item.service_name || ''
                 }));
                 allThreats = allThreats.filter(x => x.tipo !== 'Cloud Threat').concat(cloudThreats);
                 switchThreatSubTab('cloud');
                 if (cloudThreats.length === 0) {
-                    showToast("Varredura em Nuvem", "Todos os serviços instalados e processos foram verificados: nenhuma ameaça ou minerador detectado.", "success", 4500);
+                    showToast("Serviços e processos", "Todos os serviços e processos foram verificados: nenhum item suspeito pela lista local de assinaturas.", "success", 4500);
                 } else {
                     showToast("Ameaça Detectada", `${cloudThreats.length} serviço(s)/processo(s) malicioso(s) identificado(s) pela inteligência em nuvem!`, "error", 5500);
                 }
@@ -3964,13 +3893,7 @@ lucide.createIcons();
                     (k === 'official' && sub === 'official') ||
                     (k === 'cloud' && sub === 'cloud') ||
                     (k === 'heur' && sub === 'heuristics');
-                if (match) {
-                    btn.className = "px-3 py-1 rounded-lg font-bold bg-blue-600 text-white transition";
-                } else {
-                    btn.className = k === 'official'
-                        ? "px-3 py-1 rounded-lg font-semibold text-emerald-400 hover:text-white transition"
-                        : "px-3 py-1 rounded-lg font-semibold text-slate-400 hover:text-white transition";
-                }
+                btn.classList.toggle('active', match);
             });
             renderThreatTable(allThreats);
         }
@@ -3995,11 +3918,11 @@ lucide.createIcons();
 
             if (filtered.length === 0) {
                 const msg = threatActiveSubTab === 'official'
-                    ? 'Clique em "Auditar System32 & Drivers" ou execute uma Varredura para listar os drivers oficiais assinados.'
-                    : 'Nenhuma ameaça ou anomalia detectada nesta categoria. Sistema Limpo!';
-                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-emerald-400 font-sans font-semibold"><i data-lucide="shield-check" class="w-6 h-6 mx-auto mb-1 text-emerald-400"></i>${msg}</td></tr>`;
+                    ? 'Execute "Auditar System32" ou uma varredura para listar os binários assinados.'
+                    : 'Nenhum item suspeito encontrado nesta categoria.';
+                tbody.innerHTML = `<tr><td colspan="6" class="ws-empty">${msg}</td></tr>`;
                 const countBadge = document.getElementById('threat-count-badge');
-                if (countBadge) countBadge.innerText = threatActiveSubTab === 'official' ? "0 drivers listados" : "Sistema Limpo & Protegido";
+                if (countBadge) countBadge.innerText = threatActiveSubTab === 'official' ? "0 itens" : "0 itens suspeitos";
                 lucide.createIcons();
                 return;
             }
@@ -4007,9 +3930,7 @@ lucide.createIcons();
             filtered.forEach(threat => {
                 const isOfficial = threat.is_official_vendor || threat.classification === 'official_driver' || threat.tipo === 'Official Driver';
                 const tr = document.createElement('tr');
-                tr.className = isOfficial
-                    ? "hover:bg-dark-750/30 transition bg-emerald-500/5 cursor-pointer"
-                    : "hover:bg-dark-750/30 transition bg-rose-500/10 cursor-pointer";
+                tr.className = 'cursor-pointer';
                 tr.onclick = (ev) => {
                     if (ev.target.closest('button')) return;
                     document.querySelectorAll('#threat-table-body tr').forEach(r => r.classList.remove('selected-row'));
@@ -4019,69 +3940,26 @@ lucide.createIcons();
 
                 if (isOfficial) {
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-sans font-bold text-emerald-300">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="badge-check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
-                                <span class="truncate">${escapeHtml(threat.processo || threat.name || 'Driver Oficial')}</span>
-                                ${threat.pid ? `<span class="text-[10px] font-mono text-slate-400">(PID: ${threat.pid})</span>` : ''}
-                            </div>
-                        </td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                                ${escapeHtml(threat.origem || threat.vendor_display || 'Fabricante Oficial')}
-                            </span>
-                        </td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] font-mono">DRIVER OFICIAL (SEGURO)</span>
-                        </td>
-                        <td class="py-3 px-4 text-emerald-200 font-sans text-xs max-w-md">${escapeHtml(threat.diagnostico || 'Certificado digital oficial validado — Não é malware')}</td>
-                        <td class="py-3 px-4 text-slate-300 truncate max-w-xs font-mono text-[11px]" title="${escapeHtml(threat.caminho || '')}">${escapeHtml(threat.caminho || 'System32')}</td>
-                        <td class="py-3 px-4 text-right">
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 inline-flex items-center gap-1">
-                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Verificado Legítimo
-                            </span>
-                        </td>
+                        <td class="ws-strong">${escapeHtml(threat.processo || threat.name || 'Driver')}${threat.pid ? ` <span class="ws-mono ws-faint" style="font-weight:400">PID ${threat.pid}</span>` : ''}</td>
+                        <td>${escapeHtml(threat.origem || threat.vendor_display || 'Fabricante')}</td>
+                        <td><span class="ws-badge ok">Assinado</span></td>
+                        <td class="ws-muted max-w-[360px]">${escapeHtml(threat.diagnostico || 'Assinatura digital válida do fabricante')}</td>
+                        <td class="ws-mono text-[11.5px] truncate max-w-[300px]" title="${escapeHtml(threat.caminho || '')}">${escapeHtml(threat.caminho || '—')}</td>
+                        <td class="text-right"><span class="ws-badge ok">Verificado</span></td>
                     `;
                 } else {
                     const isCrit = threat.nivel === 'CRÍTICO';
-                    const levelColor = isCrit ? 'bg-rose-600 text-white' : 'bg-amber-600 text-white';
                     const isService = !!threat.is_service || !!threat.service_name;
-
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-sans font-bold text-rose-300">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="${isService ? 'server' : 'skull'}" class="w-4 h-4 ${isService ? 'text-purple-400' : 'text-rose-500'} flex-shrink-0"></i>
-                                <span class="truncate">${escapeHtml(threat.processo || 'Ameaça')}</span>
-                                ${threat.pid ? `<span class="text-[10px] font-mono text-slate-400">(PID: ${threat.pid})</span>` : ''}
-                            </div>
-                        </td>
-                        <td class="py-3 px-4">
-                            ${isService ? `
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1 w-max">
-                                    <i data-lucide="server" class="w-3 h-3 text-purple-400"></i>
-                                    <span>Serviço: ${escapeHtml(threat.service_name || threat.origem)}</span>
-                                </span>
-                            ` : `
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800 text-slate-300 border border-slate-700">
-                                    ${escapeHtml(threat.origem || threat.tipo || 'Sistema')}
-                                </span>
-                            `}
-                        </td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded ${levelColor} font-bold text-[10px] font-mono">${escapeHtml(threat.nivel || 'ALTO')}</span></td>
-                        <td class="py-3 px-4 text-rose-200 font-sans text-xs max-w-xs">${escapeHtml(threat.diagnostico || 'Comportamento suspeito')}</td>
-                        <td class="py-3 px-4 text-slate-300 truncate max-w-xs font-mono text-[11px]" title="${escapeHtml(threat.caminho || '')}">${escapeHtml(threat.caminho || (isService ? 'Registro de Serviço' : 'Memória RAM'))}</td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="ws-strong">${escapeHtml(threat.processo || 'Item')}${threat.pid ? ` <span class="ws-mono ws-faint" style="font-weight:400">PID ${threat.pid}</span>` : ''}</td>
+                        <td>${isService ? `Serviço: <span class="ws-mono">${escapeHtml(threat.service_name || threat.origem)}</span>` : escapeHtml(threat.origem || threat.tipo || 'Sistema')}</td>
+                        <td><span class="ws-badge ${isCrit ? 'bad' : 'warn'}">${escapeHtml(threat.nivel || 'ALTO')}</span></td>
+                        <td class="max-w-[360px]">${escapeHtml(threat.diagnostico || 'Comportamento suspeito')}</td>
+                        <td class="ws-mono text-[11.5px] truncate max-w-[300px]" title="${escapeHtml(threat.caminho || '')}">${escapeHtml(threat.caminho || (isService ? 'Registro de serviço' : 'Memória'))}</td>
+                        <td class="text-right">
                             <div class="flex items-center justify-end gap-1.5">
-                                ${(!isService && threat.caminho) ? `
-                                <button onclick="deleteThreatDirectly(decodeURIComponent('${encodeURIComponent(threat.caminho || '')}'), '${threat.pid || ''}', false, '')" class="btn-action-secondary px-2.5 py-1.5 rounded-lg text-amber-300 border-amber-500/40 hover:border-amber-400 font-bold text-xs flex items-center gap-1 transition" title="Isolar arquivo na pasta de Quarentena">
-                                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
-                                    <span>${t('antivirus.btn_quarantine')}</span>
-                                </button>
-                                ` : ''}
-                                <button onclick="deleteThreatDirectly(decodeURIComponent('${encodeURIComponent(threat.caminho || '')}'), '${threat.pid || ''}', true, '${escapeHtml(threat.service_name || '')}')" class="px-3 py-1.5 rounded-lg text-white font-bold text-xs bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-md shadow-rose-900/30 flex items-center gap-1 transition">
-                                    <i data-lucide="${isService ? 'server-off' : 'trash-2'}" class="w-3.5 h-3.5"></i>
-                                    <span>${isService ? 'Desinstalar Serviço' : t('antivirus.btn_delete')}</span>
-                                </button>
+                                ${(!isService && threat.caminho) ? `<button onclick="deleteThreatDirectly(decodeURIComponent('${encodeURIComponent(threat.caminho || '')}'), '${threat.pid || ''}', false, '')" class="ws-btn sm" title="Mover para a quarentena"><i data-lucide="archive"></i>${t('antivirus.btn_quarantine')}</button>` : ''}
+                                <button onclick="deleteThreatDirectly(decodeURIComponent('${encodeURIComponent(threat.caminho || '')}'), '${threat.pid || ''}', true, '${escapeHtml(threat.service_name || '')}')" class="ws-btn sm danger"><i data-lucide="${isService ? 'server-off' : 'trash-2'}"></i>${isService ? 'Remover serviço' : t('antivirus.btn_delete')}</button>
                             </div>
                         </td>
                     `;
@@ -4093,8 +3971,8 @@ lucide.createIcons();
             const countBadge = document.getElementById('threat-count-badge');
             if (countBadge) {
                 countBadge.innerText = threatActiveSubTab === 'official'
-                    ? `✅ ${filtered.length} driver(s)/binário(s) oficial(is) autenticado(s)`
-                    : `🚨 ${filtered.length} ameaça(s)/anomalia(s) identificada(s)`;
+                    ? `${filtered.length} binário(s) com assinatura válida`
+                    : `${filtered.length} item(ns) suspeito(s)`;
             }
         }
 
@@ -4321,7 +4199,7 @@ lucide.createIcons();
             const grid = document.getElementById('clean-categories-grid');
             if (!grid) return;
             if (currentCleanCategories.length === 0) {
-                grid.innerHTML = '<p class="col-span-4 text-center py-4 text-slate-500">Nenhuma categoria analisada ainda.</p>';
+                grid.innerHTML = '<div class="ws-empty sm:col-span-2 xl:col-span-4">Nenhuma análise nesta sessão.</div>';
                 return;
             }
 
@@ -4334,13 +4212,11 @@ lucide.createIcons();
             grid.innerHTML = currentCleanCategories.map(cat => {
                 const isChecked = (cat.key in prevChecked) ? prevChecked[cat.key] : true;
                 return `
-                <label class="flex items-start justify-between p-3.5 rounded-xl bg-dark-900 border border-slate-800 cursor-pointer hover:border-teal-500/40 transition">
-                    <div class="flex items-start space-x-2.5">
-                        <input type="checkbox" id="chk-clean-${cat.key}" ${isChecked ? 'checked' : ''} class="mt-0.5 w-4 h-4 rounded bg-dark-950 border-slate-700 text-teal-500">
-                        <div>
-                            <p class="font-bold text-white text-xs">${escapeHtml(cat.label)}</p>
-                            <p class="text-[11px] text-teal-400 font-mono mt-0.5">${Number(cat.files || 0).toLocaleString()} arquivos • <span class="font-bold">${escapeHtml(cat.formatted || '0 B')}</span></p>
-                        </div>
+                <label class="ws-option !items-start">
+                    <input type="checkbox" id="chk-clean-${cat.key}" ${isChecked ? 'checked' : ''} class="mt-0.5">
+                    <div class="min-w-0 flex-1">
+                        <div class="t">${escapeHtml(cat.label)}</div>
+                        <div class="d ws-mono">${Number(cat.files || 0).toLocaleString('pt-BR')} arquivos · <b style="color:var(--text-primary)">${escapeHtml(cat.formatted || '0 B')}</b></div>
                     </div>
                 </label>
                 `;
@@ -4405,6 +4281,8 @@ lucide.createIcons();
         }
 
         async function setPowerPlan(type) {
+            const card = document.querySelector(`#pw-plan-grid [data-plan="${type}"]`);
+            if (card) card.style.opacity = '0.6';
             try {
                 const res = await fetch('/api/power/set', {
                     method: 'POST',
@@ -4412,30 +4290,61 @@ lucide.createIcons();
                     body: JSON.stringify({ plan: type })
                 });
                 const data = await res.json();
-                showToast("Plano de Energia", data.message, "success");
-                loadPowerSchemes();
+                showToast("Plano de Energia", data.message, data.status === 'success' ? "success" : "error");
             } catch (e) {
                 showToast("Erro", "Erro ao aplicar plano: " + e, "error");
             }
+            if (card) card.style.opacity = '';
+            loadPowerSchemes();
         }
 
         async function createCustomPlan() {
             const name = document.getElementById('custom-plan-name').value;
             const mon = document.getElementById('custom-plan-monitor').value;
             const stb = document.getElementById('custom-plan-standby').value;
+            const minEl = document.getElementById('custom-plan-min');
+            const maxEl = document.getElementById('custom-plan-max');
+            const cpuMin = minEl ? Number(minEl.value) : 100;
+            const cpuMax = maxEl ? Number(maxEl.value) : 100;
+            if (cpuMin > cpuMax) {
+                showToast("Valores inválidos", "A CPU mínima não pode ser maior que a máxima.", "warning");
+                return;
+            }
             try {
                 const res = await fetch('/api/power/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: name, monitor: mon, standby: stb })
+                    body: JSON.stringify({ name: name, monitor: mon, standby: stb, cpu_min: cpuMin, cpu_max: cpuMax })
                 });
                 const data = await res.json();
-                showToast("Plano Criado", data.message, "success");
+                showToast(data.status === 'success' ? "Plano Criado" : "Falha ao criar plano", data.message, data.status === 'success' ? "success" : "error");
                 loadPowerSchemes();
             } catch (e) {
                 showToast("Erro", "Erro ao criar plano: " + e, "error");
             }
         }
+
+
+        // Preenchimento dos sliders ws-range (CSS var --p = posição atual)
+        function updateRangeFill(el) {
+            if (!el) return;
+            const min = Number(el.min || 0), max = Number(el.max || 100);
+            el.style.setProperty('--p', `${((Number(el.value) - min) / Math.max(1, max - min)) * 100}%`);
+        }
+        document.addEventListener('input', e => { if (e.target.classList && e.target.classList.contains('ws-range')) updateRangeFill(e.target); });
+        window.addEventListener('DOMContentLoaded', () => document.querySelectorAll('.ws-range').forEach(updateRangeFill));
+
+        const POWER_DEFAULT_GUIDS = new Set([
+            '381b4222-f694-41f0-9685-ff5bb260df2e',
+            '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c',
+            'a1841308-3541-4fab-bc81-f71556f20b4a'
+        ]);
+        const POWER_PLAN_MATCH = {
+            ultimate: { guids: ['e9a42b02-d5df-448d-aa00-03f14749eb61'], names: ['desempenho máximo', 'ultimate performance', 'máximo rendimiento'] },
+            high: { guids: ['8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c'], names: ['alto desempenho', 'high performance', 'alto rendimiento'] },
+            balanced: { guids: ['381b4222-f694-41f0-9685-ff5bb260df2e'], names: ['equilibrado', 'balanced'] },
+            powersave: { guids: ['a1841308-3541-4fab-bc81-f71556f20b4a'], names: ['economia de energia', 'power saver', 'economizador'] }
+        };
 
         async function loadPowerSchemes() {
             try {
@@ -4443,23 +4352,18 @@ lucide.createIcons();
                 const data = await res.json();
                 const tbody = document.getElementById('power-schemes-body');
                 tbody.innerHTML = '';
-                const defaultGuids = new Set([
-                    '381b4222-f694-41f0-9685-ff5bb260df2e',
-                    '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c',
-                    'a1841308-3541-4fab-bc81-f71556f20b4a'
-                ]);
                 (data.schemes || []).forEach(s => {
                     const tr = document.createElement('tr');
-                    tr.className = s.ativo ? "bg-amber-500/10 font-bold" : "hover:bg-dark-750/30 transition";
-                    const canDelete = !s.ativo && !defaultGuids.has((s.guid || '').toLowerCase());
+                    if (s.ativo) tr.className = 'is-active';
+                    const canDelete = !s.ativo && !POWER_DEFAULT_GUIDS.has((s.guid || '').toLowerCase());
                     tr.innerHTML = `
-                        <td class="py-2.5 px-3 text-slate-400 font-mono">${escapeHtml(s.guid)}</td>
-                        <td class="py-2.5 px-3 text-white font-sans">${escapeHtml(s.nome)}</td>
-                        <td class="py-2.5 px-3">${s.ativo ? '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-bold">⭐ ATIVO</span>' : '<span class="text-slate-500 text-xs">Instalado</span>'}</td>
-                        <td class="py-2.5 px-3 text-right">
+                        <td><span class="font-semibold" style="color:var(--text-primary)">${escapeHtml(s.nome)}</span></td>
+                        <td class="ws-mono text-[11.5px]" style="color:var(--text-muted)">${escapeHtml(s.guid)}</td>
+                        <td>${s.ativo ? '<span class="ws-badge ok"><span class="dot"></span>Ativo</span>' : '<span class="ws-badge">Instalado</span>'}</td>
+                        <td class="text-right">
                             <div class="flex items-center justify-end gap-1.5">
-                                ${!s.ativo ? `<button onclick="activatePowerScheme('${s.guid}')" class="btn-action-primary px-3 py-1 rounded-lg text-xs font-bold shadow-sm">Ativar</button>` : ''}
-                                ${canDelete ? `<button onclick="deletePowerScheme('${s.guid}', '${escapeHtml(s.nome)}')" class="btn-action-danger px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1" title="Excluir esquema de energia"><i data-lucide="trash-2" class="w-3 h-3"></i><span>Excluir</span></button>` : ''}
+                                ${!s.ativo ? `<button onclick="activatePowerScheme('${s.guid}')" class="ws-btn sm">Ativar</button>` : ''}
+                                ${canDelete ? `<button onclick="deletePowerScheme('${s.guid}', '${escapeHtml(s.nome)}')" class="ws-btn sm danger" title="Excluir esquema de energia">Excluir</button>` : ''}
                             </div>
                         </td>
                     `;
@@ -4467,6 +4371,96 @@ lucide.createIcons();
                 });
                 lucide.createIcons();
             } catch (e) { }
+            if (currentTab === 'power') loadPowerDetails(true);
+        }
+
+        async function loadPowerDetails(force = false) {
+            try {
+                const res = await fetch('/api/power/details' + (force ? '?force=1' : ''));
+                const data = await res.json();
+                if (data && data.details) renderPowerDetails(data.details);
+            } catch (e) {
+                const badge = document.getElementById('pw-source-badge');
+                if (badge) { badge.className = 'ws-badge bad'; badge.innerHTML = '<span class="dot"></span>Falha ao ler powercfg'; }
+            }
+        }
+
+        function renderPowerDetails(d) {
+            const st = d.settings || {};
+            const pct = v => (v === null || v === undefined) ? 'N/D' : `${v}%`;
+            const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+
+            setText('pw-active-name', d.active_name || 'Plano desconhecido');
+            setText('pw-active-guid', d.active_guid || '—');
+            const badge = document.getElementById('pw-source-badge');
+            if (badge) { badge.className = 'ws-badge ok'; badge.innerHTML = `<span class="dot"></span>Lido às ${escapeHtml(d.read_at || '')}`; }
+            const bat = document.getElementById('pw-battery');
+            if (bat) bat.innerText = d.battery ? `· Bateria ${d.battery.percent}% ${d.battery.plugged ? '(na tomada)' : '(descarregando)'}` : '· Desktop (sem bateria)';
+
+            setText('pw-stat-min', pct(st.cpu_min && st.cpu_min.ac));
+            setText('pw-stat-max', pct(st.cpu_max && st.cpu_max.ac));
+            setText('pw-stat-boost', (st.boost && st.boost.label) || 'N/D');
+            setText('pw-stat-park', pct(st.core_parking && st.core_parking.ac));
+
+            const slider = (id, s) => {
+                const el = document.getElementById(id);
+                if (!el || !s || s.ac === null || s.ac === undefined) return;
+                if (document.activeElement !== el) el.value = s.ac;
+                updateRangeFill(el);
+                setText(id + '-val', `${s.ac}%`);
+            };
+            slider('pw-cpu-min', st.cpu_min);
+            slider('pw-cpu-max', st.cpu_max);
+            slider('pw-park', st.core_parking);
+
+            const fillSelect = (id, names, s) => {
+                const el = document.getElementById(id);
+                if (!el || !names) return;
+                if (el.options.length !== names.length) el.innerHTML = names.map((n, i) => `<option value="${i}">${escapeHtml(n)}</option>`).join('');
+                if (s && s.ac !== null && s.ac !== undefined) el.value = String(s.ac);
+            };
+            fillSelect('pw-boost', d.boost_modes, st.boost);
+            fillSelect('pw-aspm', d.aspm_modes, st.aspm);
+
+            const timeSelect = (id, s) => {
+                const el = document.getElementById(id);
+                if (!el || !s || s.ac === null || s.ac === undefined) return;
+                const val = String(s.ac);
+                if (![...el.options].some(o => o.value === val)) {
+                    const m = Math.round(s.ac / 60);
+                    el.insertAdjacentHTML('beforeend', `<option value="${val}">${m >= 60 ? (m / 60).toFixed(1) + ' h' : m + ' min'} (atual)</option>`);
+                }
+                el.value = val;
+            };
+            timeSelect('pw-monitor', st.monitor);
+            timeSelect('pw-sleep', st.sleep);
+            timeSelect('pw-disk', st.disk);
+
+            const name = (d.active_name || '').toLowerCase();
+            const guid = (d.active_guid || '').toLowerCase();
+            document.querySelectorAll('#pw-plan-grid [data-plan]').forEach(card => {
+                const m = POWER_PLAN_MATCH[card.dataset.plan];
+                const active = m && (m.guids.includes(guid) || m.names.some(n => name === n || name.startsWith(n)));
+                card.classList.toggle('is-active', !!active);
+                const b = card.querySelector('[data-active-badge]');
+                if (b) b.classList.toggle('hidden', !active);
+            });
+        }
+
+        async function setPowerSetting(key, value) {
+            try {
+                const res = await fetch('/api/power/setting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, value: Number(value) })
+                });
+                const data = await res.json();
+                showToast(data.status === 'success' ? "Ajuste confirmado" : "Ajuste não aplicado", data.message, data.status === 'success' ? "success" : "error", 2600);
+                if (data.details) renderPowerDetails(data.details);
+            } catch (e) {
+                showToast("Erro", "Falha ao alterar configuração: " + e, "error");
+                loadPowerDetails(true);
+            }
         }
 
         async function activatePowerScheme(guid) {
@@ -4585,7 +4579,7 @@ lucide.createIcons();
             document.getElementById('opt-modal-log').innerText = '';
             const doneBtn = document.getElementById('opt-modal-done-btn');
             doneBtn.disabled = true;
-            doneBtn.className = "px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-slate-800 opacity-50 cursor-not-allowed transition";
+            doneBtn.className = "ws-btn";
             doneBtn.innerText = t('opt_modal.btn_done') || "Aguarde...";
 
             modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -4654,68 +4648,20 @@ lucide.createIcons();
                 if (descEl) descEl.innerText = hw.profile_description || 'Serviços calibrados para a configuração real desta máquina.';
                 if (chassisBadge) chassisBadge.innerText = `${hw.chassis || 'Desktop'} • ${hw.profile_badge || hw.cpu_vendor || 'x64'}`;
                 if (cpuEl) cpuEl.innerText = hw.cpu || hw.cpu_name || 'Processador Detectado';
-                if (threadsEl) threadsEl.innerText = `${hw.cores || hw.cpu_cores || '--'}C / ${hw.threads || hw.cpu_threads || '--'}T`;
+                if (threadsEl) threadsEl.innerText = `${hw.cores || hw.cpu_cores || '--'} núcleos · ${hw.threads || hw.cpu_threads || '--'} threads`;
                 if (ramEl) ramEl.innerText = `${hw.ram_gb || '--'} GB`;
-                if (ramTierEl) ramTierEl.innerText = hw.ram_gb >= 15 ? 'Perfil: High-Capacity (16GB+)' : 'Perfil: Compressão Ativa';
+                if (ramTierEl) ramTierEl.innerText = hw.ram_gb >= 15 ? 'Alta capacidade (16 GB+)' : 'Capacidade moderada';
                 if (gpuEl) gpuEl.innerText = hw.gpu || hw.gpu_name || 'GPU Detectada';
-                if (gpuTypeEl) gpuTypeEl.innerText = hw.is_dedicated_gpu ? 'Arquitetura: Dedicada PCIe (HAGS)' : 'Arquitetura: Integrada WDDM';
+                if (gpuTypeEl) gpuTypeEl.innerText = hw.is_dedicated_gpu ? 'Dedicada (PCIe)' : 'Integrada';
                 if (storageEl) storageEl.innerText = hw.storage_type || 'SSD / Disco';
-                if (storageModelEl) storageModelEl.innerText = 'I/O Calibrado para Unidade Primária';
+                if (storageModelEl) storageModelEl.innerText = 'Unidade do sistema';
                 if (recCountEl) {
-                    const recCnt = services.filter(s => s.recommended).length;
-                    recCountEl.innerText = `${recCnt} recomendados p/ esta máquina`;
+                    const recCnt = services.filter(s => s.recommended && !MAINTENANCE_TASKS.has(s.id || s.key)).length;
+                    recCountEl.innerText = `· ${recCnt} recomendados para esta máquina`;
                 }
 
-                const gridEl = document.getElementById('opt-adaptive-services-grid');
-                if (gridEl && services.length > 0) {
-                    const palette = ['cyan', 'purple', 'emerald', 'amber', 'blue', 'rose'];
-                    const colorMap = {
-                        'cyan': { border: 'border-cyan-500/30 hover:border-cyan-400', badge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30', iconBg: 'bg-cyan-500/15 text-cyan-400' },
-                        'purple': { border: 'border-purple-500/30 hover:border-purple-400', badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30', iconBg: 'bg-purple-500/15 text-purple-400' },
-                        'emerald': { border: 'border-emerald-500/30 hover:border-emerald-400', badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', iconBg: 'bg-emerald-500/15 text-emerald-400' },
-                        'amber': { border: 'border-amber-500/30 hover:border-amber-400', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30', iconBg: 'bg-amber-500/15 text-amber-400' },
-                        'blue': { border: 'border-blue-500/30 hover:border-blue-400', badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30', iconBg: 'bg-blue-500/15 text-blue-400' },
-                        'rose': { border: 'border-rose-500/30 hover:border-rose-400', badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30', iconBg: 'bg-rose-500/15 text-rose-400' }
-                    };
-                    gridEl.innerHTML = services.map((s, idx) => {
-                        const taskId = s.id || s.key;
-                        const c = colorMap[s.color || palette[idx % palette.length]] || colorMap.cyan;
-                        const recBadge = s.recommended
-                            ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Recomendado p/ seu PC</span>`
-                            : `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700">Opcional</span>`;
-                        const iconName = (s.icon || 'zap').toLowerCase();
-                        return `
-                            <div class="p-4 rounded-2xl bg-dark-950/90 border ${c.border} flex flex-col justify-between transition group">
-                                <div>
-                                    <div class="flex items-start justify-between gap-2 mb-2.5">
-                                        <div class="flex items-center gap-2.5">
-                                            <div class="w-9 h-9 rounded-xl ${c.iconBg} flex items-center justify-center flex-shrink-0">
-                                                <i data-lucide="${escapeHtml(iconName)}" class="w-4 h-4"></i>
-                                            </div>
-                                            <div>
-                                                <span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${c.badge}">${escapeHtml(s.category || 'Sistema')}</span>
-                                                <h4 class="text-xs font-extrabold text-white mt-1">${escapeHtml(s.title)}</h4>
-                                            </div>
-                                        </div>
-                                        ${recBadge}
-                                    </div>
-                                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">${escapeHtml(s.desc)}</p>
-                                    <div class="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 mb-3">
-                                        <p class="text-[10px] text-cyan-300 font-mono"><i data-lucide="cpu" class="w-3 h-3 inline mr-1"></i>${escapeHtml(s.reason || s.adaptive_reason || s.hardware_tag || 'Adaptado para este hardware')}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
-                                    <span class="text-[10px] font-mono text-slate-400">${escapeHtml(s.hardware_tag || 'Otimização Nativa')}</span>
-                                    <button onclick="runSingleOptimizationModal('${escapeHtml(taskId)}')" class="px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500/30 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
-                                        <i data-lucide="play" class="w-3 h-3"></i>
-                                        <span>Aplicar Serviço</span>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                    lucide.createIcons();
-                }
+                await loadOptimizeStates();
+                renderOptimizeServices();
 
                 if (manual) {
                     showToast("Hardware Reanalisado", `Perfil adaptativo calibrado: ${hw.profile_name || 'OK'}`, "success", 2500);
@@ -4725,13 +4671,122 @@ lucide.createIcons();
             }
         }
 
+
+        // Ações pontuais (sem configuração gravada) ficam na página Manutenção
+        const MAINTENANCE_TASKS = new Set(['clean_ram', 'trim', 'sfc', 'dism', 'dism_cleanup', 'chkdsk', 'restore_point', 'network_reset']);
+        let optimizeStates = {};
+        let optimizeFilter = 'all';
+
+        async function loadOptimizeStates() {
+            try {
+                const res = await fetch('/api/optimize/state');
+                const data = await res.json();
+                optimizeStates = (data && data.state) || {};
+            } catch (e) {
+                optimizeStates = {};
+            }
+        }
+
+        function setOptimizeFilter(f) {
+            optimizeFilter = f;
+            document.querySelectorAll('#opt-filter [data-filter]').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+            renderOptimizeServices();
+        }
+
+        function renderOptimizeServices() {
+            const gridEl = document.getElementById('opt-adaptive-services-grid');
+            const services = ((currentAdaptiveProfile && currentAdaptiveProfile.services) || []).filter(x => !MAINTENANCE_TASKS.has(x.id || x.key));
+            if (!gridEl || services.length === 0) return;
+
+            const stateOf = s => (optimizeStates[s.id || s.key] || {});
+            const verifiable = services.filter(s => stateOf(s).applied === true || stateOf(s).applied === false);
+            const applied = verifiable.filter(s => stateOf(s).applied === true);
+            const pending = services.filter(s => stateOf(s).applied === false);
+            const counts = { all: services.length, recommended: services.filter(s => s.recommended).length, pending: pending.length, applied: applied.length };
+            document.querySelectorAll('#opt-filter [data-count]').forEach(el => { el.innerText = counts[el.dataset.count] ?? 0; });
+
+            // Placar: ajustes verificáveis aplicados / total verificável
+            const total = verifiable.length;
+            const ratio = total ? applied.length / total : 0;
+            const arc = document.getElementById('opt-score-arc');
+            if (arc) arc.style.strokeDashoffset = String(452.4 * (1 - ratio));
+            const sv = document.getElementById('opt-score-value');
+            if (sv) sv.innerText = total ? `${applied.length}/${total}` : '—';
+            const sf = document.getElementById('opt-score-foot');
+            if (sf) sf.innerText = total ? 'ajustes aplicados' : 'estado indisponível';
+
+            const list = services.filter(s => {
+                const ap = stateOf(s).applied;
+                if (optimizeFilter === 'recommended') return s.recommended;
+                if (optimizeFilter === 'pending') return ap === false;
+                if (optimizeFilter === 'applied') return ap === true;
+                return true;
+            });
+            if (list.length === 0) {
+                gridEl.innerHTML = `<div class="ws-empty md:col-span-2 2xl:col-span-3">${optimizeFilter === 'pending' ? 'Nenhum ajuste pendente — tudo o que é verificável já está aplicado.' : 'Nenhum ajuste nesta categoria.'}</div>`;
+                return;
+            }
+            gridEl.innerHTML = list.map(s => {
+                const taskId = s.id || s.key;
+                const st = stateOf(s);
+                const ap = st.applied;
+                const stateBadge = ap === true ? '<span class="ws-badge ok"><span class="dot"></span>Aplicado</span>'
+                    : ap === false ? '<span class="ws-badge warn"><span class="dot"></span>Pendente</span>'
+                        : '<span class="ws-badge">Ação pontual</span>';
+                const rec = s.recommended ? '<span class="ws-badge brand">Recomendado</span>' : '';
+                const iconName = (s.icon || 'zap').toLowerCase();
+                return `
+                    <div class="ws-tweak ws-fade-in ${ap === true ? 'is-applied' : ''}">
+                        <div class="flex items-start gap-3">
+                            <div class="ws-icon ${ap === true ? 'ok' : ''}"><i data-lucide="${escapeHtml(iconName)}"></i></div>
+                            <div class="min-w-0 flex-1">
+                                <span class="ws-kicker">${escapeHtml(s.category || 'Sistema')}</span>
+                                <div class="ws-tweak-title mt-0.5">${escapeHtml(s.title)}</div>
+                            </div>
+                        </div>
+                        <p class="ws-tweak-desc">${escapeHtml(s.desc)}</p>
+                        <div class="ws-tweak-state" title="Estado lido do Windows">${escapeHtml(st.detail || s.hardware_tag || '—')}</div>
+                        <div class="ws-tweak-foot">
+                            <div class="flex flex-wrap gap-1.5">${stateBadge}${rec}</div>
+                            <button onclick="runSingleOptimizationModal('${escapeHtml(taskId)}')" class="ws-btn sm ${ap === true ? 'ghost' : ''}">
+                                <i data-lucide="${ap === true ? 'rotate-cw' : 'play'}"></i>${ap === true ? 'Reaplicar' : 'Aplicar'}
+                            </button>
+                        </div>
+                    </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // Marca uma etapa do modal conforme o resultado REAL devolvido pelo backend
+        function markOptimizeStep(iconEl, statusEl, data) {
+            const ok = data && data.status === 'success';
+            const verified = data && data.state && data.state.applied === true;
+            if (iconEl) {
+                iconEl.className = `ws-step-icon ${ok ? 'ok' : 'bad'}`;
+                iconEl.innerHTML = `<i data-lucide="${ok ? 'check' : 'x'}" class="w-4 h-4"></i>`;
+                const row = iconEl.closest('.ws-step');
+                if (row) row.className = 'ws-step';
+            }
+            if (statusEl) {
+                statusEl.className = 'ws-mono text-[11.5px] flex-shrink-0';
+                statusEl.style.color = ok ? 'var(--ok)' : 'var(--bad)';
+                const secs = data && data.elapsed !== undefined ? ` · ${data.elapsed}s` : '';
+                statusEl.innerText = ok ? (verified ? `Verificado${secs}` : `Concluído${secs}`) : (data && data.state && data.state.applied === false ? 'Não confirmado' : 'Falhou');
+            }
+            return ok;
+        }
+
         async function runHardwareAdaptivePipeline() {
             if (!currentAdaptiveProfile) {
                 await loadOptimizationProfile(false);
             }
             const recServices = (currentAdaptiveProfile && Array.isArray(currentAdaptiveProfile.services))
-                ? currentAdaptiveProfile.services.filter(s => s.recommended)
+                ? currentAdaptiveProfile.services.filter(s => s.recommended && !MAINTENANCE_TASKS.has(s.id || s.key) && (optimizeStates[s.id || s.key] || {}).applied !== true)
                 : [];
+            if (currentAdaptiveProfile && recServices.length === 0) {
+                showToast("Nada a aplicar", "Todos os ajustes recomendados já estão aplicados e verificados neste PC.", "success");
+                return;
+            }
 
             const steps = recServices.length > 0
                 ? recServices.map((s, idx) => ({ key: s.id || s.key, name: `${idx + 1}. ${s.title}`, desc: s.reason || s.adaptive_reason || s.desc }))
@@ -4751,22 +4806,21 @@ lucide.createIcons();
 
             const stepsList = document.getElementById('opt-steps-list');
             stepsList.innerHTML = steps.map((s, idx) => `
-                <div id="pipe-row-${idx}" class="p-3 rounded-2xl bg-dark-950 border border-slate-800 flex items-center justify-between transition-all">
-                    <div class="flex items-center gap-3">
-                        <span id="pipe-icon-${idx}" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 flex items-center justify-center">
-                            <span class="text-xs font-bold font-mono">${idx + 1}</span>
-                        </span>
-                        <div>
-                            <p class="text-xs font-bold text-white">${escapeHtml(s.name)}</p>
-                            <p class="text-[11px] text-slate-400">${escapeHtml(s.desc)}</p>
+                <div id="pipe-row-${idx}" class="ws-step">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span id="pipe-icon-${idx}" class="ws-step-icon"><span class="ws-mono">${idx + 1}</span></span>
+                        <div class="min-w-0">
+                            <p class="ws-strong text-[12.5px] truncate">${escapeHtml(s.name)}</p>
+                            <p class="ws-stat-foot truncate">${escapeHtml(s.desc)}</p>
                         </div>
                     </div>
-                    <span id="pipe-status-${idx}" class="text-xs font-mono font-semibold text-slate-500">Pendente</span>
+                    <span id="pipe-status-${idx}" class="ws-mono text-[11.5px] ws-faint flex-shrink-0">Pendente</span>
                 </div>
             `).join('');
             lucide.createIcons();
 
             appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Iniciando Pipeline Adaptativo para: ${hwTitle}`);
+            let failed = 0;
 
             for (let i = 0; i < steps.length; i++) {
                 const s = steps[i];
@@ -4777,51 +4831,45 @@ lucide.createIcons();
                 const icon = document.getElementById(`pipe-icon-${i}`);
                 const st = document.getElementById(`pipe-status-${i}`);
 
-                if (row) row.className = "p-3 rounded-2xl bg-dark-950 border border-purple-500/40 shadow-lg shadow-purple-500/10 flex items-center justify-between transition-all";
+                if (row) row.className = "ws-step is-running";
                 if (icon) {
-                    icon.className = "w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center";
-                    icon.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i>`;
+                    icon.className = "ws-step-icon";
+                    icon.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 ws-spin"></i>`;
                 }
                 if (st) {
-                    st.className = "text-xs font-mono font-semibold text-purple-300";
+                    st.className = "ws-mono text-[11.5px] flex-shrink-0";
                     st.innerText = "Aplicando...";
                 }
                 lucide.createIcons();
 
                 appendOptimizeModalLog(`--> [${i + 1}/${steps.length}] Aplicando: ${s.name}`);
 
+                let data = null;
                 try {
                     const res = await fetch('/api/optimize/run', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ task: s.key, sync: true })
                     });
-                    const data = await res.json();
+                    data = await res.json();
                     if (data.output) appendOptimizeModalLog(data.output);
                 } catch (e) {
                     appendOptimizeModalLog(`Aviso na etapa ${s.name}: ${e}`);
                 }
-
-                if (icon) {
-                    icon.className = "w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center";
-                    icon.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i>`;
-                }
-                if (st) {
-                    st.className = "text-xs font-mono font-semibold text-emerald-400";
-                    st.innerText = "Concluído";
-                }
+                if (!markOptimizeStep(icon, st, data)) failed++;
                 lucide.createIcons();
             }
 
-            setOptimizeModalProgress(100, `Todos os ${steps.length} serviços adaptativos foram aplicados com sucesso!`);
+            setOptimizeModalProgress(100, failed ? `${steps.length - failed} de ${steps.length} ajustes aplicados — ${failed} não confirmado(s).` : `Todos os ${steps.length} ajustes foram aplicados e verificados.`);
             appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Otimização Adaptativa Finalizada.`);
 
             if (optModalTimer) { clearInterval(optModalTimer); optModalTimer = null; }
             const doneBtn = document.getElementById('opt-modal-done-btn');
             doneBtn.disabled = false;
-            doneBtn.className = "px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-500/25 transition cursor-pointer";
+            doneBtn.className = "ws-btn primary";
             doneBtn.innerText = t('opt_modal.btn_done') || "Concluído";
-            showToast("Otimização Adaptativa Concluída", `${steps.length} serviços foram calibrados para o seu hardware!`, "success");
+            showToast("Otimização Adaptativa", failed ? `${failed} ajuste(s) não confirmado(s). Execute o WinShield como administrador.` : `${steps.length} ajustes aplicados e verificados.`, failed ? "warning" : "success");
+            loadOptimizeStates().then(renderOptimizeServices);
         }
 
         async function runSingleOptimizationModal(taskKey) {
@@ -4853,17 +4901,15 @@ lucide.createIcons();
 
             const stepsList = document.getElementById('opt-steps-list');
             stepsList.innerHTML = `
-                <div class="p-3 rounded-2xl bg-dark-950 border border-purple-500/30 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <span id="opt-step-icon-0" class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center">
-                            <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
-                        </span>
-                        <div>
-                            <p class="text-xs font-bold text-white">${escapeHtml(info.name)}</p>
-                            <p class="text-[11px] text-slate-400">${escapeHtml(info.desc)}</p>
+                <div class="ws-step is-running">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span id="opt-step-icon-0" class="ws-step-icon"><i data-lucide="loader-2" class="w-4 h-4 ws-spin"></i></span>
+                        <div class="min-w-0">
+                            <p class="ws-strong text-[12.5px] truncate">${escapeHtml(info.name)}</p>
+                            <p class="ws-stat-foot truncate">${escapeHtml(info.desc)}</p>
                         </div>
                     </div>
-                    <span id="opt-step-status-0" class="text-xs font-mono font-semibold text-purple-300">Executando...</span>
+                    <span id="opt-step-status-0" class="ws-mono text-[11.5px] flex-shrink-0">Executando…</span>
                 </div>
             `;
             lucide.createIcons();
@@ -4879,21 +4925,13 @@ lucide.createIcons();
                 });
                 const data = await res.json();
 
-                setOptimizeModalProgress(100, `Tarefa ${info.name} concluída com sucesso!`);
-                const icon = document.getElementById('opt-step-icon-0');
-                const st = document.getElementById('opt-step-status-0');
-                if (icon) {
-                    icon.className = "w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center";
-                    icon.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i>`;
-                }
-                if (st) {
-                    st.className = "text-xs font-mono font-semibold text-emerald-400";
-                    st.innerText = "Concluído";
-                }
+                const ok = markOptimizeStep(document.getElementById('opt-step-icon-0'), document.getElementById('opt-step-status-0'), data);
+                setOptimizeModalProgress(100, ok ? `${info.name}: concluído.` : `${info.name}: não foi possível confirmar a execução.`);
                 if (data.output) {
                     appendOptimizeModalLog(data.output);
                 }
-                appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Finalizado com sucesso.`);
+                appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] ${ok ? 'Finalizado.' : 'Finalizado com falha (código de saída ou verificação).'}`);
+                loadOptimizeStates().then(renderOptimizeServices);
             } catch (err) {
                 setOptimizeModalProgress(100, "Erro ao executar tarefa.");
                 appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Erro: ${err}`);
@@ -4902,41 +4940,39 @@ lucide.createIcons();
             if (optModalTimer) { clearInterval(optModalTimer); optModalTimer = null; }
             const doneBtn = document.getElementById('opt-modal-done-btn');
             doneBtn.disabled = false;
-            doneBtn.className = "px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-500/25 transition cursor-pointer";
+            doneBtn.className = "ws-btn primary";
             doneBtn.innerText = t('opt_modal.btn_done') || "Concluído";
             lucide.createIcons();
         }
 
         async function runCompleteOptimizationPipeline() {
             const steps = [
-                { key: 'restore_point', name: '1. Ponto de Restauração', desc: 'Criando snapshot oficial de segurança no Windows...' },
-                { key: 'telemetry', name: '2. Debloat & Telemetria', desc: 'Desativando DiagTrack e serviços espiões...' },
-                { key: 'clean_ram', name: '3. Liberação de Memória RAM', desc: 'Limpando working sets e standby pages...' },
-                { key: 'trim', name: '4. Otimização TRIM SSD/NVMe', desc: 'Despachando comandos TRIM de alta performance...' },
-                { key: 'sfc', name: '5. Verificação SFC de Arquivos', desc: 'Auditando e corrigindo DLLs com sfc /scannow...' },
-                { key: 'dism', name: '6. Reparo DISM RestoreHealth', desc: 'Reparando imagem limpa de componentes oficiais...' }
+                { key: 'restore_point', name: '1. Ponto de restauração', desc: 'Checkpoint-Computer' },
+                { key: 'clean_ram', name: '2. Liberar memória RAM', desc: 'EmptyWorkingSet em todos os processos' },
+                { key: 'trim', name: '3. TRIM dos SSDs', desc: 'Optimize-Volume -ReTrim' },
+                { key: 'sfc', name: '4. SFC /SCANNOW', desc: 'Verificação de arquivos protegidos' },
+                { key: 'dism', name: '5. DISM RestoreHealth', desc: 'Reparo da imagem de componentes' }
             ];
 
-            openOptimizeModal("Pipeline Completo de Otimização & Debloat", "Executando 6 etapas automatizadas para desempenho máximo...");
+            openOptimizeModal("Rotina de manutenção completa", `${steps.length} etapas em sequência`);
 
             const stepsList = document.getElementById('opt-steps-list');
             stepsList.innerHTML = steps.map((s, idx) => `
-                <div id="pipe-row-${idx}" class="p-3 rounded-2xl bg-dark-950 border border-slate-800 flex items-center justify-between transition-all">
-                    <div class="flex items-center gap-3">
-                        <span id="pipe-icon-${idx}" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 flex items-center justify-center">
-                            <span class="text-xs font-bold font-mono">${idx + 1}</span>
-                        </span>
-                        <div>
-                            <p class="text-xs font-bold text-white">${escapeHtml(s.name)}</p>
-                            <p class="text-[11px] text-slate-400">${escapeHtml(s.desc)}</p>
+                <div id="pipe-row-${idx}" class="ws-step">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span id="pipe-icon-${idx}" class="ws-step-icon"><span class="ws-mono">${idx + 1}</span></span>
+                        <div class="min-w-0">
+                            <p class="ws-strong text-[12.5px] truncate">${escapeHtml(s.name)}</p>
+                            <p class="ws-stat-foot truncate">${escapeHtml(s.desc)}</p>
                         </div>
                     </div>
-                    <span id="pipe-status-${idx}" class="text-xs font-mono font-semibold text-slate-500">Pendente</span>
+                    <span id="pipe-status-${idx}" class="ws-mono text-[11.5px] ws-faint flex-shrink-0">Pendente</span>
                 </div>
             `).join('');
             lucide.createIcons();
 
             appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Iniciando Pipeline Completo WinShield Enterprise...`);
+            let fullFailed = 0;
 
             for (let i = 0; i < steps.length; i++) {
                 const s = steps[i];
@@ -4947,53 +4983,47 @@ lucide.createIcons();
                 const icon = document.getElementById(`pipe-icon-${i}`);
                 const st = document.getElementById(`pipe-status-${i}`);
 
-                if (row) row.className = "p-3 rounded-2xl bg-dark-950 border border-purple-500/40 shadow-lg shadow-purple-500/10 flex items-center justify-between transition-all";
+                if (row) row.className = "ws-step is-running";
                 if (icon) {
-                    icon.className = "w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center";
-                    icon.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i>`;
+                    icon.className = "ws-step-icon";
+                    icon.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 ws-spin"></i>`;
                 }
                 if (st) {
-                    st.className = "text-xs font-mono font-semibold text-purple-300";
+                    st.className = "ws-mono text-[11.5px] flex-shrink-0";
                     st.innerText = "Executando...";
                 }
                 lucide.createIcons();
 
                 appendOptimizeModalLog(`--> [${i + 1}/${steps.length}] Executando: ${s.name}`);
 
+                let data = null;
                 try {
                     const res = await fetch('/api/optimize/run', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ task: s.key, sync: true })
                     });
-                    const data = await res.json();
+                    data = await res.json();
                     if (data.output) {
                         appendOptimizeModalLog(data.output);
                     }
                 } catch (e) {
                     appendOptimizeModalLog(`Aviso na etapa ${s.name}: ${e}`);
                 }
-
-                if (icon) {
-                    icon.className = "w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center";
-                    icon.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i>`;
-                }
-                if (st) {
-                    st.className = "text-xs font-mono font-semibold text-emerald-400";
-                    st.innerText = "Concluído";
-                }
+                if (!markOptimizeStep(icon, st, data)) fullFailed++;
                 lucide.createIcons();
             }
 
-            setOptimizeModalProgress(100, "Todas as 6 etapas foram concluídas com sucesso!");
-            appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Pipeline Finalizado. Sistema 100% Otimizado.`);
+            setOptimizeModalProgress(100, fullFailed ? `${steps.length - fullFailed} de ${steps.length} etapas concluídas — ${fullFailed} com falha.` : `As ${steps.length} etapas foram concluídas.`);
+            appendOptimizeModalLog(`[${new Date().toLocaleTimeString()}] Rotina finalizada: ${steps.length - fullFailed}/${steps.length} etapas com sucesso.`);
+            loadOptimizeStates().then(renderOptimizeServices);
 
             if (optModalTimer) { clearInterval(optModalTimer); optModalTimer = null; }
             const doneBtn = document.getElementById('opt-modal-done-btn');
             doneBtn.disabled = false;
-            doneBtn.className = "px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-500/25 transition cursor-pointer";
+            doneBtn.className = "ws-btn primary";
             doneBtn.innerText = t('opt_modal.btn_done') || "Concluído";
-            showToast("Otimização Completa Concluída", "Todas as etapas do pipeline foram executadas com sucesso!", "success");
+            showToast("Rotina completa", fullFailed ? `${fullFailed} etapa(s) falharam — veja o registro.` : "Todas as etapas foram concluídas.", fullFailed ? "warning" : "success");
         }
 
         // =====================================================================
@@ -5011,13 +5041,9 @@ lucide.createIcons();
             const win = document.getElementById('terminal-execution-window');
             win.classList.remove('hidden');
 
-            document.getElementById('term-exec-shell-badge').innerText = `${mode} (ADMIN)`;
+            document.getElementById('term-exec-shell-badge').innerText = mode;
             document.getElementById('term-exec-cmd-text').innerText = cmd;
-            document.getElementById('term-exec-status').innerHTML = `
-                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i>
-                <span>Executando comando...</span>
-            `;
-            document.getElementById('term-exec-status').className = "flex items-center gap-1.5 text-xs font-semibold text-cyan-400";
+            document.getElementById('term-exec-status').innerHTML = `<span class="ws-badge brand live"><span class="dot"></span>Executando</span>`;
             document.getElementById('term-exec-output').innerText = "Aguardando retorno do processo...";
             lucide.createIcons();
 
@@ -5040,27 +5066,14 @@ lucide.createIcons();
                 const finalElapsed = data.elapsed !== undefined ? Number(data.elapsed).toFixed(1) : ((Date.now() - termStartTime) / 1000).toFixed(1);
                 document.getElementById('term-exec-timer').innerText = `${finalElapsed}s`;
 
-                if (data.code === 0) {
-                    document.getElementById('term-exec-status').innerHTML = `
-                        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="text-emerald-400 font-bold">Concluído (Código 0)</span>
-                    `;
-                } else {
-                    document.getElementById('term-exec-status').innerHTML = `
-                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-400"></i>
-                        <span class="text-rose-400 font-bold">Finalizado (Código ${data.code ?? 1})</span>
-                    `;
-                }
-
-                document.getElementById('term-exec-output').innerText = data.output || "Comando executado sem retorno textual.";
+                const ok = data.code === 0;
+                document.getElementById('term-exec-status').innerHTML = `<span class="ws-badge ${ok ? 'ok' : 'bad'}"><span class="dot"></span>${ok ? 'Concluído' : 'Falhou'} · código ${data.code ?? '?'}</span>`;
+                document.getElementById('term-exec-output').innerText = data.output || "(sem saída de texto)";
                 lucide.createIcons();
-                showToast("Terminal", "Comando executado com sucesso.", "success", 2000);
+                showToast("Terminal", ok ? "Comando concluído (código 0)." : `O comando terminou com código ${data.code ?? '?'}.`, ok ? "success" : "warning", 2500);
             } catch (e) {
                 if (termTimer) { clearInterval(termTimer); termTimer = null; }
-                document.getElementById('term-exec-status').innerHTML = `
-                    <i data-lucide="x-circle" class="w-3.5 h-3.5 text-rose-500"></i>
-                    <span class="text-rose-400 font-bold">Falha de Execução</span>
-                `;
+                document.getElementById('term-exec-status').innerHTML = `<span class="ws-badge bad"><span class="dot"></span>Falha de execução</span>`;
                 document.getElementById('term-exec-output').innerText = `Erro: ${e}`;
                 lucide.createIcons();
                 showToast("Erro no Terminal", String(e), "error");
@@ -5124,7 +5137,7 @@ lucide.createIcons();
             const sigBar = document.getElementById('net-wifi-signal-bar');
             if (isWifi && net.wifi_signal !== undefined && net.wifi_signal !== null) {
                 if (sigVal) sigVal.innerText = `${net.wifi_signal}%`;
-                if (sigBar) sigBar.style.width = `${net.wifi_signal}%`;
+                if (sigBar) { sigBar.parentElement.style.display = ''; sigBar.style.width = `${net.wifi_signal}%`; }
                 const ssidEl = document.getElementById('net-wifi-ssid');
                 if (ssidEl) ssidEl.innerText = net.wifi_ssid || '--';
                 const detailsEl = document.getElementById('net-wifi-details');
@@ -5133,12 +5146,12 @@ lucide.createIcons();
                     detailsEl.innerText = `${quality} • Canal ${net.wifi_channel || '--'} • ${net.wifi_protocol || '802.11'}`;
                 }
             } else {
-                if (sigVal) sigVal.innerText = 'Cabo (100%)';
-                if (sigBar) sigBar.style.width = '100%';
+                if (sigVal) sigVal.innerText = 'Cabeada';
+                if (sigBar) sigBar.parentElement.style.display = 'none';
                 const ssidEl = document.getElementById('net-wifi-ssid');
-                if (ssidEl) ssidEl.innerText = 'Conexão Cabeada Ethernet';
+                if (ssidEl) ssidEl.innerText = 'Ethernet';
                 const detailsEl = document.getElementById('net-wifi-details');
-                if (detailsEl) detailsEl.innerText = 'Conexão estável via cabo • Full-Duplex';
+                if (detailsEl) detailsEl.innerText = 'Sem medição de sinal (conexão por cabo)';
             }
 
             // IP Local
@@ -5161,7 +5174,7 @@ lucide.createIcons();
             const statusEl = document.getElementById('net-status-text');
             if (statusEl) {
                 statusEl.innerText = net.connected ? 'Conectado à Internet' : 'Sem conexão com a Internet';
-                statusEl.className = net.connected ? 'text-emerald-300 font-semibold' : 'text-rose-300 font-semibold';
+                statusEl.className = 'text-[12px]'; statusEl.style.color = net.connected ? 'var(--ok)' : 'var(--bad)';
             }
 
             
@@ -5185,14 +5198,7 @@ lucide.createIcons();
             if (btn) btn.disabled = true;
 
             if (tbody) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="p-6 text-center text-slate-400 font-mono text-xs">
-                            <i data-lucide="loader" class="w-5 h-5 animate-spin mx-auto text-cyan-400 mb-2"></i>
-                            Disparando pacotes ICMP para servidores globais...
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = `<tr><td colspan="7" class="ws-empty">Enviando pacotes ICMP…</td></tr>`;
                 lucide.createIcons();
             }
 
@@ -5214,39 +5220,27 @@ lucide.createIcons();
             const tbody = document.getElementById('ping-results-body');
             if (!tbody) return;
             if (!results || results.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-mono text-xs">Nenhum servidor testado.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="ws-empty">Nenhum servidor testado.</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = results.map(r => {
-                const avgNum = Number(r.avg_ms ?? r.avg ?? 999);
-                let badgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
-                if (avgNum > 100) badgeClass = "bg-rose-500/20 text-rose-300 border-rose-500/30";
-                else if (avgNum > 50) badgeClass = "bg-amber-500/20 text-amber-300 border-amber-500/30";
+            tbody.innerHTML = results.map(r => pingRowHtml(r)).join('');
+        }
 
-                const sent = r.packets_sent ?? 0;
-                const recv = r.packets_recv ?? 0;
-
-                return `
-                    <tr class="border-b border-slate-800/60 hover:bg-dark-850/50 transition">
-                        <td class="p-3 text-xs font-bold text-white flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full ${avgNum < 50 ? 'bg-emerald-400' : 'bg-amber-400'}"></span>
-                            ${escapeHtml(r.name || r.server || 'Servidor')}
-                        </td>
-                        <td class="p-3 text-xs font-mono text-cyan-300">${escapeHtml(r.host)}</td>
-                        <td class="p-3 text-xs font-mono text-slate-300">${sent}/${recv}</td>
-                        <td class="p-3 text-xs font-mono text-slate-400">${r.packet_loss ?? 0}%</td>
-                        <td class="p-3 text-xs font-mono text-slate-400">${r.min_ms ?? r.min ?? '--'} / ${r.max_ms ?? r.max ?? '--'} ms</td>
-                        <td class="p-3 text-xs font-mono font-bold text-white">${r.avg_ms ?? r.avg ?? '--'} ms</td>
-                        <td class="p-3 text-xs">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">
-                                ${escapeHtml(r.rating || r.quality || 'Bom')}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            lucide.createIcons();
+        function pingRowHtml(r, highlight = false) {
+            const avgNum = Number(r.avg_ms ?? r.avg ?? 999);
+            const offline = (r.packets_recv ?? 0) === 0;
+            const tone = offline ? 'bad' : (avgNum > 100 ? 'bad' : (avgNum > 50 ? 'warn' : 'ok'));
+            return `
+                <tr${highlight ? ' class="is-active"' : ''}>
+                    <td class="ws-strong">${escapeHtml(r.name || r.server || 'Servidor')}</td>
+                    <td class="ws-mono">${escapeHtml(r.host)}</td>
+                    <td class="ws-mono">${r.packets_recv ?? 0}/${r.packets_sent ?? 0}</td>
+                    <td class="ws-mono">${r.packet_loss ?? 0}%</td>
+                    <td class="ws-mono">${r.min_ms ?? r.min ?? '—'} / ${r.max_ms ?? r.max ?? '—'} ms</td>
+                    <td class="ws-mono ws-strong">${offline ? '—' : `${r.avg_ms ?? r.avg ?? '—'} ms`}</td>
+                    <td><span class="ws-badge ${tone}">${escapeHtml(r.rating || r.quality || '—')}</span></td>
+                </tr>`;
         }
 
         async function runCustomPing() {
@@ -5271,25 +5265,8 @@ lucide.createIcons();
                     r.server = `Personalizado (${host})`;
                     const tbody = document.getElementById('ping-results-body');
                     if (tbody) {
-                        const cur = tbody.innerHTML.includes('loader') ? '' : tbody.innerHTML;
-                        tbody.innerHTML = `
-                            <tr class="border-b border-cyan-500/40 bg-cyan-950/20 transition">
-                                <td class="p-3 text-xs font-bold text-cyan-300 flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                                    ${escapeHtml(r.server)}
-                                </td>
-                                <td class="p-3 text-xs font-mono text-cyan-300">${escapeHtml(r.host)}</td>
-                                <td class="p-3 text-xs font-mono text-slate-300">${r.packets_sent ?? 0}/${r.packets_recv ?? 0}</td>
-                                <td class="p-3 text-xs font-mono text-slate-400">${r.packet_loss ?? 0}%</td>
-                                <td class="p-3 text-xs font-mono text-slate-400">${r.min_ms ?? '--'} / ${r.max_ms ?? '--'} ms</td>
-                                <td class="p-3 text-xs font-mono font-bold text-white">${r.avg_ms ?? '--'} ms</td>
-                                <td class="p-3 text-xs">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold border bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
-                                        ${escapeHtml(r.rating || 'Testado')}
-                                    </span>
-                                </td>
-                            </tr>
-                        ` + cur;
+                        const cur = tbody.querySelector('.ws-empty') ? '' : tbody.innerHTML;
+                        tbody.innerHTML = pingRowHtml(r, true) + cur;
                         lucide.createIcons();
                     }
                 }
@@ -5323,10 +5300,10 @@ lucide.createIcons();
             const pillPing = document.getElementById('st-pill-ping');
             const pillDl = document.getElementById('st-pill-dl');
             const pillUl = document.getElementById('st-pill-ul');
-            const baseClass = "py-1.5 px-2 rounded-lg bg-dark-900 border border-slate-800 text-slate-400 transition font-mono";
-            const activePing = "py-1.5 px-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow transition font-mono font-extrabold";
-            const activeDl = "py-1.5 px-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow transition font-mono font-extrabold";
-            const activeUl = "py-1.5 px-2 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow transition font-mono font-extrabold";
+            const baseClass = "ws-phase";
+            const activePing = "ws-phase active";
+            const activeDl = "ws-phase active";
+            const activeUl = "ws-phase active";
 
             if (pillPing) pillPing.className = (phase === 'ping' || phase === 'server_selection' || phase === 'finding_server') ? activePing : baseClass;
             if (pillDl) pillDl.className = (phase === 'download') ? activeDl : baseClass;
@@ -5350,7 +5327,7 @@ lucide.createIcons();
             if (pingEl) pingEl.innerText = '-- ms';
             if (jitterEl) jitterEl.innerText = '-- ms';
             if (statusEl) statusEl.innerText = 'Buscando servidor...';
-            if (phaseLabel) phaseLabel.innerText = 'LOCALIZANDO SERVIDOR MAIS PRÓXIMO';
+            if (phaseLabel) phaseLabel.innerText = 'Localizando servidor';
             if (progBar) progBar.style.width = '5%';
             updateSpeedTestGauge(0);
             setSpeedTestPhasePills('ping');
@@ -5415,19 +5392,19 @@ lucide.createIcons();
                 }
 
                 if (st.phase === 'server_selection' || st.phase === 'finding_server') {
-                    if (phaseLabel) phaseLabel.innerText = 'LOCALIZANDO SERVIDOR MAIS PRÓXIMO';
+                    if (phaseLabel) phaseLabel.innerText = 'Localizando servidor';
                     if (statusEl) statusEl.innerText = 'Buscando servidor...';
                     updateSpeedTestGauge(0);
                 } else if (st.phase === 'ping') {
-                    if (phaseLabel) phaseLabel.innerText = 'MEDINDO LATÊNCIA (PING & JITTER)';
+                    if (phaseLabel) phaseLabel.innerText = 'Medindo latência';
                     if (statusEl) statusEl.innerText = 'Testando Latência...';
                     updateSpeedTestGauge(liveMbps);
                 } else if (st.phase === 'download') {
-                    if (phaseLabel) phaseLabel.innerText = 'TESTANDO DOWNLOAD MULTI-STREAM';
+                    if (phaseLabel) phaseLabel.innerText = 'Download';
                     if (statusEl) statusEl.innerText = `Download (${pct}%)`;
                     updateSpeedTestGauge(liveMbps || st.download_mbps || 0);
                 } else if (st.phase === 'upload') {
-                    if (phaseLabel) phaseLabel.innerText = 'TESTANDO UPLOAD MULTI-STREAM';
+                    if (phaseLabel) phaseLabel.innerText = 'Upload';
                     if (statusEl) statusEl.innerText = `Upload (${pct}%)`;
                     updateSpeedTestGauge(liveMbps || st.upload_mbps || 0);
                 }
@@ -5444,7 +5421,9 @@ lucide.createIcons();
                     }
                     setSpeedTestPhasePills('done');
                     updateSpeedTestGauge(st.download_mbps || 0);
-                    if (phaseLabel) phaseLabel.innerText = 'TESTE FINALIZADO • VELOCIDADE REAL';
+                    if (phaseLabel) phaseLabel.innerText = 'Resultado (download)';
+                    if (!(st.upload_mbps > 0) && ulVal) ulVal.innerText = 'N/D';
+                    if (!(st.download_mbps > 0) && dlVal) dlVal.innerText = 'N/D';
                     if (statusEl) statusEl.innerText = `Concluído ${st.timestamp || ''}`.trim();
 
                     const qStream = document.getElementById('st-qual-stream');
@@ -5458,7 +5437,7 @@ lucide.createIcons();
 
                     const btn = document.getElementById('btn-speed-test');
                     if (btn) btn.disabled = false;
-                    showToast("SpeedTest Concluído", `Download: ${st.download_mbps} Mbps | Upload: ${st.upload_mbps} Mbps | Ping: ${st.ping_ms} ms`, "success");
+                    showToast("Teste de velocidade concluído", `Download ${st.download_mbps || 'N/D'} Mbps · Upload ${st.upload_mbps || 'N/D'} Mbps · Latência ${st.ping_ms} ms`, "success");
                 }
             } catch (e) {
                 console.error("Erro no pollSpeedTestLive:", e);
@@ -5497,14 +5476,7 @@ lucide.createIcons();
         async function loadDevicesInfo(force = false) {
             const tbody = document.getElementById('dev-table-body');
             if (tbody) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="p-6 text-center text-slate-400 font-mono text-xs">
-                            <i data-lucide="loader" class="w-5 h-5 animate-spin mx-auto text-cyan-400 mb-2"></i>
-                            Mapeando barramento Plug & Play e drivers instalados...
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = `<tr><td colspan="7" class="ws-empty">Lendo dispositivos Plug and Play e drivers…</td></tr>`;
                 lucide.createIcons();
             }
 
@@ -5532,7 +5504,7 @@ lucide.createIcons();
                     if (thEl) thEl.innerText = third;
                     const signEl = document.getElementById('dev-signed-val');
                     if (signEl) {
-                        const pct = tot > 0 ? Math.round((signed / tot) * 100) : 100;
+                        const pct = tot > 0 ? Math.round((signed / tot) * 100) : 0;
                         signEl.innerText = `${pct}%`;
                     }
 
@@ -5553,85 +5525,32 @@ lucide.createIcons();
         function renderPairingCards(pairedList) {
             const container = document.getElementById('dev-pairing-container');
             if (!container) return;
-
             if (!pairedList || pairedList.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full p-4 rounded-xl bg-dark-900 border border-slate-800 text-center text-xs text-slate-400">
-                        Nenhum componente pareado detectado.
-                    </div>
-                `;
+                container.innerHTML = `<div class="ws-card ws-empty sm:col-span-2 xl:col-span-4">Nenhum componente com canal oficial identificado.</div>`;
                 return;
             }
-
-            container.innerHTML = pairedList.map(item => {
-                const vendor = item.vendor || 'Outro';
-                let vendorBadgeClass = 'bg-slate-800 text-slate-300 border-slate-700';
-                let iconColor = 'text-cyan-400';
-
-                if (vendor === 'NVIDIA') {
-                    vendorBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-                    iconColor = 'text-emerald-400';
-                } else if (vendor === 'AMD') {
-                    vendorBadgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
-                    iconColor = 'text-rose-400';
-                } else if (vendor === 'Intel') {
-                    vendorBadgeClass = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
-                    iconColor = 'text-blue-400';
-                } else if (vendor === 'Realtek') {
-                    vendorBadgeClass = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
-                    iconColor = 'text-cyan-400';
-                }
-
-                return `
-                    <div class="p-4 rounded-2xl bg-dark-900/80 border border-slate-800/80 hover:border-slate-700 transition flex flex-col justify-between space-y-3">
-                        <div class="flex items-start justify-between gap-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">${escapeHtml(item.category || 'Hardware')}</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${vendorBadgeClass}">${escapeHtml(vendor)}</span>
-                        </div>
-                        <div>
-                            <h6 class="text-xs font-bold text-white truncate" title="${escapeHtml(item.hardware_name)}">${escapeHtml(item.hardware_name)}</h6>
-                            <p class="text-[11px] text-cyan-300 font-mono mt-0.5 truncate">${escapeHtml(item.installed_version)}</p>
-                        </div>
-                        <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px]">
-                            <span class="text-slate-400 flex items-center gap-1 truncate" title="${escapeHtml(item.official_portal)}">
-                                <i data-lucide="check-circle" class="w-3 h-3 ${iconColor} flex-shrink-0"></i>
-                                <span class="truncate">Pareado Oficial</span>
-                            </span>
-                            <span class="text-emerald-400 font-semibold font-mono">Conectado</span>
-                        </div>
+            container.innerHTML = pairedList.map(item => `
+                <div class="ws-card ws-card-tight flex flex-col gap-2 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="ws-kicker">${escapeHtml(item.category || 'Hardware')}</span>
+                        <span class="ws-badge">${escapeHtml(item.vendor || 'Outro')}</span>
                     </div>
-                `;
-            }).join('');
-            lucide.createIcons();
+                    <div class="ws-strong text-[13px] truncate" title="${escapeHtml(item.hardware_name)}">${escapeHtml(item.hardware_name)}</div>
+                    <div class="ws-mono text-[12px] ws-muted truncate">Instalado: ${escapeHtml(item.installed_version || '—')}</div>
+                    <div class="ws-stat-foot truncate" title="${escapeHtml(item.official_portal || '')}">${escapeHtml(item.official_portal || '')}</div>
+                </div>
+            `).join('');
         }
 
         function filterDevices(cat) {
             currentDeviceFilter = cat;
-            document.querySelectorAll('.dev-filter-pill').forEach(b => {
-                const isActive = b.getAttribute('data-category') === cat;
-                b.classList.toggle('active', isActive);
-                b.classList.toggle('bg-blue-600', isActive);
-                b.classList.toggle('text-white', isActive);
-                b.classList.toggle('font-bold', isActive);
-                b.classList.toggle('bg-dark-900', !isActive);
-                b.classList.toggle('text-slate-400', !isActive);
-                b.classList.toggle('font-semibold', !isActive);
-            });
+            document.querySelectorAll('.dev-filter-pill').forEach(b => b.classList.toggle('active', b.getAttribute('data-category') === cat));
             renderDevicesTable();
         }
 
         function filterDriverVendor(vendor) {
             currentDriverVendorFilter = vendor;
-            document.querySelectorAll('.dev-vendor-pill').forEach(b => {
-                const isActive = b.getAttribute('data-vendor') === vendor;
-                b.classList.toggle('active', isActive);
-                b.classList.toggle('bg-blue-600', isActive);
-                b.classList.toggle('text-white', isActive);
-                b.classList.toggle('font-bold', isActive);
-                b.classList.toggle('bg-dark-900', !isActive);
-                b.classList.toggle('text-slate-400', !isActive);
-                b.classList.toggle('font-semibold', !isActive);
-            });
+            document.querySelectorAll('.dev-vendor-pill').forEach(b => b.classList.toggle('active', b.getAttribute('data-vendor') === vendor));
             if (latestDriverUpdatesData) {
                 renderDriverUpdates(latestDriverUpdatesData);
             }
@@ -5656,79 +5575,45 @@ lucide.createIcons();
                     (d.class || '').toLowerCase().includes(search)
                 );
             }
-
             if (!filtered || filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 font-mono text-xs">Nenhum dispositivo encontrado para os filtros selecionados.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="ws-empty">Nenhum dispositivo para os filtros selecionados.</td></tr>`;
                 return;
             }
-
             tbody.innerHTML = filtered.map(d => {
-                const isThird = d.is_third_party;
-                const provider = isThird ? 'Terceiro / OEM' : 'Microsoft';
+                const ok = !d.status || /ok|operacional|funcionando/i.test(d.status);
                 return `
-                    <tr class="border-b border-slate-800/60 hover:bg-dark-850/50 transition">
-                        <td class="p-3 text-xs font-bold text-white max-w-xs truncate" title="${escapeHtml(d.name)}">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="cpu" class="w-4 h-4 text-cyan-400 flex-shrink-0"></i>
-                                <span class="truncate">${escapeHtml(d.name)}</span>
+                    <tr>
+                        <td class="ws-strong max-w-[320px] truncate" title="${escapeHtml(d.name)}">${escapeHtml(d.name)}</td>
+                        <td class="ws-mono text-[11.5px]">${escapeHtml(d.class || d.category || '—')}</td>
+                        <td class="max-w-[200px] truncate" title="${escapeHtml(d.manufacturer || '')}">${escapeHtml(d.manufacturer || '—')}</td>
+                        <td class="ws-mono">${escapeHtml(d.driver_version || d.version || '—')}</td>
+                        <td class="ws-mono">${escapeHtml(d.driver_date || d.date || '—')}</td>
+                        <td>${d.is_third_party ? 'Terceiro' : 'Microsoft'}</td>
+                        <td>
+                            <div class="flex gap-1.5">
+                                <span class="ws-badge ${ok ? '' : 'warn'}">${escapeHtml(d.status || 'OK')}</span>
+                                ${d.is_signed ? '' : '<span class="ws-badge warn">Sem assinatura</span>'}
                             </div>
                         </td>
-                        <td class="p-3 text-xs font-mono text-slate-300 uppercase">${escapeHtml(d.category || d.class || 'other')}</td>
-                        <td class="p-3 text-xs text-slate-300 max-w-[180px] truncate" title="${escapeHtml(d.manufacturer || 'Microsoft')}">
-                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${isThird ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
-                                ${escapeHtml(d.manufacturer || 'Microsoft')}
-                            </span>
-                        </td>
-                        <td class="p-3 text-xs font-mono text-cyan-300">${escapeHtml(d.driver_version || d.version || '--')}</td>
-                        <td class="p-3 text-xs font-mono text-slate-400">${escapeHtml(d.driver_date || d.date || '--')}</td>
-                        <td class="p-3 text-xs font-mono text-slate-300">${provider}</td>
-                        <td class="p-3 text-xs">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${d.is_signed ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border-amber-500/30'}">
-                                ${escapeHtml(d.status || 'Operacional')} • ${d.is_signed ? 'Assinado' : 'Não Assinado'}
-                            </span>
-                        </td>
-                    </tr>
-                `;
+                    </tr>`;
             }).join('');
-            lucide.createIcons();
         }
 
         function switchDeviceSubTab(tab) {
             const vInst = document.getElementById('dev-content-installed');
             const vUpd = document.getElementById('dev-content-updates');
-            const bInst = document.getElementById('dev-subtab-installed');
-            const bUpd = document.getElementById('dev-subtab-updates');
-            if (!vInst || !vUpd || !bInst || !bUpd) return;
-
-            if (tab === 'installed') {
-                vInst.classList.remove('hidden');
-                vUpd.classList.add('hidden');
-                bInst.classList.remove('text-slate-400', 'font-semibold');
-                bInst.classList.add('bg-blue-600', 'text-white', 'font-bold');
-                bUpd.classList.remove('bg-blue-600', 'text-white', 'font-bold');
-                bUpd.classList.add('text-slate-400', 'font-semibold');
-            } else {
-                vInst.classList.add('hidden');
-                vUpd.classList.remove('hidden');
-                bUpd.classList.remove('text-slate-400', 'font-semibold');
-                bUpd.classList.add('bg-blue-600', 'text-white', 'font-bold');
-                bInst.classList.remove('bg-blue-600', 'text-white', 'font-bold');
-                bInst.classList.add('text-slate-400', 'font-semibold');
-                scanDriverUpdates();
-            }
-            lucide.createIcons();
+            if (!vInst || !vUpd) return;
+            vInst.classList.toggle('hidden', tab !== 'installed');
+            vUpd.classList.toggle('hidden', tab === 'installed');
+            document.getElementById('dev-subtab-installed').classList.toggle('active', tab === 'installed');
+            document.getElementById('dev-subtab-updates').classList.toggle('active', tab !== 'installed');
+            if (tab !== 'installed' && !latestDriverUpdatesData) scanDriverUpdates();
         }
 
         async function scanDriverUpdates() {
             const list = document.getElementById('dev-updates-results');
             if (list) {
-                list.innerHTML = `
-                    <div class="p-8 text-center text-slate-400 font-mono text-xs">
-                        <i data-lucide="loader" class="w-7 h-7 animate-spin mx-auto text-cyan-400 mb-3"></i>
-                        <p class="font-bold text-white text-sm">Consultando servidores oficiais dos grandes fabricantes...</p>
-                        <p class="text-slate-400 mt-1">Conectando a NVIDIA, AMD, Intel, Realtek e catálogo oficial Microsoft WHQL...</p>
-                    </div>
-                `;
+                list.innerHTML = `<div class="ws-card ws-empty">Consultando NVIDIA, AMD, Intel, Realtek, Windows Update e winget…</div>`;
                 lucide.createIcons();
             }
 
@@ -5750,12 +5635,12 @@ lucide.createIcons();
                     badge.classList.toggle('hidden', total <= 0);
                 }
                 const lastCheck = document.getElementById('dev-last-check-text');
-                if (lastCheck) lastCheck.innerText = `Última verificação oficial: ${data.checked_at || new Date().toLocaleString()}`;
+                if (lastCheck) lastCheck.innerText = `Última verificação: ${data.checked_at || new Date().toLocaleString()}`;
 
                 // Inicia monitoramento caso já haja download ativo
                 startDownloadPolling();
             } catch (e) {
-                if (list) list.innerHTML = `<div class="p-4 text-center text-rose-400 text-xs">Erro ao consultar atualizações oficiais: ${e}</div>`;
+                if (list) list.innerHTML = `<div class="ws-note warn"><i data-lucide="alert-triangle"></i><span>Falha ao consultar atualizações: ${escapeHtml(String(e))}</span></div>`;
             }
         }
 
@@ -5791,148 +5676,67 @@ lucide.createIcons();
             }
 
             if (filteredOfficial.length === 0 && filteredWu.length === 0 && filteredWinget.length === 0) {
-                list.innerHTML = `
-                    <div class="p-6 text-center text-emerald-400 bg-emerald-950/20 rounded-2xl border border-emerald-500/30 font-mono text-xs">
-                        <i data-lucide="check-circle" class="w-8 h-8 mx-auto text-emerald-400 mb-2"></i>
-                        <p class="font-bold text-sm">Hardware Pareado & Drivers Atualizados!</p>
-                        <p class="text-slate-400 mt-1">Os servidores oficiais do fabricante confirmam que seus dispositivos estão operando com as versões mais recentes.</p>
-                    </div>
-                `;
+                list.innerHTML = `<div class="ws-note"><i data-lucide="check-circle"></i><span><b>Nenhuma atualização encontrada.</b> As versões instaladas são iguais ou mais novas que as publicadas nos canais consultados.</span></div>`;
                 lucide.createIcons();
                 return;
             }
 
+            const row = (icon, title, meta, side) => `
+                <div class="ws-card ws-card-tight flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                        <div class="ws-icon"><i data-lucide="${icon}"></i></div>
+                        <div class="min-w-0">${title}${meta}</div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">${side}</div>
+                </div>`;
+
             let html = '';
-
-            // 1. CARDS DE DRIVERS OFICIAIS DOS FABRICANTES (DOWNLOAD DIRETO)
             filteredOfficial.forEach(drv => {
-                const vendor = drv.vendor || 'Fabricante';
-                let vendorBadgeClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-                let iconColor = 'text-cyan-400';
-                let accentBorder = 'border-slate-800';
-
-                if (vendor === 'NVIDIA') {
-                    vendorBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-                    iconColor = 'text-emerald-400';
-                    accentBorder = 'border-emerald-500/30';
-                } else if (vendor === 'AMD') {
-                    vendorBadgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
-                    iconColor = 'text-rose-400';
-                    accentBorder = 'border-rose-500/30';
-                } else if (vendor === 'Intel') {
-                    vendorBadgeClass = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
-                    iconColor = 'text-blue-400';
-                    accentBorder = 'border-blue-500/30';
-                }
-
                 const dlUrl = drv.download_url || '';
                 const fname = drv.filename || `${drv.id}.exe`;
-                const dName = drv.name || 'Driver Oficial';
+                const dName = drv.name || 'Driver';
                 const dId = drv.id || 'driver';
-
                 html += `
-                    <div id="driver-card-${dId}" class="p-5 rounded-2xl bg-dark-950 border ${accentBorder} flex flex-col gap-4 shadow-sm transition">
+                    <div id="driver-card-${dId}" class="ws-card ws-card-tight flex flex-col gap-3">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div class="flex items-start gap-3.5 min-w-0">
-                                <div class="w-11 h-11 rounded-xl bg-dark-900 border border-slate-700/80 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="cpu" class="w-6 h-6 ${iconColor}"></i>
-                                </div>
+                            <div class="flex items-start gap-3 min-w-0">
+                                <div class="ws-icon"><i data-lucide="cpu"></i></div>
                                 <div class="min-w-0">
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <h4 class="text-sm font-bold text-white truncate">${escapeHtml(dName)}</h4>
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${vendorBadgeClass}">${escapeHtml(vendor)} OFICIAL</span>
-                                        ${drv.is_newer ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse">NOVA VERSÃO</span>' : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">CANAL WHQL</span>'}
+                                        <span class="ws-strong text-[13px] truncate">${escapeHtml(dName)}</span>
+                                        <span class="ws-badge">${escapeHtml(drv.vendor || 'Fabricante')}</span>
+                                        ${drv.is_newer ? '<span class="ws-badge warn">Versão mais nova</span>' : ''}
                                     </div>
-                                    <p class="text-xs text-slate-300 font-mono mt-1">
-                                        Pareado com: <strong class="text-cyan-300">${escapeHtml(drv.hardware_matched || 'Hardware')}</strong>
-                                    </p>
-                                    <p class="text-[11px] text-slate-400 font-mono mt-0.5">
-                                        Versão no PC: <span class="text-slate-300">${escapeHtml(drv.installed_version)}</span> • Servidor Oficial: <strong class="text-emerald-400">${escapeHtml(drv.available_version)}</strong>
-                                        ${drv.size_mb ? ` • Tamanho: <span class="text-slate-300">${drv.size_mb} MB</span>` : ''}
-                                    </p>
-                                    <p class="text-[10px] text-slate-500 font-mono mt-0.5 truncate flex items-center gap-1">
-                                        <i data-lucide="shield" class="w-3 h-3 text-cyan-400 flex-shrink-0"></i>
-                                        <span>Servidor: ${escapeHtml(drv.official_server)}</span>
-                                    </p>
+                                    <div class="ws-mono text-[12px] ws-muted mt-1">Instalado ${escapeHtml(drv.installed_version || '—')} → disponível <span class="ws-strong">${escapeHtml(drv.available_version || '—')}</span>${drv.size_mb ? ` · ${drv.size_mb} MB` : ''}</div>
+                                    <div class="ws-stat-foot mt-0.5 truncate">${escapeHtml(drv.hardware_matched || '')} · ${escapeHtml(drv.official_server || '')}</div>
                                 </div>
                             </div>
-
-                            <!-- BOTÕES DE AÇÃO DO DRIVER -->
                             <div class="flex items-center gap-2 flex-shrink-0" id="driver-actions-${dId}">
-                                <button onclick="triggerDriverDownload('${escapeHtml(dId)}', '${escapeHtml(dlUrl)}', '${escapeHtml(fname)}', '${escapeHtml(dName)}')"
-                                    class="btn-action-primary px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-blue-500/20">
-                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                                    <span>Baixar Driver</span>
-                                </button>
-                                <button onclick="openDriverDownloadFolder()"
-                                    class="btn-action-secondary px-3 py-2 rounded-xl text-xs font-bold border-slate-700 hover:border-cyan-400 text-slate-300 flex items-center gap-1" title="Abrir pasta de downloads">
-                                    <i data-lucide="folder" class="w-3.5 h-3.5"></i>
-                                </button>
+                                <button onclick="triggerDriverDownload('${escapeHtml(dId)}', '${escapeHtml(dlUrl)}', '${escapeHtml(fname)}', '${escapeHtml(dName)}')" class="ws-btn sm primary"><i data-lucide="download"></i>Baixar</button>
+                                <button onclick="openDriverDownloadFolder()" class="ws-btn sm" title="Abrir pasta de downloads">Pasta</button>
                             </div>
                         </div>
-
-                        <!-- BARRA DE PROGRESSO DO DOWNLOAD DIRETO (OCULTA ATÉ O DISPARO) -->
-                        <div id="driver-progress-box-${dId}" class="hidden space-y-2 p-3 rounded-xl bg-dark-900 border border-slate-800">
-                            <div class="flex items-center justify-between text-xs font-mono">
-                                <span id="driver-progress-text-${dId}" class="text-cyan-300 font-bold flex items-center gap-1.5">
-                                    <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i>
-                                    <span>Iniciando conexão com os servidores oficiais...</span>
-                                </span>
-                                <span id="driver-progress-pct-${dId}" class="text-white font-extrabold">0%</span>
+                        <div id="driver-progress-box-${dId}" class="hidden">
+                            <div class="flex items-center justify-between text-[12px] mb-1.5">
+                                <span id="driver-progress-text-${dId}" class="ws-muted flex items-center gap-1.5">Conectando…</span>
+                                <span id="driver-progress-pct-${dId}" class="ws-mono ws-strong">0%</span>
                             </div>
-                            <div class="w-full h-2.5 bg-dark-950 rounded-full overflow-hidden border border-slate-800">
-                                <div id="driver-progress-bar-${dId}" class="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-300" style="width: 0%"></div>
-                            </div>
+                            <div class="ws-meter"><span id="driver-progress-bar-${dId}" style="width:0%"></span></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
-
-            // 2. CARDS DE ATUALIZAÇÃO VIA WINDOWS UPDATE
             filteredWu.forEach(u => {
-                html += `
-                    <div class="p-4 rounded-2xl bg-dark-950 border border-blue-500/30 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="download-cloud" class="w-5 h-5"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <h4 class="text-xs font-bold text-white truncate">${escapeHtml(u.name || 'Atualização de Driver')}</h4>
-                                <p class="text-[11px] text-slate-400 font-mono truncate">${escapeHtml(u.details || 'Canal Oficial Microsoft Windows Update')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <span class="px-2.5 py-1 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows Update</span>
-                            <button onclick="openWindowsUpdateSettings()" class="btn-action-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                <span>Abrir Update</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                html += row('download-cloud',
+                    `<div class="ws-strong text-[13px] truncate">${escapeHtml(u.name || 'Atualização de driver')}</div>`,
+                    `<div class="ws-stat-foot truncate">${escapeHtml(u.details || 'Windows Update')}</div>`,
+                    `<span class="ws-badge">Windows Update</span><button onclick="openWindowsUpdateSettings()" class="ws-btn sm"><i data-lucide="external-link"></i>Abrir</button>`);
             });
-
-            // 3. CARDS DE SUÍTES OEM VIA WINGET
             filteredWinget.forEach(w => {
-                html += `
-                    <div class="p-4 rounded-2xl bg-dark-950 border border-purple-500/30 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="package" class="w-5 h-5"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <h4 class="text-xs font-bold text-white truncate">${escapeHtml(w.name || w.id || 'Software OEM')}</h4>
-                                <p class="text-[11px] text-slate-400 font-mono truncate">Versão disponível: <strong class="text-emerald-400">${escapeHtml(w.version || '--')}</strong> • ${escapeHtml(w.type || 'Suíte / Driver de Terceiro')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <span class="px-2.5 py-1 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Fabricante / OEM</span>
-                            ${w.id ? `<button onclick="upgradeWingetDriver('${escapeHtml(w.id)}', '${escapeHtml(w.name || w.id)}')" class="btn-action-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1"><i data-lucide="download" class="w-3.5 h-3.5"></i><span>Atualizar</span></button>` : ''}
-                        </div>
-                    </div>
-                `;
+                html += row('package',
+                    `<div class="ws-strong text-[13px] truncate">${escapeHtml(w.name || w.id || 'Pacote')}</div>`,
+                    `<div class="ws-mono text-[12px] ws-muted">Disponível ${escapeHtml(w.version || '—')} · ${escapeHtml(w.type || 'winget')}</div>`,
+                    `<span class="ws-badge">winget</span>${w.id ? `<button onclick="upgradeWingetDriver('${escapeHtml(w.id)}', '${escapeHtml(w.name || w.id)}')" class="ws-btn sm primary"><i data-lucide="download"></i>Atualizar</button>` : ''}`);
             });
-
             list.innerHTML = html;
             lucide.createIcons();
         }
@@ -6005,24 +5809,18 @@ lucide.createIcons();
                         if (pBar) pBar.style.width = `${pct}%`;
                         if (pPct) pPct.innerText = `${pct}%`;
                         if (pText) {
-                            pText.innerHTML = `
-                                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i>
-                                <span>Baixando: ${dlMB} / ${totMB} MB (${pct}%) • ${spd} MB/s • Restante: ${eta}s</span>
-                            `;
+                            pText.innerHTML = `<span>Baixando ${dlMB} / ${totMB} MB · ${spd} MB/s · restante ${eta} s</span>`;
                             lucide.createIcons();
                         }
                     } else if (status === 'completed') {
                         pBox.classList.remove('hidden');
                         if (pBar) {
                             pBar.style.width = '100%';
-                            pBar.className = 'h-full bg-emerald-500 rounded-full transition-all duration-300';
+                            pBar.parentElement.className = 'ws-meter ok';
                         }
                         if (pPct) pPct.innerText = '100%';
                         if (pText) {
-                            pText.innerHTML = `
-                                <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
-                                <span class="text-emerald-400 font-bold">Download Concluído com Sucesso! Arquivo pronto para instalação.</span>
-                            `;
+                            pText.innerHTML = `<span style="color:var(--ok);font-weight:600">Download concluído — pronto para instalar.</span>`;
                             lucide.createIcons();
                         }
 
@@ -6031,23 +5829,15 @@ lucide.createIcons();
                             actionsBox.dataset.completed = "true";
                             const fPath = dl.file_path || '';
                             actionsBox.innerHTML = `
-                                <button onclick="installDownloadedDriver('${escapeHtml(fPath).replace(/\\/g, '\\\\')}')"
-                                    class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 transition">
-                                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                                    <span>Instalar Driver</span>
-                                </button>
-                                <button onclick="openDriverDownloadFolder('${escapeHtml(fPath).replace(/\\/g, '\\\\')}')"
-                                    class="btn-action-secondary px-3 py-2 rounded-xl text-xs font-bold border-slate-700 hover:border-cyan-400 text-slate-300 flex items-center gap-1" title="Abrir pasta de downloads">
-                                    <i data-lucide="folder" class="w-3.5 h-3.5"></i>
-                                    <span>Abrir Pasta</span>
-                                </button>
+                                <button onclick="installDownloadedDriver('${escapeHtml(fPath).replace(/\\/g, '\\\\')}')" class="ws-btn sm primary"><i data-lucide="play"></i>Instalar</button>
+                                <button onclick="openDriverDownloadFolder('${escapeHtml(fPath).replace(/\\/g, '\\\\')}')" class="ws-btn sm" title="Abrir pasta de downloads"><i data-lucide="folder-open"></i>Pasta</button>
                             `;
                             lucide.createIcons();
                             showToast("Download Concluído", `O driver ${dl.name} foi baixado e está pronto para instalação!`, "success", 4000);
                         }
                     } else if (status === 'error') {
                         if (pText) {
-                            pText.innerHTML = `<span class="text-rose-400 font-bold">Erro no download: ${escapeHtml(dl.error || 'Falha de rede')}</span>`;
+                            pText.innerHTML = `<span style="color:var(--bad);font-weight:600">Erro no download: ${escapeHtml(dl.error || 'falha de rede')}</span>`;
                         }
                     }
                 }
@@ -6150,7 +5940,7 @@ lucide.createIcons();
         // =====================================================================
         let stabilityPollTimer = null;
         let isStabilityTestingActive = false;
-        let activeStressTab = 'temperatures';
+        let activeStressTab = 'components';
         let latestStressData = null;
         let lastSectorLogCount = 0;
 
@@ -6183,6 +5973,97 @@ lucide.createIcons();
             clk_gpu: true
         };
 
+        // Formata um sensor: null/undefined => "N/D" (nunca inventa valores)
+        function fmtSensor(v, unit, dec = 0) {
+            if (v === null || v === undefined || Number.isNaN(Number(v))) return 'N/D';
+            const n = Number(v);
+            return `${dec > 0 ? n.toFixed(dec) : Math.round(n).toLocaleString('pt-BR')}${unit ? ' ' + unit : ''}`;
+        }
+
+        // ---------------------------------------------------------------------
+        // CARGA REAL DE GPU VIA WebGL2 (shader de fragmento pesado, 1920x1080)
+        // ---------------------------------------------------------------------
+        const gpuLoad = { running: false, gl: null, canvas: null, prog: null, frames: 0, t0: 0, fps: null, raf: null, renderer: null, reportTimer: null };
+
+        function startGpuLoad() {
+            if (gpuLoad.running) return true;
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = 1920; canvas.height = 1080;
+                canvas.style.cssText = 'position:fixed;left:-10000px;top:0;width:2px;height:2px;pointer-events:none;';
+                document.body.appendChild(canvas);
+                const gl = canvas.getContext('webgl2', { powerPreference: 'high-performance', antialias: false, preserveDrawingBuffer: false });
+                if (!gl) { canvas.remove(); showToast('GPU', 'WebGL2 indisponível: a carga de GPU não pode ser gerada.', 'warning', 5000); return false; }
+                const vs = `#version 300 es
+                in vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+                const fs = `#version 300 es
+                precision highp float; uniform float t; uniform vec2 r; out vec4 o;
+                void main(){
+                    vec2 uv = (gl_FragCoord.xy / r) * 3.0 - vec2(2.0, 1.5);
+                    vec2 z = vec2(0.0); float acc = 0.0;
+                    for (int i = 0; i < 384; i++) {
+                        z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y) + uv + 0.0001*sin(t + float(i));
+                        acc += exp(-dot(z,z)) + sin(z.x * 1.7 + t) * cos(z.y * 1.3);
+                        if (dot(z,z) > 64.0) z *= 0.125;
+                    }
+                    o = vec4(fract(acc * 0.01), fract(acc * 0.013), fract(acc * 0.017), 1.0);
+                }`;
+                const mk = (type, src) => { const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh)); return sh; };
+                const prog = gl.createProgram();
+                gl.attachShader(prog, mk(gl.VERTEX_SHADER, vs));
+                gl.attachShader(prog, mk(gl.FRAGMENT_SHADER, fs));
+                gl.linkProgram(prog);
+                if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+                gl.useProgram(prog);
+                const buf = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+                const loc = gl.getAttribLocation(prog, 'p');
+                gl.enableVertexAttribArray(loc);
+                gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+                gpuLoad.renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+                Object.assign(gpuLoad, { running: true, gl, canvas, prog, frames: 0, t0: performance.now(), fps: null,
+                    uT: gl.getUniformLocation(prog, 't'), uR: gl.getUniformLocation(prog, 'r') });
+                gl.uniform2f(gpuLoad.uR, canvas.width, canvas.height);
+                const loop = () => {
+                    if (!gpuLoad.running) return;
+                    const g = gpuLoad.gl;
+                    for (let k = 0; k < 3; k++) {
+                        g.uniform1f(gpuLoad.uT, performance.now() / 1000 + k);
+                        g.drawArrays(g.TRIANGLES, 0, 3);
+                        gpuLoad.frames++;
+                    }
+                    g.finish();
+                    gpuLoad.raf = requestAnimationFrame(loop);
+                };
+                gpuLoad.raf = requestAnimationFrame(loop);
+                gpuLoad.reportTimer = setInterval(() => {
+                    const now = performance.now();
+                    gpuLoad.fps = gpuLoad.frames / ((now - gpuLoad.t0) / 1000);
+                    gpuLoad.frames = 0; gpuLoad.t0 = now;
+                    fetch('/api/stress/gpu_report', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fps: gpuLoad.fps, renderer: gpuLoad.renderer }) }).catch(() => {});
+                }, 1000);
+                return true;
+            } catch (e) {
+                console.error('GPU load', e);
+                showToast('GPU', 'Falha ao iniciar a carga WebGL2: ' + e.message, 'warning', 5000);
+                stopGpuLoad();
+                return false;
+            }
+        }
+
+        function stopGpuLoad() {
+            gpuLoad.running = false;
+            if (gpuLoad.raf) cancelAnimationFrame(gpuLoad.raf);
+            if (gpuLoad.reportTimer) clearInterval(gpuLoad.reportTimer);
+            try { const ext = gpuLoad.gl && gpuLoad.gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); } catch (e) { }
+            if (gpuLoad.canvas) gpuLoad.canvas.remove();
+            Object.assign(gpuLoad, { gl: null, canvas: null, prog: null, raf: null, reportTimer: null, fps: null });
+        }
+
         function toggleStressTrace(key) {
             stressTracesVisible[key] = !stressTracesVisible[key];
             if (latestStressData && activeStressTab !== 'statistics') {
@@ -6214,15 +6095,17 @@ lucide.createIcons();
                 if (startedEl) startedEl.innerText = st.test_started_str || '--';
 
                 const battEl = document.getElementById('stress-battery-status');
-                if (battEl) battEl.innerText = st.battery_status || 'No battery';
+                if (battEl) battEl.innerText = st.battery_status || 'Sem bateria';
+                if (!st.running && gpuLoad.running) stopGpuLoad();
+                renderStressHealthStrip(st);
 
                 // Top Labels
                 const cpuTop = document.getElementById('stress-cpu-top-label');
-                if (cpuTop) cpuTop.innerText = `${st.system_threads || 8} Threads (${st.max_clock || 3400} MHz)`;
+                if (cpuTop) cpuTop.innerText = `${st.system_threads || '—'} threads · ${fmtSensor(st.max_clock, 'MHz')} nominal`;
                 const gpuTop = document.getElementById('stress-gpu-top-label');
-                if (gpuTop) gpuTop.innerText = st.gpu_name || 'NVIDIA GeForce RTX 4060 Ti';
+                if (gpuTop) gpuTop.innerText = st.gpu_renderer || st.gpu_name || 'GPU não identificada';
                 const diskTop = document.getElementById('stress-disk-top-label');
-                if (diskTop) diskTop.innerText = st.disk_name || 'KINGSTON SA400S37960G';
+                if (diskTop) diskTop.innerText = st.disk_name || 'Disco do sistema';
 
                 // 2. Status Badge Principal & Throttling Card
                 const statusBadge = document.getElementById('stress-status-badge');
@@ -6239,67 +6122,30 @@ lucide.createIcons();
                 const cur = st.current || {};
                 const isThrottling = Boolean(st.throttling_active || (cur.cpu_throttling && cur.cpu_throttling > 0));
 
+                const setStatus = (tone, text) => {
+                    if (statusBadge) statusBadge.className = `ws-badge ${tone}${st.running ? ' live' : ''}`;
+                    if (statusDot) statusDot.className = 'dot';
+                    if (statusText) statusText.innerText = text;
+                };
+                const setThrottle = (tone, text) => {
+                    if (cardThrottlingText) { cardThrottlingText.innerText = text; cardThrottlingText.style.color = tone ? `var(--${tone})` : ''; }
+                    if (cardThrottlingIconBox) cardThrottlingIconBox.className = `ws-icon ${tone || ''}`;
+                };
+                if (btnStart) btnStart.disabled = !!st.running;
+                if (btnStop) btnStop.disabled = !st.running;
+                document.querySelectorAll('.stress-subsystem-chk').forEach(chk => chk.disabled = !!st.running);
+
                 if (st.running) {
-                    if (btnStart) {
-                        btnStart.disabled = true;
-                        btnStart.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-400/30 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 cursor-not-allowed opacity-50";
-                    }
-                    if (btnStop) {
-                        btnStop.disabled = false;
-                        btnStop.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 border border-rose-500/40 flex items-center gap-1.5 shadow-md shadow-rose-950/40 cursor-pointer transition active:scale-95";
-                    }
-
-                    // Desabilita checkboxes enquanto em teste
-                    document.querySelectorAll('.stress-subsystem-chk').forEach(chk => chk.disabled = true);
-
-                    if (isThrottling) {
-                        if (statusBadge) statusBadge.className = "px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-rose-500/20 text-rose-500 border border-rose-500/40 flex items-center gap-1 animate-pulse";
-                        if (statusDot) statusDot.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping";
-                        if (statusText) statusText.innerText = "ALERTA: THERMAL THROTTLING DETECTADO!";
-
-                        if (cardThrottlingText) {
-                            cardThrottlingText.innerText = `${cur.cpu_throttling || 0}% (Superaquecimento!)`;
-                            cardThrottlingText.className = "text-xs font-mono font-black text-rose-500 animate-pulse";
-                        }
-                        if (cardThrottlingIconBox) {
-                            cardThrottlingIconBox.className = "w-6 h-6 rounded-md bg-rose-500/20 border border-rose-500/40 flex items-center justify-center flex-shrink-0 animate-pulse";
-                        }
-                    } else {
-                        if (statusBadge) statusBadge.className = "px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1 animate-pulse";
-                        if (statusDot) statusDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-                        if (statusText) statusText.innerText = "TESTE EM ANDAMENTO (ESTÁVEL)";
-
-                        if (cardThrottlingText) {
-                            cardThrottlingText.innerText = "Sem Throttling (0%)";
-                            cardThrottlingText.className = "text-xs font-mono font-black text-emerald-600 dark:text-emerald-400";
-                        }
-                        if (cardThrottlingIconBox) {
-                            cardThrottlingIconBox.className = "w-6 h-6 rounded-md bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0";
-                        }
-                    }
+                    const errN = st.errors_total || 0;
+                    if (errN > 0) setStatus('bad', `Instável — ${errN} erro(s)`);
+                    else if (isThrottling) setStatus('warn', cur.thermal_throttling ? 'Em execução — limitação térmica' : 'Em execução — clock limitado');
+                    else setStatus('brand', 'Em execução — 0 erros');
+                    if (isThrottling) setThrottle('warn', `${fmtSensor(cur.cpu_throttling, '%', 1)} abaixo do nominal`);
+                    else setThrottle('ok', cur.cpu_throttling === null || cur.cpu_throttling === undefined ? 'Sem dados do Windows' : `Nenhuma (${fmtSensor(cur.performance_limit_pct, '%', 0)} do clock)`);
                 } else {
-                    if (btnStart) {
-                        btnStart.disabled = false;
-                        btnStart.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/40 flex items-center gap-1.5 shadow-md shadow-emerald-950/30 cursor-pointer transition active:scale-95";
-                    }
-                    if (btnStop) {
-                        btnStop.disabled = true;
-                        btnStop.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-400/30 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 cursor-not-allowed opacity-50 transition";
-                    }
-
-                    document.querySelectorAll('.stress-subsystem-chk').forEach(chk => chk.disabled = false);
-
-                    if (statusBadge) statusBadge.className = "px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1";
-                    if (statusDot) statusDot.className = "w-2 h-2 rounded-full bg-slate-400";
-                    if (statusText) statusText.innerText = "PRONTO PARA TESTE";
-
-                    if (cardThrottlingText) {
-                        cardThrottlingText.innerText = "Inativo (0%)";
-                        cardThrottlingText.className = "text-xs font-mono font-black text-slate-500 dark:text-slate-400";
-                    }
-                    if (cardThrottlingIconBox) {
-                        cardThrottlingIconBox.className = "w-6 h-6 rounded-md bg-slate-200/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 flex items-center justify-center flex-shrink-0";
-                    }
+                    const errN = st.errors_total || 0;
+                    setStatus(errN > 0 ? 'bad' : '', errN > 0 ? `Último teste: ${errN} erro(s)` : 'Pronto para testar');
+                    setThrottle('', 'Aguardando teste');
                 }
 
                 // 3. Atualização do Log de Setores do StressPulse™
@@ -6308,34 +6154,25 @@ lucide.createIcons();
                 const countLbl = document.getElementById('stress-sector-count-label');
                 const ramTestedLbl = document.getElementById('stress-sector-ram-tested');
 
-                if (countLbl) countLbl.innerText = `Setores Registrados: ${sectorLog.length}`;
-                if (ramTestedLbl) ramTestedLbl.innerText = `RAM Alocada: ${st.memory_tested_mb || 0} MB`;
+                if (countLbl) countLbl.innerText = `${sectorLog.length} eventos`;
+                if (ramTestedLbl) ramTestedLbl.innerText = `RAM: ${st.memory_tested_mb || 0} MB · ${((st.work && st.work.mem_verified_bytes) ? (st.work.mem_verified_bytes / 1e9).toFixed(1) : '0.0')} GB conferidos`;
 
                 if (sectorBox) {
                     if (sectorLog.length === 0) {
-                        sectorBox.innerHTML = `
-                            <div class="p-3 text-slate-500 italic text-center text-xs" id="stress-sector-log-empty">
-                                Nenhum teste em execução. Selecione os setores e clique em "Start" para iniciar o registro cronológico.
-                            </div>
-                        `;
+                        sectorBox.innerHTML = `<div class="ws-empty" id="stress-sector-log-empty">Nenhum teste em execução.</div>`;
                     } else if (sectorLog.length !== lastSectorLogCount) {
                         lastSectorLogCount = sectorLog.length;
                         sectorBox.innerHTML = sectorLog.map(entry => {
-                            const isErr = entry.status.includes('Error') || entry.status.includes('Bit-flip');
-                            const isWarn = entry.status.includes('Throttling') || entry.status.includes('Overheating');
-                            const isStop = entry.status.includes('Stopped');
-                            const isStart = entry.status.includes('Started');
+                            const isErr = entry.level === 'error' || entry.status.includes('ERRO');
+                            const isWarn = entry.level === 'warn';
+                            const isStop = /encerrad|interrompid|concluíd/i.test(entry.status);
+                            const isStart = /iniciad|thread|alocad|verificação/i.test(entry.status);
 
-                            let statusClass = "text-slate-200";
-                            if (isErr) statusClass = "text-rose-400 font-bold";
-                            else if (isWarn) statusClass = "text-amber-400 font-bold";
-                            else if (isStop) statusClass = "text-slate-400";
-                            else if (isStart) statusClass = "text-emerald-400 font-bold";
-
+                            const color = isErr ? 'var(--bad)' : isWarn ? 'var(--warn)' : isStop ? 'var(--text-muted)' : isStart ? 'var(--text-primary)' : 'var(--text-secondary)';
                             return `
-                                <div class="grid grid-cols-12 py-1 px-2.5 hover:bg-slate-900/80 transition rounded items-center">
-                                    <div class="col-span-4 sm:col-span-3 text-slate-400 font-mono text-[11px]">${escapeHtml(entry.datetime || '')}</div>
-                                    <div class="col-span-8 sm:col-span-9 ${statusClass} font-mono text-[11px] truncate" title="${escapeHtml(entry.status || '')}">${escapeHtml(entry.status || '')}</div>
+                                <div class="flex gap-3 px-3 py-1" style="border-bottom:1px solid var(--border-subtle)">
+                                    <span class="ws-faint flex-shrink-0">${escapeHtml(entry.datetime || '')}</span>
+                                    <span class="truncate" style="color:${color};${isErr || isWarn ? 'font-weight:600' : ''}" title="${escapeHtml(entry.status || '')}">${escapeHtml(entry.status || '')}</span>
                                 </div>
                             `;
                         }).join('');
@@ -6347,19 +6184,9 @@ lucide.createIcons();
                 const thHeadline = document.getElementById('stress-throttling-headline');
                 if (thHeadline) {
                     if (isThrottling) {
-                        thHeadline.innerHTML = `
-                            <span class="text-rose-500 font-black animate-pulse flex items-center gap-1.5">
-                                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-500"></i>
-                                CPU Throttling (Max: ${cur.cpu_throttling || 0}%) - Superaquecimento Detectado!
-                            </span>
-                        `;
+                        thHeadline.innerHTML = `<span class="ws-badge warn"><span class="dot"></span>Limitação ${fmtSensor(cur.cpu_throttling, '%', 1)} ${cur.thermal_throttling ? '(térmica)' : '(energia/temperatura)'}</span>`;
                     } else {
-                        thHeadline.innerHTML = `
-                            <span class="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1.5">
-                                <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i>
-                                CPU Throttling: 0% - Overheating Not Detected
-                            </span>
-                        `;
+                        thHeadline.innerHTML = `<span class="ws-muted">Limitação: ${cur.cpu_throttling === null || cur.cpu_throttling === undefined ? 'N/D' : 'nenhuma'} · fonte: contadores do Windows</span>`;
                     }
                 }
 
@@ -6368,12 +6195,16 @@ lucide.createIcons();
 
                 const liveCpuThrottling = document.getElementById('stress-live-cpu-throttling-val');
                 if (liveCpuThrottling) {
-                    liveCpuThrottling.innerText = `${cur.cpu_throttling || 0}%`;
-                    liveCpuThrottling.className = (cur.cpu_throttling > 0) ? "text-rose-500 font-bold" : "text-slate-400";
+                    liveCpuThrottling.innerText = fmtSensor(cur.cpu_throttling, '%', 1);
+                    liveCpuThrottling.style.color = (cur.cpu_throttling > 0) ? 'var(--warn)' : '';
                 }
 
                 // 5. Renderização dos Gráficos com Números nas Linhas
-                if (activeStressTab === 'statistics') {
+                updateStressFansNotice(st);
+                if (activeStressTab === 'components') {
+                    renderStressComponents(st);
+                    renderStressLowerGraph(st.history || []);
+                } else if (activeStressTab === 'statistics') {
                     renderStressStatisticsTable(st);
                 } else {
                     renderStressUpperGraph(st.history || []);
@@ -6387,18 +6218,150 @@ lucide.createIcons();
             }
         }
 
+        function renderStressHealthStrip(st) {
+            const el = document.getElementById('stress-health-strip');
+            if (!el) return;
+            const cur = st.current || {};
+            const src = cur.sensor_sources || {};
+            const r = st.rates || {};
+            const errs = st.errors_total || 0;
+            const noBoard = !src.board;
+            const chip = (label, val, tone) => `<div class="ws-chip ws-chip-${tone}"><span>${label}</span><strong>${val}</strong></div>`;
+            el.innerHTML = [
+                chip('Erros detectados', errs > 0 ? `${errs}` : '0', errs > 0 ? 'bad' : 'ok'),
+                chip('CPU', r.cpu_mb_s != null ? `${r.cpu_mb_s} MB/s` : '—', 'info'),
+                chip('FPU', r.fpu_mops != null ? `${r.fpu_mops} Mops/s` : '—', 'info'),
+                chip('RAM conferida', r.mem_gb_s != null ? `${r.mem_gb_s} GB/s` : '—', 'info'),
+                chip('Disco', r.disk_w_mb_s != null ? `${r.disk_w_mb_s} / ${r.disk_r_mb_s} MB/s` : '—', 'info'),
+                chip('GPU (WebGL2)', cur.gpu_fps != null ? `${cur.gpu_fps} quadros/s` : '—', 'info'),
+                chip('Sensores', src.board ? 'LibreHardwareMonitor' : (src.temperatures || 'Windows'), noBoard ? 'warn' : 'ok'),
+            ].join('') + (noBoard ? `<div class="ws-hint">Ventoinhas, tensões e potência só aparecem com o LibreHardwareMonitor aberto (o Windows não expõe o chip Super I/O). Sem ele, esses campos ficam como <b>N/D</b> — nenhum valor é estimado.</div>` : '');
+        }
+
+
+        // =====================================================================
+        // STRESSPULSE — VISÃO POR COMPONENTE (o que está em carga e como está indo)
+        // =====================================================================
+        const STRESS_COMPONENTS = [
+            { key: 'cpu', cfg: 'stress_cpu', chk: 'stress-chk-cpu', name: 'CPU — inteiros', color: 'var(--chart-1)', unit: 'MB/s', stat: 'rate_cpu_mb_s', err: 'cpu',
+              method: () => 'SHA-256 e BLAKE2b sobre 1 MiB; cada hash é comparado com a referência', series: h => h.rates && h.rates.cpu_mb_s,
+              work: w => `${((w.cpu_bytes || 0) / 1e9).toFixed(1)} GB processados` },
+            { key: 'fpu', cfg: 'stress_fpu', chk: 'stress-chk-fpu', name: 'FPU — ponto flutuante', color: 'var(--chart-5)', unit: 'Mops/s', stat: 'rate_fpu_mops', err: 'fpu',
+              method: () => 'Kernel float64 (sin, cos, sqrt, exp) comparado bit a bit', series: h => h.rates && h.rates.fpu_mops,
+              work: w => `${((w.fpu_ops || 0) / 1e9).toFixed(1)} bilhões de operações` },
+            { key: 'cache', cfg: 'stress_cache', chk: 'stress-chk-cache', name: 'Cache', color: 'var(--chart-2)', unit: 'Mops/s', stat: 'rate_cache_mops', err: 'cache',
+              method: () => 'Leitura aleatória em 8 MiB com soma de verificação', series: h => h.rates && h.rates.cache_mops,
+              work: w => `${((w.cache_ops || 0) / 1e9).toFixed(1)} bilhões de leituras` },
+            { key: 'memory', cfg: 'stress_memory', chk: 'stress-chk-memory', name: 'Memória RAM', color: 'var(--chart-3)', unit: 'GB/s', stat: 'rate_mem_gb_s', err: 'memory',
+              method: st => `Padrões fixos, endereço e aleatório em ${st.memory_tested_mb || (st.config && st.config.memory_mb) || 0} MB; 100% das palavras conferidas`, series: h => h.rates && h.rates.mem_gb_s, variesByDesign: 'A vazão muda com o padrão testado (padrões aleatórios são mais lentos); variação alta é esperada.',
+              work: w => `${((w.mem_verified_bytes || 0) / 1e9).toFixed(1)} GB conferidos` },
+            { key: 'disk', cfg: 'stress_disk', chk: 'stress-chk-disks', name: 'Disco', color: 'var(--info)', unit: 'MB/s', stat: 'rate_disk_mb_s', err: 'disk',
+              method: st => `Grava e relê 256 MiB sem cache, hash por bloco (${st.disk_name || 'unidade do sistema'})`,
+              series: h => h.rates && h.rates.disk_w_mb_s != null ? (h.rates.disk_w_mb_s + (h.rates.disk_r_mb_s || 0)) : null, variesByDesign: 'Alterna fases de gravação e leitura; variação alta é esperada.',
+              work: w => `${(((w.disk_written_bytes || 0) + (w.disk_read_bytes || 0)) / 1e9).toFixed(1)} GB gravados + lidos` },
+            { key: 'gpu', cfg: 'stress_gpu', chk: 'stress-chk-gpu', name: 'GPU', color: 'var(--chart-4)', unit: 'quadros/s', stat: 'rate_gpu_fps', err: null,
+              method: st => `Shader WebGL2 em 1920×1080 (${st.gpu_name || 'GPU'}); carga sem verificação de resultado`, series: h => h.gpu_fps,
+              work: () => '' },
+        ];
+
+        function stressSparkline(values, color) {
+            const pts = values.filter(v => v !== null && v !== undefined);
+            if (pts.length < 2) return '<div class="ws-stat-foot">sem dados</div>';
+            const W = 220, H = 34, mx = Math.max(...pts) || 1;
+            const n = values.length;
+            let d = '';
+            values.forEach((v, i) => {
+                if (v === null || v === undefined) return;
+                const x = (i / Math.max(1, n - 1)) * W, y = H - 2 - (v / mx) * (H - 4);
+                d += `${d ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
+            });
+            return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:${H}px;display:block"><path d="${d}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+        }
+
+        function renderStressComponents(st) {
+            const body = document.getElementById('stress-components-body');
+            if (!body) return;
+            st = st || {};
+            const hist = st.history || [];
+            const stats = st.statistics || {};
+            const errs = st.errors || {};
+            const work = st.work || {};
+            const useCfg = st.running || hist.length > 0;
+            const fmt = v => v === null || v === undefined ? '—' : (v >= 100 ? Math.round(v).toLocaleString('pt-BR') : Number(v).toLocaleString('pt-BR', { maximumFractionDigits: 2 }));
+
+            const head = `
+                <div class="ws-comp-row ws-comp-head">
+                    <span>Componente</span><span>Estado</span><span class="text-right">Agora</span><span class="text-right">Mín · Média · Máx</span><span class="text-right">Variação</span><span class="text-right">Erros</span><span>Vazão ao longo do teste</span>
+                </div>`;
+            const rows = STRESS_COMPONENTS.map(c => {
+                const chk = document.getElementById(c.chk);
+                const selected = useCfg ? !!(st.config && st.config[c.cfg]) : !!(chk && chk.checked);
+                const s = stats[c.stat];
+                const series = hist.slice(-120).map(c.series);
+                const nowV = series.length ? series[series.length - 1] : null;
+                const errN = c.err ? (errs[c.err] || 0) : null;
+                const cv = s && s.avg > 0 ? (s.std / s.avg * 100) : null;
+                let state;
+                if (!selected) state = '<span class="ws-badge">Não selecionado</span>';
+                else if (errN > 0) state = `<span class="ws-badge bad">${errN} erro(s)</span>`;
+                else if (st.running) state = '<span class="ws-badge brand live"><span class="dot"></span>Em carga</span>';
+                else if (s) state = '<span class="ws-badge ok">Concluído sem erros</span>';
+                else state = '<span class="ws-badge">Aguardando</span>';
+                const errTxt = errN === null ? '<span class="ws-faint">n/a</span>' : `<span style="color:${errN > 0 ? 'var(--bad)' : 'var(--ok)'};font-weight:600">${errN}</span>`;
+                return `
+                    <div class="ws-comp-row ${selected ? '' : 'is-off'}">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2"><span class="ws-dot" style="margin-top:0;background:${c.color}"></span><span class="ws-strong">${c.name}</span></div>
+                            <div class="ws-stat-foot truncate" title="${escapeHtml(c.method(st))}">${escapeHtml(c.method(st))}</div>
+                            ${selected && c.work(work) ? `<div class="ws-stat-foot ws-mono">${c.work(work)}</div>` : ''}
+                        </div>
+                        <div>${state}</div>
+                        <div class="text-right ws-mono ws-strong">${selected ? `${fmt(nowV)} <span class="ws-faint" style="font-weight:400">${c.unit}</span>` : '—'}</div>
+                        <div class="text-right ws-mono">${s ? `${fmt(s.min)} · ${fmt(s.avg)} · ${fmt(s.max)}` : '—'}</div>
+                        <div class="text-right ws-mono" title="${c.variesByDesign || 'Desvio padrão ÷ média da vazão'}" style="color:${cv === null ? '' : (cv > 15 && !c.variesByDesign ? 'var(--warn)' : 'var(--text-secondary)')}">${cv === null ? '—' : `±${cv.toFixed(1)}%`}${c.variesByDesign && cv !== null ? '*' : ''}</div>
+                        <div class="text-right ws-mono">${selected ? errTxt : '—'}</div>
+                        <div>${selected ? stressSparkline(series, errN > 0 ? 'var(--bad)' : c.color) : ''}</div>
+                    </div>`;
+            }).join('');
+            body.innerHTML = head + rows;
+        }
+
+        function updateStressFansNotice(st) {
+            const box = document.getElementById('stress-fans-notice');
+            if (!box) return;
+            const cur = (st && st.current) || {};
+            const hasBoard = !!(cur.sensor_sources && cur.sensor_sources.board);
+            const show = activeStressTab === 'cooling_fans' && !hasBoard;
+            box.classList.toggle('hidden', !show);
+            if (!show) return;
+            const gpuTxt = cur.gpu_fan_pct !== null && cur.gpu_fan_pct !== undefined ? ` A ventoinha da GPU é lida pelo driver NVIDIA (${cur.gpu_fan_pct}% agora; 0% = parada em repouso).` : '';
+            const lhm = (st && st.lhm) || {};
+            document.getElementById('stress-fans-notice-text').innerHTML =
+                `<b>Ventoinhas da placa-mãe indisponíveis.</b> O Windows não expõe o chip de controle (Super I/O); a leitura exige o LibreHardwareMonitor aberto como administrador.${gpuTxt}` +
+                (lhm.installed_path ? ` <span class="ws-mono">Encontrado: ${escapeHtml(lhm.installed_path)}</span>` : ' Não foi encontrado instalado neste PC.');
+            const btn = document.getElementById('stress-lhm-start-btn');
+            if (btn) btn.classList.toggle('hidden', !lhm.installed_path);
+        }
+
+        async function startLibreHardwareMonitor() {
+            try {
+                const data = await (await fetch('/api/sensors/lhm/start', { method: 'POST' })).json();
+                showToast('LibreHardwareMonitor', data.message, data.status === 'success' ? 'success' : 'warning', 5000);
+            } catch (e) { showToast('Erro', String(e), 'error'); }
+        }
+
+        async function openLibreHardwareMonitorSite() {
+            try { await fetch('/api/sensors/lhm/site', { method: 'POST' }); } catch (e) { }
+        }
+
         function setStressTab(tabId) {
             activeStressTab = tabId;
-            const tabs = ['temperatures', 'cooling_fans', 'voltages', 'powers', 'clocks', 'unified', 'statistics'];
+            const tabs = ['components', 'temperatures', 'cooling_fans', 'voltages', 'powers', 'clocks', 'unified', 'statistics'];
 
             tabs.forEach(t => {
                 const btn = document.getElementById(`stress-tab-${t}`);
                 if (!btn) return;
-                if (t === tabId) {
-                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-sm transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer";
-                } else {
-                    btn.className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer";
-                }
+                btn.classList.toggle('active', t === tabId);
             });
 
             const visualGraphs = document.getElementById('stress-visual-graphs-container');
@@ -6406,7 +6369,14 @@ lucide.createIcons();
             const upperTitle = document.getElementById('stress-upper-title');
             const upperScale = document.getElementById('stress-upper-scale-label');
 
-            if (tabId === 'statistics') {
+            const compBox = document.getElementById('stress-components-container');
+            if (compBox) compBox.classList.toggle('hidden', tabId !== 'components');
+            updateStressFansNotice(latestStressData);
+            if (tabId === 'components') {
+                if (visualGraphs) visualGraphs.classList.add('hidden');
+                if (statsTable) statsTable.classList.add('hidden');
+                renderStressComponents(latestStressData);
+            } else if (tabId === 'statistics') {
                 if (visualGraphs) visualGraphs.classList.add('hidden');
                 if (statsTable) statsTable.classList.remove('hidden');
                 if (latestStressData) renderStressStatisticsTable(latestStressData);
@@ -6415,22 +6385,22 @@ lucide.createIcons();
                 if (statsTable) statsTable.classList.add('hidden');
 
                 if (tabId === 'temperatures') {
-                    if (upperTitle) upperTitle.innerText = "Temperatures Oscilloscope";
+                    if (upperTitle) upperTitle.innerText = "Temperaturas";
                     if (upperScale) upperScale.innerText = "Escala Y: 0 °C — 100 °C";
                 } else if (tabId === 'cooling_fans') {
-                    if (upperTitle) upperTitle.innerText = "Cooling Fans Telemetry";
+                    if (upperTitle) upperTitle.innerText = "Ventoinhas";
                     if (upperScale) upperScale.innerText = "Escala Y: 0 RPM — 3000 RPM";
                 } else if (tabId === 'voltages') {
-                    if (upperTitle) upperTitle.innerText = "Voltages Waveforms";
+                    if (upperTitle) upperTitle.innerText = "Tensões";
                     if (upperScale) upperScale.innerText = "Escala Y: 0.0 V — 14.0 V";
                 } else if (tabId === 'powers') {
-                    if (upperTitle) upperTitle.innerText = "Power Consumption";
+                    if (upperTitle) upperTitle.innerText = "Consumo de potência";
                     if (upperScale) upperScale.innerText = "Escala Y: 0 W — 200 W";
                 } else if (tabId === 'clocks') {
-                    if (upperTitle) upperTitle.innerText = "Core Frequencies & Clocks";
-                    if (upperScale) upperScale.innerText = "Escala Y: 0 MHz — 5000 MHz";
+                    if (upperTitle) upperTitle.innerText = "Frequências (clock efetivo)";
+                    if (upperScale) upperScale.innerText = "Escala Y: automática";
                 } else if (tabId === 'unified') {
-                    if (upperTitle) upperTitle.innerText = "Unified Multi-Sensor Matrix";
+                    if (upperTitle) upperTitle.innerText = "Visão unificada (normalizada)";
                     if (upperScale) upperScale.innerText = "Escala Y: Normalizado 0% — 100%";
                 }
 
@@ -6450,53 +6420,50 @@ lucide.createIcons();
 
             let items = [];
 
+            const ct = cur.core_temps || [];
+            const ck = cur.clocks || [];
             if (activeStressTab === 'temperatures') {
                 items = [
-                    { key: 'mobo', label: 'Motherboard', color: '#3b82f6', val: `${cur.mobo_temp || 28}°C` },
-                    { key: 'cpu', label: 'CPU Package', color: '#ef4444', val: `${cur.cpu_temp || 45}°C` },
-                    { key: 'core1', label: 'Core #1', color: '#10b981', val: `${cur.core_temps ? cur.core_temps[0] || 43 : 43}°C` },
-                    { key: 'core2', label: 'Core #2', color: '#eab308', val: `${cur.core_temps ? cur.core_temps[1] || 44 : 44}°C` },
-                    { key: 'core3', label: 'Core #3', color: '#06b6d4', val: `${cur.core_temps ? cur.core_temps[2] || 42 : 42}°C` },
-                    { key: 'core4', label: 'Core #4', color: '#a855f7', val: `${cur.core_temps ? cur.core_temps[3] || 46 : 46}°C` },
-                    { key: 'disk', label: 'Drive C: KINGSTON', color: '#f59e0b', val: `${cur.disk_temp || 28}°C` },
-                    { key: 'gpu', label: 'GPU Core', color: '#14b8a6', val: `${cur.gpu_temp || 38}°C` },
+                    { key: 'cpu', label: `CPU (${cur.temp_source || 'sem sensor'})`, color: '#ef4444', val: fmtSensor(cur.cpu_temp, '°C', 1) },
+                    { key: 'mobo', label: 'Placa-mãe', color: '#3b82f6', val: fmtSensor(cur.mobo_temp, '°C', 1) },
+                    ...[0, 1, 2, 3].filter(i => ct[i] !== undefined).map(i => ({ key: `core${i + 1}`, label: `Núcleo #${i + 1}`, color: ['#10b981', '#eab308', '#06b6d4', '#a855f7'][i], val: fmtSensor(ct[i], '°C', 1) })),
+                    { key: 'disk', label: cur.disk_name ? `Disco ${String(cur.disk_name).slice(0, 18)}` : 'Disco', color: '#f59e0b', val: fmtSensor(cur.disk_temp, '°C') },
+                    { key: 'gpu', label: 'GPU', color: '#14b8a6', val: fmtSensor(cur.gpu_temp, '°C') },
                 ];
             } else if (activeStressTab === 'cooling_fans') {
                 items = [
-                    { key: 'fan_cpu', label: 'CPU Fan', color: '#06b6d4', val: `${cur.cpu_fan || 1200} RPM` },
-                    { key: 'fan_gpu', label: 'GPU Fan', color: '#10b981', val: `${cur.gpu_fan || 0} RPM` },
-                    { key: 'fan_chassis', label: 'Chassis Fan', color: '#a855f7', val: `${cur.chassis_fan || 950} RPM` },
+                    { key: 'fan_cpu', label: 'Ventoinha CPU', color: '#06b6d4', val: fmtSensor(cur.cpu_fan, 'RPM') },
+                    { key: 'fan_gpu', label: cur.gpu_fan != null ? 'Ventoinha GPU' : 'Ventoinha GPU (driver)', color: '#10b981', val: cur.gpu_fan != null ? fmtSensor(cur.gpu_fan, 'RPM') : fmtSensor(cur.gpu_fan_pct, '%') },
+                    ...((cur.fans || []).filter(f => !f.gpu).slice(3).map((f, i) => ({ key: `fan_extra${i}`, label: f.name, color: ['#f59e0b', '#ec4899', '#84cc16'][i % 3], val: fmtSensor(f.rpm, 'RPM') }))),
+                    { key: 'fan_chassis', label: 'Gabinete', color: '#a855f7', val: fmtSensor(cur.chassis_fan, 'RPM') },
                 ];
             } else if (activeStressTab === 'voltages') {
                 items = [
-                    { key: 'vcore', label: 'CPU VCore', color: '#0284c7', val: `${cur.vcore || 1.150} V` },
-                    { key: 'v12', label: '+12V', color: '#f59e0b', val: `${cur.v12 || 12.096} V` },
-                    { key: 'v5', label: '+5V', color: '#10b981', val: `${cur.v5 || 5.040} V` },
-                    { key: 'v33', label: '+3.3V', color: '#8b5cf6', val: `${cur.v33 || 3.328} V` },
-                    { key: 'dram', label: 'DRAM', color: '#ec4899', val: `${cur.dram_v || 1.350} V` },
+                    { key: 'vcore', label: 'VCore', color: '#0284c7', val: fmtSensor(cur.vcore, 'V', 3) },
+                    { key: 'v12', label: '+12V', color: '#f59e0b', val: fmtSensor(cur.v12, 'V', 3) },
+                    { key: 'v5', label: '+5V', color: '#10b981', val: fmtSensor(cur.v5, 'V', 3) },
+                    { key: 'v33', label: '+3.3V', color: '#8b5cf6', val: fmtSensor(cur.v33, 'V', 3) },
+                    { key: 'dram', label: 'DRAM', color: '#ec4899', val: fmtSensor(cur.dram_v, 'V', 3) },
                 ];
             } else if (activeStressTab === 'powers') {
                 items = [
-                    { key: 'pwr_pkg', label: 'CPU Package', color: '#f97316', val: `${cur.cpu_power || 25} W` },
-                    { key: 'pwr_cores', label: 'CPU Cores', color: '#f59e0b', val: `${cur.cores_power || 20} W` },
-                    { key: 'pwr_gpu', label: 'GPU Power', color: '#10b981', val: `${cur.gpu_power || 15} W` },
+                    { key: 'pwr_pkg', label: 'CPU Package', color: '#f97316', val: fmtSensor(cur.cpu_power, 'W', 1) },
+                    { key: 'pwr_cores', label: 'Núcleos CPU', color: '#f59e0b', val: fmtSensor(cur.cores_power, 'W', 1) },
+                    { key: 'pwr_gpu', label: 'GPU', color: '#10b981', val: fmtSensor(cur.gpu_power, 'W', 1) },
                 ];
             } else if (activeStressTab === 'clocks') {
                 items = [
-                    { key: 'clk_avg', label: 'CPU Average', color: '#06b6d4', val: `${cur.avg_clock || 3400} MHz` },
-                    { key: 'clk_c1', label: 'Core #1', color: '#10b981', val: `${cur.clocks ? cur.clocks[0] || 3400 : 3400} MHz` },
-                    { key: 'clk_c2', label: 'Core #2', color: '#eab308', val: `${cur.clocks ? cur.clocks[1] || 3400 : 3400} MHz` },
-                    { key: 'clk_c3', label: 'Core #3', color: '#3b82f6', val: `${cur.clocks ? cur.clocks[2] || 3400 : 3400} MHz` },
-                    { key: 'clk_c4', label: 'Core #4', color: '#a855f7', val: `${cur.clocks ? cur.clocks[3] || 3400 : 3400} MHz` },
-                    { key: 'clk_gpu', label: 'GPU Clock', color: '#ec4899', val: `${cur.gpu_clock || 360} MHz` },
+                    { key: 'clk_avg', label: 'CPU (efetivo)', color: '#06b6d4', val: fmtSensor(cur.avg_clock, 'MHz') },
+                    ...[0, 1, 2, 3].filter(i => ck[i] !== undefined).map(i => ({ key: `clk_c${i + 1}`, label: `Núcleo #${i + 1}`, color: ['#10b981', '#eab308', '#3b82f6', '#a855f7'][i], val: fmtSensor(ck[i], 'MHz') })),
+                    { key: 'clk_gpu', label: 'GPU', color: '#ec4899', val: fmtSensor(cur.gpu_clock, 'MHz') },
                 ];
             } else if (activeStressTab === 'unified') {
                 items = [
-                    { key: 'mobo', label: 'CPU Temp', color: '#ef4444', val: `${cur.cpu_temp || 45}°C` },
-                    { key: 'cpu', label: 'CPU Clock', color: '#06b6d4', val: `${cur.avg_clock || 3400} MHz` },
-                    { key: 'core1', label: 'CPU Usage', color: '#10b981', val: `${cur.cpu_usage || 0}%` },
-                    { key: 'core2', label: 'RAM Usage', color: '#a855f7', val: `${cur.ram_usage_pct || 0}%` },
-                    { key: 'disk', label: 'CPU Power', color: '#f59e0b', val: `${cur.cpu_power || 25} W` },
+                    { key: 'mobo', label: 'Temp. CPU', color: '#ef4444', val: fmtSensor(cur.cpu_temp, '°C', 1) },
+                    { key: 'cpu', label: 'Clock CPU', color: '#06b6d4', val: fmtSensor(cur.avg_clock, 'MHz') },
+                    { key: 'core1', label: 'Uso CPU', color: '#10b981', val: fmtSensor(cur.cpu_usage, '%') },
+                    { key: 'core2', label: 'Uso RAM', color: '#a855f7', val: fmtSensor(cur.ram_usage_pct, '%') },
+                    { key: 'disk', label: 'Potência CPU', color: '#f59e0b', val: fmtSensor(cur.cpu_power, 'W') },
                 ];
             }
 
@@ -6545,7 +6512,7 @@ lucide.createIcons();
 
             // Fundo escuro osciloscópio CRT
             const isLight = document.documentElement.classList.contains('light');
-            ctx.fillStyle = isLight ? '#f8fafc' : '#060a12';
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-surface-deep').trim() || (isLight ? '#f8fafc' : '#0b0e13');
             ctx.fillRect(0, 0, W, H);
 
             // Escala e limites por aba
@@ -6559,13 +6526,14 @@ lucide.createIcons();
             } else if (activeStressTab === 'powers') {
                 yMin = 0; yMax = 200; unit = 'W'; numSteps = 5;
             } else if (activeStressTab === 'clocks') {
-                yMin = 0; yMax = 5000; unit = 'MHz'; numSteps = 5;
+                const mx = Math.max(1000, ...(history || []).map(p => Math.max(p.avg_clock || 0, ...(p.clocks || [0]), p.gpu_clock || 0)));
+                yMin = 0; yMax = Math.ceil(mx * 1.15 / 500) * 500; unit = 'MHz'; numSteps = 5;
             } else if (activeStressTab === 'unified') {
                 yMin = 0; yMax = 100; unit = '%'; numSteps = 5;
             }
 
             // Grade horizontal
-            const gridColor = isLight ? 'rgba(203, 213, 225, 0.6)' : 'rgba(16, 185, 129, 0.14)';
+            const gridColor = isLight ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.12)';
             const textColor = isLight ? '#64748b' : '#94a3b8';
 
             ctx.strokeStyle = gridColor;
@@ -6624,21 +6592,19 @@ lucide.createIcons();
                 if (key && stressTracesVisible[key] === false) return;
 
                 ctx.beginPath();
-                let lastPtX = 0, lastPtY = 0, lastVal = 0;
+                let lastPtX = 0, lastPtY = 0, lastVal = null, penDown = false;
 
                 pts.forEach((p, idx) => {
                     const v = getter(p);
+                    if (v === null || v === undefined || Number.isNaN(Number(v))) { penDown = false; return; }
                     const x = getX(idx);
                     const y = getY(v);
-                    if (idx === 0) ctx.moveTo(x, y);
+                    if (!penDown) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
-
-                    if (idx === numPts - 1) {
-                        lastPtX = x;
-                        lastPtY = y;
-                        lastVal = v;
-                    }
+                    penDown = true;
+                    lastPtX = x; lastPtY = y; lastVal = v;
                 });
+                if (lastVal === null) return;  // sensor sem dados: não desenha linha inventada
 
                 ctx.strokeStyle = strokeStyle;
                 ctx.lineWidth = lineWidth;
@@ -6663,42 +6629,44 @@ lucide.createIcons();
             }
 
             // Desenha as curvas conforme a aba ativa
+            const nz = (v) => (v === null || v === undefined) ? null : v;
+            const idxv = (arr, i) => (Array.isArray(arr) && arr[i] !== undefined) ? arr[i] : null;
             if (activeStressTab === 'temperatures') {
-                drawTraceWithNumber(p => p.mobo_temp || 28, '#3b82f6', 2.0, 'mobo');
-                drawTraceWithNumber(p => p.cpu_temp || 45, '#ef4444', 2.6, 'cpu');
-                drawTraceWithNumber(p => (p.core_temps && p.core_temps[0]) || p.cpu_temp, '#10b981', 1.8, 'core1');
-                drawTraceWithNumber(p => (p.core_temps && p.core_temps[1]) || p.cpu_temp, '#eab308', 1.8, 'core2');
-                drawTraceWithNumber(p => (p.core_temps && p.core_temps[2]) || p.cpu_temp, '#06b6d4', 1.8, 'core3');
-                drawTraceWithNumber(p => (p.core_temps && p.core_temps[3]) || p.cpu_temp, '#a855f7', 1.8, 'core4');
-                drawTraceWithNumber(p => p.disk_temp || 28, '#f59e0b', 2.0, 'disk');
-                drawTraceWithNumber(p => p.gpu_temp || 38, '#14b8a6', 2.0, 'gpu');
+                drawTraceWithNumber(p => nz(p.mobo_temp), '#3b82f6', 2.0, 'mobo');
+                drawTraceWithNumber(p => nz(p.cpu_temp), '#ef4444', 2.6, 'cpu');
+                drawTraceWithNumber(p => idxv(p.core_temps, 0), '#10b981', 1.8, 'core1');
+                drawTraceWithNumber(p => idxv(p.core_temps, 1), '#eab308', 1.8, 'core2');
+                drawTraceWithNumber(p => idxv(p.core_temps, 2), '#06b6d4', 1.8, 'core3');
+                drawTraceWithNumber(p => idxv(p.core_temps, 3), '#a855f7', 1.8, 'core4');
+                drawTraceWithNumber(p => nz(p.disk_temp), '#f59e0b', 2.0, 'disk');
+                drawTraceWithNumber(p => nz(p.gpu_temp), '#14b8a6', 2.0, 'gpu');
             } else if (activeStressTab === 'cooling_fans') {
-                drawTraceWithNumber(p => p.cpu_fan || 1200, '#06b6d4', 2.4, 'fan_cpu');
-                drawTraceWithNumber(p => p.gpu_fan || 0, '#10b981', 2.0, 'fan_gpu');
-                drawTraceWithNumber(p => p.chassis_fan || 950, '#a855f7', 1.8, 'fan_chassis');
+                drawTraceWithNumber(p => nz(p.cpu_fan), '#06b6d4', 2.4, 'fan_cpu');
+                drawTraceWithNumber(p => nz(p.gpu_fan), '#10b981', 2.0, 'fan_gpu');
+                drawTraceWithNumber(p => nz(p.chassis_fan), '#a855f7', 1.8, 'fan_chassis');
             } else if (activeStressTab === 'voltages') {
-                drawTraceWithNumber(p => p.vcore || 1.15, '#0284c7', 2.4, 'vcore');
-                drawTraceWithNumber(p => p.v12 || 12.096, '#f59e0b', 2.0, 'v12');
-                drawTraceWithNumber(p => p.v5 || 5.040, '#10b981', 2.0, 'v5');
-                drawTraceWithNumber(p => p.v33 || 3.328, '#8b5cf6', 2.0, 'v33');
-                drawTraceWithNumber(p => p.dram_v || 1.350, '#ec4899', 2.0, 'dram');
+                drawTraceWithNumber(p => nz(p.vcore), '#0284c7', 2.4, 'vcore');
+                drawTraceWithNumber(p => nz(p.v12), '#f59e0b', 2.0, 'v12');
+                drawTraceWithNumber(p => nz(p.v5), '#10b981', 2.0, 'v5');
+                drawTraceWithNumber(p => nz(p.v33), '#8b5cf6', 2.0, 'v33');
+                drawTraceWithNumber(p => nz(p.dram_v), '#ec4899', 2.0, 'dram');
             } else if (activeStressTab === 'powers') {
-                drawTraceWithNumber(p => p.cpu_power || 25, '#f97316', 2.6, 'pwr_pkg');
-                drawTraceWithNumber(p => p.cores_power || 20, '#f59e0b', 2.0, 'pwr_cores');
-                drawTraceWithNumber(p => p.gpu_power || 15, '#10b981', 2.0, 'pwr_gpu');
+                drawTraceWithNumber(p => nz(p.cpu_power), '#f97316', 2.6, 'pwr_pkg');
+                drawTraceWithNumber(p => nz(p.cores_power), '#f59e0b', 2.0, 'pwr_cores');
+                drawTraceWithNumber(p => nz(p.gpu_power), '#10b981', 2.0, 'pwr_gpu');
             } else if (activeStressTab === 'clocks') {
-                drawTraceWithNumber(p => p.avg_clock || 3400, '#06b6d4', 2.6, 'clk_avg');
-                drawTraceWithNumber(p => (p.clocks && p.clocks[0]) || 3400, '#10b981', 1.8, 'clk_c1');
-                drawTraceWithNumber(p => (p.clocks && p.clocks[1]) || 3400, '#eab308', 1.8, 'clk_c2');
-                drawTraceWithNumber(p => (p.clocks && p.clocks[2]) || 3400, '#3b82f6', 1.8, 'clk_c3');
-                drawTraceWithNumber(p => (p.clocks && p.clocks[3]) || 3400, '#a855f7', 1.8, 'clk_c4');
-                drawTraceWithNumber(p => p.gpu_clock || 360, '#ec4899', 2.0, 'clk_gpu');
+                drawTraceWithNumber(p => nz(p.avg_clock), '#06b6d4', 2.6, 'clk_avg');
+                drawTraceWithNumber(p => idxv(p.clocks, 0), '#10b981', 1.8, 'clk_c1');
+                drawTraceWithNumber(p => idxv(p.clocks, 1), '#eab308', 1.8, 'clk_c2');
+                drawTraceWithNumber(p => idxv(p.clocks, 2), '#3b82f6', 1.8, 'clk_c3');
+                drawTraceWithNumber(p => idxv(p.clocks, 3), '#a855f7', 1.8, 'clk_c4');
+                drawTraceWithNumber(p => nz(p.gpu_clock), '#ec4899', 2.0, 'clk_gpu');
             } else if (activeStressTab === 'unified') {
-                drawTraceWithNumber(p => p.cpu_temp || 45, '#ef4444', 2.4, 'mobo');
-                drawTraceWithNumber(p => (p.avg_clock ? (p.avg_clock / 50) : 60), '#06b6d4', 2.0, 'cpu');
-                drawTraceWithNumber(p => p.cpu_usage || 0, '#10b981', 2.2, 'core1');
-                drawTraceWithNumber(p => p.ram_usage_pct || 0, '#a855f7', 2.0, 'core2');
-                drawTraceWithNumber(p => (p.cpu_power ? (p.cpu_power / 2) : 20), '#f59e0b', 2.0, 'disk');
+                drawTraceWithNumber(p => nz(p.cpu_temp), '#ef4444', 2.4, 'mobo');
+                drawTraceWithNumber(p => (p.avg_clock && p.nominal_clock) ? Math.min(100, p.avg_clock * 100 / (p.nominal_clock * 1.6)) : null, '#06b6d4', 2.0, 'cpu');
+                drawTraceWithNumber(p => nz(p.cpu_usage), '#10b981', 2.2, 'core1');
+                drawTraceWithNumber(p => nz(p.ram_usage_pct), '#a855f7', 2.0, 'core2');
+                drawTraceWithNumber(p => p.cpu_power != null ? Math.min(100, p.cpu_power / 2) : null, '#f59e0b', 2.0, 'disk');
             }
 
             // -----------------------------------------------------------------
@@ -6750,7 +6718,7 @@ lucide.createIcons();
                     const textW = ctx.measureText(b.valText).width + 8;
                     const badgeH = 14;
 
-                    ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(11, 18, 30, 0.95)';
+                    ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(19, 23, 30, 0.96)';
                     ctx.strokeStyle = b.color;
                     ctx.lineWidth = 1.2;
 
@@ -6804,10 +6772,10 @@ lucide.createIcons();
             const plotH = H - padTop - padBottom;
 
             const isLight = document.documentElement.classList.contains('light');
-            ctx.fillStyle = isLight ? '#f8fafc' : '#060a12';
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-surface-deep').trim() || (isLight ? '#f8fafc' : '#0b0e13');
             ctx.fillRect(0, 0, W, H);
 
-            const gridColor = isLight ? 'rgba(203, 213, 225, 0.6)' : 'rgba(16, 185, 129, 0.14)';
+            const gridColor = isLight ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.12)';
             const textColor = isLight ? '#64748b' : '#94a3b8';
 
             ctx.strokeStyle = gridColor;
@@ -6893,7 +6861,7 @@ lucide.createIcons();
                 ctx.stroke();
 
                 const bx = padLeft + plotW + 10;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(11, 18, 30, 0.95)';
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(19, 23, 30, 0.96)';
                 ctx.strokeStyle = '#10b981';
                 ctx.lineWidth = 1.2;
                 ctx.beginPath();
@@ -6949,7 +6917,7 @@ lucide.createIcons();
 
                 const bx = padLeft + plotW + 10;
                 const thY = (Math.abs(lastThrottlingY - lastUsageY) < 16) ? lastThrottlingY - 14 : lastThrottlingY;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(11, 18, 30, 0.95)';
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(19, 23, 30, 0.96)';
                 ctx.strokeStyle = '#ef4444';
                 ctx.lineWidth = 1.2;
                 ctx.beginPath();
@@ -6985,15 +6953,22 @@ lucide.createIcons();
             const cur = st.current || {};
 
             const getStat = (key, unit, curVal) => {
-                const s = stats[key] || {};
-                const c = (curVal !== undefined ? curVal : s.current) || 0;
+                const s = stats[key];
+                const c = (curVal !== undefined && curVal !== null) ? curVal : (s ? s.current : null);
+                const dec = (unit === 'V') ? 3 : ((unit === 'GB' || unit === '°C' || unit === 'W') ? 1 : 0);
                 return {
-                    current: `${c} ${unit}`,
-                    min: `${s.min !== undefined ? s.min : c} ${unit}`,
-                    max: `${s.max !== undefined ? s.max : c} ${unit}`,
-                    avg: `${s.avg !== undefined ? s.avg : c} ${unit}`
+                    current: fmtSensor(c, unit, dec),
+                    min: s ? fmtSensor(s.min, unit, dec) : 'N/D',
+                    max: s ? fmtSensor(s.max, unit, dec) : 'N/D',
+                    avg: s ? fmtSensor(s.avg, unit, dec) : 'N/D'
                 };
             };
+            const errs = st.errors || {};
+            const rates = st.rates || {};
+            const errRow = (name, k, rateTxt) => ({
+                name, current: (errs[k] || 0) > 0 ? `${errs[k]} ERRO(S)` : '0 erros', min: rateTxt || '—', max: '—', avg: '—'
+            });
+            const coreRows = (cur.core_temps || []).slice(0, 16).map((v, i) => ({ name: `Núcleo #${i + 1}`, ...getStat(`core_temp_${i + 1}`, '°C', v) }));
 
             const groups = [
                 {
@@ -7001,14 +6976,11 @@ lucide.createIcons();
                     icon: "thermometer",
                     color: "text-orange-500",
                     rows: [
-                        { name: "Placa-Mãe (Motherboard)", ...getStat("mobo_temp", "°C", cur.mobo_temp) },
-                        { name: "Processador (CPU Package)", ...getStat("cpu_temp", "°C", cur.cpu_temp) },
-                        { name: "CPU Core #1", ...getStat("core_temp_1", "°C", cur.core_temps ? cur.core_temps[0] : 43) },
-                        { name: "CPU Core #2", ...getStat("core_temp_2", "°C", cur.core_temps ? cur.core_temps[1] : 44) },
-                        { name: "CPU Core #3", ...getStat("core_temp_3", "°C", cur.core_temps ? cur.core_temps[2] : 42) },
-                        { name: "CPU Core #4", ...getStat("core_temp_4", "°C", cur.core_temps ? cur.core_temps[3] : 46) },
-                        { name: `Drive C: ${st.disk_name || 'KINGSTON SSD'}`, ...getStat("disk_temp", "°C", cur.disk_temp) },
-                        { name: `GPU: ${st.gpu_name || 'RTX 4060 Ti'}`, ...getStat("gpu_temp", "°C", cur.gpu_temp) },
+                        { name: `Processador (${cur.temp_source || 'sem sensor'})`, ...getStat("cpu_temp", "°C", cur.cpu_temp) },
+                        { name: "Placa-mãe", ...getStat("mobo_temp", "°C", cur.mobo_temp) },
+                        ...coreRows,
+                        { name: `Disco: ${st.disk_name || 'sistema'}`, ...getStat("disk_temp", "°C", cur.disk_temp) },
+                        { name: `GPU: ${st.gpu_name || 'não identificada'}`, ...getStat("gpu_temp", "°C", cur.gpu_temp) },
                     ]
                 },
                 {
@@ -7058,16 +7030,21 @@ lucide.createIcons();
                     color: "text-purple-500",
                     rows: [
                         { name: "Utilização Total da CPU", ...getStat("cpu_usage", "%", cur.cpu_usage) },
-                        { name: "CPU Thermal Throttling", ...getStat("cpu_throttling", "%", cur.cpu_throttling) },
+                        { name: "Limitação de clock (Windows)", ...getStat("cpu_throttling", "%", cur.cpu_throttling) },
                         { name: "Utilização da Memória RAM", ...getStat("ram_usage_pct", "%", cur.ram_usage_pct) },
                         { name: "Memória RAM Físicamente Ocupada", ...getStat("ram_used_gb", "GB", cur.ram_used_gb) },
-                        {
-                            name: "Integridade de Memória (Bit-Flips / Erros)",
-                            current: (st.memory_errors > 0 ? `${st.memory_errors} Erros!` : "0 Erros (Estável)"),
-                            min: "0",
-                            max: `${st.memory_errors || 0}`,
-                            avg: "0.00"
-                        }
+                    ]
+                },
+                {
+                    title: "Verificação de Erros (Atual = erros · Mín = taxa de trabalho)",
+                    icon: "shield-check",
+                    color: "text-emerald-500",
+                    rows: [
+                        errRow("CPU — hashes SHA-256/BLAKE2b conferidos", "cpu", rates.cpu_mb_s != null ? `${rates.cpu_mb_s} MB/s` : null),
+                        errRow("FPU — resultados float64 conferidos", "fpu", rates.fpu_mops != null ? `${rates.fpu_mops} Mops/s` : null),
+                        errRow("Cache — somas de verificação", "cache", rates.cache_mops != null ? `${rates.cache_mops} Macessos/s` : null),
+                        errRow("RAM — palavras de 64 bits conferidas", "memory", rates.mem_gb_s != null ? `${rates.mem_gb_s} GB/s` : null),
+                        errRow("Disco — blocos relidos e comparados", "disk", rates.disk_r_mb_s != null ? `${rates.disk_w_mb_s}/${rates.disk_r_mb_s} MB/s` : null),
                     ]
                 }
             ];
@@ -7171,7 +7148,8 @@ lucide.createIcons();
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
-                    showToast("StressPulse™ Ativo", "Todos os setores configurados foram iniciados.", "success", 3000);
+                    if (stressGpu) startGpuLoad();
+                    showToast("StressPulse™ Ativo", "Carga real aplicada. Erros de cálculo e de memória são verificados continuamente.", "success", 3500);
                     if (!stabilityPollTimer) stabilityPollTimer = setInterval(pollStabilityStatus, 1000);
                 } else {
                     showToast("Aviso", data.message || "Não foi possível iniciar o teste.", "warning", 4000);
@@ -7180,7 +7158,7 @@ lucide.createIcons();
                 showToast("Erro", String(e), "error");
             } finally {
                 if (btnStart) {
-                    btnStart.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i><span>Start</span>`;
+                    btnStart.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i><span>Iniciar</span>`;
                     lucide.createIcons();
                 }
                 await pollStabilityStatus();
@@ -7198,6 +7176,7 @@ lucide.createIcons();
                 lucide.createIcons();
             }
             if (statusText) statusText.innerText = "ENCERRANDO TESTE...";
+            stopGpuLoad();
 
             showToast("Interrompendo Teste", "Finalizando workers e liberando recursos de hardware...", "info", 2000);
             try {
@@ -7213,7 +7192,7 @@ lucide.createIcons();
             } finally {
                 await pollStabilityStatus();
                 if (btnStop) {
-                    btnStop.innerHTML = `<i data-lucide="square" class="w-3.5 h-3.5 fill-white"></i><span>Stop</span>`;
+                    btnStop.innerHTML = `<i data-lucide="square" class="w-3.5 h-3.5 fill-white"></i><span>Parar</span>`;
                     lucide.createIcons();
                 }
             }
@@ -7256,11 +7235,18 @@ lucide.createIcons();
             if (!modal) return;
             modal.classList.remove('hidden');
 
+            fetch('/api/silicon/info').then(r => r.json()).then(d => {
+                const p = (d && d.silicon && d.silicon.processor) || {};
+                const nm = document.getElementById('cpuid-proc-name');
+                if (nm) nm.innerText = p.name || '—';
+                const ins = document.getElementById('cpuid-instructions');
+                if (ins) ins.innerText = p.instructions || 'N/D';
+            }).catch(() => { });
             if (latestStressData) {
                 const th = document.getElementById('cpuid-threads-count');
-                if (th) th.innerText = `${latestStressData.system_threads || 8} Threads`;
+                if (th) th.innerText = `${latestStressData.system_threads || '—'} threads`;
                 const clk = document.getElementById('cpuid-clock-speed');
-                if (clk) clk.innerText = `${latestStressData.max_clock || 3400} MHz`;
+                if (clk) clk.innerText = fmtSensor(latestStressData.max_clock, 'MHz');
             }
             lucide.createIcons();
         }
@@ -7287,3 +7273,219 @@ lucide.createIcons();
                 renderStressLowerGraph(latestStressData.history || []);
             }
         });
+
+        // =====================================================================
+        // STRESSBENCH — BENCHMARK DE ESTRESSE EM LOOPS
+        // =====================================================================
+        let stressBenchPreset = 'padrao';
+        let stressBenchTimer = null;
+        let stabilityMode = 'pulse';
+        const STRESSBENCH_PRESET_DESC = {
+            rapido: '10 loops × 30 s · aprovação com estabilidade ≥ 97%',
+            padrao: '20 loops × 60 s · aprovação com estabilidade ≥ 97%',
+            extremo: '40 loops × 60 s · aprovação com estabilidade ≥ 97%'
+        };
+
+        function switchStabilityMode(mode) {
+            stabilityMode = mode;
+            document.querySelectorAll('#stab-mode-seg [data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+            document.getElementById('stab-mode-pulse').classList.toggle('hidden', mode !== 'pulse');
+            document.getElementById('stab-mode-bench').classList.toggle('hidden', mode !== 'bench');
+            const hint = document.getElementById('stab-mode-hint');
+            if (hint) hint.innerText = mode === 'bench'
+                ? 'Mede se o desempenho se mantém sob carga máxima contínua — pontuação, estabilidade e histórico.'
+                : 'Carga contínua com verificação de erros em CPU, FPU, cache, RAM, disco e GPU.';
+            if (mode === 'bench') {
+                pollStressBench();
+                if (!stressBenchTimer) stressBenchTimer = setInterval(pollStressBench, 1000);
+            }
+        }
+
+        function selectStressBenchPreset(p) {
+            stressBenchPreset = p;
+            document.querySelectorAll('#sb-preset-seg [data-preset]').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
+            const d = document.getElementById('sb-preset-desc');
+            if (d) d.innerText = STRESSBENCH_PRESET_DESC[p] || '';
+        }
+
+        async function startStressBench() {
+            const btn = document.getElementById('sb-start-btn');
+            if (btn) btn.disabled = true;
+            try {
+                const res = await fetch('/api/stressbench/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ preset: stressBenchPreset })
+                });
+                const data = await res.json();
+                showToast(data.status === 'success' ? 'StressBench iniciado' : 'Não foi possível iniciar', data.message, data.status === 'success' ? 'success' : 'warning');
+            } catch (e) {
+                showToast('Erro', 'Falha ao iniciar o benchmark: ' + e, 'error');
+            }
+            if (btn) btn.disabled = false;
+            if (!stressBenchTimer) stressBenchTimer = setInterval(pollStressBench, 1000);
+            pollStressBench();
+        }
+
+        async function stopStressBench() {
+            try {
+                const res = await fetch('/api/stressbench/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+                const data = await res.json();
+                showToast('StressBench', data.message, 'info');
+            } catch (e) { }
+        }
+
+        async function pollStressBench() {
+            try {
+                const res = await fetch('/api/stressbench/status');
+                const data = await res.json();
+                if (data && data.bench) renderStressBench(data.bench);
+                const running = data && data.bench && data.bench.running;
+                const visible = currentTab === 'stability' && stabilityMode === 'bench';
+                if (!running && !visible && stressBenchTimer) { clearInterval(stressBenchTimer); stressBenchTimer = null; }
+            } catch (e) { }
+        }
+
+        function fmtDuration(sec) {
+            sec = Math.max(0, Math.round(sec || 0));
+            const m = Math.floor(sec / 60), s = sec % 60;
+            return m >= 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')} min` : `${m}:${String(s).padStart(2, '0')}`;
+        }
+
+        function renderStressBench(b) {
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+            const live = b.live || {};
+            const running = !!b.running;
+
+            set('sb-threads', `${b.threads || '—'}`);
+            document.getElementById('sb-start-btn').classList.toggle('hidden', running);
+            document.getElementById('sb-stop-btn').classList.toggle('hidden', !running);
+            document.querySelectorAll('#sb-preset-seg button').forEach(x => x.disabled = running);
+
+            const badge = document.getElementById('sb-status-badge');
+            const phaseTxt = { idle: 'Pronto', warmup: 'Aquecendo', running: 'Em execução', completed: 'Concluído', stopped: 'Interrompido', error: 'Falha' }[b.phase] || 'Pronto';
+            const phaseCls = { warmup: 'warn live', running: 'brand live', completed: 'ok', stopped: 'warn', error: 'bad' }[b.phase] || '';
+            if (badge) { badge.className = `ws-badge ${phaseCls}`; badge.innerHTML = `<span class="dot"></span>${phaseTxt}`; }
+
+            // Ao vivo
+            set('sb-live-loop', b.loops_total ? `${b.current_loop || 0}/${b.loops_total}` : '—');
+            const lb = document.getElementById('sb-live-loop-bar');
+            if (lb) lb.style.width = `${running ? Math.round((b.loop_progress || 0) * 100) : 0}%`;
+            set('sb-live-score', running && live.score ? Math.round(live.score).toLocaleString('pt-BR') : '—');
+            set('sb-live-temp', live.temp !== null && live.temp !== undefined ? `${live.temp} °C` : 'N/D');
+            set('sb-live-temp-src', `fonte: ${live.temp_source || 'indisponível'}`);
+            set('sb-live-clock', live.clock ? `${(live.clock / 1000).toFixed(2)} GHz` : 'N/D');
+            set('sb-live-usage', `uso da CPU: ${live.usage !== null && live.usage !== undefined ? live.usage + '%' : '—'}`);
+
+            const pb = document.getElementById('sb-progress-bar');
+            if (pb) pb.style.width = `${b.progress_pct || 0}%`;
+            set('sb-progress-text', running ? `${b.message || ''} · ${Math.round(b.progress_pct || 0)}%` : (b.message || 'Progresso total'));
+            set('sb-eta', running ? `decorrido ${fmtDuration(b.elapsed_sec)} · restante ${fmtDuration(b.eta_sec)}` : '—');
+
+            renderStressBenchChart(b.loops || []);
+            renderStressBenchLoops(b.loops || []);
+            renderStressBenchResult(b);
+            renderStressBenchHistory(b.history || []);
+        }
+
+        function renderStressBenchChart(loops) {
+            const svg = document.getElementById('sb-chart');
+            const empty = document.getElementById('sb-chart-empty');
+            if (!svg) return;
+            if (!loops.length) { svg.innerHTML = ''; svg.style.display = 'none'; if (empty) empty.style.display = ''; return; }
+            svg.style.display = ''; if (empty) empty.style.display = 'none';
+
+            const W = 800, H = 220, padL = 46, padR = 40, padT = 12, padB = 24;
+            const scores = loops.map(l => l.score);
+            const best = Math.max(...scores), worst = Math.min(...scores);
+            const yMax = best * 1.08, yMin = Math.max(0, worst * 0.85);
+            const y = v => padT + (H - padT - padB) * (1 - (v - yMin) / Math.max(1, yMax - yMin));
+            const n = loops.length, slot = (W - padL - padR) / n, bw = Math.max(3, Math.min(28, slot * 0.62));
+            let out = '<g class="grid">';
+            for (let i = 0; i <= 4; i++) {
+                const v = yMin + (yMax - yMin) * i / 4;
+                out += `<line x1="${padL}" x2="${W - padR}" y1="${y(v)}" y2="${y(v)}"></line><text x="${padL - 6}" y="${y(v) + 3}" text-anchor="end">${Math.round(v)}</text>`;
+            }
+            out += '</g>';
+            loops.forEach((l, i) => {
+                const x = padL + slot * i + (slot - bw) / 2;
+                const cls = l.errors ? 'bar err' : (l.score === worst && n > 1 ? 'bar worst' : 'bar');
+                out += `<rect class="${cls}" x="${x}" y="${y(l.score)}" width="${bw}" height="${H - padB - y(l.score)}" rx="3"><title>Loop ${l.n}: ${l.score} pts</title></rect>`;
+                if (n <= 20 || i % Math.ceil(n / 20) === 0) out += `<text x="${x + bw / 2}" y="${H - 8}" text-anchor="middle">${l.n}</text>`;
+            });
+            const thr = y(best * 0.97);
+            out += `<line class="thr" x1="${padL}" x2="${W - padR}" y1="${thr}" y2="${thr}"></line>`;
+            const temps = loops.filter(l => l.temp_avg !== null && l.temp_avg !== undefined);
+            if (temps.length >= 2) {
+                const tMin = Math.min(...temps.map(l => l.temp_avg)) - 3, tMax = Math.max(...temps.map(l => l.temp_avg)) + 3;
+                const ty = t => padT + (H - padT - padB) * (1 - (t - tMin) / Math.max(1, tMax - tMin));
+                const pts = loops.map((l, i) => l.temp_avg === null || l.temp_avg === undefined ? null : `${padL + slot * i + slot / 2},${ty(l.temp_avg)}`).filter(Boolean).join(' ');
+                out += `<polyline class="temp" points="${pts}"></polyline>`;
+                out += `<text x="${W - padR + 6}" y="${ty(tMax - 3) + 3}">${Math.round(tMax - 3)}°</text><text x="${W - padR + 6}" y="${ty(tMin + 3) + 3}">${Math.round(tMin + 3)}°</text>`;
+            }
+            svg.innerHTML = out;
+        }
+
+        function renderStressBenchLoops(loops) {
+            const tb = document.getElementById('sb-loops-body');
+            if (!tb) return;
+            if (!loops.length) { tb.innerHTML = '<tr><td colspan="7" class="ws-empty">Nenhum loop concluído ainda.</td></tr>'; return; }
+            const best = Math.max(...loops.map(l => l.score));
+            const nd = (v, u) => v === null || v === undefined ? '<span class="ws-muted">N/D</span>' : `${v}${u}`;
+            tb.innerHTML = loops.slice().reverse().map(l => `
+                <tr>
+                    <td class="ws-mono">${l.n}</td>
+                    <td class="ws-mono" style="color:var(--text-primary)">${Math.round(l.score).toLocaleString('pt-BR')} <span class="ws-muted text-[11px]">(${(l.score / best * 100).toFixed(1)}%)</span></td>
+                    <td class="ws-mono">${nd(l.temp_avg, ' °C')}</td>
+                    <td class="ws-mono">${nd(l.temp_max, ' °C')}</td>
+                    <td class="ws-mono">${l.clock_avg ? (l.clock_avg / 1000).toFixed(2) + ' GHz' : '<span class="ws-muted">N/D</span>'}</td>
+                    <td class="ws-mono">${nd(l.throttle_max, '%')}</td>
+                    <td>${l.errors ? `<span class="ws-badge bad">${l.errors}</span>` : '<span class="ws-badge ok">0</span>'}</td>
+                </tr>`).join('');
+        }
+
+        function renderStressBenchResult(b) {
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+            const loops = b.loops || [];
+            const r = b.result;
+            // Durante a execução, mostra a estabilidade parcial dos loops já concluídos
+            let stab = null, best = null, worst = null;
+            if (r) { stab = r.stability; best = r.best; worst = r.worst; }
+            else if (loops.length) {
+                const sc = loops.map(l => l.score);
+                best = Math.max(...sc); worst = Math.min(...sc); stab = +(worst / best * 100).toFixed(1);
+            }
+            set('sb-stability', stab !== null ? `${stab}%` : '—');
+            const arc = document.getElementById('sb-ring-arc');
+            if (arc) arc.style.strokeDashoffset = String(452.4 * (1 - (stab || 0) / 100));
+            set('sb-best', best !== null ? Math.round(best).toLocaleString('pt-BR') : '—');
+            set('sb-worst', worst !== null ? Math.round(worst).toLocaleString('pt-BR') : '—');
+            set('sb-errors', String(b.errors || 0));
+            const drop = r ? r.clock_drop_pct : (loops.length >= 2 && loops[0].clock_avg && loops[loops.length - 1].clock_avg
+                ? +((1 - loops[loops.length - 1].clock_avg / loops[0].clock_avg) * 100).toFixed(1) : null);
+            set('sb-clockdrop', drop !== null && drop !== undefined ? `${drop}%` : '—');
+
+            const v = document.getElementById('sb-verdict');
+            if (!v) return;
+            if (b.running) { v.className = 'ws-badge brand live'; v.innerHTML = '<span class="dot"></span>Parcial — em execução'; }
+            else if (r && r.complete) {
+                v.className = `ws-badge ${r.passed ? 'ok' : 'bad'}`;
+                v.innerHTML = `<span class="dot"></span>${r.passed ? 'APROVADO' : 'REPROVADO'}${!r.passed ? (r.errors ? ' · erros de cálculo' : ' · estabilidade < 97%') : ''}`;
+            } else if (r) { v.className = 'ws-badge warn'; v.innerHTML = `<span class="dot"></span>Incompleto (${r.loops_done}/${r.loops_total} loops)`; }
+            else { v.className = 'ws-badge'; v.innerText = 'Aguardando execução'; }
+        }
+
+        function renderStressBenchHistory(hist) {
+            const tb = document.getElementById('sb-history-body');
+            if (!tb) return;
+            if (!hist.length) { tb.innerHTML = '<tr><td colspan="6" class="ws-empty">Sem execuções anteriores.</td></tr>'; return; }
+            tb.innerHTML = hist.map(h => `
+                <tr>
+                    <td class="ws-mono text-[11.5px]">${escapeHtml(h.timestamp || '')}</td>
+                    <td>${escapeHtml(h.preset || '')} <span class="ws-muted text-[11px]">${h.loops_total}×${h.loop_sec}s</span></td>
+                    <td class="ws-mono" style="color:var(--text-primary)">${Math.round(h.average).toLocaleString('pt-BR')}</td>
+                    <td class="ws-mono">${h.stability}%</td>
+                    <td class="ws-mono">${h.temp_max !== null && h.temp_max !== undefined ? h.temp_max + ' °C' : '<span class="ws-muted">N/D</span>'}</td>
+                    <td>${h.passed ? '<span class="ws-badge ok">Aprovado</span>' : '<span class="ws-badge bad">Reprovado</span>'}</td>
+                </tr>`).join('');
+        }

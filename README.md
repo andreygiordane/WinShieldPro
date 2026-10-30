@@ -2,7 +2,7 @@
   <img src="imagens/logo.png" alt="WinShield Pro Enterprise Logo" width="360">
 </p>
 
-<h1 align="center">WinShield Pro v6.2 Enterprise Edition</h1>
+<h1 align="center">WinShield Pro v7.0 Enterprise Edition</h1>
 
 <p align="center">
   <strong>Central Definitiva de Diagnóstico de Hardware, Saúde de Discos, Drivers Oficiais, Benchmark, Segurança Forense e Otimização Avançada para Windows 10 e 11.</strong>
@@ -10,12 +10,12 @@
 
 <p align="center">
   <a href="https://github.com/andreygiordane/WinShieldPro/raw/main/dist/WinShieldPro.exe">
-    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v6.2_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
+    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.0_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
   </a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versão-6.2.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
+  <img src="https://img.shields.io/badge/Versão-7.0.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
   <img src="https://img.shields.io/badge/Plataforma-Windows_10_%7C_11_(x64)-0078D6?style=flat-square&logo=windows11&logoColor=white" alt="Plataforma">
   <img src="https://img.shields.io/badge/Python-3.15.1_Nativo-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Assinatura-Authenticode_Andrey_Giordane-22C55E?style=flat-square&logo=checkmarx&logoColor=white" alt="Assinatura Digital">
@@ -26,17 +26,31 @@
 
 ## 🌟 Visão Geral
 
-O **WinShield Pro v6.2 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
+O **WinShield Pro v7.0 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
 
-A versão **6.2** traz motores de hardware de nível baixo (**Silicon Core™**, **Vision Engine™**, **RAMGuard™** e **DiskGuard™**), download direto de drivers de servidores oficiais (**NVIDIA, AMD, Intel, Realtek**) com pareamento inteligente, benchmark físico real e um gerenciador de processos reconstruído para tempo de resposta instantâneo.
+A versão **7.0** traz uma interface totalmente redesenhada, testes com metodologia documentada e motores de hardware de nível baixo (**Silicon Core™**, **Vision Engine™**, **RAMGuard™** e **DiskGuard™**), download direto de drivers de servidores oficiais (**NVIDIA, AMD, Intel, Realtek**) com pareamento inteligente, benchmark físico real e um gerenciador de processos reconstruído para tempo de resposta instantâneo.
 
 ---
 
 ## 📥 Download Direto do Executável
 
+### Novidades da versão 7.0
+
+* **Interface redesenhada** — visual limpo e técnico, temas claro e escuro, tela de abertura com verificações reais do sistema.
+* **Janela nativa (WebView2)** — o app abre na própria janela, com perfil isolado, sem depender do navegador instalado.
+* **StressBench** — benchmark de estresse em loops com pontuação, estabilidade (pior ÷ melhor loop) e histórico.
+* **Teste de estabilidade por componente** — vazão, variação e erros de CPU, FPU, cache, RAM, disco e GPU.
+* **Resultados verificáveis** — otimizações confirmadas por releitura do registro; teste de internet de 15 s/12 s sem estimativas; benchmark de CPU com variação entre amostras.
+* **Energia** — leitura e ajuste fino do plano ativo (estado da CPU, Boost, núcleos, ASPM) com confirmação.
+* **Manutenção separada da Otimização** — SFC, DISM, CHKDSK, TRIM e rotina completa em um menu próprio.
+* **Discos** — fabricante, dias e horas de uso, ciclos de energia e desligamentos inesperados.
+
+A metodologia de cada medição está em [METODOLOGIA_DOS_TESTES.md](METODOLOGIA_DOS_TESTES.md).
+
+
 Não é necessário instalar Python, dependências ou compiladores para utilizar o WinShield Pro:
 
-* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v6.2 Standalone)](https://github.com/andreygiordane/WinShieldPro/raw/main/dist/WinShieldPro.exe)**
+* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.0 Standalone)](https://github.com/andreygiordane/WinShieldPro/raw/main/dist/WinShieldPro.exe)**
 * 🔒 **Assinado Digitalmente:** Binário assinado via certificado Authenticode por *Andrey Giordane*.
 * 🛡️ **Zero Dependências Externas:** Executável portátil integrado (*Single File*) pronto para rodar.
 
@@ -256,30 +270,25 @@ WinShieldPro/
 │   ├── power_engine.py                # Gestor de esquemas de energia powercfg
 │   ├── process.py                     # Execução de processos 100% invisíveis (sem janelas piscando)
 │   ├── security_engine.py             # ThreatHunter, heurística e integração Windows Defender
-│   ├── stress_engine.py               # Motor de estresse multithread e osciloscópio térmico
+│   ├── stress_engine.py               # Teste de estabilidade com verificação de erros por componente
+│   ├── stress_bench_engine.py         # StressBench: benchmark de estresse em loops
+│   ├── telemetry.py                   # Sensores (PDH, LibreHardwareMonitor, nvidia-smi)
 │   ├── system_engine.py               # Métricas de hardware ao vivo e leitura direta do Registro
 │   └── terminal_engine.py             # Execução de comandos PowerShell 5.1/7+ e CMD
 │
 ├── frontend/                          # Interface Web Moderna e Componentes
 │   ├── css/                           # Estilos base e Tailwind utilitário
-│   ├── js/
-│   │   ├── controllers/               # Controladores reativos para cada página da suíte
-│   │   ├── core/                      # Lucide batching rAF, roteamento, temas e polling leve
-│   │   └── i18n/                      # Traduções completas em Português, Inglês e Espanhol
-│   ├── pages/                         # Módulos modulares em HTML puro
+│   ├── js/core/app.js                 # Lógica da interface, traduções (PT/EN/ES) e polling
+│   ├── pages/                         # Uma página HTML por tela (17 telas)
 │   └── winshield_pro_dashboard.html   # Dashboard mestre compilado
 │
 ├── certificates/                      # Certificados de assinatura de código Authenticode
 ├── dist/                              # Executável portátil compilado e assinado (WinShieldPro.exe)
-├── docs/screenshots/                  # Capturas de tela de demonstração em alta resolução
 ├── imagens/                           # Logotipos, ícones e artes visuais do projeto
-├── scripts/
-│   ├── build_frontend.py              # Empacotador modular do frontend
-│   └── sign_app.ps1                   # Script automatizado de assinatura digital Authenticode
 ├── tests/                             # Bateria completa de testes automatizados (pytest)
 ├── build_exe.bat                      # Script 1-clique de compilação do executável .EXE
 ├── run_as_admin.bat                   # Inicializador seguro com elevação UAC
-├── version_info.txt                   # Metadados oficiais do executável (v6.2.0.0)
+├── version_info.txt                   # Metadados oficiais do executável (v7.0.0.0)
 └── winshield_app.py                   # Ponto de entrada da aplicação desktop
 ```
 

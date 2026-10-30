@@ -1,5 +1,5 @@
 """
-WinShield Pro v6.2 Enterprise - Servidor Desktop & API Central.
+WinShield Pro v7.0 Enterprise - Servidor Desktop & API Central.
 Gerencia a interface Web Desktop, rotas REST e integra todos os motores de sistema.
 """
 
@@ -15,7 +15,7 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 # Importação dos módulos especializados do WinShield Pro
 from backend.api import ApiRouter
-from backend.core import is_admin, elevate_privileges, base_dir, resource_path, IS_WINDOWS
+from backend.core import is_admin, elevate_privileges, base_dir, resource_path, IS_WINDOWS, APP_VERSION
 from backend.log_manager import LogManager
 from backend.process import run_hidden, run_ps
 from backend.cmd_engine import SystemCommandEngine, JobManager
@@ -34,6 +34,7 @@ from backend.memory_engine import MemoryEngine
 from backend.network_engine import NetworkEngine
 from backend.device_engine import DeviceEngine
 from backend.stress_engine import StressEngine
+from backend.stress_bench_engine import StressBenchEngine
 
 
 class WinShieldRequestHandler(BaseHTTPRequestHandler):
@@ -48,7 +49,7 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             self._serve_file("winshield_pro_dashboard.html", "text/html; charset=utf-8")
             return
 
-        elif url_path in ("/splash_backdrop.webp", "/splash_backdrop.png", "/splash_logo.webp", "/splash_logo.png", "/splash_bg.png", "/splash_bg.webp") or url_path.startswith("/imagens/"):
+        elif url_path.startswith("/imagens/"):
             fname = url_path.lstrip("/").replace("/", os.sep)
             mime = "image/png"
             if fname.endswith(".ico"):
@@ -73,6 +74,7 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
         elif url_path == "/api/status":
             self._send_json({
                 "admin": is_admin(),
+                "version": APP_VERSION,
                 "os": sys.platform,
                 "timestamp": datetime.now().strftime("%H:%M:%S")
             })
@@ -199,6 +201,15 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "success", "downloads": status_data})
 
         # --- TESTE DE ESTABILIDADE DO SISTEMA (STRESSPULSE) ---
+        elif url_path == "/api/stressbench/status":
+            self._send_json({"status": "success", "bench": StressBenchEngine.get_status()})
+
+        elif url_path == "/api/power/details":
+            self._send_json({"status": "success", "details": PowerEngine.get_details(force="force=1" in self.path)})
+
+        elif url_path == "/api/optimize/state":
+            self._send_json({"status": "success", "state": OptimizerEngine.get_tweak_states()})
+
         elif url_path == "/api/stress/status":
             st = StressEngine.get_status()
             self._send_json({"status": "success", "stress": st})
@@ -320,8 +331,8 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
 
         # --- MOTOR DE DIAGNÓSTICO & TESTE DE MEMÓRIA (RAMGUARD MATRIX) ---
         elif url_path == "/api/memory/test/start":
-            size_mb = data.get("size_mb", 1024)
-            passes = data.get("passes", 1)
+            size_mb = data.get("size_mb", 0)
+            passes = data.get("passes")
             mode = data.get("mode", "quick")
             ok, msg = MemoryEngine.start_memory_test(size_mb=size_mb, passes=passes, mode=mode)
             self._send_json({"status": "success" if ok else "error", "message": msg})
@@ -397,11 +408,16 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             ok, msg = PowerEngine.delete_guid(guid)
             self._send_json({"status": "success" if ok else "error", "message": msg})
 
+        elif url_path == "/api/power/setting":
+            ok, msg = PowerEngine.set_setting(data.get("key"), data.get("value"), bool(data.get("apply_dc")))
+            self._send_json({"status": "success" if ok else "error", "message": msg,
+                             "details": PowerEngine.get_details(force=True)})
+
         elif url_path == "/api/power/create":
             name = data.get("name", "WinShield Turbo LowLatency")
             mon = data.get("monitor", 0)
             sleep = data.get("standby", 0)
-            ok, msg = PowerEngine.create_custom(name, mon, sleep)
+            ok, msg = PowerEngine.create_custom(name, mon, sleep, data.get("cpu_min", 100), data.get("cpu_max", 100))
             self._send_json({"status": "success" if ok else "error", "message": msg})
 
         # --- OTIMIZAÇÃO & DEBLOAT ---
@@ -414,7 +430,8 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
                     "status": "success" if ok else "error",
                     "title": title,
                     "output": out,
-                    "elapsed": elapsed
+                    "elapsed": elapsed,
+                    "state": OptimizerEngine.get_tweak_states().get(task),
                 })
             else:
                 ok, msg = OptimizerEngine.run(task)
@@ -509,9 +526,45 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "success" if ok else "error", "message": msg})
 
         # --- TESTE DE ESTABILIDADE DO SISTEMA (STRESSPULSE) ---
+        elif url_path == "/api/sensors/lhm/start":
+            from backend.telemetry import find_lhm
+            exe = find_lhm()
+            if not exe:
+                self._send_json({"status": "error", "message": "LibreHardwareMonitor não encontrado neste PC."})
+            else:
+                try:
+                    import ctypes
+                    # "runas": o LibreHardwareMonitor precisa de administrador para carregar o driver de sensores
+                    rc = ctypes.windll.shell32.ShellExecuteW(None, "runas", exe, None, os.path.dirname(exe), 7)
+                    ok = rc > 32
+                except Exception:
+                    ok = False
+                self._send_json({"status": "success" if ok else "error",
+                                 "message": "LibreHardwareMonitor aberto. As ventoinhas aparecem em alguns segundos." if ok
+                                 else "Não foi possível abrir o LibreHardwareMonitor (permissão negada)."})
+
+        elif url_path == "/api/sensors/lhm/site":
+            try:
+                os.startfile("https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/releases")
+                self._send_json({"status": "success"})
+            except Exception as ex:
+                self._send_json({"status": "error", "message": str(ex)})
+
+        elif url_path == "/api/stressbench/start":
+            ok, msg = StressBenchEngine.start(data.get("preset", "padrao"), data.get("loops"), data.get("loop_sec"))
+            self._send_json({"status": "success" if ok else "error", "message": msg})
+
+        elif url_path == "/api/stressbench/stop":
+            ok, msg = StressBenchEngine.stop()
+            self._send_json({"status": "success" if ok else "error", "message": msg})
+
         elif url_path == "/api/stress/start":
             ok, msg = StressEngine.start_test(data)
             self._send_json({"status": "success" if ok else "error", "message": msg})
+
+        elif url_path == "/api/stress/gpu_report":
+            StressEngine.report_gpu_client(fps=data.get("fps"), renderer=data.get("renderer"))
+            self._send_json({"status": "success"})
 
         elif url_path == "/api/stress/stop":
             ok, msg = StressEngine.stop_test()
@@ -601,11 +654,42 @@ def find_free_port(preferred=None):
     return port
 
 
+def _app_data_dir(*parts):
+    path = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), "WinShieldPro", *parts)
+    os.makedirs(path, exist_ok=True)
+    return path
+
+
+def run_native_window(url):
+    """
+    Janela nativa do próprio aplicativo (pywebview + Microsoft WebView2).
+    O processo do WinShield é dono da janela: perfil isolado em %LOCALAPPDATA%/WinShieldPro,
+    sem extensões e sem depender do navegador instalado. Bloqueia até a janela ser fechada.
+    Retorna False se o WebView2/pywebview não estiver disponível.
+    """
+    try:
+        import webview
+    except Exception as ex:
+        LogManager.add_log(f"[AVISO] Janela nativa indisponível ({ex}); usando o modo de compatibilidade.")
+        return False
+    try:
+        webview.create_window(
+            f"WinShield Pro {APP_VERSION}", url,
+            width=1440, height=900, min_size=(1100, 700),
+            maximized=True, background_color="#0b0d11", text_select=True,
+        )
+        webview.start(gui="edgechromium", private_mode=False,
+                      storage_path=_app_data_dir("WebView2"), debug=False)
+        return True
+    except Exception as ex:
+        LogManager.add_log(f"[AVISO] Falha ao iniciar o WebView2 ({ex}); usando o modo de compatibilidade.")
+        return False
+
+
 def launch_desktop_window(url):
     """
-    Abre o aplicativo em uma janela Desktop limpa (Modo App do Edge / Chrome).
-    Sem barra de ferramentas, sem abas, parecendo um software nativo premium.
-    Executado de forma limpa sem console.
+    Modo de compatibilidade: Edge/Chrome em modo app, com perfil PRÓPRIO e isolado
+    (não usa o perfil, as extensões nem as sessões do navegador do usuário).
     """
     edge_paths = [
         os.path.expandvars(r"%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"),
@@ -617,25 +701,26 @@ def launch_desktop_window(url):
     for ep in edge_paths:
         if os.path.exists(ep):
             try:
-                subprocess.Popen(
+                return subprocess.Popen(
                     [
                         ep,
                         f"--app={url}",
-                        "--window-size=1400,900",
+                        f"--user-data-dir={_app_data_dir('BrowserProfile')}",
                         "--start-maximized",
-                        "--disable-features=msEdgeWebWidget,msEdgeVisualSearch,msEdgeSidebarV2,msHubWindowDragDrop,msEdgeTranslate",
-                        "--disable-context-menu",
+                        "--disable-extensions",
+                        "--disable-sync",
+                        "--disable-features=msEdgeWebWidget,msEdgeVisualSearch,msEdgeSidebarV2,msHubWindowDragDrop,msEdgeTranslate,Translate",
                         "--no-first-run",
-                        "--no-default-browser-check"
+                        "--no-default-browser-check",
                     ],
                     close_fds=True
                 )
-                return
             except Exception:
                 pass
 
     import webbrowser
     webbrowser.open(url)
+    return None
 
 
 def main():
@@ -647,7 +732,7 @@ def main():
     server = ThreadingHTTPServer(('127.0.0.1', port), WinShieldRequestHandler)
     app_url = f"http://127.0.0.1:{port}/"
 
-    LogManager.add_log("=== WINSHIELD PRO v6.2 ENTERPRISE INICIADO ===")
+    LogManager.add_log(f"=== WINSHIELD PRO v{APP_VERSION} INICIADO ===")
     if is_admin():
         LogManager.add_log("[OK] Executando com Privilégios Totais de Administrador (UAC Elevado).")
     else:
@@ -658,16 +743,26 @@ def main():
     threading.Thread(target=lambda: SystemEngine.static_info(), daemon=True).start()
     threading.Thread(target=lambda: DiskHealthEngine.scan(), daemon=True).start()
 
-    # Lança a janela desktop
-    threading.Thread(target=lambda: launch_desktop_window(app_url), daemon=True).start()
+    # Servidor local em segundo plano; a janela fica no thread principal
+    threading.Thread(target=server.serve_forever, daemon=True, name="http").start()
+    print(f"[WINSHIELD PRO] Servidor local ativo em {app_url}")
 
-    print(f"[WINSHIELD PRO] Servidor Desktop Ativo em {app_url}")
+    if run_native_window(app_url):
+        # Janela fechada pelo usuário: encerra tudo (inclusive testes em andamento)
+        server.shutdown()
+        os._exit(0)
+
+    # Modo de compatibilidade: navegador em modo app com perfil isolado
+    launch_desktop_window(app_url)
     try:
-        server.serve_forever()
+        while True:
+            time.sleep(3600)
     except KeyboardInterrupt:
-        print("\n[WINSHIELD PRO] Encerrando aplicação...")
+        print("[WINSHIELD PRO] Encerrando aplicação...")
         server.shutdown()
 
 
 if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
     main()

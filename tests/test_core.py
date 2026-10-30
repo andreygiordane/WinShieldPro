@@ -4,7 +4,7 @@ from backend.core import base_dir, resource_path, app_data_dir, APP_NAME, APP_VE
 
 def test_app_constants():
     assert APP_NAME == "WinShield Pro"
-    assert APP_VERSION == "6.2"
+    assert APP_VERSION == "7.0"
 
 
 def test_base_dir_exists():

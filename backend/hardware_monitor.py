@@ -87,24 +87,75 @@ def _parse_cpu_caption(caption):
 
 
 def _get_cpu_instructions():
-    """Identifica conjunto de instruções suportadas via kernel32 IsProcessorFeaturePresent."""
+    """Conjunto de instruções confirmado pelo kernel (IsProcessorFeaturePresent). Nada é presumido."""
     if IS_WINDOWS and ctypes:
         k32 = ctypes.windll.kernel32
-        features = {
-            3: "MMX", 6: "SSE", 10: "SSE2", 13: "SSE3", 36: "SSSE3",
-            37: "SSE4.1", 38: "SSE4.2", 39: "AVX", 40: "AVX2"
-        }
+        features = [
+            (3, "MMX"), (6, "SSE"), (10, "SSE2"), (13, "SSE3"), (36, "SSSE3"),
+            (37, "SSE4.1"), (38, "SSE4.2"), (39, "AVX"), (40, "AVX2"), (41, "AVX-512F"),
+            (14, "CMPXCHG16B"), (17, "NX"), (28, "RDRAND"), (32, "RDTSCP"), (20, "SLAT"),
+        ]
         present = []
-        for fid, name in features.items():
+        for fid, name in features:
             try:
                 if k32.IsProcessorFeaturePresent(fid):
                     present.append(name)
             except Exception:
                 pass
-        if "AVX2" in present:
-            present.extend(["FMA3", "BMI1", "BMI2", "AES", "SHA"])
         return ["x86-64"] + present
-    return ["x86-64", "MMX", "SSE", "SSE2", "SSE3", "SSSE3", "SSE4.1", "SSE4.2", "AVX", "AVX2"]
+    return ["x86-64"]
+
+
+def _get_cache_topology():
+    """Lê a hierarquia real de caches via GetLogicalProcessorInformation."""
+    if not (IS_WINDOWS and ctypes):
+        return None
+
+    class CACHE_DESCRIPTOR(ctypes.Structure):
+        _fields_ = [("Level", ctypes.c_ubyte), ("Associativity", ctypes.c_ubyte),
+                    ("LineSize", ctypes.c_ushort), ("Size", ctypes.c_ulong), ("Type", ctypes.c_int)]
+
+    class _U(ctypes.Union):
+        _fields_ = [("Cache", CACHE_DESCRIPTOR), ("Reserved", ctypes.c_ulonglong * 2)]
+
+    class SLPI(ctypes.Structure):
+        _fields_ = [("ProcessorMask", ctypes.c_size_t), ("Relationship", ctypes.c_int), ("u", _U)]
+
+    try:
+        k32 = ctypes.windll.kernel32
+        size = wintypes.DWORD(0)
+        k32.GetLogicalProcessorInformation(None, ctypes.byref(size))
+        n = size.value // ctypes.sizeof(SLPI)
+        arr = (SLPI * n)()
+        if not k32.GetLogicalProcessorInformation(arr, ctypes.byref(size)):
+            return None
+        caches = {}
+        cores = 0
+        for e in arr:
+            if e.Relationship == 0:   # RelationProcessorCore
+                cores += 1
+            elif e.Relationship == 2:  # RelationCache
+                c = e.u.Cache
+                kind = {0: "U", 1: "I", 2: "D", 3: "T"}.get(c.Type, "U")
+                key = (c.Level, kind)
+                d = caches.setdefault(key, {"count": 0, "size": c.Size, "ways": c.Associativity, "line": c.LineSize})
+                d["count"] += 1
+        return {"caches": caches, "cores": cores}
+    except Exception:
+        return None
+
+
+def _fmt_cache(entry):
+    if not entry:
+        return "—"
+    kb = entry["size"] // 1024
+    ways = f", {entry['ways']}-way" if entry.get("ways") and entry["ways"] != 0xFF else ""
+    total = entry["count"] * kb
+    total_s = f"{round(total / 1024, 1)} MB" if total >= 1024 else f"{total} KB"
+    size_s = f"{round(kb / 1024, 1)} MB" if kb >= 1024 else f"{kb} KB"
+    if entry["count"] > 1:
+        return f"{entry['count']} x {size_s} ({total_s}{ways})"
+    return f"{size_s}{ways}"
 
 
 # ==============================================================================
@@ -225,8 +276,17 @@ class CoreEngine:
 
         slots_total = int(raw.get("MemoryDevices") or 0) or max(len(mem_modules), 2)
 
-        l2_str = f"{cores} x {l2 // cores} KB ({round(l2 / 1024, 1)} MB)" if (l2 and cores) else (f"{l2} KB" if l2 else "—")
-        l3_str = f"{round(l3 / 1024, 1)} MB ({l3} KB)" if l3 else "—"
+        topo = _get_cache_topology()
+        if topo and topo["caches"]:
+            cc = topo["caches"]
+            l1d_str = _fmt_cache(cc.get((1, "D")))
+            l1i_str = _fmt_cache(cc.get((1, "I")))
+            l2_str = _fmt_cache(cc.get((2, "U")) or cc.get((2, "D")))
+            l3_str = _fmt_cache(cc.get((3, "U")) or cc.get((3, "D")))
+        else:
+            l1d_str = l1i_str = "—"
+            l2_str = f"{l2} KB (total)" if l2 else "—"
+            l3_str = f"{round(l3 / 1024, 1)} MB ({l3} KB)" if l3 else "—"
         mult_val = round(max_clock / bus_clock, 1) if (max_clock and bus_clock) else 0
 
         board_man = (raw.get("BoardMan") or hw_fallback.get("board_manufacturer") or "—").replace("Default string", "").strip() or "—"
@@ -252,8 +312,8 @@ class CoreEngine:
                 "instructions": " ".join(instructions)
             },
             "caches": {
-                "l1_data": f"{cores} x 32 KB" if cores else "—",
-                "l1_inst": f"{cores} x 32 KB" if cores else "—",
+                "l1_data": l1d_str,
+                "l1_inst": l1i_str,
                 "l2": l2_str,
                 "l3": l3_str
             },
@@ -299,13 +359,11 @@ class CoreEngine:
 
     @staticmethod
     def _get_live_clock():
-        """Obtém clock instantâneo do processador via Registro do Windows."""
-        if not winreg:
-            return 0
+        """Clock efetivo atual (mesma métrica do Gerenciador de Tarefas: % Processor Performance)."""
         try:
-            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"HARDWARE\DESCRIPTION\System\CentralProcessor\0") as k:
-                val, _ = winreg.QueryValueEx(k, "~MHz")
-                return int(val)
+            from backend.telemetry import Telemetry
+            snap = Telemetry.cpu_snapshot(min_interval=0.5)
+            return int(snap.get("avg_clock") or 0)
         except Exception:
             return 0
 
@@ -314,17 +372,22 @@ class CoreEngine:
 # BENCHMARK WINSHIELD CORE-ENGINE (TESTE MULTI-THREAD & SINGLE-THREAD)
 # ==============================================================================
 class CoreBenchmarkEngine:
+    """
+    Benchmark de CPU WinShield (single e multi-thread) com cargas nativas que liberam o GIL:
+      * SHA-256 (inteiros/ALU)      * zlib nível 6 (ramificações, cache, memória)
+      * BLAKE2b (ALU 64 bits)       * NumPy float64 (FPU/SIMD) quando disponível
+    Cada fase: 3 s de aquecimento (turbo/estabilização, descartado) + 20 s medidos,
+    com uma amostra de vazão por segundo para medir a consistência (coef. de variação).
+    A pontuação é baseada em MB/s processados e é proporcional ao desempenho real:
+    o fator multi/single reflete de fato o número de núcleos efetivos.
+    """
     _lock = threading.Lock()
     _running = False
+    WARMUP_SEC = 3.0
+    MEASURE_SEC = 20.0
     _last_results = {
-        "single_thread": 0.0,
-        "multi_thread": 0.0,
-        "ratio": 0.0,
-        "running": False,
-        "phase": "idle",
-        "progress": 0,
-        "reference_cpu": "",
-        "timestamp": None
+        "single_thread": 0.0, "multi_thread": 0.0, "ratio": 0.0, "running": False,
+        "phase": "idle", "progress": 0, "reference_cpu": "", "timestamp": None, "details": {},
     }
 
     @classmethod
@@ -333,110 +396,136 @@ class CoreBenchmarkEngine:
             return dict(cls._last_results)
 
     @classmethod
-    def run_benchmark(cls, duration_sec=3.0):
+    def run_benchmark(cls, duration_sec=None):
+        from backend.stress_bench_engine import StressBenchEngine
+        from backend.stress_engine import StressEngine
+        if StressBenchEngine._running or StressEngine._running:
+            return False, "Há um teste de carga em execução. Pare-o antes do benchmark de CPU para não falsear o resultado."
         with cls._lock:
             if cls._running:
                 return False, "Benchmark de CPU já está em execução."
             cls._running = True
-            cpu_name = SystemEngine.static_info().get("cpu", "CPU Local")
+            cpu_name = SystemEngine.static_info().get("cpu", "CPU")
             cls._last_results = {
-                "single_thread": 0.0,
-                "multi_thread": 0.0,
-                "ratio": 0.0,
-                "running": True,
-                "phase": "single",
-                "progress": 10,
-                "reference_cpu": cpu_name,
-                "timestamp": None
+                "single_thread": 0.0, "multi_thread": 0.0, "ratio": 0.0, "running": True,
+                "phase": "single", "progress": 1, "reference_cpu": cpu_name, "timestamp": None, "details": {},
+                "measure_sec": cls.MEASURE_SEC,
             }
-
-        def worker():
-            try:
-                LogManager.add_log("=== INICIANDO BENCHMARK WINSHIELD CORE-ENGINE ===")
-                num_cores = os.cpu_count() or 4
-                cpu_name_local = SystemEngine.static_info().get("cpu", "CPU Local")
-
-                # 1. Single Thread Test
-                LogManager.add_log("[CPU BENCH] Testando desempenho Single-Thread...")
-                single_score = cls._bench_single(duration_sec=2.0)
-
-                with cls._lock:
-                    cls._last_results["single_thread"] = round(single_score, 1)
-                    cls._last_results["phase"] = "multi"
-                    cls._last_results["progress"] = 50
-
-                # 2. Multi Thread Test
-                LogManager.add_log(f"[CPU BENCH] Testando desempenho Multi-Thread ({num_cores} Threads)...")
-                multi_score = cls._bench_multi(num_cores, duration_sec=2.5)
-
-                ratio = round(multi_score / max(1.0, single_score), 2)
-
-                with cls._lock:
-                    cls._last_results = {
-                        "single_thread": round(single_score, 1),
-                        "multi_thread": round(multi_score, 1),
-                        "ratio": ratio,
-                        "running": False,
-                        "phase": "completed",
-                        "progress": 100,
-                        "reference_cpu": f"{cpu_name_local} ({num_cores}T)",
-                        "timestamp": time.strftime("%H:%M:%S")
-                    }
-                LogManager.add_log(f"[CPU BENCH CONCLUÍDO] Single: {single_score:.1f} | Multi: {multi_score:.1f} | Ratio: {ratio}x")
-            except Exception as e:
-                LogManager.add_log(f"[ERRO CPU BENCH] {e}")
-            finally:
-                with cls._lock:
-                    cls._running = False
-                    cls._last_results["running"] = False
-
-        t = threading.Thread(target=worker, daemon=True)
-        t.start()
-        return True, "Benchmark de CPU iniciado."
-
-    @staticmethod
-    def _math_workload(iterations=120000):
-        """Cálculos intensivos reais de ponto flutuante e raízes."""
-        val = 1.000001
-        for i in range(1, iterations):
-            val = math.sin(val) * math.cos(val) + math.sqrt(i)
-        return val
+        threading.Thread(target=cls._worker, daemon=True).start()
+        return True, "Benchmark de CPU iniciado (≈ 50 s)."
 
     @classmethod
-    def _bench_single(cls, duration_sec=2.0):
-        t_start = time.perf_counter()
-        t_end = t_start + duration_sec
-        ops = 0
-        while time.perf_counter() < t_end:
-            cls._math_workload(iterations=25000)
-            ops += 1
-        elapsed = max(0.001, time.perf_counter() - t_start)
-        return (ops / elapsed) * 22.5
+    def _worker(cls):
+        try:
+            threads = os.cpu_count() or 4
+            LogManager.add_log("=== BENCHMARK DE CPU WINSHIELD (3 s aquecimento + 20 s por fase) ===")
+            single = cls._run_phase(1, progress_from=1, progress_to=48, phase="single")
+            with cls._lock:
+                cls._last_results["single_thread"] = single["score"]
+                cls._last_results["details"]["single"] = single
+                cls._last_results["phase"] = "multi"
+            multi = cls._run_phase(threads, progress_from=50, progress_to=99, phase="multi")
+            ratio = round(multi["score"] / max(1e-9, single["score"]), 2)
+            with cls._lock:
+                cls._last_results.update({
+                    "single_thread": single["score"], "multi_thread": multi["score"], "ratio": ratio,
+                    "running": False, "phase": "completed", "progress": 100,
+                    "reference_cpu": f"{SystemEngine.static_info().get('cpu', 'CPU')} ({threads}T)",
+                    "timestamp": time.strftime("%d/%m/%Y %H:%M:%S"),
+                })
+                cls._last_results["details"]["multi"] = multi
+            LogManager.add_log(f"[CPU BENCH] Single: {single['score']} | Multi: {multi['score']} | Escala: {ratio}x em {threads} threads")
+        except Exception as e:
+            LogManager.add_log(f"[ERRO CPU BENCH] {e}")
+            with cls._lock:
+                cls._last_results["phase"] = "error"
+        finally:
+            with cls._lock:
+                cls._running = False
+                cls._last_results["running"] = False
 
     @classmethod
-    def _bench_multi(cls, threads, duration_sec=2.5):
-        t_start = time.perf_counter()
-        t_end = t_start + duration_sec
-        total_ops = [0] * threads
+    def _run_phase(cls, n_threads, progress_from, progress_to, phase):
+        import hashlib
+        import zlib
+        try:
+            import numpy as np
+        except ImportError:
+            np = None
+        counters = [dict(sha=0, z=0, b2=0, fp=0) for _ in range(n_threads)]
+        state = {"measuring": False, "stop": False}
 
-        def thread_task(idx):
-            ops = 0
-            while time.perf_counter() < t_end:
-                cls._math_workload(iterations=25000)
-                ops += 1
-            total_ops[idx] = ops
+        def work(idx):
+            seed = (idx * 2654435761) & 0xFFFFFFFF
+            raw = bytes((seed + i * 131) & 0xFF for i in range(4096)) * 256       # 1 MiB
+            text = (b"WinShield benchmark " * 13108)[:262144]                      # 256 KiB compressível
+            arr = np.linspace(0.1, 100.0, 65536) if np is not None else None
+            c = counters[idx]
+            while not state["stop"]:
+                hashlib.sha256(raw).digest()
+                hashlib.blake2b(raw).digest()
+                zlib.compress(text, 6)
+                if arr is not None:
+                    np.sqrt(np.sin(arr) * np.cos(arr) + arr)
+                if state["measuring"]:
+                    c["sha"] += len(raw)
+                    c["b2"] += len(raw)
+                    c["z"] += len(text)
+                    if arr is not None:
+                        c["fp"] += arr.size
 
-        with ThreadPoolExecutor(max_workers=threads) as executor:
-            list(executor.map(thread_task, range(threads)))
-
-        elapsed = max(0.001, time.perf_counter() - t_start)
-        return (sum(total_ops) / elapsed) * 22.5
+        pool = [threading.Thread(target=work, args=(i,), daemon=True) for i in range(n_threads)]
+        for t in pool:
+            t.start()
+        t0 = time.perf_counter()
+        total = cls.WARMUP_SEC + cls.MEASURE_SEC
+        measure_t0 = None
+        per_sec = []            # vazão SHA-256 (MB/s) a cada segundo medido
+        last_mark = None
+        while True:
+            el = time.perf_counter() - t0
+            if el >= cls.WARMUP_SEC and not state["measuring"]:
+                for c in counters:
+                    c.update(sha=0, z=0, b2=0, fp=0)
+                state["measuring"] = True
+                measure_t0 = time.perf_counter()
+                last_mark = (measure_t0, 0)
+            if last_mark and time.perf_counter() - last_mark[0] >= 1.0:
+                now, cur = time.perf_counter(), sum(c["sha"] for c in counters)
+                per_sec.append((cur - last_mark[1]) / (now - last_mark[0]) / 1e6)
+                last_mark = (now, cur)
+            if el >= total:
+                break
+            with cls._lock:
+                cls._last_results["progress"] = int(progress_from + (progress_to - progress_from) * el / total)
+                cls._last_results["phase"] = phase
+            time.sleep(0.1)
+        state["stop"] = True
+        dur = time.perf_counter() - (measure_t0 or t0)
+        for t in pool:
+            t.join(timeout=2)
+        sha = sum(c["sha"] for c in counters) / dur / 1e6
+        b2 = sum(c["b2"] for c in counters) / dur / 1e6
+        z = sum(c["z"] for c in counters) / dur / 1e6
+        fp = sum(c["fp"] for c in counters) / dur / 1e6
+        # Pontuação: soma ponderada das taxas (MB/s), escala 1x = referência interna
+        score = round(sha * 0.35 + b2 * 0.25 + z * 0.6 + fp * 0.8, 1)
+        # Consistência: coeficiente de variação das amostras de 1 s (baixo = resultado confiável)
+        cv = None
+        if len(per_sec) >= 3:
+            mean = sum(per_sec) / len(per_sec)
+            var = sum((x - mean) ** 2 for x in per_sec) / (len(per_sec) - 1)
+            cv = round((var ** 0.5) / mean * 100, 1) if mean > 0 else None
+        return {"threads": n_threads, "seconds": round(dur, 2), "score": score,
+                "sha256_mb_s": round(sha, 1), "blake2b_mb_s": round(b2, 1),
+                "zlib_mb_s": round(z, 1), "fpu_melem_s": round(fp, 1),
+                "samples": len(per_sec), "variation_pct": cv}
 
 
 def _detect_gpu_architecture(name):
     n = (name or "").upper()
     if "5090" in n or "5080" in n or "5070" in n:
-        return {"chip": "NVIDIA Blackwell", "technology": "4 nm TSMC", "die_size": "—", "transistors": "Blackwell GPU", "cuda_cores": "CUDA Cores (Blackwell)", "tmus": "—", "rops": "—", "memory_type": "GDDR7", "bus_width": "256-bit+", "bandwidth": "PCIe 5.0", "directx": "12 Ultimate"}
+        return {"chip": "NVIDIA Blackwell", "technology": "4 nm TSMC", "die_size": "—", "transistors": "—", "cuda_cores": "CUDA Cores (Blackwell)", "tmus": "—", "rops": "—", "memory_type": "GDDR7", "bus_width": "256-bit+", "bandwidth": "PCIe 5.0", "directx": "12 Ultimate"}
     elif "4090" in n:
         return {"chip": "AD102 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "608 mm²", "transistors": "76.300 Milhões", "cuda_cores": "16384 CUDA Cores", "tmus": "512", "rops": "176", "memory_type": "GDDR6X", "bus_width": "384-bit", "bandwidth": "1008 GB/s", "directx": "12 Ultimate"}
     elif "4080" in n:
@@ -458,11 +547,11 @@ def _detect_gpu_architecture(name):
     elif "1660" in n or "1650" in n or "2060" in n or "2070" in n or "2080" in n:
         return {"chip": "NVIDIA Turing Architecture", "technology": "12 nm (TSMC)", "die_size": "284 mm²", "transistors": "6.600+ Milhões", "cuda_cores": "Turing Shading Units", "tmus": "—", "rops": "—", "memory_type": "GDDR6", "bus_width": "128/192/256-bit", "bandwidth": "PCIe 3.0 x16", "directx": "12"}
     elif "NVIDIA" in n or "GEFORCE" in n or "QUADRO" in n:
-        return {"chip": "NVIDIA GPU Architecture", "technology": "TSMC / Samsung FinFET", "die_size": "—", "transistors": "NVIDIA GPU", "cuda_cores": "NVIDIA CUDA Cores", "tmus": "—", "rops": "—", "memory_type": "GDDR", "bus_width": "PCIe", "bandwidth": "PCIe Bus", "directx": "12"}
+        return {"chip": "NVIDIA GPU Architecture", "technology": "TSMC / Samsung FinFET", "die_size": "—", "transistors": "—", "cuda_cores": "NVIDIA CUDA Cores", "tmus": "—", "rops": "—", "memory_type": "GDDR", "bus_width": "PCIe", "bandwidth": "PCIe Bus", "directx": "12"}
     elif "RADEON" in n or "RX " in n or "AMD" in n:
-        return {"chip": "AMD Radeon Architecture", "technology": "TSMC FinFET (7nm/6nm/5nm)", "die_size": "—", "transistors": "AMD RDNA / GCN", "cuda_cores": "Stream Processors", "tmus": "—", "rops": "—", "memory_type": "GDDR6 / VRAM", "bus_width": "PCIe Bus", "bandwidth": "PCIe x16", "directx": "12 Ultimate"}
+        return {"chip": "AMD Radeon Architecture", "technology": "TSMC FinFET (7nm/6nm/5nm)", "die_size": "—", "transistors": "—", "cuda_cores": "Stream Processors", "tmus": "—", "rops": "—", "memory_type": "GDDR6 / VRAM", "bus_width": "PCIe Bus", "bandwidth": "PCIe x16", "directx": "12 Ultimate"}
     elif "INTEL" in n or "IRIS" in n or "ARC" in n or "UHD" in n or "HD GRAPHICS" in n:
-        return {"chip": "Intel Graphics Architecture", "technology": "Intel FinFET / Xe", "die_size": "Integrada / Dedicada", "transistors": "Intel GPU", "cuda_cores": "Execution Units (EUs)", "tmus": "—", "rops": "—", "memory_type": "VRAM / Memória Compartilhada", "bus_width": "Dual-Channel / PCIe", "bandwidth": "System Memory / PCIe", "directx": "12"}
+        return {"chip": "Intel Graphics Architecture", "technology": "Intel FinFET / Xe", "die_size": "Integrada / Dedicada", "transistors": "—", "cuda_cores": "Execution Units (EUs)", "tmus": "—", "rops": "—", "memory_type": "VRAM / Memória Compartilhada", "bus_width": "Dual-Channel / PCIe", "bandwidth": "System Memory / PCIe", "directx": "12"}
     else:
         return {"chip": "Controlador Gráfico do Sistema", "technology": "—", "die_size": "—", "transistors": "—", "cuda_cores": "Shading Units", "tmus": "—", "rops": "—", "memory_type": "VRAM", "bus_width": "—", "bandwidth": "PCIe / Integrado", "directx": "12"}
 
@@ -661,7 +750,7 @@ class VisionEngine:
                     m_clock = _safe_float(parts[6])
 
                     sensors["temperature_gpu"] = int(temp)
-                    sensors["temperature_hotspot"] = int(temp + 8) if temp > 0 else 0
+                    sensors["temperature_hotspot"] = 0  # nvidia-smi não expõe hotspot; não estimamos
                     sensors["gpu_usage_percent"] = int(util)
                     sensors["memory_used_mb"] = int(m_used)
                     sensors["memory_total_mb"] = int(m_total)

@@ -1,0 +1,82 @@
+<section id="view-maintenance" class="view-panel hidden ws-page">
+
+                <!-- ROTINA COMPLETA -->
+                <div class="ws-card">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div>
+                            <div class="ws-card-title text-[15px]">Rotina de manutenção completa</div>
+                            <div class="ws-card-sub max-w-3xl">Executa em sequência: ponto de restauração, liberação de RAM, TRIM, SFC e DISM. Cada etapa só aparece como concluída se o comando terminar com código 0.</div>
+                            <div class="ws-stat-foot mt-2">Duração típica: 15 a 45 minutos (SFC e DISM ocupam quase todo o tempo). Mantenha o computador ligado até o fim.</div>
+                        </div>
+                        <button onclick="runCompleteOptimizationPipeline()" class="ws-btn primary lg flex-shrink-0">Iniciar rotina completa</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 2xl:grid-cols-3 gap-3">
+                    <!-- REPARO -->
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div>
+                                <div class="ws-card-title">Reparo do sistema</div>
+                                <div class="ws-card-sub">Ferramentas oficiais da Microsoft.</div>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">SFC /SCANNOW</div><div class="ws-row-hint">Verifica e repara arquivos protegidos do Windows · 5–20 min</div></div>
+                            <button onclick="runSingleOptimizationModal('sfc')" class="ws-btn sm">Executar</button>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">DISM RestoreHealth</div><div class="ws-row-hint">Repara a imagem de componentes usada pelo SFC · 5–30 min</div></div>
+                            <button onclick="runSingleOptimizationModal('dism')" class="ws-btn sm">Executar</button>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">CHKDSK online (C:)</div><div class="ws-row-hint">Verifica o sistema de arquivos NTFS sem reiniciar · 1–10 min</div></div>
+                            <button onclick="runSingleOptimizationModal('chkdsk')" class="ws-btn sm">Executar</button>
+                        </div>
+                    </div>
+
+                    <!-- LIMPEZA E ARMAZENAMENTO -->
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div>
+                                <div class="ws-card-title">Armazenamento e memória</div>
+                                <div class="ws-card-sub">Ações pontuais: não deixam configuração gravada.</div>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">TRIM dos SSDs</div><div class="ws-row-hint">Envia o ReTrim a todas as unidades fixas · menos de 1 min</div></div>
+                            <button onclick="runSingleOptimizationModal('trim')" class="ws-btn sm">Executar</button>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">Limpeza do WinSxS</div><div class="ws-row-hint">Remove componentes substituídos por atualizações · 2–15 min</div></div>
+                            <button onclick="runSingleOptimizationModal('dism_cleanup')" class="ws-btn sm">Executar</button>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">Liberar memória RAM</div><div class="ws-row-hint">Esvazia o working set dos processos sem fechá-los</div></div>
+                            <button onclick="runSingleOptimizationModal('clean_ram')" class="ws-btn sm">Executar</button>
+                        </div>
+                    </div>
+
+                    <!-- SEGURANÇA E REDE -->
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div>
+                                <div class="ws-card-title">Segurança e rede</div>
+                                <div class="ws-card-sub">Recomendado criar um ponto de restauração antes de qualquer alteração.</div>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">Ponto de restauração</div><div class="ws-row-hint">Cria um snapshot do Windows para desfazer alterações</div></div>
+                            <button onclick="runSingleOptimizationModal('restore_point')" class="ws-btn sm">Criar</button>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0"><div class="ws-row-label">Redefinir pilha de rede</div><div class="ws-row-hint">Winsock, TCP/IP, DHCP e cache DNS · exige reiniciar</div></div>
+                            <button onclick="runSingleOptimizationModal('network_reset')" class="ws-btn sm danger">Executar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- VIEW 9: TERMINAL (CMD & POWERSHELL ADMINISTRATIVO) -->
+            <!-- ============================================================= -->

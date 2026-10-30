@@ -1,364 +1,169 @@
-<section id="view-disk-health" class="view-panel hidden space-y-6">
-                <!-- BARRA DE SELEÇÃO DE DISCOS -->
-                <div
-                    class="bg-dark-850 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex items-center gap-2 overflow-x-auto" id="disk-health-selector-bar">
-                        <!-- Botões dos discos inseridos via JS -->
-                    </div>
-                    <button onclick="refreshDiskHealth(true)"
-                        class="btn-action-secondary flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i>
-                        <span data-i18n="disk_health.btn_rescan">Reescanear Discos</span>
-                    </button>
+<section id="view-disk-health" class="view-panel hidden ws-page">
+
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="ws-chips" id="disk-health-selector-bar"></div>
+                    <button onclick="refreshDiskHealth(true)" class="ws-btn sm"><span data-i18n="disk_health.btn_rescan">Reler discos</span></button>
                 </div>
 
-                <!-- SUB-MENU INTERNO DE SAÚDE DOS DISCOS (WINSHIELD DISKGUARD & SURFACESCAN) -->
-                <div
-                    class="bg-dark-850 p-3 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3">
-                    <div class="flex items-center gap-2 overflow-x-auto">
-                        <button onclick="switchDiskHealthSubTab('sentinel')" id="dh-subtab-btn-sentinel"
-                            class="subtab-btn dh-subtab-btn active">
-                            <i data-lucide="heart-pulse" class="w-3.5 h-3.5"></i>
-                            <span>WinShield DiskGuard</span>
-                        </button>
-                        <button onclick="switchDiskHealthSubTab('smart')" id="dh-subtab-btn-smart"
-                            class="subtab-btn dh-subtab-btn">
-                            <i data-lucide="list-checks" class="w-3.5 h-3.5"></i>
-                            <span data-i18n="disk_health.tab_smart">S.M.A.R.T. & NVMe Log</span>
-                        </button>
-                        <button onclick="switchDiskHealthSubTab('errorscan')" id="dh-subtab-btn-errorscan"
-                            class="subtab-btn dh-subtab-btn">
-                            <i data-lucide="scan" class="w-3.5 h-3.5"></i>
-                            <span data-i18n="disk_health.tab_surface">SurfaceScan (1.200 Blocos)</span>
-                        </button>
-                        <button onclick="switchDiskHealthSubTab('info')" id="dh-subtab-btn-info"
-                            class="subtab-btn dh-subtab-btn">
-                            <i data-lucide="info" class="w-3.5 h-3.5"></i>
-                            <span data-i18n="disk_health.tab_align">Recursos & Alinhamento 4K</span>
-                        </button>
-                    </div>
+                <div class="ws-tabs">
+                    <button onclick="switchDiskHealthSubTab('sentinel')" id="dh-subtab-btn-sentinel" class="dh-subtab-btn active">Resumo</button>
+                    <button onclick="switchDiskHealthSubTab('smart')" id="dh-subtab-btn-smart" class="dh-subtab-btn"><span data-i18n="disk_health.tab_smart">Atributos S.M.A.R.T.</span></button>
+                    <button onclick="switchDiskHealthSubTab('errorscan')" id="dh-subtab-btn-errorscan" class="dh-subtab-btn"><span data-i18n="disk_health.tab_surface">Varredura de superfície</span></button>
+                    <button onclick="switchDiskHealthSubTab('info')" id="dh-subtab-btn-info" class="dh-subtab-btn"><span data-i18n="disk_health.tab_align">Recursos e alinhamento</span></button>
                 </div>
 
-                <!-- SUBVIEW 1: WINSHIELD DISKGUARD DIAGNÓSTICO -->
-                <div id="dh-subview-sentinel" class="dh-subview space-y-6">
-                    <div id="disk-health-main-card"
-                        class="bg-dark-850 rounded-2xl border border-slate-800 p-6 shadow-xl">
-                        <div
-                            class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between pb-6 border-b border-slate-800/80">
-                            <div class="flex items-start gap-4">
-                                <!-- GAUGE DE SAÚDE -->
-                                <div id="dh-gauge-box"
-                                    class="w-24 h-24 rounded-2xl bg-emerald-500/10 border-2 border-emerald-500/40 flex flex-col items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/10">
-                                    <span id="dh-health-percent"
-                                        class="text-3xl font-extrabold text-emerald-400">--%</span>
-                                    <span id="dh-health-badge"
-                                        class="text-[10px] font-bold uppercase tracking-wider text-emerald-300">Excelente</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h2 id="dh-disk-model" class="text-lg font-bold text-white tracking-wide">
-                                            Carregando Disco...</h2>
-                                        <span id="dh-disk-media"
-                                            class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/20 text-cyan-300 border border-blue-500/30">Detectando...</span>
-                                        <span id="dh-disk-bus"
-                                            class="px-2 py-0.5 rounded text-[10px] font-mono bg-dark-700 text-slate-300 border border-slate-700">--</span>
-                                    </div>
-                                    <div
-                                        class="flex flex-wrap items-center gap-4 text-xs text-slate-400 mt-2 font-mono">
-                                        <span>Serial: <strong id="dh-disk-serial"
-                                                class="text-slate-300">--</strong></span>
-                                        <span>Firmware: <strong id="dh-disk-firmware"
-                                                class="text-slate-300">--</strong></span>
-                                        <span>Capacidade: <strong id="dh-disk-size"
-                                                class="text-slate-300">--</strong></span>
-                                    </div>
-                                </div>
+                <!-- RESUMO -->
+                <div id="dh-subview-sentinel" class="dh-subview ws-page">
+                    <div id="disk-health-main-card" class="ws-card">
+                        <div class="flex items-center gap-5 min-w-0">
+                            <div id="dh-gauge-box" class="ws-ring" style="width:92px;height:92px">
+                                <svg viewBox="0 0 168 168">
+                                    <circle class="track" cx="84" cy="84" r="72" fill="none" stroke-width="12" />
+                                    <circle class="bar" id="dh-health-arc" cx="84" cy="84" r="72" fill="none" stroke-width="12" stroke-dasharray="452.4" stroke-dashoffset="452.4" />
+                                </svg>
+                                <div class="ws-ring-center"><span id="dh-health-percent" class="ws-strong ws-mono text-[19px]">—</span></div>
                             </div>
-
-                            <!-- BADGES VITAIS: TEMPERATURA, HORAS, GRAVADO -->
-                            <div class="flex flex-wrap items-center gap-3">
-                                <div
-                                    class="px-4 py-3 rounded-xl bg-dark-900 border border-slate-800 text-center min-w-[100px]">
-                                    <span class="text-[10px] text-slate-500 uppercase font-bold block"
-                                        data-i18n="disk_health.temperature">Temperatura</span>
-                                    <div class="flex items-center justify-center gap-1.5 mt-0.5">
-                                        <i data-lucide="thermometer" class="w-4 h-4 text-amber-400"></i>
-                                        <span id="dh-disk-temp" class="text-base font-extrabold text-white">-- °C</span>
-                                    </div>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span id="dh-health-badge" class="ws-badge">—</span>
+                                    <span id="dh-disk-media" class="ws-badge">—</span>
+                                    <span id="dh-disk-bus" class="ws-badge">—</span>
                                 </div>
-                                <div
-                                    class="px-4 py-3 rounded-xl bg-dark-900 border border-slate-800 text-center min-w-[100px]">
-                                    <span class="text-[10px] text-slate-500 uppercase font-bold block"
-                                        data-i18n="disk_health.power_on_hours">Tempo Ligado</span>
-                                    <div class="flex items-center justify-center gap-1.5 mt-0.5">
-                                        <i data-lucide="clock" class="w-4 h-4 text-cyan-400"></i>
-                                        <span id="dh-disk-hours" class="text-base font-extrabold text-white">-- h</span>
-                                    </div>
-                                </div>
-                                <div
-                                    class="px-4 py-3 rounded-xl bg-dark-900 border border-slate-800 text-center min-w-[100px]">
-                                    <span class="text-[10px] text-slate-500 uppercase font-bold block"
-                                        data-i18n="disk_health.total_written">Total Gravado</span>
-                                    <div class="flex items-center justify-center gap-1.5 mt-0.5">
-                                        <i data-lucide="hard-drive-download" class="w-4 h-4 text-indigo-400"></i>
-                                        <span id="dh-disk-writes" class="text-base font-extrabold text-white">--
-                                            TB</span>
-                                    </div>
-                                </div>
+                                <h2 id="dh-disk-model" class="ws-hero-title mt-1.5 truncate">Carregando…</h2>
+                                <div class="text-[12.5px] ws-muted mt-0.5">Fabricante: <b id="dh-disk-vendor-top" class="ws-strong" style="font-weight:600">—</b></div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- DIAGNÓSTICO TEXTUAL (WINSHIELD DISKGUARD) -->
-                        <div class="mt-6 p-4 rounded-xl bg-dark-900 border border-slate-800">
-                            <h4
-                                class="text-xs font-bold text-slate-300 uppercase tracking-wide flex items-center gap-2 mb-2">
-                                <i data-lucide="stethoscope" class="w-4 h-4 text-blue-400"></i>
-                                Diagnóstico Técnico de Integridade & Confiabilidade
-                            </h4>
-                            <div id="dh-issues-list" class="space-y-1.5 text-xs">
-                                <!-- Populado via JS -->
-                            </div>
+                    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+                        <div class="ws-card ws-stat"><span class="ws-stat-label">Tempo de uso</span><span id="dh-disk-days" class="ws-stat-value ws-mono">—</span><span id="dh-disk-hours" class="ws-stat-foot ws-mono">— horas ligado</span></div>
+                        <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="disk_health.temperature">Temperatura</span><span id="dh-disk-temp" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">sensor do controlador</span></div>
+                        <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="disk_health.total_written">Total gravado</span><span id="dh-disk-writes" class="ws-stat-value ws-mono">—</span><span id="dh-disk-reads" class="ws-stat-foot ws-mono">lido: —</span></div>
+                        <div class="ws-card ws-stat"><span class="ws-stat-label">Ciclos de energia</span><span id="dh-disk-cycles" class="ws-stat-value ws-mono">—</span><span id="dh-disk-unsafe" class="ws-stat-foot ws-mono">desligamentos inesperados: —</span></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-5 gap-3">
+                        <div class="ws-card xl:col-span-3">
+                            <div class="ws-card-head"><div class="ws-card-title">Informações do disco</div></div>
+                            <dl class="ws-kv">
+                                <dt>Fabricante</dt><dd id="dh-disk-vendor">—</dd>
+                                <dt>Modelo</dt><dd id="dh-disk-model-kv">—</dd>
+                                <dt>Número de série</dt><dd id="dh-disk-serial" class="ws-mono">—</dd>
+                                <dt>Firmware</dt><dd id="dh-disk-firmware" class="ws-mono">—</dd>
+                                <dt>Capacidade</dt><dd id="dh-disk-size" class="ws-mono">—</dd>
+                                <dt>Tipo / barramento</dt><dd id="dh-disk-type">—</dd>
+                                <dt>Horas ligado</dt><dd id="dh-disk-hours-kv" class="ws-mono">—</dd>
+                                <dt>Dias de uso</dt><dd id="dh-disk-days-kv" class="ws-mono">—</dd>
+                                <dt>Desgaste</dt><dd id="dh-disk-wear">—</dd>
+                                <dt>Vida útil restante (estimativa)</dt><dd id="dh-disk-life" class="ws-mono">—</dd>
+                                <dt>Volumes</dt><dd id="dh-disk-volumes" class="ws-mono">—</dd>
+                            </dl>
+                        </div>
+                        <div class="ws-card xl:col-span-2">
+                            <div class="ws-card-head"><div class="ws-card-title">Diagnóstico</div></div>
+                            <div id="dh-issues-list" class="flex flex-col gap-2 text-[12.5px]"></div>
+                            <p class="ws-stat-foot mt-4">A vida útil restante é uma projeção a partir do desgaste reportado pelo controlador e das horas de uso — não é uma garantia.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- SUBVIEW 2: S.M.A.R.T. & NVME LOG -->
-                <div id="dh-subview-smart" class="dh-subview hidden space-y-4">
-                    <div class="bg-dark-850 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h4 id="dh-table-title" class="text-xs font-bold text-white flex items-center gap-2">
-                                <i data-lucide="list-checks" class="w-4 h-4 text-cyan-400"></i>
-                                Tabela de Atributos S.M.A.R.T. em Tempo Real
-                            </h4>
-                            <span class="text-[11px] text-slate-500 font-mono">Dados extraídos diretamente do
-                                controlador de hardware</span>
+                <!-- S.M.A.R.T. -->
+                <div id="dh-subview-smart" class="dh-subview hidden ws-page">
+                    <div class="ws-card ws-card-flush">
+                        <div class="ws-card-head">
+                            <div id="dh-table-title" class="ws-card-title">Atributos S.M.A.R.T.</div>
+                            <span class="ws-stat-foot">Lidos diretamente do controlador (IOCTL)</span>
                         </div>
-                        <div class="overflow-x-auto max-h-[480px] overflow-y-auto rounded-xl border border-slate-800">
-                            <table class="w-full text-left border-collapse text-xs font-mono" id="dh-smart-table">
+                        <div class="overflow-auto max-h-[560px]">
+                            <table class="ws-table" id="dh-smart-table">
                                 <thead>
-                                    <tr
-                                        class="bg-dark-750 text-slate-400 uppercase tracking-wider sticky top-0 bg-dark-800 z-10 border-b border-slate-700">
-                                        <th class="py-2.5 px-3">ID</th>
-                                        <th class="py-2.5 px-3 font-sans" data-i18n="disk_health.th_attr">Nome do
-                                            Atributo</th>
-                                        <th class="py-2.5 px-3" data-i18n="disk_health.th_current">Atual</th>
-                                        <th class="py-2.5 px-3" data-i18n="disk_health.th_worst">Pior</th>
-                                        <th class="py-2.5 px-3" data-i18n="disk_health.th_threshold">Limite</th>
-                                        <th class="py-2.5 px-3" data-i18n="disk_health.th_raw">Valor Bruto (Raw)</th>
-                                        <th class="py-2.5 px-3">Status</th>
-                                    </tr>
+                                    <tr><th>ID</th><th data-i18n="disk_health.th_attr">Atributo</th><th data-i18n="disk_health.th_current">Atual</th><th data-i18n="disk_health.th_worst">Pior</th><th data-i18n="disk_health.th_threshold">Limite</th><th data-i18n="disk_health.th_raw">Valor bruto</th><th>Estado</th></tr>
                                 </thead>
-                                <tbody id="dh-smart-tbody" class="divide-y divide-slate-800/80">
-                                    <!-- Inserido dinamicamente -->
-                                </tbody>
+                                <tbody id="dh-smart-tbody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- SUBVIEW 3: SECTORGUARD™ DEEP SURFACE SCAN (GRADE DE 1.200 SETORES) -->
-                <div id="dh-subview-errorscan" class="dh-subview hidden space-y-4">
-                    <div class="bg-dark-850 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6">
-                        <!-- CONTROLES DO ERROR SCAN -->
-                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
-                            <div class="flex flex-wrap items-center gap-4">
-                                <div>
-                                    <label class="text-xs text-slate-400 block mb-1 font-medium">Unidade para
-                                        Varredura:</label>
-                                    <select id="sectorguard-scan-drive"
-                                        class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-cyan-500 min-w-[160px]">
-                                        <option value="C">C: [Disco do Sistema]</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="text-xs text-slate-400 block mb-1 font-medium">Modo de Leitura Física (Direct I/O):</label>
-                                    <select id="sectorguard-scan-mode-select" onchange="document.getElementById('sectorguard-quick-scan').checked = (this.value === 'quick')"
-                                        class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-cyan-300 focus:outline-none focus:border-cyan-500 min-w-[240px]">
-                                        <option value="quick" selected>Varredura Padrão (Leitura Real 512 KB/Bloco)</option>
-                                        <option value="full">Varredura Profunda Intensiva (Leitura LBA 2 MB/Bloco)</option>
+                <!-- VARREDURA DE SUPERFÍCIE -->
+                <div id="dh-subview-errorscan" class="dh-subview hidden ws-page">
+                    <div class="ws-card">
+                        <div class="flex flex-wrap items-end justify-between gap-4">
+                            <div class="flex flex-wrap items-end gap-3">
+                                <label class="flex flex-col gap-1.5"><span class="ws-stat-label">Unidade</span>
+                                    <select id="sectorguard-scan-drive" class="ws-select min-w-[200px]"><option value="C">C:</option></select>
+                                </label>
+                                <label class="flex flex-col gap-1.5"><span class="ws-stat-label">Modo</span>
+                                    <select id="sectorguard-scan-mode-select" onchange="document.getElementById('sectorguard-quick-scan').checked = (this.value === 'quick')" class="ws-select min-w-[320px]">
+                                        <option value="quick" selected>Rápido — 32 MiB em cada uma das 1.200 regiões</option>
+                                        <option value="full">Completo — 100% dos setores</option>
                                     </select>
                                     <input type="checkbox" id="sectorguard-quick-scan" checked class="hidden">
-                                </div>
+                                </label>
                             </div>
-
-                            <div class="flex items-center gap-3">
-                                <span id="sectorguard-io-mode-badge"
-                                    class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 hidden sm:inline-flex items-center gap-1">
-                                    <i data-lucide="cpu" class="w-3 h-3"></i> FILE_FLAG_NO_BUFFERING
-                                </span>
-                                <span id="sectorguard-io-led"
-                                    class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1.5">
-                                    <span class="w-2 h-2 rounded-full bg-slate-500"></span> AGUARDANDO
-                                </span>
-                                <button id="sectorguard-start-btn" onclick="startSectorGuardScan()"
-                                    class="btn-action-success flex items-center space-x-2 px-6 py-2.5 rounded-xl text-xs tracking-wide shadow-lg">
-                                    <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-                                    <span data-i18n="disk_health.btn_start_scan">INICIAR VARREDURA SURFACESCAN</span>
-                                </button>
-                                <button id="sectorguard-stop-btn" onclick="stopSectorGuardScan()"
-                                    class="hidden btn-action-danger flex items-center space-x-2 px-6 py-2.5 rounded-xl text-xs tracking-wide shadow-lg">
-                                    <i data-lucide="square" class="w-4 h-4 fill-current"></i>
-                                    <span data-i18n="disk_health.btn_stop_scan">INTERROMPER VARREDURA</span>
-                                </button>
+                            <div class="flex items-center gap-2">
+                                <span id="sectorguard-io-mode-badge" class="ws-badge ws-mono hidden sm:inline-flex">NO_BUFFERING · somente leitura</span>
+                                <span id="sectorguard-io-led" class="ws-badge"><span class="dot"></span>Parado</span>
+                                <button id="sectorguard-start-btn" onclick="startSectorGuardScan()" class="ws-btn primary"><span data-i18n="disk_health.btn_start_scan">Iniciar varredura</span></button>
+                                <button id="sectorguard-stop-btn" onclick="stopSectorGuardScan()" class="hidden ws-btn danger"><span data-i18n="disk_health.btn_stop_scan">Parar</span></button>
                             </div>
                         </div>
 
-                        <!-- PAINEL DE MÉTRICAS AO VIVO (6 CARDS DE TELEMETRIA FÍSICA) -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs font-mono">
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans"
-                                    data-i18n="disk_health.bad_sectors">Setores Danificados</span>
-                                <strong id="sectorguard-damaged-val" class="text-emerald-400 text-sm">0.0% (0 /
-                                    1.200)</strong>
-                            </div>
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans"
-                                    data-i18n="disk_health.read_speed">Taxa de Leitura Real</span>
-                                <strong id="sectorguard-speed-val" class="text-cyan-400 text-sm">0.0 MB/s</strong>
-                            </div>
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans">Latência do Bloco</span>
-                                <strong id="sectorguard-latency-val" class="text-indigo-300 text-sm">0.00 ms</strong>
-                            </div>
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans"
-                                    data-i18n="disk_health.elapsed_time">Tempo Decorrido</span>
-                                <strong id="sectorguard-time-val" class="text-slate-200 text-sm">00:00:00</strong>
-                            </div>
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans"
-                                    data-i18n="disk_health.remaining_time">Tempo Restante Est.</span>
-                                <strong id="sectorguard-remaining-val" class="text-amber-300 text-sm">--:--</strong>
-                            </div>
-                            <div class="p-3 rounded-xl bg-dark-900 border border-slate-800">
-                                <span class="text-slate-500 text-[10px] block font-sans">Posição LBA / Volume</span>
-                                <strong id="sectorguard-pos-val" class="text-slate-200 text-sm">0 / 0 GB (0%)</strong>
-                            </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 mt-5">
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label" data-i18n="disk_health.bad_sectors">Regiões com erro</span><span id="sectorguard-damaged-val" class="ws-stat-value text-[15px] ws-mono">0</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label" data-i18n="disk_health.read_speed">Leitura</span><span id="sectorguard-speed-val" class="ws-stat-value text-[15px] ws-mono">—</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">Latência</span><span id="sectorguard-latency-val" class="ws-stat-value text-[15px] ws-mono">—</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label" data-i18n="disk_health.elapsed_time">Decorrido</span><span id="sectorguard-time-val" class="ws-stat-value text-[15px] ws-mono">00:00:00</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label" data-i18n="disk_health.remaining_time">Restante</span><span id="sectorguard-remaining-val" class="ws-stat-value text-[15px] ws-mono">—</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">Posição</span><span id="sectorguard-pos-val" class="ws-stat-value text-[15px] ws-mono">—</span></div>
                         </div>
+                    </div>
 
-                        <!-- DISTRIBUIÇÃO DE LATÊNCIA DE SETORES EM TEMPO REAL -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                            <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-sm bg-emerald-500"></span>
-                                    <span class="text-slate-200 font-sans text-[11px] font-semibold">Excelente (&lt; 12ms)</span>
-                                </div>
-                                <strong id="sectorguard-fast-cnt" class="text-emerald-400">0</strong>
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div>
+                                <div class="ws-card-title">Mapa da superfície</div>
+                                <div class="ws-card-sub">1.200 regiões do disco físico. Cada célula mostra a pior latência de leitura de 1 MiB na região.</div>
                             </div>
-                            <div class="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-sm bg-emerald-400"></span>
-                                    <span class="text-slate-200 font-sans text-[11px] font-semibold">Normal (12 - 180ms)</span>
-                                </div>
-                                <strong id="sectorguard-normal-cnt" class="text-cyan-300">0</strong>
-                            </div>
-                            <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-sm bg-amber-400"></span>
-                                    <span class="text-slate-200 font-sans text-[11px] font-semibold">Lento (&gt; 180ms)</span>
-                                </div>
-                                <strong id="sectorguard-slow-cnt" class="text-amber-300">0</strong>
-                            </div>
-                            <div class="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-sm bg-rose-600"></span>
-                                    <span class="text-slate-200 font-sans text-[11px] font-semibold">Danificado (Erro CRC/IO)</span>
-                                </div>
-                                <strong id="sectorguard-bad-cnt" class="text-rose-400">0</strong>
-                            </div>
+                            <span id="sectorguard-status-txt" class="ws-mono text-[12px] ws-muted">Pronto</span>
                         </div>
-
-                        <!-- GRADE VISUAL DE 1.200 BLOCOS (MATRIZ SECTORGUARD™ DEEP SCAN) -->
-                        <div class="space-y-3">
-                            <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-                                <span class="font-bold text-slate-300 flex items-center gap-2">
-                                    <i data-lucide="grid" class="w-4 h-4 text-cyan-400"></i>
-                                    Grade de Superfície Física do Disco (1.200 Blocos LBA com Medição Real em ms)
-                                </span>
-                                <span id="sectorguard-status-txt" class="font-mono text-cyan-300">Pronto para iniciar
-                                    varredura física não-bufferizada</span>
-                            </div>
-
-                            <!-- O CONTAINER DA GRADE -->
-                            <div class="p-4 rounded-xl bg-dark-900 border border-slate-800 overflow-hidden">
-                                <div id="sectorguard-blocks-grid" class="sectorguard-grid">
-                                    <!-- 1.200 blocos gerados dinamicamente via JS -->
-                                </div>
-                            </div>
-
-                            <!-- LEGENDA VISUAL MATRIZ SECTORGUARD™ -->
-                            <div class="flex flex-wrap items-center gap-5 text-xs font-mono pt-1">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="w-3.5 h-3.5 rounded-sm bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
-                                    <span class="text-slate-300">Saudável (Leitura Física OK)</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-sm bg-amber-400"></span>
-                                    <span class="text-slate-300">Alta Latência (&gt;180ms)</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="w-3.5 h-3.5 rounded-sm bg-rose-600 shadow-sm shadow-rose-600/50"></span>
-                                    <span class="text-rose-400 font-bold">Setor Danificado (Bad Sector)</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-sm bg-cyan-400 animate-pulse"></span>
-                                    <span class="text-cyan-300 font-bold">Cabeçote / LBA Atual</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-sm bg-slate-800 border border-slate-700"></span>
-                                    <span class="text-slate-500">Pendente / Não Escaneado</span>
-                                </div>
-                            </div>
+                        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] mb-3">
+                            <span class="flex items-center gap-2"><span class="sectorguard-cell cell-good w-3 h-3"></span>&lt; 20 ms <b id="sectorguard-fast-cnt" class="ws-mono">0</b></span>
+                            <span class="flex items-center gap-2"><span class="sectorguard-cell cell-normal w-3 h-3"></span>20–150 ms <b id="sectorguard-normal-cnt" class="ws-mono">0</b></span>
+                            <span class="flex items-center gap-2"><span class="sectorguard-cell cell-slow w-3 h-3"></span>≥ 150 ms <b id="sectorguard-slow-cnt" class="ws-mono">0</b></span>
+                            <span class="flex items-center gap-2"><span class="sectorguard-cell cell-damaged w-3 h-3"></span>Erro confirmado <b id="sectorguard-bad-cnt" class="ws-mono">0</b></span>
+                            <span class="flex items-center gap-2"><span class="sectorguard-cell cell-untested w-3 h-3"></span>Não lido</span>
                         </div>
+                        <div id="sectorguard-blocks-grid" class="sectorguard-grid"></div>
+                    </div>
+
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div class="ws-card-title">Taxa de transferência ao longo do disco</div>
+                            <span id="sectorguard-speed-summary" class="ws-mono text-[12px] ws-muted">—</span>
+                        </div>
+                        <canvas id="sectorguard-speed-canvas" class="w-full" style="height:150px;display:block"></canvas>
                     </div>
                 </div>
 
-                <!-- SUBVIEW 4: SECTORGUARD™ GEOMETRIA & ALINHAMENTO 4K -->
-                <div id="dh-subview-info" class="dh-subview hidden space-y-4">
-                    <div class="bg-dark-850 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6">
-                        <!-- ALINHAMENTO 4K -->
-                        <div>
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-                                <div>
-                                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                        <i data-lucide="check-check" class="w-4 h-4 text-emerald-400"></i>
-                                        Status de Alinhamento 4K (4K Partition Alignment)
-                                    </h3>
-                                    <p class="text-xs text-slate-400">Partições alinhadas em múltiplos exatos de 4096
-                                        bytes garantem velocidade máxima de I/O e prolongam a vida útil da NAND.</p>
-                                </div>
-                            </div>
-
-                            <div id="dh-alignment-container" class="space-y-2">
-                                <!-- Populado via JS -->
+                <!-- RECURSOS E ALINHAMENTO -->
+                <div id="dh-subview-info" class="dh-subview hidden ws-page">
+                    <div class="ws-card">
+                        <div class="ws-card-head">
+                            <div>
+                                <div class="ws-card-title">Alinhamento das partições</div>
+                                <div class="ws-card-sub">Offsets múltiplos de 4.096 bytes evitam leituras e gravações duplicadas em SSDs e discos de setor 4K.</div>
                             </div>
                         </div>
-
-                        <!-- RECURSOS DO DRIVE -->
-                        <div>
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                    <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
-                                    Recursos de Hardware do Drive (WinShield SurfaceScan Features)
-                                </h3>
-                            </div>
-                            <div class="overflow-x-auto rounded-xl border border-slate-800">
-                                <table class="w-full text-left border-collapse text-xs font-mono">
-                                    <thead>
-                                        <tr class="bg-dark-750 text-slate-400 uppercase border-b border-slate-700">
-                                            <th class="py-2.5 px-3 font-sans">Recurso de Hardware</th>
-                                            <th class="py-2.5 px-3">Suportado</th>
-                                            <th class="py-2.5 px-3">Status Ativo</th>
-                                            <th class="py-2.5 px-3 font-sans">Descrição Técnica</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dh-features-tbody" class="divide-y divide-slate-800">
-                                        <!-- Inserido dinamicamente via JS -->
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div id="dh-alignment-container" class="flex flex-col gap-2"></div>
+                    </div>
+                    <div class="ws-card ws-card-flush">
+                        <div class="ws-card-head"><div class="ws-card-title">Recursos da unidade</div></div>
+                        <div class="overflow-x-auto">
+                            <table class="ws-table">
+                                <thead><tr><th>Recurso</th><th>Suportado</th><th>Ativo</th><th>Descrição</th></tr></thead>
+                                <tbody id="dh-features-tbody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

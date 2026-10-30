@@ -1,82 +1,54 @@
 # -*- coding: utf-8 -*-
 """
-WinShield Pro Enterprise - Engine de Teste de Estabilidade do Sistema (WinShield StressPulse™ System Stability Suite)
-Monitoramento em tempo real e testes de carga para:
-  - Stress CPU (Inteiros / ALUs / Criptografia C-Level)
-  - Stress FPU (Ponto Flutuante AVX / SSE - Alta Carga Térmica)
-  - Stress Cache (L1, L2, L3 Cache Lines)
-  - Stress System Memory (Alocação, Varredura e Validação de Bit-Flips de RAM)
-  - Stress Local Disks (Gravação e Leitura Contínua em Disco I/O)
-  - Stress GPU(s) (Cálculos Matriciais e Carga Térmica de GPU)
+WinShield Pro - StressPulse™ (Teste de Estabilidade do Sistema).
 
-Telemetria de Baixo Nível:
-  - Temperaturas: Motherboard, CPU Package, Cores Individuais, Discos (S.M.A.R.T.), GPU (nvidia-smi)
-  - Ventoinhas (Cooling Fans): CPU Fan RPM, GPU Fan RPM, Chassis Fan RPM
-  - Tensões (Voltages): VCore, +12V, +5V, +3.3V, DRAM
-  - Potências (Powers): CPU Package Power (W), Cores Power (W), GPU Power (W)
-  - Clocks: Por Núcleo (MHz via CallNtPowerInformation) e GPU Clock
-  - CPU Usage & Detecção de Thermal Throttling (%)
-  - Bateria / Alimentação (AC / No Battery / %)
-  - Log de Setores Ativos no console StressPulse™ (Date / Time | Status)
+Carga REAL e verificada em cada subsistema:
+  * CPU  - SHA-256/BLAKE2b sobre buffers de 1 MiB. Cada resultado é comparado
+           com um resultado de referência calculado no início; qualquer
+           divergência é um ERRO DE CÁLCULO (sinal clássico de instabilidade).
+  * FPU  - séries trigonométricas/raízes em float64 (NumPy, vetorizado AVX/SSE)
+           com verificação bit-a-bit contra a referência.
+  * Cache- acessos aleatórios (gather) em conjuntos de 8 MiB com checagem de soma.
+  * RAM  - aloca o volume escolhido e alterna padrões (sólido, xadrez, endereço
+           próprio, aleatório com semente) verificando 100% das palavras.
+  * Disco- grava/relê arquivo temporário com dados aleatórios, sem cache do
+           Windows (FILE_FLAG_NO_BUFFERING), comparando o hash de cada bloco.
+  * GPU  - a carga é gerada pela interface (WebGL2); aqui só é registrada.
+
+Todo o trabalho pesado roda em código nativo (hashlib/NumPy/I-O), que libera o
+GIL do Python — por isso as threads conseguem levar todos os núcleos a 100%.
+
+Telemetria: somente valores medidos (ver backend/telemetry.py). Sensores sem
+fonte disponível retornam None e aparecem como "N/D" na interface.
 """
 
 import os
 import sys
 import time
-import math
-import random
-import threading
-import tempfile
 import hashlib
+import tempfile
+import threading
 import gc
 from collections import deque
-import ctypes
-from ctypes import wintypes
-import psutil
 
 try:
     import numpy as np
-except ImportError:
+except ImportError:  # pragma: no cover
     np = None
 
 from backend.log_manager import LogManager
-from backend.disk_health_engine import DiskHealthEngine
-from backend.system_engine import SystemEngine
+from backend.telemetry import Telemetry, IS_WINDOWS
 
-IS_WINDOWS = sys.platform.startswith("win")
-
-
-# ==============================================================================
-# ESTRUTURAS CTYPES PARA TELEMETRIA NATIVA DO WINDOWS
-# ==============================================================================
-class PROCESSOR_POWER_INFORMATION(ctypes.Structure):
-    _fields_ = [
-        ("Number", wintypes.ULONG),
-        ("MaxMhz", wintypes.ULONG),
-        ("CurrentMhz", wintypes.ULONG),
-        ("MhzLimit", wintypes.ULONG),
-        ("MaxIdleState", wintypes.ULONG),
-        ("CurrentIdleState", wintypes.ULONG),
-    ]
+if IS_WINDOWS:
+    import ctypes
+    from ctypes import wintypes
 
 
-class _MEMSTATUS(ctypes.Structure):
-    _fields_ = [
-        ("dwLength", wintypes.DWORD),
-        ("dwMemoryLoad", wintypes.DWORD),
-        ("ullTotalPhys", ctypes.c_uint64),
-        ("ullAvailPhys", ctypes.c_uint64),
-        ("ullTotalPageFile", ctypes.c_uint64),
-        ("ullAvailPageFile", ctypes.c_uint64),
-        ("ullTotalVirtual", ctypes.c_uint64),
-        ("ullAvailVirtual", ctypes.c_uint64),
-        ("ullAvailExtendedVirtual", ctypes.c_uint64),
-    ]
+def _fmt_elapsed(sec):
+    s = max(0, int(sec or 0))
+    return f"{s // 3600:02d}:{(s % 3600) // 60:02d}:{s % 60:02d}"
 
 
-# ==============================================================================
-# ENGINE PRINCIPAL DE ESTRESSE & ESTABILIDADE (WINSHIELD STRESSPULSE™ COMPLETE SUITE)
-# ==============================================================================
 class StressEngine:
     _lock = threading.Lock()
     _running = False
@@ -95,856 +67,715 @@ class StressEngine:
         "stress_memory": True,
         "stress_disk": False,
         "stress_gpu": False,
-        "threads": os.cpu_count() or 4,
+        "threads": 0,               # 0 = todas as threads lógicas
         "memory_mb": 2048,
-        "duration_limit_sec": 0,  # 0 = contínuo
+        "duration_limit_sec": 0,    # 0 = contínuo
     }
 
-    # Tabela de Setores Ativos do StressPulse™: Date / Time | Status
     _sector_log = []
-
-    # Histórico de telemetria dos últimos 120 segundos para os gráficos StressPulse™
-    _history = deque(maxlen=120)
-
-    # Estatísticas StressPulse™: Current, Min, Max, Average para todos os sensores
+    _history = deque(maxlen=600)     # 10 minutos a 1 Hz
     _stats = {}
 
-    _last_sys_times = None
-    _simulated_temp = 42.0
-    _core_offsets = [0.0, -1.5, 1.2, -0.8, 2.0, -1.1, 0.5, -0.5]
-    _memory_errors = 0
+    # Contadores de trabalho e erros (reais)
+    _errors = {"cpu": 0, "fpu": 0, "cache": 0, "memory": 0, "disk": 0}
+    _work = {"cpu_bytes": 0, "fpu_ops": 0, "cache_ops": 0, "mem_verified_bytes": 0,
+             "disk_written_bytes": 0, "disk_read_bytes": 0}
+    _work_prev = None
+    _rates = {}
     _memory_tested_mb = 0
-    _disk_io_mb = 0.0
     _throttling_active = False
+    _gpu_client = {"fps": None, "ts": 0.0, "renderer": None}
 
-    # Detecção de hardware estática e cache GPU
-    _disk_model_name = "Disco Local"
-    _disk_temp_base = 28.0
-    _gpu_model_name = "GPU"
-    _has_nvidia = False
+    _disk_model_name = None
+    _gpu_model_name = None
     _initialized = False
-    _last_gpu_time = 0.0
-    _cached_gpu_sensors = {
-        "temp": 37.0,
-        "usage": 0.0,
-        "power": 12.0,
-        "fan_pct": 0,
-        "clock": 360.0,
-    }
 
+    # ------------------------------------------------------------------
     @classmethod
     def _init_hardware_names(cls):
         if cls._initialized:
             return
         cls._initialized = True
         try:
-            disks = DiskHealthEngine.scan(force=False)
-            if disks and len(disks) > 0:
-                cls._disk_model_name = disks[0].get("model") or "KINGSTON SA400S37"
-                cls._disk_temp_base = float(disks[0].get("temperature") or 28.0)
+            from backend.disk_health_engine import DiskHealthEngine
+            disks = DiskHealthEngine._cache or []
+            sysd = None
+            for d in disks:
+                if any((v.get("letter") or "").upper() == "C" for v in d.get("volumes", [])):
+                    sysd = d
+                    break
+            sysd = sysd or (disks[0] if disks else None)
+            if sysd:
+                cls._disk_model_name = sysd.get("model")
+                cls._disk_index = sysd.get("index", 0)
+                cls._disk_is_nvme = bool(sysd.get("nvme"))
         except Exception:
-            cls._disk_model_name = "KINGSTON SA400S37"
-            cls._disk_temp_base = 28.0
-
+            pass
         try:
+            from backend.system_engine import SystemEngine
             stat = SystemEngine.static_info()
-            cls._gpu_model_name = stat.get("gpu_primary") or "NVIDIA GeForce RTX 4060 Ti"
-            cls._has_nvidia = "nvidia" in cls._gpu_model_name.lower()
-        except Exception:
-            cls._gpu_model_name = "NVIDIA GeForce RTX 4060 Ti"
-            cls._has_nvidia = True
-
-    # -------------------------------------------------------------------------
-    # TELEMETRIA DE BAIXO NÍVEL (WIN32 / HARDWARE)
-    # -------------------------------------------------------------------------
-    @classmethod
-    def _get_cpu_clocks(cls):
-        """Lê os clocks instantâneos reais de cada thread via CallNtPowerInformation."""
-        num_cpus = os.cpu_count() or 4
-        if not (IS_WINDOWS and ctypes):
-            return [3400] * num_cpus, 3400.0, 3400.0
-
-        try:
-            buf_type = PROCESSOR_POWER_INFORMATION * num_cpus
-            buf = buf_type()
-            status = ctypes.windll.powrprof.CallNtPowerInformation(
-                11, None, 0, ctypes.byref(buf), ctypes.sizeof(buf)
-            )
-            if status == 0:
-                current_clocks = [int(buf[i].CurrentMhz) for i in range(num_cpus)]
-                max_clocks = [int(buf[i].MaxMhz) for i in range(num_cpus)]
-                avg_current = sum(current_clocks) / max(1, len(current_clocks))
-                max_cap = max(max_clocks) if max_clocks else avg_current
-                return current_clocks, round(avg_current, 1), max_cap
+            cls._gpu_model_name = stat.get("gpu_primary") or None
         except Exception:
             pass
 
-        return [3400.0] * num_cpus, 3400.0, 3400.0
+    @classmethod
+    def _add_sector_entry(cls, status_text, level="info"):
+        dt_str = time.strftime("%d/%m/%Y %H:%M:%S")
+        cls._sector_log.append({"datetime": dt_str, "status": status_text, "level": level})
+        if len(cls._sector_log) > 200:
+            cls._sector_log.pop(0)
+        LogManager.add_log(f"[STRESSPULSE] {status_text}")
 
     @classmethod
-    def _get_system_cpu_usage(cls):
-        """Mede o percentual exato de uso global da CPU via GetSystemTimes."""
-        if not (IS_WINDOWS and ctypes):
-            return 0.0
-        try:
-            idle = wintypes.FILETIME()
-            kern = wintypes.FILETIME()
-            user = wintypes.FILETIME()
-            ctypes.windll.kernel32.GetSystemTimes(ctypes.byref(idle), ctypes.byref(kern), ctypes.byref(user))
-            to_int = lambda ft: (ft.dwHighDateTime << 32) | ft.dwLowDateTime
-            now = (to_int(idle), to_int(kern), to_int(user))
-            prev, cls._last_sys_times = cls._last_sys_times, now
-            if prev is None:
-                return 0.0
-            d_idle = now[0] - prev[0]
-            d_kern = now[1] - prev[1]
-            d_user = now[2] - prev[2]
-            total = d_kern + d_user
-            if total <= 0:
-                return 0.0
-            return round(max(0.0, min(100.0, (total - d_idle) * 100.0 / total)), 1)
-        except Exception:
-            return 0.0
-
-    @classmethod
-    def _get_system_memory(cls):
-        """Retorna uso exato da memória RAM física em bytes e percentual."""
-        if not (IS_WINDOWS and ctypes):
-            return {"total_gb": 32.0, "used_gb": 10.0, "percent": 31.0, "avail_mb": 22000}
-        try:
-            ms = _MEMSTATUS()
-            ms.dwLength = ctypes.sizeof(_MEMSTATUS)
-            ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(ms))
-            total_gb = round(ms.ullTotalPhys / (1024 ** 3), 2)
-            used_gb = round((ms.ullTotalPhys - ms.ullAvailPhys) / (1024 ** 3), 2)
-            avail_mb = int(ms.ullAvailPhys / (1024 ** 2))
-            return {
-                "total_gb": total_gb,
-                "used_gb": used_gb,
-                "percent": float(ms.dwMemoryLoad),
-                "avail_mb": avail_mb,
-            }
-        except Exception:
-            return {"total_gb": 32.0, "used_gb": 10.0, "percent": 31.0, "avail_mb": 22000}
-
-    @classmethod
-    def _get_battery_status(cls):
-        """Retorna status da bateria no formato de telemetria: 'No battery' ou 'XX%'."""
-        try:
-            batt = psutil.sensors_battery()
-            if batt is None:
-                return "No battery", None
-            status = f"{round(batt.percent)}%"
-            if batt.power_plugged:
-                status += " (AC Power)"
-            return status, round(batt.percent)
-        except Exception:
-            return "No battery", None
-
-    @classmethod
-    def _get_gpu_live(cls):
-        """Consulta nvidia-smi para temperatura real da GPU, uso e consumo com cache de 2s."""
-        if not cls._has_nvidia:
-            return cls._cached_gpu_sensors
-
-        now = time.time()
-        if now - cls._last_gpu_time < 2.0:
-            return cls._cached_gpu_sensors
-
-        try:
-            from backend.process import run_hidden
-            code, out = run_hidden(
-                "nvidia-smi --query-gpu=temperature.gpu,utilization.gpu,power.draw,fan.speed,clocks.current.graphics --format=csv,noheader,nounits",
-                timeout=1
-            )
-            if code == 0 and out and "," in out:
-                parts = [p.strip() for p in out.strip().splitlines()[0].split(",")]
-                if len(parts) >= 5:
-                    def _f(v, d=0.0):
-                        try:
-                            return float(v)
-                        except ValueError:
-                            return d
-                    cls._cached_gpu_sensors = {
-                        "temp": _f(parts[0], 37.0),
-                        "usage": _f(parts[1], 0.0),
-                        "power": _f(parts[2], 12.0),
-                        "fan_pct": int(_f(parts[3], 0)),
-                        "clock": _f(parts[4], 360.0),
-                    }
-                    cls._last_gpu_time = now
-        except Exception:
-            pass
-
-        return cls._cached_gpu_sensors
-
-    @classmethod
-    def _compute_thermodynamic_temp(cls, cpu_usage, is_stressing, fpu_active, avg_clock, max_clock):
-        """
-        Modelo físico termodinâmico calibrado para coincidir com as curvas reais do StressPulse™.
-        """
-        idle_temp = 38.5
-        thermal_headroom = 47.0 if fpu_active else 35.0
-        load_ratio = cpu_usage / 100.0
-
-        target_temp = idle_temp + (thermal_headroom * load_ratio)
-        jitter = random.uniform(-0.35, 0.35)
-
-        if is_stressing:
-            diff = (target_temp - cls._simulated_temp)
-            step = diff * 0.16 if diff > 0 else diff * 0.07
-            cls._simulated_temp = round(cls._simulated_temp + step + jitter, 1)
-        else:
-            diff = (idle_temp - cls._simulated_temp)
-            cls._simulated_temp = round(cls._simulated_temp + diff * 0.12 + jitter, 1)
-
-        cls._simulated_temp = max(32.0, min(100.0, cls._simulated_temp))
-        return cls._simulated_temp
-
-    # -------------------------------------------------------------------------
-    # WORKERS DE CARGA PESADA (6 SUBSISTEMAS: CPU, FPU, CACHE, RAM, DISK, GPU)
-    # -------------------------------------------------------------------------
-    @classmethod
-    def _worker_cpu(cls, stop_event, worker_id):
-        """Carga de CPU Integer / ALU: cálculos de permutações, bits e SHA-256 liberando GIL."""
-        # 64KB de payload por thread para forçar instruções criptográficas nativas em C (releasing GIL)
-        block = b"WINSHIELD_STRESSPULSE_CPU_INTEGER_ALU_PAYLOAD_0123456789ABCDEF" * 1024
-        sha = hashlib.sha256
-        val = 0x5A5A5A5A ^ ((worker_id + 1) * 0x1F1F1F1F)
-        while not stop_event.is_set():
-            for _ in range(40):
-                # Operações ALU / Bitwise intensivas
-                val = ((val ^ (val << 13)) & 0xFFFFFFFF)
-                val = ((val ^ (val >> 17)) & 0xFFFFFFFF)
-                val = ((val ^ (val << 5)) & 0xFFFFFFFF)
-                # Chamada nativa em C que executa com alta carga no núcleo sem travar o GIL
-                sha(block).digest()
-            time.sleep(0.0003)
-
-    @classmethod
-    def _worker_fpu(cls, stop_event, worker_id):
-        """Carga de FPU: matemática de ponto flutuante intensiva estilo AVX/SSE."""
-        if np is not None:
-            try:
-                arr = np.random.uniform(0.1, 100.0, size=(50000,)).astype(np.float64)
-                while not stop_event.is_set():
-                    for _ in range(4):
-                        res = np.sin(arr) * np.cos(arr) + np.sqrt(arr)
-                        arr = (res % 100.0) + 0.1
-                    time.sleep(0.0003)
-                return
-            except Exception:
-                pass
-
-        # Fallback sem numpy (usando math puro com yields do GIL)
-        x = 1.000123 + (worker_id * 0.001)
-        sin_f = math.sin
-        cos_f = math.cos
-        sqrt_f = math.sqrt
-        while not stop_event.is_set():
-            for _ in range(1200):
-                x = sin_f(x) * cos_f(x) + sqrt_f(abs(x) + 0.0001)
-                if x > 10000.0:
-                    x = 1.000123
-            time.sleep(0.0005)
-
-    @classmethod
-    def _worker_cache(cls, stop_event, worker_id):
-        """Carga de Cache L1/L2/L3: varreduras de memória forçando cache thrashing contínuo."""
-        buf = bytearray(4 * 1024 * 1024)
-        size = len(buf)
-        stride = 64
-        while not stop_event.is_set():
-            for offset in range(0, size, stride * 8):
-                buf[offset] = (buf[offset] + 1) & 0xFF
-            time.sleep(0.0005)
-
-    @classmethod
-    def _worker_memory(cls, stop_event, target_mb):
-        """Carga de Memória RAM: aloca blocos de RAM, escreve padrões e valida integridade física."""
-        chunk_size = 16 * 1024 * 1024  # 16 MB chunks
-        num_chunks = max(1, target_mb // 16)
-        allocated_blocks = []
-
-        try:
-            for _ in range(num_chunks):
-                if stop_event.is_set():
-                    break
-                try:
-                    block = bytearray(chunk_size)
-                    # Touch em páginas para forçar comutação física real no Windows
-                    block[0] = 0x55
-                    block[-1] = 0xAA
-                    allocated_blocks.append(block)
-                except MemoryError:
-                    break
-        except Exception:
-            pass
-
-        actual_mb = (len(allocated_blocks) * chunk_size) // (1024 * 1024)
+    def _report_error(cls, kind, msg):
         with cls._lock:
-            cls._memory_tested_mb = actual_mb
+            cls._errors[kind] += 1
+            n = cls._errors[kind]
+        if n <= 20:  # evita inundar o log
+            cls._add_sector_entry(f"ERRO {kind.upper()}: {msg}", "error")
 
-        patterns = [0x55, 0xAA, 0xFF, 0x00]
-        p_idx = 0
-        stride = 4096  # Limites de página de 4KB (x86-64 page boundary)
+    @classmethod
+    def _add_work(cls, key, amount):
+        # Operação atômica o suficiente para contadores (GIL), sem lock no caminho quente
+        cls._work[key] = cls._work.get(key, 0) + amount
 
+    # ------------------------------------------------------------------
+    # WORKERS
+    # ------------------------------------------------------------------
+    @classmethod
+    def _worker_cpu(cls, stop, wid):
+        rnd = np.random.default_rng(1000 + wid) if np is not None else None
+        buf = rnd.bytes(1 << 20) if rnd is not None else os.urandom(1 << 20)
+        ref_sha = hashlib.sha256(buf).digest()
+        ref_b2 = hashlib.blake2b(buf).digest()
+        n = len(buf)
+        while not stop.is_set():
+            for _ in range(8):
+                if hashlib.sha256(buf).digest() != ref_sha:
+                    cls._report_error("cpu", f"divergência SHA-256 na thread {wid}")
+                if hashlib.blake2b(buf).digest() != ref_b2:
+                    cls._report_error("cpu", f"divergência BLAKE2b na thread {wid}")
+            cls._add_work("cpu_bytes", 16 * n)
+
+    @classmethod
+    def _worker_fpu(cls, stop, wid):
+        if np is None:
+            return
+        rng = np.random.default_rng(2000 + wid)
+        x = rng.uniform(0.5, 50.0, size=131072)          # 1 MiB float64 (cabe no L2/L3)
+        out = np.empty_like(x)
+        tmp = np.empty_like(x)
+
+        def kernel():
+            np.sin(x, out=out)
+            np.cos(x, out=tmp)
+            np.multiply(out, tmp, out=out)
+            np.sqrt(x, out=tmp)
+            np.add(out, tmp, out=out)
+            np.multiply(out, 1.000001, out=out)
+            np.exp(np.negative(np.abs(out, out=tmp), out=tmp), out=tmp)
+            np.add(out, tmp, out=out)
+            return out
+
+        ref = kernel().copy()
+        ops_per_iter = x.size * 9
+        while not stop.is_set():
+            for _ in range(20):
+                r = kernel()
+                if not np.array_equal(r, ref):
+                    bad = int(np.count_nonzero(r != ref))
+                    cls._report_error("fpu", f"{bad} resultado(s) de ponto flutuante incorretos (thread {wid})")
+            cls._add_work("fpu_ops", 20 * ops_per_iter)
+
+    @classmethod
+    def _worker_cache(cls, stop, wid):
+        if np is None:
+            return
+        rng = np.random.default_rng(3000 + wid)
+        data = rng.integers(0, 1 << 30, size=1 << 20, dtype=np.int64)   # 8 MiB
+        idx = rng.permutation(data.size)
+        ref = int(data.sum())
+        while not stop.is_set():
+            for _ in range(4):
+                g = np.take(data, idx)
+                if int(g.sum()) != ref:
+                    cls._report_error("cache", f"soma de verificação divergente (thread {wid})")
+            cls._add_work("cache_ops", 4 * data.size)
+
+    @classmethod
+    def _worker_memory(cls, stop, target_mb):
+        if np is None:
+            return
+        chunk_words = (64 * 1024 * 1024) // 8   # blocos de 64 MiB
+        avail_mb = Telemetry.memory()["avail_mb"]
+        safe_mb = max(64, min(target_mb, int(avail_mb * 0.85) - 256))
+        if safe_mb < target_mb:
+            cls._add_sector_entry(f"RAM: limitado a {safe_mb} MB para não paginar (livre: {avail_mb} MB)", "warn")
+        blocks = []
         try:
-            while not stop_event.is_set() and allocated_blocks:
-                pat = patterns[p_idx % len(patterns)]
-                p_idx += 1
+            for _ in range(max(1, safe_mb // 64)):
+                if stop.is_set():
+                    break
+                b = np.empty(chunk_words, dtype=np.uint64)
+                b.fill(0)  # força comprometimento físico das páginas
+                blocks.append(b)
+        except MemoryError:
+            cls._add_sector_entry("RAM: alocação interrompida por falta de memória livre", "warn")
+        with cls._lock:
+            cls._memory_tested_mb = len(blocks) * 64
+        cls._add_sector_entry(f"RAM: {len(blocks) * 64} MB alocados e em verificação contínua")
 
-                for block in allocated_blocks:
-                    if stop_event.is_set():
+        addr = np.arange(chunk_words, dtype=np.uint64)
+        patterns = ["0x5555…", "0xAAAA…", "0xFFFF…", "0x0000…", "endereço", "~endereço", "aleatório"]
+        p = 0
+        try:
+            while not stop.is_set() and blocks:
+                name = patterns[p % len(patterns)]
+                seed = p
+                p += 1
+                for bi, b in enumerate(blocks):
+                    if stop.is_set():
                         break
-                    block_len = len(block)
-                    for i in range(0, block_len, stride):
-                        block[i] = pat
-
-                    for i in range(0, block_len, stride):
-                        if block[i] != pat:
-                            with cls._lock:
-                                cls._memory_errors += 1
-                                cls._add_sector_entry(f"RAM Hardware Error: Bit-flip detected at offset {i}!")
-                    if stop_event.is_set():
-                        break
-
-                time.sleep(0.02)
+                    base = np.uint64(bi * chunk_words)
+                    if name == "0x5555…":
+                        exp = np.uint64(0x5555555555555555); b.fill(exp)
+                    elif name == "0xAAAA…":
+                        exp = np.uint64(0xAAAAAAAAAAAAAAAA); b.fill(exp)
+                    elif name == "0xFFFF…":
+                        exp = np.uint64(0xFFFFFFFFFFFFFFFF); b.fill(exp)
+                    elif name == "0x0000…":
+                        exp = np.uint64(0); b.fill(exp)
+                    elif name == "endereço":
+                        np.add(addr, base, out=b); exp = None
+                    elif name == "~endereço":
+                        np.add(addr, base, out=b); np.invert(b, out=b); exp = None
+                    else:
+                        r = np.random.default_rng(seed * 1000 + bi)
+                        b[:] = r.integers(0, np.iinfo(np.uint64).max, size=chunk_words, dtype=np.uint64, endpoint=True)
+                        exp = None
+                    # Verificação de 100% das palavras de 64 bits
+                    if exp is not None:
+                        bad = int(np.count_nonzero(b != exp))
+                    elif name == "endereço":
+                        bad = int(np.count_nonzero(b != (addr + base)))
+                    elif name == "~endereço":
+                        bad = int(np.count_nonzero(b != ~(addr + base)))
+                    else:
+                        r = np.random.default_rng(seed * 1000 + bi)
+                        bad = int(np.count_nonzero(b != r.integers(0, np.iinfo(np.uint64).max, size=chunk_words,
+                                                                 dtype=np.uint64, endpoint=True)))
+                    if bad:
+                        first = int(np.flatnonzero(b != exp)[0]) if exp is not None else 0
+                        cls._report_error("memory", f"{bad} palavra(s) corrompida(s) no bloco {bi} "
+                                                    f"(padrão {name}, offset ~0x{(bi * chunk_words + first) * 8:X})")
+                    cls._add_work("mem_verified_bytes", b.nbytes)
         finally:
-            allocated_blocks.clear()
+            blocks.clear()
             with cls._lock:
                 cls._memory_tested_mb = 0
             gc.collect()
 
     @classmethod
-    def _worker_disk(cls, stop_event):
-        """Carga de Disco Local: grava e lê blocos de teste contínuos forçando I/O da controladora."""
-        tmp_file = os.path.join(tempfile.gettempdir(), f"winshield_disk_stress_{os.getpid()}_{random.randint(1000, 9999)}.tmp")
-        block_size = 128 * 1024  # 128 KB
-        chunk = b"WINSHIELD_STRESSPULSE_DISK_STRESS_BLOCK_PAYLOAD_" * (block_size // 48)
-
+    def _worker_disk(cls, stop):
+        """Grava e relê 256 MiB com verificação de hash por bloco (sem cache do SO)."""
+        block = 1 << 20
+        n_blocks = 256
+        path = os.path.join(tempfile.gettempdir(), f"winshield_stress_{os.getpid()}.bin")
+        io = _UnbufferedFile(path, block)
+        rng = np.random.default_rng(42) if np is not None else None
         try:
-            while not stop_event.is_set():
-                # 1. Escrita sequencial (~32MB por ciclo) sem flush excessivo
-                total_written = 0
-                with open(tmp_file, "wb") as f:
-                    for _ in range(256):
-                        if stop_event.is_set():
-                            break
-                        f.write(chunk)
-                        total_written += len(chunk)
-                    f.flush()
-
-                cls._disk_io_mb += (total_written / (1024 * 1024))
-
-                # 2. Leitura sequencial com validação
-                if os.path.exists(tmp_file) and not stop_event.is_set():
-                    with open(tmp_file, "rb") as f:
-                        while not stop_event.is_set():
-                            read_data = f.read(block_size)
-                            if not read_data:
-                                break
-
-                time.sleep(0.04)
-        except Exception:
-            pass
-        finally:
-            try:
-                if os.path.exists(tmp_file):
-                    os.remove(tmp_file)
-            except Exception:
-                pass
-
-    @classmethod
-    def _worker_gpu(cls, stop_event):
-        """Carga de GPU / Compute: cálculos matriciais densos mantendo o pipeline gráfico aquecido."""
-        if np is not None:
-            try:
-                A = np.random.rand(600, 600).astype(np.float32)
-                B = np.random.rand(600, 600).astype(np.float32)
-                while not stop_event.is_set():
-                    _ = np.dot(A, B)
-                    time.sleep(0.005)
+            if not io.open():
+                cls._add_sector_entry("Disco: não foi possível abrir arquivo de teste sem cache", "warn")
                 return
-            except Exception:
+            cycle = 0
+            while not stop.is_set():
+                digests = []
+                for i in range(n_blocks):
+                    if stop.is_set():
+                        break
+                    data = rng.bytes(block) if rng is not None else os.urandom(block)
+                    digests.append(hashlib.blake2b(data, digest_size=16).digest())
+                    if not io.write_at(i * block, data):
+                        cls._report_error("disk", f"falha de gravação no bloco {i}")
+                    cls._add_work("disk_written_bytes", block)
+                io.flush()
+                for i, dg in enumerate(digests):
+                    if stop.is_set():
+                        break
+                    data = io.read_at(i * block)
+                    if data is None:
+                        cls._report_error("disk", f"falha de leitura no bloco {i}")
+                    elif hashlib.blake2b(data, digest_size=16).digest() != dg:
+                        cls._report_error("disk", f"dados lidos diferentes dos gravados no bloco {i}")
+                    cls._add_work("disk_read_bytes", block)
+                cycle += 1
+        except Exception as ex:
+            cls._add_sector_entry(f"Disco: teste interrompido ({ex})", "warn")
+        finally:
+            io.close()
+            try:
+                os.remove(path)
+            except OSError:
                 pass
 
-        while not stop_event.is_set():
-            time.sleep(0.05)
-
-    # -------------------------------------------------------------------------
-    # TABELA DE SETORES DO StressPulse™: DATE / TIME | STATUS
-    # -------------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # SAMPLER (1 Hz)
+    # ------------------------------------------------------------------
     @classmethod
-    def _add_sector_entry(cls, status_text):
-        dt_str = time.strftime("%d/%m/%Y %H:%M:%S")
-        entry = {"datetime": dt_str, "status": status_text}
-        cls._sector_log.append(entry)
-        if len(cls._sector_log) > 100:
-            cls._sector_log.pop(0)
-        LogManager.add_log(f"[STRESSPULSE] {dt_str} - {status_text}")
+    def _collect_snapshot(cls, elapsed):
+        cpu = Telemetry.cpu_snapshot()
+        sens = Telemetry.sensors()
+        ext = sens.get("external") or {}
+        nv = sens.get("nvidia") or {}
+        mem = Telemetry.memory()
+        batt_status, batt_pct = Telemetry.battery()
 
-    # -------------------------------------------------------------------------
-    # SAMPLER EM TEMPO REAL & ATUALIZAÇÃO DE TODAS AS MÉTRICAS
-    # -------------------------------------------------------------------------
+        tz = cpu.get("thermal_zones") or {}
+        cpu_temp = ext.get("cpu_temp")
+        temp_source = "LibreHardwareMonitor" if cpu_temp is not None else None
+        if cpu_temp is None and tz:
+            cpu_temp = max(tz.values())
+            temp_source = "Zona térmica ACPI"
+
+        disk_temp = (ext.get("disk_temps") or [None])[0]
+        if disk_temp is None and getattr(cls, "_disk_is_nvme", False):
+            disk_temp = cls._nvme_temp()
+
+        fans = ext.get("fans") or []
+        cpu_fan = next((f["rpm"] for f in fans if not f["gpu"] and "cpu" in f["name"].lower()), None)
+        if cpu_fan is None:
+            cpu_fan = next((f["rpm"] for f in fans if not f["gpu"]), None)
+        chassis = [f["rpm"] for f in fans if not f["gpu"]]
+        chassis_fan = chassis[1] if len(chassis) > 1 else None
+        gpu_fan = next((f["rpm"] for f in fans if f["gpu"]), None)
+        volt = ext.get("voltages") or {}
+
+        # Limitação de clock (dados do Windows): 100% = sem limitação
+        lim = cpu.get("performance_limit_pct")
+        passive = cpu.get("thermal_passive_limit_pct")
+        limits = [v for v in (lim, passive) if v is not None]
+        throttling = round(max(0.0, 100.0 - min(limits)), 1) if limits else None
+        thermal = passive is not None and passive < 100
+
+        # Taxas de trabalho (MB/s, Mops/s)
+        now = time.time()
+        work = dict(cls._work)
+        if cls._work_prev:
+            dt = max(0.001, now - cls._work_prev[0])
+            pw = cls._work_prev[1]
+            cls._rates = {
+                "cpu_mb_s": round((work["cpu_bytes"] - pw["cpu_bytes"]) / dt / 1e6, 1),
+                "fpu_mops": round((work["fpu_ops"] - pw["fpu_ops"]) / dt / 1e6, 1),
+                "cache_mops": round((work["cache_ops"] - pw["cache_ops"]) / dt / 1e6, 1),
+                "mem_gb_s": round((work["mem_verified_bytes"] - pw["mem_verified_bytes"]) / dt / 1e9, 2),
+                "disk_w_mb_s": round((work["disk_written_bytes"] - pw["disk_written_bytes"]) / dt / 1e6, 1),
+                "disk_r_mb_s": round((work["disk_read_bytes"] - pw["disk_read_bytes"]) / dt / 1e6, 1),
+            }
+        cls._work_prev = (now, work)
+
+        gpu_fps = cls._gpu_client["fps"] if now - cls._gpu_client["ts"] < 3 else None
+
+        return {
+            "cpu_temp": cpu_temp,
+            "temp_source": temp_source,
+            "core_temps": ext.get("core_temps") or [],
+            "mobo_temp": ext.get("mobo_temp"),
+            "disk_temp": disk_temp,
+            "disk_name": cls._disk_model_name,
+            "gpu_temp": nv.get("temp") if nv.get("temp") is not None else ext.get("gpu_temp"),
+            "gpu_hotspot": ext.get("gpu_hotspot"),
+            "gpu_name": cls._gpu_model_name,
+            "gpu_usage": nv.get("usage"),
+            "gpu_fps": gpu_fps,
+            "cpu_fan": cpu_fan,
+            "gpu_fan": gpu_fan,
+            "gpu_fan_pct": nv.get("fan_pct"),
+            "chassis_fan": chassis_fan,
+            "fans": fans,
+            "vcore": volt.get("vcore"),
+            "v12": volt.get("v12"),
+            "v5": volt.get("v5"),
+            "v33": volt.get("v33"),
+            "dram_v": volt.get("dram_v"),
+            "cpu_power": ext.get("cpu_power"),
+            "cores_power": ext.get("cores_power"),
+            "gpu_power": nv.get("power") if nv.get("power") is not None else ext.get("gpu_power"),
+            "clocks": ext.get("core_clocks") or cpu.get("clocks") or [],
+            "avg_clock": cpu.get("avg_clock"),
+            "nominal_clock": cpu.get("nominal_clock"),
+            "gpu_clock": nv.get("clock"),
+            "cpu_usage": cpu.get("usage"),
+            "per_core_usage": cpu.get("per_core_usage"),
+            "cpu_throttling": throttling,
+            "performance_limit_pct": lim,
+            "thermal_throttling": thermal,
+            "ram_usage_pct": mem["percent"],
+            "ram_used_gb": mem["used_gb"],
+            "ram_total_gb": mem["total_gb"],
+            "battery_status": batt_status,
+            "battery_pct": batt_pct,
+            "elapsed_sec": elapsed,
+            "elapsed_str": _fmt_elapsed(elapsed),
+            "test_started_str": cls._start_time_str,
+            "memory_errors": cls._errors["memory"],
+            "throttling_active": bool(throttling and throttling >= 5 and (cpu.get("usage") or 0) > 50),
+            "rates": dict(cls._rates),
+            "sensor_sources": {
+                "temperatures": temp_source,
+                "board": sens.get("external_source"),
+                "gpu": "nvidia-smi" if nv else (sens.get("external_source") if ext.get("gpu_temp") is not None else None),
+                "clocks": cpu.get("clock_source"),
+            },
+        }
+
     @classmethod
-    def _sampler_loop(cls, stop_event):
-        """Coleta telemetria precisa a cada 1 segundo para todos os sensores do StressPulse™."""
-        while not stop_event.is_set():
-            # Aguarda 1 segundo com saída imediata se stop_event for ativado
-            if stop_event.wait(timeout=1.0):
-                break
+    def _nvme_temp(cls):
+        now = time.time()
+        if now - getattr(cls, "_nvme_temp_ts", 0) < 10:
+            return getattr(cls, "_nvme_temp_val", None)
+        val = None
+        try:
+            from backend.disk_health_engine import read_nvme_health
+            nv = read_nvme_health(getattr(cls, "_disk_index", 0))
+            val = nv.get("temperature") if nv else None
+        except Exception:
+            val = None
+        cls._nvme_temp_ts, cls._nvme_temp_val = now, val
+        return val
+
+    @classmethod
+    def _sampler_loop(cls, stop):
+        while not stop.wait(timeout=1.0):
             if not cls._running:
                 break
-
-            # 1. Limite de tempo programado
             elapsed = int(time.time() - cls._start_time)
-            dur_limit = cls._config.get("duration_limit_sec", 0)
-            if dur_limit and dur_limit > 0 and elapsed >= dur_limit:
-                cls._add_sector_entry("Programmed Test Duration Reached - Stopping Safely")
-                threading.Thread(target=cls.stop_test, daemon=True).start()
+            lim = cls._config.get("duration_limit_sec", 0)
+            if lim and elapsed >= lim:
+                cls._add_sector_entry("Duração programada atingida — encerrando com segurança")
+                threading.Thread(target=cls.stop_test, kwargs={"completed": True}, daemon=True).start()
                 break
+            try:
+                snap = cls._collect_snapshot(elapsed)
+            except Exception as ex:  # nunca derruba o teste por falha de telemetria
+                LogManager.add_log(f"[STRESSPULSE] Falha de telemetria: {ex}")
+                continue
 
-            # 2. Coleta de telemetria FORA de locks pesados
-            cpu_usage = cls._get_system_cpu_usage()
-            clocks, avg_clock, max_clock = cls._get_cpu_clocks()
-            mem = cls._get_system_memory()
-            ram_used_gb = mem["used_gb"]
-            ram_pct = mem["percent"]
-            batt_status, batt_pct = cls._get_battery_status()
-            gpu_live = cls._get_gpu_live()
-
-            # 3. Temperaturas (Motherboard, CPU Package, Cores, Discos, GPU)
-            fpu_active = bool(cls._config.get("stress_fpu", True))
-            cpu_package_temp = cls._compute_thermodynamic_temp(cpu_usage, cls._running, fpu_active, avg_clock, max_clock)
-            mobo_temp = round(28.0 + (cpu_usage / 100.0) * 3.5 + random.uniform(-0.2, 0.2), 1)
-
-            num_cores = min(8, len(clocks))
-            core_temps = []
-            for i in range(num_cores):
-                offset = cls._core_offsets[i % len(cls._core_offsets)]
-                t_core = round(cpu_package_temp + offset + random.uniform(-0.4, 0.4), 1)
-                core_temps.append(max(25.0, min(105.0, t_core)))
-
-            disk_stressing = bool(cls._config.get("stress_disk", False) or cls._config.get("stress_disks", False))
-            disk_temp = round(cls._disk_temp_base + (elapsed * 0.015 if disk_stressing else 0.0) + random.uniform(-0.1, 0.1), 1)
-
-            # 4. Detecção de Thermal Throttling
-            throttling_pct = 0.0
-            if cpu_package_temp >= 90.0:
-                throttling_pct = round(min(60.0, (cpu_package_temp - 88.0) * 4.0), 1)
-            elif avg_clock < (max_clock * 0.88) and cpu_usage > 90.0:
-                throttling_pct = round(max(0.0, (1.0 - (avg_clock / max(1.0, max_clock))) * 100), 1)
-
-            is_throttling = throttling_pct > 0.0
-            if is_throttling and not cls._throttling_active:
+            thr = snap.get("throttling_active")
+            if thr and not cls._throttling_active:
                 cls._throttling_active = True
-                cls._add_sector_entry(f"CPU Throttling - Overheating Detected! ({throttling_pct}%)")
-            elif not is_throttling and cls._throttling_active:
+                kind = "térmica" if snap.get("thermal_throttling") else "energia/temperatura"
+                cls._add_sector_entry(f"Limitação de clock detectada ({kind}): {snap['cpu_throttling']}% abaixo do nominal", "warn")
+            elif not thr and cls._throttling_active:
                 cls._throttling_active = False
-                cls._add_sector_entry("CPU Throttling Cleared - Thermal Equilibrium Restored")
+                cls._add_sector_entry("Limitação de clock encerrada")
 
-            # 5. Ventoinhas (RPM)
-            cpu_fan_rpm = int(1200 + (cpu_package_temp / 100.0) * 1200 + random.randint(-20, 20))
-            gpu_fan_rpm = int(gpu_live["fan_pct"] * 24) if gpu_live["fan_pct"] > 0 else 0
-            chassis_fan_rpm = int(950 + (mobo_temp / 50.0) * 400 + random.randint(-15, 15))
-
-            # 6. Tensões (VCore, +12V, +5V, +3.3V, DRAM)
-            vcore = round(1.050 + (cpu_usage / 100.0) * 0.235 + random.uniform(-0.008, 0.008), 3)
-            v12 = round(12.096 + random.uniform(-0.02, 0.02), 3)
-            v5 = round(5.040 + random.uniform(-0.01, 0.01), 3)
-            v33 = round(3.328 + random.uniform(-0.005, 0.005), 3)
-            dram_v = 1.350
-
-            # 7. Potências (Watts)
-            cpu_power = round(15.0 + (cpu_usage / 100.0) * (95.0 if fpu_active else 65.0) + random.uniform(-1.5, 1.5), 1)
-            cores_power = round(cpu_power * 0.82, 1)
-            gpu_power = gpu_live["power"]
-
-            # 8. Monta Snapshot Completo
-            current_snapshot = {
-                "mobo_temp": mobo_temp,
-                "cpu_temp": cpu_package_temp,
-                "core_temps": core_temps,
-                "disk_temp": disk_temp,
-                "disk_name": cls._disk_model_name,
-                "gpu_temp": gpu_live["temp"],
-                "gpu_name": cls._gpu_model_name,
-                "cpu_fan": cpu_fan_rpm,
-                "gpu_fan": gpu_fan_rpm,
-                "chassis_fan": chassis_fan_rpm,
-                "vcore": vcore,
-                "v12": v12,
-                "v5": v5,
-                "v33": v33,
-                "dram_v": dram_v,
-                "cpu_power": cpu_power,
-                "cores_power": cores_power,
-                "gpu_power": gpu_power,
-                "clocks": clocks[:num_cores],
-                "avg_clock": avg_clock,
-                "gpu_clock": gpu_live["clock"],
-                "cpu_usage": cpu_usage,
-                "cpu_throttling": throttling_pct,
-                "ram_usage_pct": ram_pct,
-                "ram_used_gb": ram_used_gb,
-                "ram_total_gb": mem["total_gb"],
-                "battery_status": batt_status,
-                "battery_pct": batt_pct,
-                "elapsed_sec": elapsed,
-                "elapsed_str": cls._fmt_elapsed(elapsed),
-                "test_started_str": cls._start_time_str,
-                "memory_errors": cls._memory_errors,
-                "throttling_active": is_throttling,
-            }
-
-            # 9. Adquire lock de forma ultrarrápida apenas para persistir o snapshot
             with cls._lock:
-                if not cls._running or stop_event.is_set():
+                if not cls._running:
                     break
                 cls._elapsed_sec = elapsed
-                cls._update_stats_snapshot(current_snapshot)
-                cls._history.append(current_snapshot)
+                cls._update_stats(snap)
+                cls._history.append(snap)
 
     @classmethod
-    def _update_stats_snapshot(cls, cur):
-        metric_pairs = [
-            ("mobo_temp", cur["mobo_temp"]),
-            ("cpu_temp", cur["cpu_temp"]),
-            ("disk_temp", cur["disk_temp"]),
-            ("gpu_temp", cur["gpu_temp"]),
-            ("cpu_fan", cur["cpu_fan"]),
-            ("gpu_fan", cur["gpu_fan"]),
-            ("vcore", cur["vcore"]),
-            ("v12", cur["v12"]),
-            ("v5", cur["v5"]),
-            ("v33", cur["v33"]),
-            ("dram_v", cur["dram_v"]),
-            ("cpu_power", cur["cpu_power"]),
-            ("cores_power", cur["cores_power"]),
-            ("gpu_power", cur["gpu_power"]),
-            ("avg_clock", cur["avg_clock"]),
-            ("gpu_clock", cur["gpu_clock"]),
-            ("cpu_usage", cur["cpu_usage"]),
-            ("cpu_throttling", cur["cpu_throttling"]),
-            ("ram_usage_pct", cur["ram_usage_pct"]),
-            ("ram_used_gb", cur["ram_used_gb"]),
-        ]
-        for idx, ct in enumerate(cur["core_temps"]):
-            metric_pairs.append((f"core_temp_{idx+1}", ct))
-
-        for key, val in metric_pairs:
-            if key not in cls._stats:
-                cls._stats[key] = {"current": val, "min": val, "max": val, "avg": val, "sum": val, "count": 1}
+    def _update_stats(cls, cur):
+        keys = ["mobo_temp", "cpu_temp", "disk_temp", "gpu_temp", "cpu_fan", "gpu_fan", "chassis_fan",
+                "vcore", "v12", "v5", "v33", "dram_v", "cpu_power", "cores_power", "gpu_power",
+                "avg_clock", "gpu_clock", "cpu_usage", "cpu_throttling", "ram_usage_pct", "ram_used_gb", "gpu_usage"]
+        pairs = [(k, cur.get(k)) for k in keys]
+        pairs += [(f"core_temp_{i + 1}", v) for i, v in enumerate(cur.get("core_temps") or [])]
+        # Vazão de cada componente EM CARGA (ignora os 5 s iniciais de alocação/aquecimento)
+        cfg = cls._config
+        rates = cur.get("rates") or {}
+        if (cur.get("elapsed_sec") or 0) >= 5:
+            active = {"cpu_mb_s": cfg["stress_cpu"], "fpu_mops": cfg["stress_fpu"],
+                      "cache_mops": cfg["stress_cache"], "mem_gb_s": cfg["stress_memory"]}
+            pairs += [(f"rate_{k}", rates.get(k)) for k, on in active.items() if on]
+            if cfg["stress_disk"] and rates.get("disk_w_mb_s") is not None:
+                pairs.append(("rate_disk_mb_s", round(rates["disk_w_mb_s"] + rates.get("disk_r_mb_s", 0), 1)))
+            if cfg["stress_gpu"]:
+                pairs.append(("rate_gpu_fps", cur.get("gpu_fps")))
+        for key, val in pairs:
+            if val is None:
+                continue
+            st = cls._stats.get(key)
+            if st is None:
+                cls._stats[key] = {"current": val, "min": val, "max": val, "avg": val, "sum": val,
+                                   "sumsq": val * val, "count": 1, "std": 0.0}
             else:
-                st = cls._stats[key]
                 st["current"] = val
                 st["min"] = min(st["min"], val)
                 st["max"] = max(st["max"], val)
                 st["sum"] += val
+                st["sumsq"] = st.get("sumsq", 0.0) + val * val
                 st["count"] += 1
                 st["avg"] = round(st["sum"] / st["count"], 2)
+                var = max(0.0, st["sumsq"] / st["count"] - (st["sum"] / st["count"]) ** 2)
+                st["std"] = round(var ** 0.5, 3)
 
-    @staticmethod
-    def _fmt_elapsed(sec):
-        s = max(0, int(sec or 0))
-        hrs = str(s // 3600).zfill(2)
-        mins = str((s % 3600) // 60).zfill(2)
-        secs = str(s % 60).zfill(2)
-        return f"{hrs}:{mins}:{secs}"
-
-    # -------------------------------------------------------------------------
-    # CONTROLES PÚBLICOS DA ENGINE
-    # -------------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # CONTROLES PÚBLICOS
+    # ------------------------------------------------------------------
     @classmethod
     def start_test(cls, config=None):
-        """Inicia os testes de estresse para os subsistemas e parâmetros selecionados."""
+        from backend.stress_bench_engine import StressBenchEngine
+        if StressBenchEngine._running:
+            return False, "O benchmark de estresse (StressBench) está em execução. Aguarde ou interrompa-o."
+        if cls._running:
+            cls.stop_test()
+            time.sleep(0.2)
         with cls._lock:
-            # Se já estiver rodando, sinaliza parada imediata da sessão anterior
-            if cls._running:
-                cls._stop_event.set()
-                cls._running = False
-                time.sleep(0.05)
-
             cls._init_hardware_names()
+            if config and isinstance(config, dict):
+                for k in ("stress_cpu", "stress_fpu", "stress_cache", "stress_memory", "stress_disk", "stress_gpu"):
+                    if k in config or (k + "s") in config:
+                        cls._config[k] = bool(config.get(k, config.get(k + "s")))
+                for k in ("threads", "memory_mb", "duration_limit_sec"):
+                    if k in config:
+                        try:
+                            cls._config[k] = int(config[k])
+                        except (TypeError, ValueError):
+                            pass
+            cfg = cls._config
+            if np is None and (cfg["stress_fpu"] or cfg["stress_cache"] or cfg["stress_memory"]):
+                return False, "NumPy não está disponível: FPU, Cache e RAM não podem ser testados."
+
+            threads = cfg.get("threads") or 0
+            threads = threads if threads > 0 else (os.cpu_count() or 4)
+            threads = max(1, min(256, threads))
+            mem_mb = max(128, int(cfg.get("memory_mb") or 2048))
+
             cls._running = True
-
-            # Cria novo evento de parada independente para esta nova sessão
             cls._stop_event = threading.Event()
-            session_stop_event = cls._stop_event
-
-            cls._workers.clear()
+            stop = cls._stop_event
+            cls._workers = []
             cls._start_time = time.time()
             cls._start_time_str = time.strftime("%d/%m/%Y %H:%M:%S")
             cls._elapsed_sec = 0
             cls._throttling_active = False
-            cls._memory_errors = 0
-            cls._disk_io_mb = 0.0
+            cls._errors = {k: 0 for k in cls._errors}
+            cls._work = {k: 0 for k in cls._work}
+            cls._work_prev = None
+            cls._rates = {}
             cls._memory_tested_mb = 0
-
-            # Atualiza parâmetros
-            if config and isinstance(config, dict):
-                for k in ["stress_cpu", "stress_fpu", "stress_cache", "stress_memory", "stress_disk", "stress_disks", "stress_gpu", "stress_gpus"]:
-                    if k in config:
-                        cls._config[k] = bool(config[k])
-                for k in ["threads", "memory_mb", "duration_limit_sec"]:
-                    if k in config:
-                        try:
-                            cls._config[k] = int(config[k])
-                        except (ValueError, TypeError):
-                            pass
-
-            cfg = cls._config
-            raw_threads = cfg.get("threads", 0)
-            try:
-                raw_int = int(raw_threads)
-            except (ValueError, TypeError):
-                raw_int = 0
-
-            # 0 ou negativo = Auto (todas as threads detectadas)
-            threads = raw_int if raw_int > 0 else (os.cpu_count() or 4)
-            threads = max(1, min(64, threads))
-
-            try:
-                mem_mb = max(128, int(cfg.get("memory_mb", 2048)))
-            except (ValueError, TypeError):
-                mem_mb = 2048
-
             cls._stats.clear()
-            cls._add_sector_entry("Stability Test: Started")
+            cls._history.clear()
+            cls._add_sector_entry("Teste de estabilidade iniciado")
 
-            # 1. Stress CPU (Integer / ALU / Hashing)
-            if cfg.get("stress_cpu", True):
-                cls._add_sector_entry(f"CPU: Started ({threads} Threads)")
-                for i in range(threads):
-                    t = threading.Thread(target=cls._worker_cpu, args=(session_stop_event, i), daemon=True)
-                    cls._workers.append(t)
-                    t.start()
-
-            # 2. Stress FPU (Floating Point AVX/SSE)
-            if cfg.get("stress_fpu", True):
-                cls._add_sector_entry(f"FPU: Started ({threads} Threads)")
-                for i in range(threads):
-                    t = threading.Thread(target=cls._worker_fpu, args=(session_stop_event, i), daemon=True)
-                    cls._workers.append(t)
-                    t.start()
-
-            # 3. Stress Cache (L1, L2, L3)
-            if cfg.get("stress_cache", True):
-                cache_workers = min(4, threads)
-                cls._add_sector_entry(f"Cache: Started ({cache_workers} Lines)")
-                for i in range(cache_workers):
-                    t = threading.Thread(target=cls._worker_cache, args=(session_stop_event, i), daemon=True)
-                    cls._workers.append(t)
-                    t.start()
-
-            # 4. Stress Memory (RAM)
-            if cfg.get("stress_memory", True):
-                cls._add_sector_entry(f"System Memory: Started ({mem_mb} MB)")
-                t = threading.Thread(target=cls._worker_memory, args=(session_stop_event, mem_mb), daemon=True)
-                cls._workers.append(t)
-                t.start()
-            else:
-                cls._memory_tested_mb = 0
-
-            # 5. Stress Disks
-            stress_disk_active = bool(cfg.get("stress_disk", False) or cfg.get("stress_disks", False))
-            if stress_disk_active:
-                cls._add_sector_entry(f"Drive C: Started ({cls._disk_model_name})")
-                t = threading.Thread(target=cls._worker_disk, args=(session_stop_event,), daemon=True)
+            def spawn(fn, *args, name=""):
+                t = threading.Thread(target=fn, args=(stop,) + args, daemon=True, name=name)
                 cls._workers.append(t)
                 t.start()
 
-            # 6. Stress GPU
-            stress_gpu_active = bool(cfg.get("stress_gpu", False) or cfg.get("stress_gpus", False))
-            if stress_gpu_active:
-                cls._add_sector_entry(f"GPU: Started ({cls._gpu_model_name})")
-                t = threading.Thread(target=cls._worker_gpu, args=(session_stop_event,), daemon=True)
-                cls._workers.append(t)
-                t.start()
+            # Quando CPU e FPU estão ativos, divide as threads para não sobrecarregar o agendador
+            cpu_n = fpu_n = threads
+            if cfg["stress_cpu"] and cfg["stress_fpu"]:
+                cpu_n = max(1, threads // 2)
+                fpu_n = max(1, threads - cpu_n)
+            if cfg["stress_cpu"]:
+                cls._add_sector_entry(f"CPU: {cpu_n} thread(s) de SHA-256/BLAKE2b verificados")
+                for i in range(cpu_n):
+                    spawn(cls._worker_cpu, i, name=f"cpu{i}")
+            if cfg["stress_fpu"]:
+                cls._add_sector_entry(f"FPU: {fpu_n} thread(s) de ponto flutuante float64 verificados")
+                for i in range(fpu_n):
+                    spawn(cls._worker_fpu, i, name=f"fpu{i}")
+            if cfg["stress_cache"]:
+                n = max(1, min(threads, 4))
+                cls._add_sector_entry(f"Cache: {n} thread(s) de acesso aleatório em 8 MiB")
+                for i in range(n):
+                    spawn(cls._worker_cache, i, name=f"cache{i}")
+            if cfg["stress_memory"]:
+                cls._add_sector_entry(f"RAM: alocando {mem_mb} MB")
+                spawn(cls._worker_memory, mem_mb, name="mem")
+            if cfg["stress_disk"]:
+                cls._add_sector_entry(f"Disco: gravação/leitura verificada sem cache ({cls._disk_model_name or 'unidade do sistema'})")
+                spawn(cls._worker_disk, name="disk")
+            if cfg["stress_gpu"]:
+                cls._add_sector_entry(f"GPU: carga WebGL2 iniciada pela interface ({cls._gpu_model_name or 'GPU'})")
 
-            # Inicia Sampler de telemetria
-            cls._sampler_thread = threading.Thread(target=cls._sampler_loop, args=(session_stop_event,), daemon=True)
+            cls._sampler_thread = threading.Thread(target=cls._sampler_loop, args=(stop,), daemon=True)
             cls._sampler_thread.start()
-
-            return True, "Teste de Estabilidade iniciado com sucesso."
+            return True, "Teste de estabilidade iniciado."
 
     @classmethod
-    def stop_test(cls):
-        """Interrompe todos os testes de estresse com segurança e encerramento imediato."""
+    def stop_test(cls, completed=False):
         with cls._lock:
-            if not cls._running:
-                cls._stop_event.set()
-                return True, "O Teste de Estabilidade já está parado."
-
-            cls._running = False
             cls._stop_event.set()
-            cls._add_sector_entry("Stability Test: Stopped")
-
-            cfg = cls._config
-            stress_disk_active = bool(cfg.get("stress_disk", False) or cfg.get("stress_disks", False))
-            stress_gpu_active = bool(cfg.get("stress_gpu", False) or cfg.get("stress_gpus", False))
-
-            if stress_disk_active:
-                cls._add_sector_entry("Drive C: Stopped")
-            if cfg.get("stress_cpu", True):
-                cls._add_sector_entry("CPU: Stopped")
-            if cfg.get("stress_fpu", True):
-                cls._add_sector_entry("FPU: Stopped")
-            if cfg.get("stress_cache", True):
-                cls._add_sector_entry("Cache: Stopped")
-            if cfg.get("stress_memory", True):
-                cls._add_sector_entry("System Memory: Stopped")
-            if stress_gpu_active:
-                cls._add_sector_entry("GPU: Stopped")
-
-            workers_to_stop = list(cls._workers)
-            cls._workers.clear()
+            if not cls._running:
+                return True, "O teste de estabilidade já está parado."
+            cls._running = False
+            workers = list(cls._workers)
+            cls._workers = []
             cls._throttling_active = False
-            cls._memory_tested_mb = 0
+        total_err = sum(cls._errors.values())
+        dur = _fmt_elapsed(time.time() - cls._start_time)
+        if total_err:
+            cls._add_sector_entry(f"Teste encerrado após {dur}: {total_err} ERRO(S) detectado(s) — sistema INSTÁVEL", "error")
+        else:
+            cls._add_sector_entry(f"Teste {'concluído' if completed else 'interrompido'} após {dur}: nenhum erro detectado")
 
         def _cleanup():
-            for w in workers_to_stop:
+            for w in workers:
                 try:
-                    w.join(timeout=0.15)
+                    w.join(timeout=3)
                 except Exception:
                     pass
             gc.collect()
-
         threading.Thread(target=_cleanup, daemon=True).start()
-        return True, "Teste de Estabilidade interrompido com sucesso."
+        return True, "Teste de estabilidade encerrado."
 
     @classmethod
     def reset_stats(cls):
-        """Limpa o histórico e reinicia contadores estatísticos."""
         with cls._lock:
             cls._stats.clear()
             cls._history.clear()
             cls._sector_log.clear()
-            cls._add_sector_entry("Statistics & History Reset")
-            return True, "Estatísticas limpas."
+        cls._add_sector_entry("Estatísticas e histórico reiniciados")
+        return True, "Estatísticas limpas."
+
+    @classmethod
+    def report_gpu_client(cls, fps=None, renderer=None):
+        """Recebe da interface o FPS da carga WebGL2 (prova de que a GPU está trabalhando)."""
+        try:
+            cls._gpu_client = {"fps": round(float(fps), 1) if fps is not None else None,
+                               "ts": time.time(), "renderer": renderer}
+        except (TypeError, ValueError):
+            pass
+        return True
 
     @classmethod
     def get_status(cls):
-        """Retorna instantaneamente o estado completo, telemetria e histórico para a UI."""
         cls._init_hardware_names()
-        clocks, avg_clock, max_clock = cls._get_cpu_clocks()
-        mem = cls._get_system_memory()
-        cpu_usage = cls._get_system_cpu_usage()
-        batt_status, batt_pct = cls._get_battery_status()
-        gpu_live = cls._get_gpu_live()
-
         with cls._lock:
-            is_running = cls._running
-            elapsed_sec = cls._elapsed_sec
-            elapsed_str = cls._fmt_elapsed(elapsed_sec)
-            start_str = cls._start_time_str
-            cfg_copy = dict(cls._config)
-            mem_errors = cls._memory_errors
-            mem_tested = cls._memory_tested_mb if is_running else 0
-            disk_io = round(cls._disk_io_mb, 1)
-            throttling = cls._throttling_active
-            sector_log = list(cls._sector_log)
+            running = cls._running
             history = list(cls._history)
             stats = {k: dict(v) for k, v in cls._stats.items()}
+            sector_log = list(cls._sector_log)
+            cfg = dict(cls._config)
+            errors = dict(cls._errors)
+            elapsed = cls._elapsed_sec
+            mem_tested = cls._memory_tested_mb if running else 0
+            throttling = cls._throttling_active
 
-        if not is_running:
-            cpu_temp = cls._compute_thermodynamic_temp(cpu_usage, False, False, avg_clock, max_clock)
-            num_cores = min(8, len(clocks))
-            core_temps = [round(cpu_temp + cls._core_offsets[i % len(cls._core_offsets)], 1) for i in range(num_cores)]
-
-            cur_snapshot = {
-                "mobo_temp": 28.0,
-                "cpu_temp": cpu_temp,
-                "core_temps": core_temps,
-                "disk_temp": cls._disk_temp_base,
-                "disk_name": cls._disk_model_name,
-                "gpu_temp": gpu_live["temp"],
-                "gpu_name": cls._gpu_model_name,
-                "cpu_fan": 1200,
-                "gpu_fan": 0,
-                "chassis_fan": 980,
-                "vcore": 1.050,
-                "v12": 12.096,
-                "v5": 5.040,
-                "v33": 3.328,
-                "dram_v": 1.350,
-                "cpu_power": 18.0,
-                "cores_power": 14.5,
-                "gpu_power": gpu_live["power"],
-                "clocks": clocks[:num_cores],
-                "avg_clock": avg_clock,
-                "gpu_clock": gpu_live["clock"],
-                "cpu_usage": cpu_usage,
-                "cpu_throttling": 0.0,
-                "ram_usage_pct": mem["percent"],
-                "ram_used_gb": mem["used_gb"],
-                "ram_total_gb": mem["total_gb"],
-                "battery_status": batt_status,
-                "battery_pct": batt_pct,
-                "elapsed_sec": elapsed_sec,
-                "elapsed_str": elapsed_str,
-                "test_started_str": start_str,
-                "memory_errors": mem_errors,
-                "throttling_active": False,
-            }
+        if running and history:
+            cur = history[-1]
         else:
-            cur_snapshot = history[-1] if len(history) > 0 else {
-                "mobo_temp": 28.0,
-                "cpu_temp": cls._simulated_temp,
-                "core_temps": [cls._simulated_temp] * 4,
-                "disk_temp": cls._disk_temp_base,
-                "disk_name": cls._disk_model_name,
-                "gpu_temp": gpu_live["temp"],
-                "gpu_name": cls._gpu_model_name,
-                "cpu_fan": 1450,
-                "gpu_fan": 0,
-                "chassis_fan": 1050,
-                "vcore": 1.185,
-                "v12": 12.096,
-                "v5": 5.040,
-                "v33": 3.328,
-                "dram_v": 1.350,
-                "cpu_power": 65.0,
-                "cores_power": 52.0,
-                "gpu_power": gpu_live["power"],
-                "clocks": clocks[:4],
-                "avg_clock": avg_clock,
-                "gpu_clock": gpu_live["clock"],
-                "cpu_usage": cpu_usage,
-                "cpu_throttling": 0.0,
-                "ram_usage_pct": mem["percent"],
-                "ram_used_gb": mem["used_gb"],
-                "ram_total_gb": mem["total_gb"],
-                "battery_status": batt_status,
-                "battery_pct": batt_pct,
-                "elapsed_sec": elapsed_sec,
-                "elapsed_str": elapsed_str,
-                "test_started_str": start_str,
-                "memory_errors": mem_errors,
-                "throttling_active": throttling,
-            }
+            cur = cls._collect_snapshot(elapsed)
 
         return {
-            "running": is_running,
-            "elapsed_sec": elapsed_sec,
-            "elapsed_str": elapsed_str,
-            "test_started_str": start_str,
-            "config": cfg_copy,
-            "current": cur_snapshot,
+            "running": running,
+            "elapsed_sec": elapsed,
+            "elapsed_str": _fmt_elapsed(elapsed),
+            "test_started_str": cls._start_time_str,
+            "config": cfg,
+            "current": cur,
             "statistics": stats,
-            "history": history,
+            "history": history[-180:],
             "sector_log": sector_log,
-            "memory_errors": mem_errors,
+            "errors": errors,
+            "errors_total": sum(errors.values()),
+            "memory_errors": errors["memory"],
             "memory_tested_mb": mem_tested,
-            "disk_io_mb": disk_io,
+            "work": {k: int(v) for k, v in cls._work.items()},
+            "rates": dict(cls._rates),
+            "disk_io_mb": round((cls._work["disk_written_bytes"] + cls._work["disk_read_bytes"]) / 1e6, 1),
             "throttling_active": throttling,
             "system_threads": os.cpu_count() or 4,
+            "max_clock": cur.get("nominal_clock"),
             "disk_name": cls._disk_model_name,
             "gpu_name": cls._gpu_model_name,
-            "battery_status": batt_status,
+            "gpu_renderer": cls._gpu_client.get("renderer"),
+            "battery_status": cur.get("battery_status"),
+            "numpy": np is not None,
+            "lhm": cls._lhm_info(),
         }
 
+    @classmethod
+    def _lhm_info(cls):
+        from backend.telemetry import find_lhm
+        return {"installed_path": find_lhm()}
 
-# Alias oficial proprietário
+
+# ==============================================================================
+# ARQUIVO SEM CACHE (FILE_FLAG_NO_BUFFERING) PARA O TESTE DE DISCO
+# ==============================================================================
+class _UnbufferedFile:
+    def __init__(self, path, block):
+        self.path = path
+        self.block = block
+        self.h = None
+        self.f = None
+        self.buf = None
+
+    def open(self):
+        if IS_WINDOWS:
+            try:
+                k32 = ctypes.WinDLL("kernel32", use_last_error=True)
+                k32.CreateFileW.restype = wintypes.HANDLE
+                k32.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, wintypes.LPVOID,
+                                            wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+                k32.VirtualAlloc.restype = ctypes.c_void_p
+                k32.VirtualAlloc.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
+                k32.SetFilePointerEx.argtypes = [wintypes.HANDLE, ctypes.c_longlong, ctypes.c_void_p, wintypes.DWORD]
+                k32.ReadFile.argtypes = [wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), ctypes.c_void_p]
+                k32.WriteFile.argtypes = [wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), ctypes.c_void_p]
+                k32.CloseHandle.argtypes = [wintypes.HANDLE]
+                k32.FlushFileBuffers.argtypes = [wintypes.HANDLE]
+                k32.VirtualFree.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD]
+                self.k32 = k32
+                h = k32.CreateFileW(self.path, 0xC0000000, 0, None, 2,  # GENERIC_RW, CREATE_ALWAYS
+                                    0x20000000 | 0x80000000 | 0x04000000,  # NO_BUFFERING|WRITE_THROUGH|DELETE_ON_CLOSE
+                                    None)
+                if h and h != wintypes.HANDLE(-1).value:
+                    self.h = h
+                    self.buf = k32.VirtualAlloc(None, self.block, 0x3000, 0x04)
+                    return bool(self.buf)
+            except Exception:
+                self.h = None
+        try:
+            self.f = open(self.path, "w+b", buffering=0)
+            return True
+        except OSError:
+            return False
+
+    def write_at(self, off, data):
+        if self.h:
+            ctypes.memmove(self.buf, data, len(data))
+            self.k32.SetFilePointerEx(self.h, off, None, 0)
+            n = wintypes.DWORD(0)
+            return bool(self.k32.WriteFile(self.h, self.buf, len(data), ctypes.byref(n), None)) and n.value == len(data)
+        self.f.seek(off)
+        return self.f.write(data) == len(data)
+
+    def read_at(self, off):
+        if self.h:
+            self.k32.SetFilePointerEx(self.h, off, None, 0)
+            n = wintypes.DWORD(0)
+            if not self.k32.ReadFile(self.h, self.buf, self.block, ctypes.byref(n), None) or n.value != self.block:
+                return None
+            return ctypes.string_at(self.buf, self.block)
+        self.f.seek(off)
+        d = self.f.read(self.block)
+        return d if len(d) == self.block else None
+
+    def flush(self):
+        if self.h:
+            self.k32.FlushFileBuffers(self.h)
+        elif self.f:
+            self.f.flush()
+            os.fsync(self.f.fileno())
+
+    def close(self):
+        try:
+            if self.h:
+                self.k32.CloseHandle(self.h)
+                if self.buf:
+                    self.k32.VirtualFree(ctypes.c_void_p(self.buf), 0, 0x8000)
+            elif self.f:
+                self.f.close()
+        except Exception:
+            pass
+        self.h = self.f = None
+
+
 StressPulseEngine = StressEngine

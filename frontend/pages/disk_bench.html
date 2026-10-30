@@ -1,268 +1,138 @@
-<section id="view-disk-bench" class="view-panel hidden space-y-6">
-                <!-- CONTROLES DO BENCHMARK -->
-                <div
-                    class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex flex-wrap items-center gap-4">
-                        <!-- BOTÃO TODOS -->
-                        <div>
-                            <label class="text-[11px] text-slate-400 block mb-1 font-medium">&nbsp;</label>
-                            <button id="bench-start-all-btn" onclick="startDiskBenchmark('all')"
-                                class="bench-row-btn btn-action-success px-5 py-2 text-xs font-black tracking-wide flex items-center gap-2 shadow-lg">
-                                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-                                <span data-i18n="disk_bench.btn_all_tests">TODOS OS TESTES</span>
-                            </button>
-                        </div>
+<section id="view-disk-bench" class="view-panel hidden ws-page">
 
-                        <!-- DROPDOWN PASSES -->
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1 font-medium"
-                                data-i18n="disk_bench.passes">Repetições (Passes):</label>
-                            <select id="bench-passes-select"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-cyan-500">
-                                <option value="1">1x (Rápido)</option>
-                                <option value="2">2x</option>
-                                <option value="3">3x</option>
-                                <option value="5" selected>5x (Padrão)</option>
-                                <option value="9">9x (Extremo)</option>
-                            </select>
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-end justify-between gap-4">
+                        <div class="flex flex-wrap items-end gap-3">
+                            <label class="flex flex-col gap-1.5"><span class="ws-stat-label" data-i18n="disk_bench.test_drive">Unidade</span>
+                                <select id="bench-drive-select" class="ws-select min-w-[200px]"><option value="C">C:</option></select>
+                            </label>
+                            <label class="flex flex-col gap-1.5"><span class="ws-stat-label" data-i18n="disk_bench.sample_size">Tamanho do arquivo</span>
+                                <select id="bench-size-select" class="ws-select">
+                                    <option value="64">64 MiB</option><option value="128">128 MiB</option><option value="256">256 MiB</option>
+                                    <option value="512">512 MiB</option><option value="1024" selected>1 GiB</option><option value="2048">2 GiB</option><option value="4096">4 GiB</option>
+                                </select>
+                            </label>
+                            <label class="flex flex-col gap-1.5"><span class="ws-stat-label" data-i18n="disk_bench.passes">Passes</span>
+                                <select id="bench-passes-select" class="ws-select">
+                                    <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5" selected>5</option><option value="9">9</option>
+                                </select>
+                            </label>
+                            <label class="flex flex-col gap-1.5"><span class="ws-stat-label" data-i18n="disk_bench.measure_unit">Exibir em</span>
+                                <select id="bench-unit-select" onchange="changeBenchUnit(this.value)" class="ws-select">
+                                    <option value="MB/s" selected>MB/s</option><option value="GB/s">GB/s</option><option value="IOPS">IOPS</option><option value="LAT">Latência (µs)</option>
+                                </select>
+                            </label>
                         </div>
-
-                        <!-- DROPDOWN TAMANHO -->
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1 font-medium"
-                                data-i18n="disk_bench.sample_size">Tamanho da Amostra:</label>
-                            <select id="bench-size-select"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-cyan-500">
-                                <option value="64">64 MiB</option>
-                                <option value="128">128 MiB</option>
-                                <option value="256">256 MiB</option>
-                                <option value="512">512 MiB</option>
-                                <option value="1024" selected>1 GiB (Padrão)</option>
-                                <option value="2048">2 GiB</option>
-                                <option value="4096">4 GiB</option>
-                            </select>
-                        </div>
-
-                        <!-- DROPDOWN DRIVE -->
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1 font-medium"
-                                data-i18n="disk_bench.test_drive">Unidade de Teste:</label>
-                            <select id="bench-drive-select"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-cyan-500 min-w-[150px]">
-                                <option value="C">C: [SSD Sistema]</option>
-                            </select>
-                        </div>
-
-                        <!-- DROPDOWN UNIDADE -->
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1 font-medium"
-                                data-i18n="disk_bench.measure_unit">Unidade de Medição:</label>
-                            <select id="bench-unit-select" onchange="changeBenchUnit(this.value)"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-cyan-300 focus:outline-none focus:border-cyan-500">
-                                <option value="MB/s" selected>MB/s (Padrão)</option>
-                                <option value="GB/s">GB/s</option>
-                                <option value="IOPS">IOPS (Operações/s)</option>
-                                <option value="LAT">Latência (μs)</option>
-                            </select>
+                        <div class="flex gap-2">
+                            <button id="bench-cancel-btn" onclick="cancelDiskBenchmark()" class="hidden ws-btn danger">Parar</button>
+                            <button id="bench-start-all-btn" onclick="startDiskBenchmark('all')" class="ws-btn primary"><span data-i18n="disk_bench.btn_all_tests">Executar todos</span></button>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <button id="bench-cancel-btn" onclick="cancelDiskBenchmark()"
-                            class="hidden btn-action-danger flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg">
-                            <i data-lucide="square" class="w-4 h-4 fill-current"></i>
-                            <span>Interromper</span>
-                        </button>
+                    <div id="bench-progress-box" class="mt-5">
+                        <div class="flex items-center justify-between text-[12.5px] mb-2">
+                            <span id="bench-status-phase" class="ws-muted flex items-center gap-2">Pronto</span>
+                            <span id="bench-progress-text" class="ws-mono ws-strong">0%</span>
+                        </div>
+                        <div class="ws-meter"><span id="bench-progress-bar" style="width:0%"></span></div>
+                        <p id="bench-status-msg" class="ws-stat-foot ws-mono mt-2">DiskSpd (Microsoft) · sem cache do Windows · dados aleatórios incompressíveis · 1 s de aquecimento + 5 s medidos por passe.</p>
                     </div>
                 </div>
 
-                <!-- PROGRESS BAR DO BENCHMARK -->
-                <div id="bench-progress-box" class="bg-dark-850 p-4 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="flex items-center justify-between text-xs">
-                        <span id="bench-status-phase" class="font-bold text-cyan-400 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                            Pronto para teste de velocidade com Direct I/O Multi-Pass
-                        </span>
-                        <span id="bench-progress-text" class="font-mono text-slate-400">0%</span>
+                <div class="ws-card">
+                    <div class="diskspeed-row diskspeed-head">
+                        <div class="ws-stat-label">Teste</div>
+                        <div class="flex items-center justify-between"><span class="ws-stat-label">Leitura</span><span id="lbl-unit-read" class="ws-badge ws-mono">MB/s</span></div>
+                        <div class="flex items-center justify-between"><span class="ws-stat-label">Gravação</span><span id="lbl-unit-write" class="ws-badge ws-mono">MB/s</span></div>
                     </div>
-                    <div class="w-full bg-dark-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                        <div id="bench-progress-bar"
-                            class="bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 h-2.5 rounded-full transition-all duration-300"
-                            style="width: 0%"></div>
-                    </div>
-                    <p id="bench-status-msg" class="text-[11px] text-slate-400 font-mono">Retém o pico real de
-                        performance através de múltiplas repetições sem cache do Windows.</p>
-                </div>
+                    <div class="flex flex-col gap-2.5 mt-2">
 
-                <!-- MATRIZ DE TESTES ESTILO DISKSPEED TURBO -->
-                <div class="space-y-3">
-                    <!-- CABEÇALHO DA MATRIZ -->
-                    <div class="diskspeed-row text-xs font-bold uppercase tracking-wider text-slate-400 px-2">
-                        <div class="text-center font-mono">Tipo de Teste</div>
-                        <div class="flex items-center justify-between px-3">
-                            <span class="text-emerald-400 flex items-center gap-1.5 font-sans">
-                                <i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Leitura (Read)
-                            </span>
-                            <span id="lbl-unit-read"
-                                class="font-mono text-[11px] text-slate-400 bg-dark-900 px-2 py-0.5 rounded border border-slate-800">MB/s</span>
-                        </div>
-                        <div class="flex items-center justify-between px-3">
-                            <span class="text-cyan-400 flex items-center gap-1.5 font-sans">
-                                <i data-lucide="arrow-up-circle" class="w-4 h-4"></i> Gravação (Write)
-                            </span>
-                            <span id="lbl-unit-write"
-                                class="font-mono text-[11px] text-slate-400 bg-dark-900 px-2 py-0.5 rounded border border-slate-800">MB/s</span>
-                        </div>
-                    </div>
-
-                    <!-- LINHA 1: SEQ 1M Q8T1 -->
                     <div class="diskspeed-row" id="row-seq-q8">
-                        <button onclick="startDiskBenchmark('seq_q8')" id="btn-seq-q8" class="bench-row-btn group"
-                            title="Clique para rodar apenas o teste Sequencial 1M Q8T1">
-                            <span class="text-white group-hover:text-emerald-300 font-mono">SEQ1M Q8T1</span>
-                            <span class="text-[9px] text-slate-400 font-sans font-normal mt-0.5">Queue=8 • 1 Thr</span>
+                        <button onclick="startDiskBenchmark('seq_q8')" id="btn-seq-q8" class="bench-row-btn" title="Executar somente SEQ1M Q8T1">
+                            <span class="ws-mono">SEQ1M Q8T1</span>
+                            <span class="bench-row-desc">Sequencial 1 MiB · fila 8</span>
                         </button>
-                        <!-- CARD LEITURA -->
                         <div class="diskspeed-card" id="card-read-seq-q8">
                             <div class="diskspeed-fill" id="meter-read-seq-q8"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Leitura Sequencial 1M
-                                        (Q8)</span>
-                                    <span id="sub-read-seq-q8" class="text-[10px] text-slate-500 font-mono">0 IOPS • 0.0
-                                        μs</span>
-                                </div>
-                                <span id="res-read-seq-q8"
-                                    class="text-3xl font-black font-mono text-emerald-400">0.00</span>
+                                <span id="sub-read-seq-q8" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-read-seq-q8" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
-                        <!-- CARD GRAVAÇÃO -->
                         <div class="diskspeed-card" id="card-write-seq-q8">
                             <div class="diskspeed-fill diskspeed-fill-write" id="meter-write-seq-q8"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Gravação Sequencial 1M
-                                        (Q8)</span>
-                                    <span id="sub-write-seq-q8" class="text-[10px] text-slate-500 font-mono">0 IOPS •
-                                        0.0 μs</span>
-                                </div>
-                                <span id="res-write-seq-q8"
-                                    class="text-3xl font-black font-mono text-cyan-400">0.00</span>
+                                <span id="sub-write-seq-q8" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-write-seq-q8" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- LINHA 2: SEQ 1M Q1T1 -->
                     <div class="diskspeed-row" id="row-seq-q1">
-                        <button onclick="startDiskBenchmark('seq_q1')" id="btn-seq-q1" class="bench-row-btn group"
-                            title="Clique para rodar apenas o teste Sequencial 1M Q1T1">
-                            <span class="text-white group-hover:text-emerald-300 font-mono">SEQ1M Q1T1</span>
-                            <span class="text-[9px] text-slate-400 font-sans font-normal mt-0.5">Queue=1 • 1 Thr</span>
+                        <button onclick="startDiskBenchmark('seq_q1')" id="btn-seq-q1" class="bench-row-btn" title="Executar somente SEQ1M Q1T1">
+                            <span class="ws-mono">SEQ1M Q1T1</span>
+                            <span class="bench-row-desc">Sequencial 1 MiB · fila 1</span>
                         </button>
-                        <!-- CARD LEITURA -->
                         <div class="diskspeed-card" id="card-read-seq-q1">
                             <div class="diskspeed-fill" id="meter-read-seq-q1"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Leitura Sequencial 1M
-                                        (Q1)</span>
-                                    <span id="sub-read-seq-q1" class="text-[10px] text-slate-500 font-mono">0 IOPS • 0.0
-                                        μs</span>
-                                </div>
-                                <span id="res-read-seq-q1"
-                                    class="text-3xl font-black font-mono text-emerald-400">0.00</span>
+                                <span id="sub-read-seq-q1" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-read-seq-q1" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
-                        <!-- CARD GRAVAÇÃO -->
                         <div class="diskspeed-card" id="card-write-seq-q1">
                             <div class="diskspeed-fill diskspeed-fill-write" id="meter-write-seq-q1"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Gravação Sequencial 1M
-                                        (Q1)</span>
-                                    <span id="sub-write-seq-q1" class="text-[10px] text-slate-500 font-mono">0 IOPS •
-                                        0.0 μs</span>
-                                </div>
-                                <span id="res-write-seq-q1"
-                                    class="text-3xl font-black font-mono text-cyan-400">0.00</span>
+                                <span id="sub-write-seq-q1" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-write-seq-q1" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- LINHA 3: RND 4K Q32T1 -->
                     <div class="diskspeed-row" id="row-rnd-q32">
-                        <button onclick="startDiskBenchmark('rnd_q32')" id="btn-rnd-q32" class="bench-row-btn group"
-                            title="Clique para rodar apenas o teste Aleatório 4K Q32T1">
-                            <span class="text-white group-hover:text-emerald-300 font-mono">RND4K Q32T1</span>
-                            <span class="text-[9px] text-slate-400 font-sans font-normal mt-0.5">Queue=32 • 1 Thr</span>
+                        <button onclick="startDiskBenchmark('rnd_q32')" id="btn-rnd-q32" class="bench-row-btn" title="Executar somente RND4K Q32T1">
+                            <span class="ws-mono">RND4K Q32T1</span>
+                            <span class="bench-row-desc">Aleatório 4 KiB · fila 32</span>
                         </button>
-                        <!-- CARD LEITURA -->
                         <div class="diskspeed-card" id="card-read-rnd-q32">
                             <div class="diskspeed-fill" id="meter-read-rnd-q32"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Aleatório 4K (Fila
-                                        Q32)</span>
-                                    <span id="sub-read-rnd-q32" class="text-[10px] text-slate-500 font-mono">0 IOPS •
-                                        0.0 μs</span>
-                                </div>
-                                <span id="res-read-rnd-q32"
-                                    class="text-3xl font-black font-mono text-emerald-400">0.00</span>
+                                <span id="sub-read-rnd-q32" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-read-rnd-q32" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
-                        <!-- CARD GRAVAÇÃO -->
                         <div class="diskspeed-card" id="card-write-rnd-q32">
                             <div class="diskspeed-fill diskspeed-fill-write" id="meter-write-rnd-q32"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Gravação Aleatória 4K (Fila
-                                        Q32)</span>
-                                    <span id="sub-write-rnd-q32" class="text-[10px] text-slate-500 font-mono">0 IOPS •
-                                        0.0 μs</span>
-                                </div>
-                                <span id="res-write-rnd-q32"
-                                    class="text-3xl font-black font-mono text-cyan-400">0.00</span>
+                                <span id="sub-write-rnd-q32" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-write-rnd-q32" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- LINHA 4: RND 4K Q1T1 -->
                     <div class="diskspeed-row" id="row-rnd-q1">
-                        <button onclick="startDiskBenchmark('rnd_q1')" id="btn-rnd-q1" class="bench-row-btn group"
-                            title="Clique para rodar apenas o teste Aleatório 4K Q1T1">
-                            <span class="text-white group-hover:text-emerald-300 font-mono">RND4K Q1T1</span>
-                            <span class="text-[9px] text-slate-400 font-sans font-normal mt-0.5">Queue=1 •
-                                Latência</span>
+                        <button onclick="startDiskBenchmark('rnd_q1')" id="btn-rnd-q1" class="bench-row-btn" title="Executar somente RND4K Q1T1">
+                            <span class="ws-mono">RND4K Q1T1</span>
+                            <span class="bench-row-desc">Aleatório 4 KiB · fila 1 (latência)</span>
                         </button>
-                        <!-- CARD LEITURA -->
                         <div class="diskspeed-card" id="card-read-rnd-q1">
                             <div class="diskspeed-fill" id="meter-read-rnd-q1"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Aleatório 4K (Q1
-                                        Latência)</span>
-                                    <span id="sub-read-rnd-q1" class="text-[10px] text-slate-500 font-mono">0 IOPS • 0.0
-                                        μs</span>
-                                </div>
-                                <span id="res-read-rnd-q1"
-                                    class="text-3xl font-black font-mono text-emerald-400">0.00</span>
+                                <span id="sub-read-rnd-q1" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-read-rnd-q1" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
-                        <!-- CARD GRAVAÇÃO -->
                         <div class="diskspeed-card" id="card-write-rnd-q1">
                             <div class="diskspeed-fill diskspeed-fill-write" id="meter-write-rnd-q1"></div>
                             <div class="diskspeed-content">
-                                <div>
-                                    <span class="text-[10px] text-slate-400 font-mono block">Gravação Aleatória 4K
-                                        (Q1)</span>
-                                    <span id="sub-write-rnd-q1" class="text-[10px] text-slate-500 font-mono">0 IOPS •
-                                        0.0 μs</span>
-                                </div>
-                                <span id="res-write-rnd-q1"
-                                    class="text-3xl font-black font-mono text-cyan-400">0.00</span>
+                                <span id="sub-write-rnd-q1" class="ws-mono text-[11px] ws-faint">—</span>
+                                <span id="res-write-rnd-q1" class="ws-mono diskspeed-value">0.00</span>
                             </div>
                         </div>
                     </div>
+
+                    </div>
+                    <p class="ws-stat-foot mt-3">Clique no nome de um teste para executá-lo isoladamente. O resultado exibido é o melhor passe.</p>
                 </div>
             </section>
 

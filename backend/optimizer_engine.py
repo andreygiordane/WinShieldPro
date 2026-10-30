@@ -4,6 +4,7 @@ from backend.cmd_engine import SystemCommandEngine
 from backend.log_manager import LogManager
 from backend.process import run_hidden, run_ps, run_ps_json
 from backend.system_engine import SystemEngine
+from backend.core import IS_WINDOWS
 
 # Cada tarefa: (titulo, tipo, comando, descricao_etapa)
 TASKS = {
@@ -484,30 +485,152 @@ class OptimizerEngine:
             SystemCommandEngine.run_powershell(cmd, name=title)
         return True, f"'{title}' iniciado. Acompanhe no console."
 
+    # Tempo máximo por tarefa: SFC/DISM/CHKDSK levam vários minutos de verdade
+    TIMEOUTS = {"sfc": 3600, "dism": 3600, "dism_cleanup": 3600, "chkdsk": 1800, "trim": 900,
+                "restore_point": 600, "network_reset": 300}
+
     @staticmethod
     def run_task_sync(task):
         """
         Executa uma tarefa de forma síncrona com medição de tempo e saída completa.
-        Ideal para o modal interativo com progresso de etapas.
+        O sucesso exige código de saída 0 E, quando o ajuste é verificável, que o
+        estado lido do Windows depois da execução confirme a alteração.
         """
         if task not in TASKS:
             return False, "Tarefa desconhecida.", "", 0.0
 
         item = TASKS[task]
         title, kind, cmd = item[0], item[1], item[2]
+        timeout = OptimizerEngine.TIMEOUTS.get(task, 180)
 
         LogManager.add_log(f"[OTIMIZADOR] Executando etapa: {title}...")
         start_t = time.time()
 
         if kind == "cmd":
-            code, out = run_hidden(cmd, timeout=120)
+            code, out = run_hidden(cmd, timeout=timeout)
         else:
-            code, out = run_ps(cmd, timeout=120)
+            code, out = run_ps(cmd, timeout=timeout)
 
         elapsed = round(time.time() - start_t, 2)
-        success = (code == 0)
+        # sfc/DISM escrevem em UTF-16: remove os NULs que sobram da decodificação
+        out_clean = (out or "").replace("\x00", "").strip()
 
-        out_clean = (out or "").strip()
-        LogManager.add_log(f"[OTIMIZADOR] Etapa '{title}' concluída ({elapsed}s, código {code}).")
+        state = OptimizerEngine.get_tweak_states().get(task) or {}
+        verified = state.get("applied")
+        success = (code == 0) and verified is not False
+        if code == -2:
+            out_clean += f"\n[TEMPO ESGOTADO] A tarefa excedeu {timeout // 60} min e foi interrompida."
+        if verified is True:
+            out_clean += f"\n[VERIFICADO] {state.get('detail', 'Ajuste confirmado no Windows.')}"
+        elif verified is False:
+            out_clean += f"\n[NÃO CONFIRMADO] {state.get('detail', 'O Windows não reflete o ajuste')} — execute como administrador."
 
-        return success, title, out_clean or "Etapa concluída sem erros.", elapsed
+        LogManager.add_log(f"[OTIMIZADOR] Etapa '{title}' {'concluída' if success else 'FALHOU'} "
+                           f"({elapsed}s, código {code}, verificação: {verified}).")
+        return success, title, out_clean or "Etapa concluída sem saída de texto.", elapsed
+
+    # ------------------------------------------------------------------
+    # ESTADO REAL DE CADA AJUSTE (lido do registro/serviços, sem PowerShell)
+    # ------------------------------------------------------------------
+    @staticmethod
+    def get_tweak_states():
+        """
+        Retorna {tarefa: {"applied": True|False|None, "detail": str}}.
+        applied=None significa ação pontual (não deixa estado persistente para conferir).
+        """
+        if not IS_WINDOWS:
+            return {}
+        import winreg
+
+        HKLM, HKCU = winreg.HKEY_LOCAL_MACHINE, winreg.HKEY_CURRENT_USER
+
+        def reg(root, path, name):
+            try:
+                with winreg.OpenKey(root, path, 0, winreg.KEY_READ | winreg.KEY_WOW64_64KEY) as k:
+                    return winreg.QueryValueEx(k, name)[0]
+            except OSError:
+                return None
+
+        def svc_start(name):
+            key = rf"SYSTEM\CurrentControlSet\Services\{name}"
+            start, delayed = reg(HKLM, key, "Start"), reg(HKLM, key, "DelayedAutostart")
+            return {2: "Automático (atrasado)" if delayed == 1 else "Automático", 3: "Manual", 4: "Desativado"}.get(start, "N/D")
+
+        def st(ok, detail):
+            return {"applied": bool(ok), "detail": detail}
+
+        out = {}
+        mm = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"
+
+        diag = svc_start("DiagTrack")
+        allow = reg(HKLM, r"SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry")
+        out["telemetry"] = st(diag == "Desativado" and allow == 0,
+                              f"DiagTrack: {diag} · AllowTelemetry={allow if allow is not None else 'padrão'}")
+
+        vfx = reg(HKCU, r"Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting")
+        delay = reg(HKCU, r"Control Panel\Desktop", "MenuShowDelay")
+        out["visual_fx"] = st(vfx == 2 and str(delay) == "0",
+                              f"MenuShowDelay={delay if delay is not None else '400'} ms · VisualFX={vfx if vfx is not None else 'padrão'}")
+
+        gm = reg(HKCU, r"Software\Microsoft\GameBar", "AutoGameModeEnabled")
+        hags = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode")
+        out["game_mode"] = st(gm == 1 and hags == 2,
+                              f"Modo de Jogo: {'ativo' if gm == 1 else 'padrão'} · HAGS: {'ativo' if hags == 2 else 'desligado'}")
+
+        prio = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation")
+        resp = reg(HKLM, mm, "SystemResponsiveness")
+        out["cpu_scheduler"] = st(prio == 38 and resp == 10,
+                                  f"Win32PrioritySeparation=0x{(prio or 0):X} · SystemResponsiveness={resp}")
+
+        gp = reg(HKLM, mm + r"\Tasks\Games", "GPU Priority")
+        cat = reg(HKLM, mm + r"\Tasks\Games", "Scheduling Category")
+        out["gpu_latency"] = st(gp == 8 and cat == "High", f"GPU Priority={gp} · Scheduling={cat or 'padrão'}")
+
+        ram_gb = float(SystemEngine.static_info().get("ram_total_gb") or 8)
+        sysmain = svc_start("SysMain")
+        want = "Manual" if ram_gb >= 15 else "Automático"
+        out["sysmain_tune"] = st(sysmain.startswith(want), f"SysMain: {sysmain} (ideal para {ram_gb:.0f} GB: {want})")
+
+        la = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")
+        la_off = la is not None and (la & 1) == 1
+        out["storage_io"] = st(la_off, f"Carimbo de último acesso NTFS: {'desativado' if la_off else 'ativo'}")
+
+        nodelay = []
+        base = r"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
+        try:
+            with winreg.OpenKey(HKLM, base) as k:
+                i = 0
+                while True:
+                    try:
+                        sub = winreg.EnumKey(k, i)
+                    except OSError:
+                        break
+                    i += 1
+                    nodelay.append(reg(HKLM, base + "\\" + sub, "TCPNoDelay") == 1)
+        except OSError:
+            pass
+        out["network_tcp"] = st(any(nodelay), f"TCPNoDelay em {sum(nodelay)} de {len(nodelay)} interface(s)")
+
+        bg = reg(HKCU, r"Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled")
+        dvr = reg(HKCU, r"System\GameConfigStore", "GameDVR_Enabled")
+        out["background_apps"] = st(bg == 1 and dvr == 0,
+                                    f"Apps em 2º plano: {'bloqueados' if bg == 1 else 'permitidos'} · GameDVR: {'desligado' if dvr == 0 else 'ligado'}")
+
+        ws = svc_start("WSearch")
+        out["search_index"] = st(ws == "Automático (atrasado)", f"Windows Search: {ws}")
+
+        pt = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")
+        out["power_throttling"] = st(pt == 1, f"PowerThrottlingOff={pt if pt is not None else '0 (padrão)'}")
+
+        hib_on = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled")
+        hib_type = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\Power", "HiberFileType")
+        if hib_on == 0:
+            out["hibernation_tune"] = st(True, "Hibernação desativada (hiberfil.sys não existe)")
+        else:
+            out["hibernation_tune"] = st(hib_type == 1, f"hiberfil.sys: {'reduzido' if hib_type == 1 else 'completo'}")
+
+        dnot = reg(HKLM, r"SYSTEM\CurrentControlSet\Control\FileSystem", "DisableDeleteNotification")
+        out["trim"] = {"applied": None, "detail": f"TRIM do Windows: {'desativado' if dnot == 1 else 'habilitado'}"}
+        for k in ("clean_ram", "restore_point", "sfc", "dism", "dism_cleanup", "chkdsk", "network_reset"):
+            out[k] = {"applied": None, "detail": "Ação pontual — sem estado persistente"}
+        return out

@@ -4,3 +4,5 @@
 
 psutil>=5.9.0
 numpy>=1.24.0
+# Janela nativa do app (Microsoft WebView2)
+pywebview>=6.0

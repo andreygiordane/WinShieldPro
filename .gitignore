@@ -103,3 +103,6 @@ $RECYCLE.BIN/
 ._*
 .Spotlight-V100
 .Trashes
+
+# --- FERRAMENTAS LOCAIS DE BUILD E ASSINATURA (mantidas fora do repositório) ---
+scripts/

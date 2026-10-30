@@ -10,10 +10,10 @@ def test_resource_resolution_html_and_images():
     assert os.path.isfile(html_file)
     assert html_file.endswith("winshield_pro_dashboard.html")
 
-    img_file = handler._resolve_resource(None, "splash_backdrop.webp")
+    img_file = handler._resolve_resource(None, "imagens/logo.png")
     assert img_file is not None
     assert os.path.isfile(img_file)
-    assert img_file.endswith("splash_backdrop.webp")
+    assert img_file.endswith("logo.png")
 
     icon_file = handler._resolve_resource(None, "imagens/icone.ico")
     assert icon_file is not None

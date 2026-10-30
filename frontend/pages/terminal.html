@@ -1,112 +1,42 @@
-<section id="view-terminal" class="view-panel hidden space-y-4">
-                <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <label
-                                class="flex items-center space-x-2 text-xs font-medium text-slate-300 cursor-pointer">
-                                <input type="radio" name="shell-mode" value="POWERSHELL" checked
-                                    class="text-blue-600 bg-dark-900 border-slate-700">
-                                <span data-i18n="terminal.ps_admin">PowerShell (Administrador)</span>
-                            </label>
-                            <label
-                                class="flex items-center space-x-2 text-xs font-medium text-slate-300 cursor-pointer">
-                                <input type="radio" name="shell-mode" value="CMD"
-                                    class="text-blue-600 bg-dark-900 border-slate-700">
-                                <span data-i18n="terminal.cmd_admin">Prompt de Comando (CMD)</span>
-                            </label>
+<section id="view-terminal" class="view-panel hidden ws-page">
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="ws-seg">
+                            <label class="ws-seg-radio"><input type="radio" name="shell-mode" value="POWERSHELL" checked><span data-i18n="terminal.ps_admin">PowerShell</span></label>
+                            <label class="ws-seg-radio"><input type="radio" name="shell-mode" value="CMD"><span data-i18n="terminal.cmd_admin">CMD</span></label>
                         </div>
-                        <span class="text-[11px] text-cyan-400 font-mono" data-i18n="terminal.elevated_badge">Execução
-                            em Segundo Plano</span>
+                        <span class="ws-stat-foot" data-i18n="terminal.elevated_badge">Executado de forma oculta, com os privilégios do WinShield · limite de 60 s</span>
                     </div>
-
                     <div class="flex gap-2">
-                        <input type="text" id="terminal-input"
-                            onkeydown="if(event.key==='Enter') executeCustomCommand()"
-                            placeholder="Digite o comando nativo do Windows (ex: Get-Process | Select-Object -First 10)..."
-                            data-i18n-placeholder="terminal.input_placeholder"
-                            class="flex-1 bg-dark-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
-                        <button onclick="executeCustomCommand()"
-                            class="btn-action-primary px-6 py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
-                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                            <span data-i18n="terminal.btn_run">Executar</span>
-                        </button>
+                        <input type="text" id="terminal-input" onkeydown="if(event.key==='Enter') executeCustomCommand()" placeholder="Comando (ex.: Get-Process | Select-Object -First 10)" data-i18n-placeholder="terminal.input_placeholder" class="ws-input flex-1 ws-mono">
+                        <button onclick="executeCustomCommand()" class="ws-btn primary"><span data-i18n="terminal.btn_run">Executar</span></button>
                     </div>
-
-                    <div
-                        class="flex flex-wrap gap-2 text-xs text-slate-400 items-center pt-2 border-t border-slate-800">
-                        <span class="text-[11px]" data-i18n="terminal.chips_label">Diagnósticos em 1 clique:</span>
-                        <button onclick="setTerminalCmd('netstat -ano | findstr ESTABLISHED', 'CMD')"
-                            class="clickable-chip px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm flex items-center gap-1.5">
-                            <i data-lucide="network" class="w-3 h-3 text-cyan-400"></i>
-                            <span data-i18n="terminal.chip_connections">Conexões Ativas</span>
-                        </button>
-                        <button
-                            onclick="setTerminalCmd('Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 10', 'POWERSHELL')"
-                            class="clickable-chip px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm flex items-center gap-1.5">
-                            <i data-lucide="activity" class="w-3 h-3 text-indigo-400"></i>
-                            <span data-i18n="terminal.chip_top_ram">Top 10 Memória RAM</span>
-                        </button>
-                        <button
-                            onclick="setTerminalCmd('Get-PhysicalDisk | Select-Object DeviceId, FriendlyName, MediaType, HealthStatus, Size', 'POWERSHELL')"
-                            class="clickable-chip px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm flex items-center gap-1.5">
-                            <i data-lucide="hard-drive" class="w-3 h-3 text-emerald-400"></i>
-                            <span data-i18n="terminal.chip_disks">Discos Físicos</span>
-                        </button>
-                        <button onclick="setTerminalCmd('Get-MpComputerStatus', 'POWERSHELL')"
-                            class="clickable-chip px-3 py-1.5 rounded-xl text-xs font-medium shadow-sm flex items-center gap-1.5">
-                            <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i>
-                            <span data-i18n="terminal.chip_defender">Status Defender</span>
-                        </button>
+                    <div class="flex flex-wrap items-center gap-2 mt-4">
+                        <span class="ws-stat-label mr-1" data-i18n="terminal.chips_label">Atalhos</span>
+                        <button onclick="setTerminalCmd('netstat -ano | findstr ESTABLISHED', 'CMD')" class="ws-chip-btn"><span data-i18n="terminal.chip_connections">Conexões ativas</span></button>
+                        <button onclick="setTerminalCmd('Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 10', 'POWERSHELL')" class="ws-chip-btn"><span data-i18n="terminal.chip_top_ram">Top 10 em memória</span></button>
+                        <button onclick="setTerminalCmd('Get-PhysicalDisk | Select-Object DeviceId, FriendlyName, MediaType, HealthStatus, Size', 'POWERSHELL')" class="ws-chip-btn"><span data-i18n="terminal.chip_disks">Discos físicos</span></button>
+                        <button onclick="setTerminalCmd('Get-MpComputerStatus', 'POWERSHELL')" class="ws-chip-btn"><span data-i18n="terminal.chip_defender">Status do Defender</span></button>
                     </div>
                 </div>
 
-                <!-- TERMINAL EM AÇÃO (JANELA DE EXECUÇÃO MODERNA NO CORPO DA PÁGINA) -->
-                <div id="terminal-execution-window"
-                    class="hidden bg-dark-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden transition-all">
-                    <div class="bg-dark-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                <div id="terminal-execution-window" class="hidden ws-card ws-card-flush">
+                    <div class="ws-card-head">
                         <div class="flex items-center gap-3">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
-                                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-                            </div>
-                            <span id="term-exec-shell-badge"
-                                class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">POWERSHELL
-                                (ADMIN)</span>
-                            <span id="term-exec-status"
-                                class="flex items-center gap-1.5 text-xs font-semibold text-cyan-400">
-                                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i>
-                                <span>Executando comando...</span>
-                            </span>
+                            <span id="term-exec-shell-badge" class="ws-badge ws-mono">POWERSHELL</span>
+                            <span id="term-exec-status" class="text-[12.5px] ws-muted">Executando…</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span id="term-exec-timer" class="text-xs font-mono text-slate-400">0.0s</span>
-                            <button onclick="copyTerminalOutput()"
-                                class="btn-action-secondary text-[11px] px-2.5 py-1 rounded-lg border-slate-700 hover:border-cyan-400 text-slate-300 flex items-center gap-1">
-                                <i data-lucide="copy" class="w-3 h-3 text-cyan-400"></i>
-                                <span data-i18n="terminal.btn_copy">Copiar</span>
-                            </button>
-                            <button onclick="clearTerminalExecution()"
-                                class="btn-action-secondary text-[11px] px-2.5 py-1 rounded-lg border-slate-700 hover:border-rose-400 text-slate-300 flex items-center gap-1">
-                                <i data-lucide="trash-2" class="w-3 h-3 text-rose-400"></i>
-                                <span data-i18n="terminal.btn_clear">Limpar</span>
-                            </button>
-                            <button
-                                onclick="document.getElementById('terminal-execution-window').classList.add('hidden')"
-                                class="btn-action-secondary text-[11px] px-2 py-1 rounded-lg border-slate-700 hover:border-slate-500 text-slate-300"
-                                title="Fechar Janela">
-                                <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                            </button>
+                        <div class="flex items-center gap-1.5">
+                            <span id="term-exec-timer" class="ws-mono text-[12px] ws-muted mr-2">0.0s</span>
+                            <button onclick="copyTerminalOutput()" class="ws-btn sm ghost"><span data-i18n="terminal.btn_copy">Copiar</span></button>
+                            <button onclick="clearTerminalExecution()" class="ws-btn sm ghost"><span data-i18n="terminal.btn_clear">Limpar</span></button>
+                            <button onclick="document.getElementById('terminal-execution-window').classList.add('hidden')" class="ws-icon-btn" title="Fechar"></button>
                         </div>
                     </div>
-                    <div class="p-4 bg-dark-950 font-mono text-xs">
-                        <div class="text-emerald-400 mb-2 font-bold flex items-center gap-2">
-                            <span class="text-cyan-400">PS C:\Windows\System32&gt;</span>
-                            <span id="term-exec-cmd-text" class="text-white select-all">Get-Process</span>
-                        </div>
-                        <div id="term-exec-output"
-                            class="bg-dark-900 rounded-xl p-3 border border-slate-800 text-cyan-300 overflow-x-auto max-h-96 overflow-y-auto whitespace-pre-wrap select-text leading-relaxed font-mono">
-                        </div>
+                    <div class="p-4">
+                        <div class="ws-mono text-[12.5px] mb-2"><span class="ws-faint">&gt;</span> <span id="term-exec-cmd-text" class="ws-strong select-all">—</span></div>
+                        <div id="term-exec-output" class="ws-console max-h-[480px] select-text"></div>
                     </div>
                 </div>
             </section>

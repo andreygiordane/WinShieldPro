@@ -1,71 +1,43 @@
-<section id="view-clean" class="view-panel hidden space-y-6">
-                <div
-                    class="bg-dark-850 p-6 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="flex items-center space-x-5">
-                        <div
-                            class="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 flex-shrink-0">
-                            <i data-lucide="trash-2" class="w-8 h-8"></i>
-                        </div>
+<section id="view-clean" class="view-panel hidden ws-page">
+
+                <div class="ws-card">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <span class="text-xs text-slate-400 uppercase font-semibold"
-                                data-i18n="clean.card_title">Espaço Recuperável Real no Disco</span>
-                            <h2 id="temp-size-display" class="text-3xl font-black text-white mt-1">0 B</h2>
-                            <p id="temp-files-display" class="text-xs text-teal-300 font-mono mt-0.5">Clique em "Analisar Arquivos" para escanear resíduos temporários e caches</p>
+                            <span class="ws-stat-label" data-i18n="clean.card_title">Espaço recuperável</span>
+                            <div id="temp-size-display" class="ws-stat-value ws-mono text-[30px] mt-1">—</div>
+                            <p id="temp-files-display" class="ws-stat-foot mt-1">Clique em "Analisar" para medir arquivos temporários, lixeira e caches.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-clean-analyze" onclick="analyzeTempFiles()" class="ws-btn lg"><i data-lucide="search" id="icon-clean-analyze"></i><span data-i18n="clean.btn_analyze">Analisar</span></button>
+                            <button id="btn-clean-execute" onclick="executeDeepClean()" class="ws-btn primary lg"><span data-i18n="clean.btn_clean">Limpar selecionados</span></button>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button id="btn-clean-analyze" onclick="analyzeTempFiles()"
-                            class="btn-action-secondary px-5 py-2.5 rounded-xl text-xs font-bold text-teal-300 border-teal-500/40 hover:border-teal-400 flex items-center gap-1.5">
-                            <i data-lucide="search" id="icon-clean-analyze" class="w-3.5 h-3.5"></i>
-                            <span data-i18n="clean.btn_analyze">Analisar Arquivos</span>
-                        </button>
-                        <button id="btn-clean-execute" onclick="executeDeepClean()"
-                            class="btn-action-success px-6 py-2.5 rounded-xl text-xs font-black shadow-lg flex items-center gap-1.5">
-                            <i data-lucide="sparkles" class="w-4 h-4"></i>
-                            <span data-i18n="clean.btn_clean">LIMPAR TUDO AGORA</span>
-                        </button>
+
+                    <div id="clean-live-progress-panel" class="hidden mt-5">
+                        <div class="flex items-center justify-between text-[12.5px] mb-2 gap-3">
+                            <span id="clean-live-title" class="ws-strong truncate">Analisando…</span>
+                            <span class="flex items-center gap-3 ws-mono flex-shrink-0">
+                                <span id="clean-live-stats" class="ws-muted">0 arquivos · 0 B</span>
+                                <span id="clean-live-pct" class="ws-strong">0%</span>
+                            </span>
+                        </div>
+                        <div class="ws-meter"><span id="clean-live-bar" style="width:0%"></span></div>
+                        <div class="flex items-center justify-between gap-3 text-[11.5px] mt-2">
+                            <span id="clean-live-category" class="ws-muted">—</span>
+                            <span id="clean-live-path" class="ws-mono ws-faint truncate max-w-md">—</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PAINEL DE ANIMAÇÃO DE PROGRESSO DE ANÁLISE & LIMPEZA EM TEMPO REAL -->
-                <div id="clean-live-progress-panel" class="hidden bg-dark-850 p-5 rounded-2xl border border-teal-500/40 shadow-lg space-y-3">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-ping"></span>
-                            <h4 id="clean-live-title" class="text-xs font-extrabold text-white uppercase tracking-wider">Analisando diretórios temporários...</h4>
+                <div class="ws-card">
+                    <div class="ws-card-head">
+                        <div>
+                            <div class="ws-card-title" data-i18n="clean.areas_title">Categorias</div>
+                            <div class="ws-card-sub">Tamanhos medidos arquivo a arquivo. Arquivos em uso pelo Windows são ignorados na limpeza.</div>
                         </div>
-                        <div class="flex items-center gap-3 font-mono text-xs">
-                            <span id="clean-live-stats" class="text-teal-300">0 arquivos • 0 B</span>
-                            <span id="clean-live-pct" class="text-base font-black text-teal-400">0%</span>
-                        </div>
+                        <span class="ws-badge" data-i18n="clean.real_numbers_tag">Valores medidos</span>
                     </div>
-                    <div class="w-full bg-dark-950 rounded-full h-3 overflow-hidden border border-slate-800">
-                        <div id="clean-live-bar"
-                            class="bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400 h-3 rounded-full transition-all duration-200"
-                            style="width: 0%"></div>
-                    </div>
-                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                        <span id="clean-live-category" class="font-bold text-slate-200">Iniciando varredura...</span>
-                        <span id="clean-live-path" class="truncate max-w-md text-slate-400">--</span>
-                    </div>
-                </div>
-
-                <!-- CATEGORIAS REAIS COM NÚMEROS E TAMANHOS VERIFICÁVEIS -->
-                <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i data-lucide="check-square" class="w-4 h-4 text-teal-400"></i>
-                            <span data-i18n="clean.areas_title">Categorias com Arquivos Reais Prontos para
-                                Exclusão</span>
-                        </h3>
-                        <span class="text-xs text-slate-400 font-mono" data-i18n="clean.real_numbers_tag">Exclusão
-                            Autêntica & Segura</span>
-                    </div>
-
-                    <div id="clean-categories-grid"
-                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-                        <!-- Categorias renderizadas com numeros reais via JavaScript -->
-                    </div>
+                    <div id="clean-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2.5"></div>
                 </div>
             </section>
 

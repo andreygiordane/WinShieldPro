@@ -1,9 +1,9 @@
 @echo off
 :: ============================================================================
-:: WinShield Pro v6.2 Enterprise - Compilador Executável Standalone (.EXE)
+:: WinShield Pro v7.0 Enterprise - Compilador Executável Standalone (.EXE)
 :: Inclui Manifesto de Administrador Nativo (--uac-admin) e Modo 100% Windowed
 :: ============================================================================
-title Compilando WinShield Pro v6.2 para Executável Standalone (.exe)...
+title Compilando WinShield Pro v7.0 para Executável Standalone (.exe)...
 
 cd /d "%~dp0"
 set "PROJECT_DIR=%~dp0"
@@ -16,7 +16,7 @@ set "FINAL_EXE=%PROJECT_DIR%dist\WinShieldPro.exe"
 set "PATH=%APPDATA%\Python\Python315\Scripts;%LOCALAPPDATA%\Programs\Python\Python315\Scripts;%PATH%"
 
 echo =====================================================================
-echo       COMPILADOR WINSHIELD PRO v6.2 ENTERPRISE PARA WINDOWS
+echo       COMPILADOR WINSHIELD PRO v7.0 ENTERPRISE PARA WINDOWS
 echo =====================================================================
 echo.
 
@@ -88,11 +88,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%SIGN_SCRIPT%" -TargetExe "
 
 echo.
 echo =====================================================================
-echo SUCESSO! Executavel oficial v6.2 gerado e assinado em:
+echo SUCESSO! Executavel oficial v7.0 gerado e assinado em:
 echo       %FINAL_EXE%
 echo =====================================================================
 echo.
-echo O arquivo "WinShieldPro.exe" agora possui todos os modulos integrados (v6.2)
+echo O arquivo "WinShieldPro.exe" agora possui todos os modulos integrados (v7.0)
 echo e esta assinado digitalmente por Andrey Giordane (Sem alertas de Fornecedor Desconhecido).
 echo.
 pause

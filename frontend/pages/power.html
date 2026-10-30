@@ -1,120 +1,250 @@
-<section id="view-power" class="view-panel hidden space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <div>
-                            <div
-                                class="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center mb-3">
-                                <i data-lucide="zap" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-sm font-bold text-white">Desempenho Máximo (Ultimate)</h3>
-                            <p class="text-xs text-slate-400 mt-1">Desbloqueia o plano nativo oculto do Windows para
-                                resposta instantânea de CPU sem throttling.</p>
-                        </div>
-                        <button onclick="setPowerPlan('ultimate')"
-                            class="mt-5 btn-action-warning w-full py-2.5 rounded-xl text-xs font-bold shadow-lg flex items-center justify-center gap-1.5">
-                            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                            <span>Ativar Desempenho Máximo</span>
-                        </button>
-                    </div>
+<section id="view-power" class="view-panel hidden ws-page">
 
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <div>
-                            <div
-                                class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-3">
-                                <i data-lucide="activity" class="w-5 h-5"></i>
+                <!-- PLANO ATIVO -->
+                <div class="ws-hero">
+                    <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+                        <div class="flex items-start gap-4 min-w-0">
+                            
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="ws-kicker">Plano de energia ativo</span>
+                                    <span id="pw-source-badge" class="ws-badge"><span class="dot"></span>Lendo powercfg…</span>
+                                </div>
+                                <h2 id="pw-active-name" class="ws-hero-title mt-1.5 truncate">—</h2>
+                                <p class="ws-hero-sub">
+                                    <span id="pw-active-guid" class="ws-mono">—</span>
+                                    <span id="pw-battery" class="ml-2"></span>
+                                </p>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Alto Desempenho Padrão</h3>
-                            <p class="text-xs text-slate-400 mt-1">Garante que a CPU trabalhe na frequência base sem
-                                estacionar núcleos em standby.</p>
                         </div>
-                        <button onclick="setPowerPlan('high')"
-                            class="mt-5 btn-action-primary w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
-                            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                            <span>Ativar Alto Desempenho</span>
-                        </button>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 xl:min-w-[560px]">
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">CPU mínima</span><span class="ws-stat-value" id="pw-stat-min">—</span><span class="ws-stat-foot">estado do processador</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">CPU máxima</span><span class="ws-stat-value" id="pw-stat-max">—</span><span class="ws-stat-foot">limite de frequência</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">Modo Boost</span><span class="ws-stat-value text-[16px]" id="pw-stat-boost">—</span><span class="ws-stat-foot">turbo do processador</span></div>
+                            <div class="ws-tile ws-stat"><span class="ws-stat-label">Núcleos ativos</span><span class="ws-stat-value" id="pw-stat-park">—</span><span class="ws-stat-foot">mínimo sem estacionar</span></div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <!-- PERFIS -->
+                <div>
+                    <div class="flex items-end justify-between mb-3 gap-3">
                         <div>
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
-                                <i data-lucide="leaf" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-sm font-bold text-white">Equilibrado (Recomendado)</h3>
-                            <p class="text-xs text-slate-400 mt-1">Alterna dinamicamente a frequência da CPU conforme
-                                demanda para menor temperatura.</p>
+                            <h3 class="ws-card-title">Perfis do Windows</h3>
+                            <p class="ws-card-sub">Clique em um perfil para ativá-lo. Planos ocultos (Desempenho Máximo) são liberados automaticamente.</p>
                         </div>
-                        <button onclick="setPowerPlan('balanced')"
-                            class="mt-5 btn-action-success w-full py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1.5">
-                            <i data-lucide="leaf" class="w-3.5 h-3.5"></i>
-                            <span>Ativar Equilibrado</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5" id="pw-plan-grid">
+                        <button class="ws-plan" data-plan="ultimate" onclick="setPowerPlan('ultimate')">
+                            <div class="flex items-center justify-between">
+                                
+                                <span class="ws-badge ok hidden" data-active-badge><span class="dot"></span>Ativo</span>
+                            </div>
+                            <div>
+                                <div class="ws-plan-title">Desempenho Máximo</div>
+                                <p class="ws-plan-desc mt-1">Sem economia de energia em nenhum componente. Menor latência possível; maior consumo e temperatura.</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="ws-kicker">Desempenho</span>
+                                <span class="ws-bars"><i class="on" style="height:6px"></i><i class="on" style="height:10px"></i><i class="on" style="height:14px"></i><i class="on" style="height:18px"></i></span>
+                            </div>
+                        </button>
+                        <button class="ws-plan" data-plan="high" onclick="setPowerPlan('high')">
+                            <div class="flex items-center justify-between">
+                                
+                                <span class="ws-badge ok hidden" data-active-badge><span class="dot"></span>Ativo</span>
+                            </div>
+                            <div>
+                                <div class="ws-plan-title">Alto Desempenho</div>
+                                <p class="ws-plan-desc mt-1">Mantém a CPU no estado mínimo alto e evita estacionar núcleos. Ideal para jogos e estações de trabalho.</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="ws-kicker">Desempenho</span>
+                                <span class="ws-bars"><i class="on" style="height:6px"></i><i class="on" style="height:10px"></i><i class="on" style="height:14px"></i><i style="height:18px"></i></span>
+                            </div>
+                        </button>
+                        <button class="ws-plan" data-plan="balanced" onclick="setPowerPlan('balanced')">
+                            <div class="flex items-center justify-between">
+                                
+                                <span class="ws-badge ok hidden" data-active-badge><span class="dot"></span>Ativo</span>
+                            </div>
+                            <div>
+                                <div class="ws-plan-title">Equilibrado</div>
+                                <p class="ws-plan-desc mt-1">Ajusta a frequência conforme a demanda. Recomendado pela Microsoft para uso diário e menor temperatura.</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="ws-kicker">Desempenho</span>
+                                <span class="ws-bars"><i class="on" style="height:6px"></i><i class="on" style="height:10px"></i><i style="height:14px"></i><i style="height:18px"></i></span>
+                            </div>
+                        </button>
+                        <button class="ws-plan" data-plan="powersave" onclick="setPowerPlan('powersave')">
+                            <div class="flex items-center justify-between">
+                                
+                                <span class="ws-badge ok hidden" data-active-badge><span class="dot"></span>Ativo</span>
+                            </div>
+                            <div>
+                                <div class="ws-plan-title">Economia de Energia</div>
+                                <p class="ws-plan-desc mt-1">Reduz o desempenho para maximizar a bateria e o silêncio. Indicado para notebooks fora da tomada.</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="ws-kicker">Desempenho</span>
+                                <span class="ws-bars"><i class="on" style="height:6px"></i><i style="height:10px"></i><i style="height:14px"></i><i style="height:18px"></i></span>
+                            </div>
                         </button>
                     </div>
                 </div>
 
-                <!-- CRIAR PLANO CUSTOMIZADO -->
-                <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800 space-y-4">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i> Criar Plano Customizado (powercfg)
-                    </h3>
-                    <div class="flex flex-wrap items-center gap-4">
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="text-xs text-slate-400 block mb-1">Nome do Esquema:</label>
-                            <input type="text" id="custom-plan-name" value="WinShield Turbo Ultra"
-                                class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                <div class="grid grid-cols-1 xl:grid-cols-5 gap-4">
+                    <!-- AJUSTE FINO DO PLANO ATIVO -->
+                    <div class="ws-card xl:col-span-3">
+                        <div class="ws-card-head">
+                            <div class="flex items-center gap-3">
+                                
+                                <div>
+                                    <div class="ws-card-title">Ajuste fino do plano ativo</div>
+                                    <div class="ws-card-sub">Valores na tomada (AC). Cada alteração é confirmada relendo o Windows.</div>
+                                </div>
+                            </div>
+                            <button class="ws-btn sm ghost" onclick="loadPowerDetails(true)">Reler</button>
                         </div>
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1">Desligar Monitor:</label>
-                            <select id="custom-plan-monitor"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                                <option value="0">Nunca (0 min)</option>
-                                <option value="15">15 minutos</option>
-                                <option value="30">30 minutos</option>
+
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Estado mínimo do processador</div>
+                                <div class="ws-row-hint">100% mantém o clock alto mesmo ociosa (menor latência, mais calor).</div>
+                            </div>
+                            <div class="flex items-center gap-3 w-[220px] flex-shrink-0">
+                                <input type="range" min="0" max="100" step="5" class="ws-range" id="pw-cpu-min" oninput="document.getElementById('pw-cpu-min-val').innerText=this.value+'%'" onchange="setPowerSetting('cpu_min', this.value)">
+                                <span class="ws-mono text-xs w-10 text-right" id="pw-cpu-min-val">—</span>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Estado máximo do processador</div>
+                                <div class="ws-row-hint">Abaixo de 100% desativa o turbo na maioria das CPUs (mais frio e silencioso).</div>
+                            </div>
+                            <div class="flex items-center gap-3 w-[220px] flex-shrink-0">
+                                <input type="range" min="5" max="100" step="5" class="ws-range" id="pw-cpu-max" oninput="document.getElementById('pw-cpu-max-val').innerText=this.value+'%'" onchange="setPowerSetting('cpu_max', this.value)">
+                                <span class="ws-mono text-xs w-10 text-right" id="pw-cpu-max-val">—</span>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Modo de aumento de desempenho (Boost)</div>
+                                <div class="ws-row-hint">Controla a agressividade do turbo. "Agressivo" sobe o clock mais rápido.</div>
+                            </div>
+                            <select id="pw-boost" onchange="setPowerSetting('boost', this.value)"></select>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Núcleos mínimos sem estacionar</div>
+                                <div class="ws-row-hint">100% impede que o Windows desligue núcleos ociosos (core parking).</div>
+                            </div>
+                            <div class="flex items-center gap-3 w-[220px] flex-shrink-0">
+                                <input type="range" min="0" max="100" step="5" class="ws-range" id="pw-park" oninput="document.getElementById('pw-park-val').innerText=this.value+'%'" onchange="setPowerSetting('core_parking', this.value)">
+                                <span class="ws-mono text-xs w-10 text-right" id="pw-park-val">—</span>
+                            </div>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Economia de energia PCI Express (ASPM)</div>
+                                <div class="ws-row-hint">Desligado evita latência ao acordar GPU e SSD NVMe.</div>
+                            </div>
+                            <select id="pw-aspm" onchange="setPowerSetting('aspm', this.value)"></select>
+                        </div>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Desligar a tela</div>
+                                <div class="ws-row-hint">Tempo de inatividade até apagar o monitor.</div>
+                            </div>
+                            <select id="pw-monitor" onchange="setPowerSetting('monitor', this.value)">
+                                <option value="0">Nunca</option><option value="60">1 minuto</option><option value="300">5 minutos</option>
+                                <option value="600">10 minutos</option><option value="900">15 minutos</option><option value="1800">30 minutos</option><option value="3600">1 hora</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="text-xs text-slate-400 block mb-1">Suspender Computador:</label>
-                            <select id="custom-plan-standby"
-                                class="bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                                <option value="0">Nunca (0 min)</option>
-                                <option value="30">30 minutos</option>
-                                <option value="60">60 minutos</option>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Suspender o computador</div>
+                                <div class="ws-row-hint">Tempo de inatividade até entrar em suspensão.</div>
+                            </div>
+                            <select id="pw-sleep" onchange="setPowerSetting('sleep', this.value)">
+                                <option value="0">Nunca</option><option value="600">10 minutos</option><option value="900">15 minutos</option>
+                                <option value="1800">30 minutos</option><option value="3600">1 hora</option><option value="7200">2 horas</option>
                             </select>
                         </div>
-                        <button onclick="createCustomPlan()"
-                            class="mt-5 btn-action-primary px-5 py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5">
-                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                            <span>Criar & Ativar Agora</span>
-                        </button>
+                        <div class="ws-row">
+                            <div class="min-w-0">
+                                <div class="ws-row-label">Desligar o disco rígido</div>
+                                <div class="ws-row-hint">Só afeta HDDs mecânicos; SSDs gerenciam a própria energia.</div>
+                            </div>
+                            <select id="pw-disk" onchange="setPowerSetting('disk', this.value)">
+                                <option value="0">Nunca</option><option value="300">5 minutos</option><option value="600">10 minutos</option>
+                                <option value="1200">20 minutos</option><option value="3600">1 hora</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- CRIAR PLANO -->
+                    <div class="ws-card xl:col-span-2 flex flex-col">
+                        <div class="ws-card-head">
+                            <div class="flex items-center gap-3">
+                                
+                                <div>
+                                    <div class="ws-card-title">Criar plano personalizado</div>
+                                    <div class="ws-card-sub">Baseado no Alto Desempenho, ativado logo após criar.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-4 flex-1">
+                            <div>
+                                <label class="ws-stat-label block mb-1.5" for="custom-plan-name">Nome do plano</label>
+                                <input type="text" id="custom-plan-name" value="WinShield Turbo" maxlength="60" class="w-full h-9 px-3 text-[13px]">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="ws-stat-label block mb-1.5" for="custom-plan-monitor">Desligar a tela</label>
+                                    <select id="custom-plan-monitor" class="w-full h-9 px-2.5 text-[12.5px]">
+                                        <option value="0">Nunca</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="ws-stat-label block mb-1.5" for="custom-plan-standby">Suspender</label>
+                                    <select id="custom-plan-standby" class="w-full h-9 px-2.5 text-[12.5px]">
+                                        <option value="0">Nunca</option><option value="30">30 min</option><option value="60">60 min</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1.5"><span class="ws-stat-label">CPU mínima</span><span class="ws-mono text-xs" id="custom-plan-min-val">100%</span></div>
+                                <input type="range" min="0" max="100" step="5" value="100" class="ws-range" id="custom-plan-min" oninput="document.getElementById('custom-plan-min-val').innerText=this.value+'%'">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1.5"><span class="ws-stat-label">CPU máxima</span><span class="ws-mono text-xs" id="custom-plan-max-val">100%</span></div>
+                                <input type="range" min="5" max="100" step="5" value="100" class="ws-range" id="custom-plan-max" oninput="document.getElementById('custom-plan-max-val').innerText=this.value+'%'">
+                            </div>
+                        </div>
+                        <button onclick="createCustomPlan()" class="ws-btn primary lg w-full mt-5">Criar e ativar plano</button>
                     </div>
                 </div>
 
-                <!-- LISTA DE ESQUEMAS POWERCFG -->
-                <div class="bg-dark-850 p-6 rounded-2xl border border-slate-800">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i data-lucide="list" class="w-4 h-4 text-amber-400"></i> Esquemas Instalados no Windows
-                            (powercfg /list)
-                        </h3>
-                        <button onclick="loadPowerSchemes()"
-                            class="btn-action-secondary text-amber-300 border-amber-500/40 hover:border-amber-400 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                            <span>Atualizar</span>
-                        </button>
+                <!-- ESQUEMAS INSTALADOS -->
+                <div class="ws-card">
+                    <div class="ws-card-head">
+                        <div class="flex items-center gap-3">
+                            
+                            <div>
+                                <div class="ws-card-title">Esquemas instalados</div>
+                                <div class="ws-card-sub">Lista lida de <span class="ws-mono">powercfg /list</span>. Planos padrão do Windows não podem ser excluídos.</div>
+                            </div>
+                        </div>
+                        <button onclick="loadPowerSchemes()" class="ws-btn sm">Atualizar</button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs font-mono">
+                        <table class="ws-table">
                             <thead>
-                                <tr class="border-b border-slate-700 text-slate-400 uppercase">
-                                    <th class="py-2.5 px-3">GUID</th>
-                                    <th class="py-2.5 px-3 font-sans">Nome do Esquema</th>
-                                    <th class="py-2.5 px-3">Status</th>
-                                    <th class="py-2.5 px-3 text-right">Ação</th>
-                                </tr>
+                                <tr><th>Nome</th><th>GUID</th><th>Status</th><th class="text-right">Ações</th></tr>
                             </thead>
-                            <tbody id="power-schemes-body" class="divide-y divide-slate-800">
-                                <!-- Populado dinamicamente -->
-                            </tbody>
+                            <tbody id="power-schemes-body"></tbody>
                         </table>
                     </div>
                 </div>

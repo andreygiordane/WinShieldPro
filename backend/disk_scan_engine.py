@@ -1,14 +1,26 @@
 """
-WinShield SectorGuard™ - Motor Real de Varredura de Superfície e Diagnóstico Físico de Setores.
+WinShield SurfaceScan™ - Varredura física real da superfície do disco.
 
-Executa leituras físicas reais não-bufferizadas (Direct I/O / SetFilePointerEx / 4K Aligned)
-medindo a latência real de cada bloco em milissegundos (<10ms, 10-45ms, 45-180ms, >180ms/Erro I/O),
-taxa real de transferência (MB/s), endereço LBA exato e contadores S.M.A.R.T. de erros de leitura.
+Como funciona:
+  * Abre o disco físico (\\\\.\\PhysicalDriveN) — ou o volume (\\\\.\\C:) se o disco
+    físico não puder ser aberto — somente LEITURA e sem cache do Windows
+    (FILE_FLAG_NO_BUFFERING). Nenhum dado é gravado.
+  * A superfície é dividida em 1.200 regiões (grade 60 x 20).
+      - Rápido:   lê 32 MiB contíguos no início de cada região (≈ 37 GiB amostrados
+                  em 1.200 pontos distribuídos por todo o LBA).
+      - Completo: lê 100% dos setores do disco, região por região.
+  * Cada leitura é de 1 MiB; a latência de cada leitura é medida com
+    QueryPerformanceCounter. A célula da grade recebe o PIOR resultado da região:
+        verde   < 20 ms     | azul  20–150 ms
+        âmbar  >= 150 ms (setor lento / realocação em andamento)
+        vermelho = erro de leitura (CRC / setor ilegível) — confirmado por releitura
+  * A curva de transferência (MB/s por região) é registrada como nos scanners de superfície profissionais.
+
+Requer privilégios de administrador (o WinShield Pro já solicita elevação UAC).
 """
 
 import os
 import time
-import shutil
 import threading
 from backend.core import IS_WINDOWS
 from backend.log_manager import LogManager
@@ -18,65 +30,67 @@ if IS_WINDOWS:
     import ctypes
     from ctypes import wintypes
     k32 = ctypes.WinDLL("kernel32", use_last_error=True)
-    k32.SetFilePointerEx.argtypes = [
-        wintypes.HANDLE,
-        ctypes.c_longlong,
-        ctypes.POINTER(ctypes.c_longlong),
-        wintypes.DWORD
-    ]
+    k32.CreateFileW.restype = wintypes.HANDLE
+    k32.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, wintypes.LPVOID,
+                                wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+    k32.SetFilePointerEx.argtypes = [wintypes.HANDLE, ctypes.c_longlong, ctypes.POINTER(ctypes.c_longlong), wintypes.DWORD]
     k32.SetFilePointerEx.restype = wintypes.BOOL
+    k32.ReadFile.argtypes = [wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), ctypes.c_void_p]
+    k32.DeviceIoControl.argtypes = [wintypes.HANDLE, wintypes.DWORD, wintypes.LPVOID, wintypes.DWORD,
+                                    wintypes.LPVOID, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), wintypes.LPVOID]
+    k32.VirtualAlloc.restype = ctypes.c_void_p
+    k32.VirtualAlloc.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
+    k32.VirtualFree.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD]
+    k32.CloseHandle.argtypes = [wintypes.HANDLE]
+    INVALID_HANDLE_VALUE = wintypes.HANDLE(-1).value
 else:
     ctypes = None
     wintypes = None
     k32 = None
+    INVALID_HANDLE_VALUE = -1
 
 GENERIC_READ = 0x80000000
-FILE_SHARE_READ = 0x00000001
-FILE_SHARE_WRITE = 0x00000002
-FILE_SHARE_DELETE = 0x00000004
+FILE_SHARE_RW = 0x00000003
 OPEN_EXISTING = 3
 FILE_FLAG_NO_BUFFERING = 0x20000000
-FILE_FLAG_SEQUENTIAL_SCAN = 0x08000000
-FILE_BEGIN = 0
-INVALID_HANDLE_VALUE = wintypes.HANDLE(-1).value if wintypes else -1
+IOCTL_DISK_GET_LENGTH_INFO = 0x0007405C
+IOCTL_STORAGE_GET_DEVICE_NUMBER = 0x002D1080
+
+IO_SIZE = 1024 * 1024
+QUICK_SAMPLE = 32 * 1024 * 1024
+LAT_FAST_MS = 20.0
+LAT_SLOW_MS = 150.0
 
 
-def _collect_verification_files(drive_root, max_files=250):
-    """
-    Coleta arquivos grandes reais distribuídos pelo volume (System32, Program Files, Windows)
-    para leitura física direta (FILE_FLAG_NO_BUFFERING) caso o volume bruto \\\\.\\X: exija bloqueio exclusivo.
-    """
-    candidates = []
-    search_dirs = [
-        os.path.join(drive_root, r"Windows\System32"),
-        os.path.join(drive_root, r"Windows\SysWOW64"),
-        os.path.join(drive_root, r"Program Files"),
-        os.path.join(drive_root, r"Program Files (x86)"),
-        os.path.join(drive_root, "Windows"),
-        drive_root
-    ]
-    seen = set()
-    for sdir in search_dirs:
-        if not os.path.isdir(sdir):
-            continue
-        try:
-            for root, _dirs, files in os.walk(sdir):
-                for fn in files:
-                    if len(candidates) >= max_files:
-                        return candidates
-                    fp = os.path.join(root, fn)
-                    if fp in seen:
-                        continue
-                    try:
-                        sz = os.path.getsize(fp)
-                        if sz >= 262144:  # >= 256 KB
-                            seen.add(fp)
-                            candidates.append((fp, sz))
-                    except OSError:
-                        pass
-        except OSError:
-            pass
-    return candidates
+def _open_read(path):
+    h = k32.CreateFileW(path, GENERIC_READ, FILE_SHARE_RW, None, OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, None)
+    if not h or h == INVALID_HANDLE_VALUE:
+        return None
+    return h
+
+
+def _device_length(h):
+    out = ctypes.c_longlong(0)
+    ret = wintypes.DWORD(0)
+    if k32.DeviceIoControl(h, IOCTL_DISK_GET_LENGTH_INFO, None, 0, ctypes.byref(out), 8, ctypes.byref(ret), None):
+        return int(out.value)
+    return 0
+
+
+def _disk_number_for_letter(letter):
+    h = _open_read(f"\\\\.\\{letter}:")
+    if not h:
+        h = k32.CreateFileW(f"\\\\.\\{letter}:", 0, FILE_SHARE_RW, None, OPEN_EXISTING, 0, None)
+        if not h or h == INVALID_HANDLE_VALUE:
+            return None
+    try:
+        buf = (ctypes.c_ulong * 3)()
+        ret = wintypes.DWORD(0)
+        if k32.DeviceIoControl(h, IOCTL_STORAGE_GET_DEVICE_NUMBER, None, 0, buf, ctypes.sizeof(buf), ctypes.byref(ret), None):
+            return int(buf[1])
+    finally:
+        k32.CloseHandle(h)
+    return None
 
 
 class SurfaceScanEngine:
@@ -85,103 +99,63 @@ class SurfaceScanEngine:
     _cancel_requested = False
     _thread = None
 
-    TOTAL_BLOCKS = 1200  # 60 colunas x 20 linhas na grade visual de alta resolução
+    TOTAL_BLOCKS = 1200  # grade 60 x 20
 
-    _scan_state = {
-        "running": False,
-        "paused": False,
-        "drive": "C:",
-        "mode": "quick",
-        "io_mode": "Aguardando início",
-        "current_block": -1,
-        "current_lba": 0,
-        "remaining_sec": 0,
-        "progress_percent": 0.0,
-        "scanned_mb": 0,
-        "total_mb": 0,
-        "bytes_read_actual_mb": 0.0,
-        "current_speed_mb": 0.0,
-        "last_latency_ms": 0.0,
-        "avg_latency_ms": 0.0,
-        "max_latency_ms": 0.0,
-        "fast_blocks": 0,      # < 10 ms
-        "normal_blocks": 0,    # 10 - 45 ms
-        "slow_blocks": 0,      # 45 - 180 ms
-        "damaged_blocks": 0,   # > 180 ms ou erro de leitura física
-        "damaged_percent": 0.0,
-        "elapsed_sec": 0,
-        "blocks": [0] * TOTAL_BLOCKS,  # 0=untested, 1=good (<10ms), 4=normal (10-45ms), 2=slow (45-180ms), 3=damaged
-        "status_text": "Pronto para iniciar diagnóstico físico de setores."
-    }
+    @classmethod
+    def _blank_state(cls, drive="C:", mode="quick"):
+        return {
+            "running": False, "paused": False, "drive": drive, "mode": mode,
+            "io_mode": "Aguardando início", "target": None,
+            "current_block": -1, "current_lba": 0, "remaining_sec": 0,
+            "progress_percent": 0.0, "scanned_mb": 0, "total_mb": 0,
+            "bytes_read_actual_mb": 0.0, "current_speed_mb": 0.0,
+            "min_speed_mb": None, "max_speed_mb": None, "avg_speed_mb": None,
+            "last_latency_ms": 0.0, "avg_latency_ms": 0.0, "max_latency_ms": 0.0,
+            "fast_blocks": 0, "normal_blocks": 0, "slow_blocks": 0, "damaged_blocks": 0,
+            "damaged_percent": 0.0, "read_errors": 0, "error_lbas": [],
+            "elapsed_sec": 0, "blocks": [0] * cls.TOTAL_BLOCKS,
+            "speed_curve": [None] * cls.TOTAL_BLOCKS,
+            "thresholds_ms": {"fast": LAT_FAST_MS, "slow": LAT_SLOW_MS},
+            "status_text": "Pronto para iniciar a varredura física da superfície.",
+            "error": None,
+        }
+
+    _scan_state = None
 
     @classmethod
     def get_scan_state(cls):
         with cls._lock:
-            return {
-                "running": cls._scan_state["running"],
-                "drive": cls._scan_state["drive"],
-                "mode": cls._scan_state["mode"],
-                "io_mode": cls._scan_state.get("io_mode", "Direct I/O"),
-                "current_block": cls._scan_state.get("current_block", -1),
-                "current_lba": cls._scan_state.get("current_lba", 0),
-                "remaining_sec": int(cls._scan_state.get("remaining_sec", 0)),
-                "progress_percent": round(cls._scan_state["progress_percent"], 1),
-                "scanned_mb": cls._scan_state["scanned_mb"],
-                "total_mb": cls._scan_state["total_mb"],
-                "bytes_read_actual_mb": round(cls._scan_state.get("bytes_read_actual_mb", 0.0), 1),
-                "current_speed_mb": round(cls._scan_state["current_speed_mb"], 1),
-                "last_latency_ms": round(cls._scan_state.get("last_latency_ms", 0.0), 2),
-                "avg_latency_ms": round(cls._scan_state.get("avg_latency_ms", 0.0), 2),
-                "max_latency_ms": round(cls._scan_state.get("max_latency_ms", 0.0), 2),
-                "fast_blocks": cls._scan_state.get("fast_blocks", 0),
-                "normal_blocks": cls._scan_state.get("normal_blocks", 0),
-                "slow_blocks": cls._scan_state.get("slow_blocks", 0),
-                "damaged_blocks": cls._scan_state["damaged_blocks"],
-                "damaged_percent": round(cls._scan_state["damaged_percent"], 2),
-                "elapsed_sec": int(cls._scan_state["elapsed_sec"]),
-                "blocks": list(cls._scan_state["blocks"]),
-                "status_text": cls._scan_state["status_text"]
-            }
+            if cls._scan_state is None:
+                cls._scan_state = cls._blank_state()
+            st = dict(cls._scan_state)
+            st["blocks"] = list(st["blocks"])
+            st["speed_curve"] = list(st["speed_curve"])
+            st["error_lbas"] = list(st["error_lbas"])[:100]
+            for k in ("progress_percent", "current_speed_mb", "bytes_read_actual_mb", "damaged_percent"):
+                st[k] = round(st[k] or 0.0, 2)
+            for k in ("last_latency_ms", "avg_latency_ms", "max_latency_ms"):
+                st[k] = round(st[k] or 0.0, 2)
+            st["elapsed_sec"] = int(st["elapsed_sec"])
+            st["remaining_sec"] = int(st["remaining_sec"] or 0)
+            return st
 
     @classmethod
     def start_scan(cls, drive_letter="C", mode="quick"):
-        clean_letter = (drive_letter or "C").replace(":", "").replace("\\", "").strip().upper() or "C"
-        mode = "full" if str(mode).lower() in ("full", "deep", "completa", "profundo") else "quick"
+        letter = (drive_letter or "C").replace(":", "").replace("\\", "").strip().upper()[:1] or "C"
+        mode = "full" if str(mode).lower() in ("full", "deep", "completa", "completo", "profundo") else "quick"
         with cls._lock:
             if cls._running:
                 return False, "Uma varredura de superfície já está em andamento."
+            if not IS_WINDOWS:
+                return False, "A varredura de superfície está disponível apenas no Windows."
             cls._running = True
             cls._cancel_requested = False
-            cls._scan_state = {
-                "running": True,
-                "paused": False,
-                "drive": f"{clean_letter}:",
-                "mode": mode,
-                "io_mode": "Inicializando acesso físico ao disco...",
-                "current_block": 0,
-                "current_lba": 0,
-                "remaining_sec": 0,
-                "progress_percent": 0.0,
-                "scanned_mb": 0,
-                "total_mb": 0,
-                "bytes_read_actual_mb": 0.0,
-                "current_speed_mb": 0.0,
-                "last_latency_ms": 0.0,
-                "avg_latency_ms": 0.0,
-                "max_latency_ms": 0.0,
-                "fast_blocks": 0,
-                "normal_blocks": 0,
-                "slow_blocks": 0,
-                "damaged_blocks": 0,
-                "damaged_percent": 0.0,
-                "elapsed_sec": 0,
-                "blocks": [0] * cls.TOTAL_BLOCKS,
-                "status_text": f"Mapeando geometria LBA e abrindo canal de leitura física em {clean_letter}:..."
-            }
-
-            t = threading.Thread(target=cls._scan_worker, args=(f"{clean_letter}:", mode), daemon=True)
-            cls._thread = t
-            t.start()
+            cls._scan_state = cls._blank_state(f"{letter}:", mode)
+            cls._scan_state.update(running=True, current_block=0,
+                                   io_mode="Abrindo acesso direto ao disco...",
+                                   status_text=f"Abrindo {letter}: para leitura física direta...")
+            cls._thread = threading.Thread(target=cls._scan_worker, args=(letter, mode), daemon=True)
+            cls._thread.start()
             return True, "Varredura de superfície iniciada."
 
     @classmethod
@@ -189,348 +163,264 @@ class SurfaceScanEngine:
         with cls._lock:
             if cls._running:
                 cls._cancel_requested = True
-                cls._scan_state["status_text"] = "Interrompendo varredura física..."
-                cls._scan_state["current_block"] = -1
-                LogManager.add_log("[SURFACESCAN] Cancelamento da varredura solicitado pelo usuário.")
+                cls._scan_state["status_text"] = "Interrompendo varredura..."
+                LogManager.add_log("[SURFACESCAN] Cancelamento solicitado pelo usuário.")
                 return True
         return False
 
     @classmethod
-    def _scan_worker(cls, drive, mode):
-        LogManager.add_log(f"=== INICIANDO WINSHIELD SURFACESCAN REAL EM {drive} (MODO: {mode.upper()}) ===")
+    def _set(cls, **kw):
+        with cls._lock:
+            cls._scan_state.update(kw)
+
+    @classmethod
+    def _scan_worker(cls, letter, mode):
+        st = cls._scan_state
+        handle = None
+        buf = None
         t_start = time.perf_counter()
-
-        drive_root = f"{drive}\\"
-        volume_path = f"\\\\.\\{drive}"
-        total_bytes = 0
         try:
-            du = shutil.disk_usage(drive_root)
-            total_bytes = du.total
-        except Exception:
-            total_bytes = 0
+            # 1. Disco físico (superfície inteira) ou volume como alternativa
+            disk_no = _disk_number_for_letter(letter)
+            target = None
+            if disk_no is not None:
+                handle = _open_read(f"\\\\.\\PhysicalDrive{disk_no}")
+                if handle:
+                    target = f"Disco físico {disk_no} (\\\\.\\PhysicalDrive{disk_no})"
+            if not handle:
+                handle = _open_read(f"\\\\.\\{letter}:")
+                if handle:
+                    target = f"Volume {letter}: (\\\\.\\{letter}:)"
+            if not handle:
+                err = ctypes.get_last_error()
+                msg = ("Acesso negado à leitura direta do disco. Execute o WinShield Pro como Administrador."
+                       if err == 5 else f"Não foi possível abrir o disco para leitura direta (erro Win32 {err}).")
+                cls._set(status_text=msg, error=msg, io_mode="Indisponível")
+                LogManager.add_log(f"[SURFACESCAN] {msg}")
+                return
 
-        total_mb = int(total_bytes / (1024 * 1024)) if total_bytes > 0 else 0
-        total_sectors = total_bytes // 512 if total_bytes > 0 else 0
-        cls._scan_state["total_mb"] = total_mb
+            total_bytes = _device_length(handle)
+            if total_bytes <= 0:
+                cls._set(status_text="Não foi possível obter o tamanho do dispositivo.", error="length")
+                return
+            total_bytes -= total_bytes % IO_SIZE
+            buf = k32.VirtualAlloc(None, IO_SIZE, 0x3000, 0x04)
+            region = total_bytes // cls.TOTAL_BLOCKS
+            region -= region % IO_SIZE
+            per_region = min(region, QUICK_SAMPLE) if mode == "quick" else region
+            planned_bytes = per_region * cls.TOTAL_BLOCKS
+            cls._set(target=target, total_mb=int(total_bytes / 1048576),
+                     io_mode=f"Leitura física direta sem cache — {target}",
+                     planned_mb=int(planned_bytes / 1048576),
+                     coverage_percent=round(planned_bytes * 100.0 / total_bytes, 2))
+            LogManager.add_log(f"=== SURFACESCAN {mode.upper()} em {target}: {total_bytes / 1e9:.1f} GB, "
+                               f"{planned_bytes / 1e9:.1f} GB serão lidos ===")
 
-        # Tamanho de leitura por bloco: 512 KB no modo Quick, 2 MB no modo Full
-        read_chunk_size = (512 * 1024) if mode == "quick" else (2 * 1024 * 1024)
+            read_dw = wintypes.DWORD(0)
+            new_pos = ctypes.c_longlong(0)
+            freq_lat_sum = 0.0
+            io_count = 0
+            bytes_done = 0
+            max_lat = 0.0
+            speeds = []
 
-        # Aloca buffer alinhado a 4096 bytes via VirtualAlloc para permitir FILE_FLAG_NO_BUFFERING real
-        MEM_COMMIT = 0x1000
-        MEM_RESERVE = 0x2000
-        MEM_RELEASE = 0x8000
-        PAGE_READWRITE = 0x04
-
-        aligned_buf_addr = None
-        fallback_buf = None
-        if IS_WINDOWS and k32:
-            k32.VirtualAlloc.restype = ctypes.c_void_p
-            aligned_buf_addr = k32.VirtualAlloc(None, read_chunk_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)
-        if not aligned_buf_addr and ctypes:
-            fallback_buf = (ctypes.c_char * read_chunk_size)()
-
-        buf_ptr = ctypes.c_void_p(aligned_buf_addr) if aligned_buf_addr else (ctypes.byref(fallback_buf) if fallback_buf else None)
-
-        # 1. Tenta abrir o volume bruto \\.\C: com FILE_FLAG_NO_BUFFERING
-        raw_handle = None
-        if IS_WINDOWS and k32:
-            h = k32.CreateFileW(
-                volume_path,
-                GENERIC_READ,
-                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                None,
-                OPEN_EXISTING,
-                FILE_FLAG_NO_BUFFERING | FILE_FLAG_SEQUENTIAL_SCAN,
-                None
-            )
-            if h and h != INVALID_HANDLE_VALUE:
-                # Testa se uma leitura no offset 0 funciona
-                test_read = wintypes.DWORD(0)
-                new_pos = ctypes.c_longlong(0)
-                k32.SetFilePointerEx(h, 0, ctypes.byref(new_pos), FILE_BEGIN)
-                ok_test = k32.ReadFile(h, buf_ptr, 4096, ctypes.byref(test_read), None)
-                if ok_test and test_read.value > 0:
-                    raw_handle = h
-                    cls._scan_state["io_mode"] = "Acesso Físico Direto ao Volume (Raw LBA Unbuffered)"
-                    LogManager.add_log(f"[SURFACESCAN] Canal Raw Volume LBA aberto com sucesso em {volume_path}.")
-                else:
-                    k32.CloseHandle(h)
-
-        # 2. Se o Windows bloquear leitura bruta do volume sem elevação, usa leitura física não-bufferizada (FILE_FLAG_NO_BUFFERING) nos clusters reais do disco
-        verification_files = []
-        temp_arena_path = None
-        temp_arena_handle = None
-
-        if not raw_handle:
-            cls._scan_state["io_mode"] = "Leitura Física de Clusters Não-Bufferizada (Direct I/O 4K Aligned)"
-            LogManager.add_log(f"[SURFACESCAN] Usando motor Direct I/O 4K Aligned sem cache em {drive_root}...")
-            verification_files = _collect_verification_files(drive_root, max_files=300)
-
-            # Cria também um arquivo de arena de verificação temporário alinhado a 4K para garantir leituras reais de setores livres
-            try:
-                temp_arena_path = os.path.join(os.environ.get("TEMP") or drive_root, "winshield_surface_probe.bin")
-                arena_size = 16 * 1024 * 1024  # 16 MB
-                if not os.path.exists(temp_arena_path) or os.path.getsize(temp_arena_path) < arena_size:
-                    block_pattern = os.urandom(1024 * 1024)
-                    with open(temp_arena_path, "wb") as f_ar:
-                        for _ in range(16):
-                            f_ar.write(block_pattern)
-                        f_ar.flush()
-                        os.fsync(f_ar.fileno())
-                if IS_WINDOWS and k32:
-                    th = k32.CreateFileW(
-                        temp_arena_path,
-                        GENERIC_READ,
-                        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                        None,
-                        OPEN_EXISTING,
-                        FILE_FLAG_NO_BUFFERING,
-                        None
-                    )
-                    if th and th != INVALID_HANDLE_VALUE:
-                        temp_arena_handle = th
-            except Exception:
-                pass
-
-        try:
-            total_io_bytes = 0
-            total_io_time_sec = 0.0
-            latency_sum_ms = 0.0
-            max_lat_ms = 0.0
-
-            # Cadência mínima para que o usuário acompanhe cada bloco sendo testado com clareza
-            min_block_interval = 0.032 if mode == "quick" else 0.085
+            def read_at(off, size):
+                k32.SetFilePointerEx(handle, ctypes.c_longlong(off), ctypes.byref(new_pos), 0)
+                t0 = time.perf_counter()
+                ok = k32.ReadFile(handle, ctypes.c_void_p(buf), size, ctypes.byref(read_dw), None)
+                return bool(ok) and read_dw.value == size, (time.perf_counter() - t0) * 1000.0
 
             for i in range(cls.TOTAL_BLOCKS):
                 if cls._cancel_requested:
                     break
-
-                t_block_loop_start = time.perf_counter()
-                cls._scan_state["current_block"] = i
-
-                target_offset = int((i / cls.TOTAL_BLOCKS) * max(0, total_bytes - read_chunk_size))
-                target_offset = (target_offset // 4096) * 4096
-                lba_pos = target_offset // 512
-                cls._scan_state["current_lba"] = lba_pos
-
-                bytes_this_block = 0
-                io_error = False
-                t_io_start = time.perf_counter()
-
-                if raw_handle and IS_WINDOWS and k32:
-                    read_dw = wintypes.DWORD(0)
-                    new_pos = ctypes.c_longlong(0)
-                    k32.SetFilePointerEx(raw_handle, ctypes.c_longlong(target_offset), ctypes.byref(new_pos), FILE_BEGIN)
-                    ok = k32.ReadFile(raw_handle, buf_ptr, read_chunk_size, ctypes.byref(read_dw), None)
-                    t_io_end = time.perf_counter()
-                    if not ok or read_dw.value == 0:
-                        io_error = True
+                start = i * region
+                worst = 1
+                cell_bytes = 0
+                cell_t = 0.0
+                off = start
+                end = start + per_region
+                with cls._lock:
+                    st["current_block"] = i
+                    st["current_lba"] = start // 512
+                while off < end:
+                    if cls._cancel_requested:
+                        break
+                    ok, lat = read_at(off, IO_SIZE)
+                    if not ok:
+                        # Confirma o erro com uma segunda leitura antes de marcar como danificado
+                        ok2, lat2 = read_at(off, IO_SIZE)
+                        if not ok2:
+                            worst = 3
+                            with cls._lock:
+                                st["read_errors"] += 1
+                                if len(st["error_lbas"]) < 500:
+                                    st["error_lbas"].append(off // 512)
+                            LogManager.add_log(f"[SURFACESCAN] Erro de leitura confirmado no LBA {off // 512:,}")
+                        lat = max(lat, lat2)
                     else:
-                        bytes_this_block = int(read_dw.value)
+                        cell_bytes += IO_SIZE
+                        cell_t += lat / 1000.0
+                    if worst != 3:
+                        if lat >= LAT_SLOW_MS:
+                            worst = 2
+                        elif lat >= LAT_FAST_MS and worst == 1:
+                            worst = 4
+                    io_count += 1
+                    freq_lat_sum += lat
+                    max_lat = max(max_lat, lat)
+                    bytes_done += IO_SIZE
+                    off += IO_SIZE
+                    if io_count % 16 == 0:
+                        el = time.perf_counter() - t_start
+                        with cls._lock:
+                            st["last_latency_ms"] = lat
+                            st["bytes_read_actual_mb"] = bytes_done / 1048576
+                            st["elapsed_sec"] = el
+                            st["progress_percent"] = bytes_done * 100.0 / planned_bytes
+                            st["current_speed_mb"] = (cell_bytes / 1048576) / cell_t if cell_t > 0 else 0.0
+                            if bytes_done:
+                                st["remaining_sec"] = el * (planned_bytes - bytes_done) / bytes_done
+
+                speed = (cell_bytes / 1048576) / cell_t if cell_t > 0 else 0.0
+                if cell_bytes:
+                    speeds.append(speed)
+                el = time.perf_counter() - t_start
+                key = {1: "fast_blocks", 4: "normal_blocks", 2: "slow_blocks", 3: "damaged_blocks"}[worst]
+                with cls._lock:
+                    st["blocks"][i] = worst
+                    st["speed_curve"][i] = round(speed, 1)
+                    st[key] += 1
+                    done = i + 1
+                    st["damaged_percent"] = st["damaged_blocks"] * 100.0 / done
+                    st["avg_latency_ms"] = freq_lat_sum / max(1, io_count)
+                    st["max_latency_ms"] = max_lat
+                    st["current_speed_mb"] = speed
+                    st["scanned_mb"] = int((i + 1) * region / 1048576)
+                    st["bytes_read_actual_mb"] = bytes_done / 1048576
+                    st["progress_percent"] = bytes_done * 100.0 / planned_bytes
+                    st["elapsed_sec"] = el
+                    st["remaining_sec"] = el * (planned_bytes - bytes_done) / max(1, bytes_done)
+                    if speeds:
+                        st["min_speed_mb"] = round(min(speeds), 1)
+                        st["max_speed_mb"] = round(max(speeds), 1)
+                        st["avg_speed_mb"] = round(sum(speeds) / len(speeds), 1)
+                    st["status_text"] = (f"Região {done}/{cls.TOTAL_BLOCKS} · LBA {start // 512:,} · "
+                                         f"{speed:.0f} MB/s · pior latência da região {'erro' if worst == 3 else ''}")
+
+            with cls._lock:
+                st["current_block"] = -1
+                st["remaining_sec"] = 0
+                if cls._cancel_requested:
+                    st["status_text"] = "Varredura interrompida pelo usuário."
                 else:
-                    # Leitura real sem cache do sistema operacional (FILE_FLAG_NO_BUFFERING) em arquivos do volume + arena física
-                    if verification_files and IS_WINDOWS and k32:
-                        fpath, fsize = verification_files[i % len(verification_files)]
-                        fh = k32.CreateFileW(
-                            fpath,
-                            GENERIC_READ,
-                            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                            None,
-                            OPEN_EXISTING,
-                            FILE_FLAG_NO_BUFFERING,
-                            None
-                        )
-                        if fh and fh != INVALID_HANDLE_VALUE:
-                            try:
-                                aligned_sz = min(read_chunk_size, max(4096, (fsize // 4096) * 4096))
-                                max_off = max(0, ((fsize - aligned_sz) // 4096) * 4096)
-                                file_off = ((i * 65536) % (max_off + 4096)) if max_off > 0 else 0
-                                file_off = (file_off // 4096) * 4096
-                                new_pos = ctypes.c_longlong(0)
-                                k32.SetFilePointerEx(fh, ctypes.c_longlong(file_off), ctypes.byref(new_pos), FILE_BEGIN)
-                                read_dw = wintypes.DWORD(0)
-                                ok = k32.ReadFile(fh, buf_ptr, aligned_sz, ctypes.byref(read_dw), None)
-                                if ok and read_dw.value > 0:
-                                    bytes_this_block += int(read_dw.value)
-                            finally:
-                                k32.CloseHandle(fh)
-
-                    # Complementa o bloco na arena não-bufferizada caso o arquivo fosse menor que read_chunk_size
-                    if bytes_this_block < read_chunk_size and temp_arena_handle and IS_WINDOWS and k32:
-                        rem_aligned = ((read_chunk_size - bytes_this_block) // 4096) * 4096
-                        if rem_aligned >= 4096:
-                            arena_off = ((i * read_chunk_size) % (14 * 1024 * 1024))
-                            arena_off = (arena_off // 4096) * 4096
-                            new_pos = ctypes.c_longlong(0)
-                            k32.SetFilePointerEx(temp_arena_handle, ctypes.c_longlong(arena_off), ctypes.byref(new_pos), FILE_BEGIN)
-                            read_dw = wintypes.DWORD(0)
-                            ok = k32.ReadFile(temp_arena_handle, buf_ptr, rem_aligned, ctypes.byref(read_dw), None)
-                            if ok and read_dw.value > 0:
-                                bytes_this_block += int(read_dw.value)
-                            elif bytes_this_block == 0:
-                                io_error = True
-
-                    t_io_end = time.perf_counter()
-
-                io_elapsed_sec = max(0.00005, t_io_end - t_io_start)
-                duration_ms = round(io_elapsed_sec * 1000.0, 2)
-
-                total_io_bytes += bytes_this_block
-                total_io_time_sec += io_elapsed_sec
-                latency_sum_ms += duration_ms
-                if duration_ms > max_lat_ms:
-                    max_lat_ms = duration_ms
-
-                # Classificação real por latência de leitura física do bloco
-                if io_error:
-                    block_status = 3  # Danificado / Erro de leitura I/O
-                    cls._scan_state["damaged_blocks"] += 1
-                elif duration_ms > 180.0:
-                    block_status = 2  # Lento / Alerta (> 180 ms)
-                    cls._scan_state["slow_blocks"] += 1
-                elif duration_ms > 12.0:
-                    block_status = 4  # Normal (12 - 180 ms)
-                    cls._scan_state["normal_blocks"] += 1
-                else:
-                    block_status = 1  # Excelente (< 12 ms)
-                    cls._scan_state["fast_blocks"] += 1
-
-                cls._scan_state["blocks"][i] = block_status
-
-                # Taxa de transferência física real (MB/s) medida durante as operações de I/O
-                inst_speed_mb = (bytes_this_block / (1024.0 * 1024.0)) / io_elapsed_sec if bytes_this_block > 0 else 0.0
-                avg_speed_mb = (total_io_bytes / (1024.0 * 1024.0)) / max(0.001, total_io_time_sec)
-                real_speed_mb = round((inst_speed_mb * 0.35) + (avg_speed_mb * 0.65), 1)
-
-                # Garante que a interface gráfica consiga exibir o avanço bloco a bloco com credibilidade
-                loop_elapsed = time.perf_counter() - t_block_loop_start
-                if loop_elapsed < min_block_interval:
-                    time.sleep(min_block_interval - loop_elapsed)
-
-                now = time.perf_counter()
-                elapsed = now - t_start
-                blocks_done = i + 1
-
-                cls._scan_state["progress_percent"] = (blocks_done / cls.TOTAL_BLOCKS) * 100.0
-                cls._scan_state["scanned_mb"] = int((blocks_done / cls.TOTAL_BLOCKS) * total_mb)
-                cls._scan_state["bytes_read_actual_mb"] = total_io_bytes / (1024.0 * 1024.0)
-                cls._scan_state["current_speed_mb"] = real_speed_mb
-                cls._scan_state["last_latency_ms"] = duration_ms
-                cls._scan_state["avg_latency_ms"] = latency_sum_ms / blocks_done
-                cls._scan_state["max_latency_ms"] = max_lat_ms
-                cls._scan_state["elapsed_sec"] = elapsed
-                cls._scan_state["damaged_percent"] = (cls._scan_state["damaged_blocks"] / blocks_done) * 100.0
-
-                if blocks_done > 4 and elapsed > 0:
-                    avg_time_per_block = elapsed / blocks_done
-                    cls._scan_state["remaining_sec"] = int((cls.TOTAL_BLOCKS - blocks_done) * avg_time_per_block)
-
-                cls._scan_state["status_text"] = (
-                    f"Verificando LBA {lba_pos:,} | Bloco {blocks_done}/{cls.TOTAL_BLOCKS} "
-                    f"| Latência: {duration_ms:.1f} ms | Leitura Real: {real_speed_mb:.1f} MB/s"
-                )
-
-            if not cls._cancel_requested:
-                cls._scan_state["progress_percent"] = 100.0
-                cls._scan_state["current_block"] = -1
-                cls._scan_state["remaining_sec"] = 0
-                bad = cls._scan_state["damaged_blocks"]
-                slow = cls._scan_state["slow_blocks"]
-                avg_lat = cls._scan_state["avg_latency_ms"]
-                if bad == 0 and slow == 0:
-                    cls._scan_state["status_text"] = (
-                        f"[OK] Diagnóstico físico 100% concluído! 0 blocos defeituosos (Latência média: {avg_lat:.2f} ms)."
-                    )
-                else:
-                    cls._scan_state["status_text"] = (
-                        f"[AVISO] Varredura concluída: {bad} bloco(s) danificado(s) e {slow} bloco(s) lento(s) detectados."
-                    )
-                LogManager.add_log(
-                    f"=== SURFACESCAN CONCLUÍDO ({drive}): {bad} danificados, {slow} lentos, "
-                    f"Latência Média: {avg_lat:.2f}ms, Velocidade Real: {cls._scan_state['current_speed_mb']:.1f} MB/s ==="
-                )
-
+                    st["progress_percent"] = 100.0
+                    bad, slow = st["damaged_blocks"], st["slow_blocks"]
+                    gb = bytes_done / 1e9
+                    if bad == 0 and slow == 0:
+                        st["status_text"] = (f"[OK] {gb:,.1f} GB lidos sem erros. Latência média {st['avg_latency_ms']:.2f} ms, "
+                                             f"transferência {st['min_speed_mb']}–{st['max_speed_mb']} MB/s.")
+                    else:
+                        st["status_text"] = (f"[AVISO] {gb:,.1f} GB lidos: {st['read_errors']} erro(s) de leitura em {bad} região(ões) "
+                                             f"e {slow} região(ões) com setores lentos (≥ {int(LAT_SLOW_MS)} ms).")
+            LogManager.add_log(f"=== SURFACESCAN FINALIZADO: {cls._scan_state['status_text']} ===")
         except Exception as ex:
             LogManager.add_log(f"[ERRO SURFACESCAN] {ex}")
-            cls._scan_state["status_text"] = f"Falha durante varredura física: {ex}"
+            cls._set(status_text=f"Falha durante a varredura: {ex}", error=str(ex))
         finally:
-            cls._scan_state["current_block"] = -1
-            cls._scan_state["remaining_sec"] = 0
-            if raw_handle and IS_WINDOWS and k32:
-                k32.CloseHandle(raw_handle)
-            if temp_arena_handle and IS_WINDOWS and k32:
-                k32.CloseHandle(temp_arena_handle)
-            if temp_arena_path and os.path.exists(temp_arena_path):
-                try:
-                    os.remove(temp_arena_path)
-                except OSError:
-                    pass
-            if aligned_buf_addr and IS_WINDOWS and k32:
-                k32.VirtualFree(ctypes.c_void_p(aligned_buf_addr), 0, MEM_RELEASE)
+            if handle:
+                k32.CloseHandle(handle)
+            if buf:
+                k32.VirtualFree(ctypes.c_void_p(buf), 0, 0x8000)
             with cls._lock:
                 cls._running = False
                 cls._scan_state["running"] = False
+                cls._scan_state["current_block"] = -1
 
+    # ------------------------------------------------------------------
+    # RECURSOS DO DISCO (somente o que o Windows realmente reporta)
+    # ------------------------------------------------------------------
     @classmethod
     def get_drive_features(cls, disk_index=0):
-        """Retorna recursos de hardware suportados pelo disco e status de alinhamento 4K."""
-        features = [
-            {"feature": "S.M.A.R.T. (Monitoramento de Falhas)", "supported": True, "active": True, "desc": "Monitoramento preditivo de integridade física"},
-            {"feature": "48-bit LBA (Suporte a Grandes Volumes)", "supported": True, "active": True, "desc": "Permite endereçar discos maiores que 137 GB"},
-            {"feature": "TRIM (Otimização de Descarte NAND)", "supported": True, "active": True, "desc": "Libera blocos apagados no SSD para manter velocidade de escrita"},
-            {"feature": "NCQ (Native Command Queuing)", "supported": True, "active": True, "desc": "Otimiza a ordem de execução de comandos de I/O"},
-            {"feature": "Write Cache (Cache de Escrita)", "supported": True, "active": True, "desc": "Acelera operações de escrita usando DRAM/SRAM interna"},
-            {"feature": "Power Management (APM)", "supported": True, "active": True, "desc": "Gerenciamento avançado de energia e suspensão"},
-            {"feature": "Security Mode (Senha de Disco / ATA Lock)", "supported": True, "active": False, "desc": "Bloqueio por senha do controlador de hardware"},
-            {"feature": "Device Sleep (DevSleep)", "supported": True, "active": True, "desc": "Modo de ultra-baixo consumo para notebooks e PCs em espera"},
-        ]
-
+        idx = int(disk_index)
+        features = []
         alignment_info = []
+        sectors = {"logical": None, "physical": None, "standard": "—"}
         if IS_WINDOWS:
-            ps = f"""
-            Get-Partition -DiskNumber {int(disk_index)} -ErrorAction SilentlyContinue | Where-Object {{ $_.DriveLetter }} | ForEach-Object {{
-                $off = [int64]$_.Offset
-                $is4k = ($off % 4096) -eq 0
-                [pscustomobject]@{{
-                    Letter = [string]$_.DriveLetter
-                    Offset = $off
-                    Is4kAligned = $is4k
-                    Size = [int64]$_.Size
-                }}
-            }} | ConvertTo-Json -Compress
+            ps = rf"""
+            $ErrorActionPreference='SilentlyContinue'
+            $pd = Get-PhysicalDisk | Where-Object {{ $_.DeviceId -eq '{idx}' }} | Select-Object -First 1
+            $adv = if ($pd) {{ $pd | Get-StorageAdvancedProperty }} else {{ $null }}
+            $trim = (fsutil behavior query DisableDeleteNotify) -join ' '
+            $dd = Get-CimInstance Win32_DiskDrive | Where-Object {{ $_.Index -eq {idx} }} | Select-Object -First 1
+            $pred = $null
+            if ($dd) {{
+              $pnp = $dd.PNPDeviceID
+              $pred = Get-CimInstance -Namespace root\wmi -ClassName MSStorageDriver_FailurePredictStatus |
+                      Where-Object {{ $_.InstanceName -like ($pnp + '*') }} | Select-Object -First 1
+            }}
+            $rel = if ($pd) {{ $pd | Get-StorageReliabilityCounter }} else {{ $null }}
+            $parts = @(Get-Partition -DiskNumber {idx} | ForEach-Object {{
+              [pscustomobject]@{{ Letter=[string]$_.DriveLetter; Offset=[int64]$_.Offset; Size=[int64]$_.Size; Type=[string]$_.Type }} }})
+            [pscustomobject]@{{
+              Bus=[string]$pd.BusType; Media=[string]$pd.MediaType; Spindle=[int64]$pd.SpindleSpeed;
+              Logical=[int]$pd.LogicalSectorSize; Physical=[int]$pd.PhysicalSectorSize;
+              CacheEnabled=$adv.IsDeviceCacheEnabled; PowerProtected=$adv.IsPowerProtected;
+              Trim=$trim; SmartPred=($pred -ne $null); PredictFailure=[bool]$pred.PredictFailure;
+              Reliability=($rel -ne $null); Partitions=$parts
+            }} | ConvertTo-Json -Depth 4 -Compress
             """
-            raw = run_ps_json(ps, timeout=15)
-            if raw:
-                raw_list = raw if isinstance(raw, list) else [raw]
-                for p in raw_list:
-                    alignment_info.append({
-                        "letter": p.get("Letter"),
-                        "offset_bytes": p.get("Offset"),
-                        "is_4k_aligned": p.get("Is4kAligned", True),
-                        "status_text": "[OK] Alinhado a 4K (Desempenho Máximo)" if p.get("Is4kAligned") else "[AVISO] Desalinhado (Perda de Desempenho)"
-                    })
+            raw = run_ps_json(ps, timeout=25) or {}
+            bus = str(raw.get("Bus") or "")
+            media = str(raw.get("Media") or "")
+            is_nvme = bus.lower() == "nvme" or bus == "17"
+            is_ssd = media.upper() == "SSD" or media == "4" or is_nvme
+            trim_txt = str(raw.get("Trim") or "")
+            trim_on = None
+            if "DisableDeleteNotify" in trim_txt:
+                # NTFS DisableDeleteNotify = 0 -> TRIM ativo
+                ntfs = trim_txt.split("NTFS")[1] if "NTFS" in trim_txt else trim_txt
+                trim_on = "= 0" in ntfs.split("ReFS")[0] or "= 0" in ntfs[:40]
+            smart_ok = bool(raw.get("SmartPred")) or is_nvme or bool(raw.get("Reliability"))
 
-        if not alignment_info:
-            alignment_info.append({
-                "letter": "C",
-                "offset_bytes": 1048576,
-                "is_4k_aligned": True,
-                "status_text": "[OK] Alinhado a 4K (1.048.576 bytes / Offset de 1 MiB padrão Windows)"
-            })
+            def feat(name, supported, active, desc):
+                features.append({"feature": name, "supported": supported, "active": active, "desc": desc})
 
-        return {
-            "features": features,
-            "alignment": alignment_info,
-            "sector_sizes": {
-                "logical": 512,
-                "physical": 4096,
-                "standard": "Advanced Format (512e / 4Kn)"
-            }
-        }
+            feat("S.M.A.R.T. / Health Log", smart_ok, smart_ok,
+                 "Monitoramento preditivo reportado pelo controlador" if smart_ok else "O controlador não expôs dados S.M.A.R.T. ao Windows")
+            if raw.get("SmartPred"):
+                feat("Previsão de falha (SMART)", True, bool(raw.get("PredictFailure")),
+                     "FALHA PREVISTA pelo firmware do disco!" if raw.get("PredictFailure") else "Firmware não prevê falha")
+            if is_ssd:
+                feat("TRIM (Delete Notification)", True, trim_on,
+                     "Windows envia comandos TRIM ao SSD" if trim_on else ("TRIM desativado no Windows" if trim_on is False else "Status não pôde ser lido"))
+            cache = raw.get("CacheEnabled")
+            feat("Cache de gravação do dispositivo", cache is not None, bool(cache) if cache is not None else None,
+                 "Informado por Get-StorageAdvancedProperty" if cache is not None else "Não informado pelo driver")
+            pp = raw.get("PowerProtected")
+            if pp is not None:
+                feat("Proteção contra queda de energia (PLP)", True, bool(pp),
+                     "Cache protegido por capacitores" if pp else "Cache volátil (sem PLP)")
+            feat("Interface", True, True, f"{bus or 'Desconhecida'} · {media or 'mídia não especificada'}"
+                 + (f" · {raw.get('Spindle')} RPM" if raw.get("Spindle") and 0 < int(raw.get("Spindle")) < 100000 else ""))
+
+            lg, ph = raw.get("Logical"), raw.get("Physical")
+            sectors = {"logical": lg or None, "physical": ph or None,
+                       "standard": ("4Kn" if lg == 4096 else ("512e (Advanced Format)" if ph == 4096 else ("512n" if lg == 512 else "—")))}
+
+            parts = raw.get("Partitions") or []
+            if isinstance(parts, dict):
+                parts = [parts]
+            for p in parts:
+                off = int(p.get("Offset") or 0)
+                ok = off % 4096 == 0
+                alignment_info.append({
+                    "letter": (p.get("Letter") or "").strip() or None,
+                    "offset_bytes": off,
+                    "is_4k_aligned": ok,
+                    "status_text": f"[OK] Alinhada a 4 KiB (offset {off // 1024:,} KiB)" if ok
+                                   else f"[AVISO] Desalinhada: offset {off:,} bytes não é múltiplo de 4096",
+                })
+        return {"features": features, "alignment": alignment_info, "sector_sizes": sectors}
 
 
-# Alias de compatibilidade retroativa
 SectorGuardEngine = SurfaceScanEngine
-# Alias de compatibilidade retroativa
-SurfaceScanEngine = SurfaceScanEngine

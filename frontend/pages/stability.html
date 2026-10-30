@@ -1,442 +1,346 @@
-<section id="view-stability" class="view-panel hidden space-y-2.5">
+<section id="view-stability" class="view-panel hidden ws-page">
 
-    <!-- 1. COMPACT HEADER BAR: TITULO, STATUS, HARDWARE & THROTTLING -->
-    <div class="glass-card px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-dark-900/70 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 tracking-tight">
-                <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-500 animate-pulse"></i>
-                Estabilidade do Sistema
-            </span>
-            <span id="stress-status-badge" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-slate-400" id="stress-status-dot"></span>
-                <span id="stress-status-text">PRONTO PARA TESTE</span>
-            </span>
+    <!-- SELETOR: ESTABILIDADE (STRESSPULSE) x BENCHMARK DE ESTRESSE (STRESSBENCH) -->
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="ws-seg" id="stab-mode-seg">
+            <button data-mode="pulse" class="active" onclick="switchStabilityMode('pulse')">Teste de estabilidade</button>
+            <button data-mode="bench" onclick="switchStabilityMode('bench')">Benchmark de estresse</button>
         </div>
-
-        <!-- Hardware labels -->
-        <div class="hidden md:flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400">
-            <span class="flex items-center gap-1 bg-slate-100 dark:bg-dark-950 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
-                <i data-lucide="cpu" class="w-3 h-3 text-amber-500"></i>
-                <strong class="text-slate-700 dark:text-slate-200 truncate max-w-[150px]" id="stress-cpu-top-label">8C / 16T</strong>
-            </span>
-            <span class="flex items-center gap-1 bg-slate-100 dark:bg-dark-950 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
-                <i data-lucide="monitor" class="w-3 h-3 text-emerald-500"></i>
-                <strong class="text-slate-700 dark:text-slate-200 truncate max-w-[150px]" id="stress-gpu-top-label">GPU</strong>
-            </span>
-            <span class="hidden xl:flex items-center gap-1 bg-slate-100 dark:bg-dark-950 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
-                <i data-lucide="hard-drive" class="w-3 h-3 text-cyan-500"></i>
-                <strong class="text-slate-700 dark:text-slate-200 truncate max-w-[140px]" id="stress-disk-top-label">SSD</strong>
-            </span>
-        </div>
-
-        <!-- Throttling badge -->
-        <div id="stress-throttling-card" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 flex items-center gap-2">
-            <div class="w-6 h-6 rounded-md bg-slate-200/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 flex items-center justify-center flex-shrink-0" id="stress-throttling-card-icon-box">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500" id="stress-throttling-card-icon"></i>
-            </div>
-            <div>
-                <div class="text-[9px] uppercase font-bold text-slate-400 leading-none">Térmico</div>
-                <div id="stress-throttling-card-text" class="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400 leading-tight">Inativo (0%)</div>
-            </div>
-        </div>
+        <span class="ws-stat-foot" id="stab-mode-hint">Carga contínua com verificação de erros em CPU, FPU, cache, RAM, disco e GPU.</span>
     </div>
 
-    <!-- 2. SUBSISTEMAS & REGISTRO DE EVENTOS (COMPACTO) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-2.5">
-        
-        <!-- ESQUERDA: 6 MÓDULOS DE CARGA (7 colunas) -->
-        <div class="lg:col-span-7 p-2.5 rounded-xl bg-white dark:bg-dark-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-1.5">
-            <div class="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
-                <span class="flex items-center gap-1.5 uppercase text-[10px] tracking-wider text-slate-500 dark:text-slate-400">
-                    <i data-lucide="check-square" class="w-3.5 h-3.5 text-orange-500"></i>
-                    Subsistemas em Carga
-                </span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    Multithread Paralelo
-                </span>
-            </div>
+    <div id="stab-mode-pulse" class="ws-page">
 
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
-                <!-- 1. CPU -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-cpu" checked class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">CPU</span>
-                </label>
-
-                <!-- 2. FPU -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-fpu" checked class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">FPU</span>
-                </label>
-
-                <!-- 3. Cache -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-cache" checked class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Cache</span>
-                </label>
-
-                <!-- 4. Memory -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-memory" checked class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">RAM</span>
-                </label>
-
-                <!-- 5. Disks -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-disks" class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Discos</span>
-                </label>
-
-                <!-- 6. GPU -->
-                <label class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 hover:border-orange-500/40 cursor-pointer select-none transition">
-                    <input type="checkbox" id="stress-chk-gpu" class="w-3.5 h-3.5 rounded accent-orange-500 cursor-pointer stress-subsystem-chk">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">GPU</span>
-                </label>
-            </div>
-        </div>
-
-        <!-- DIREITA: REGISTRO DE EVENTOS (5 colunas) -->
-        <div class="lg:col-span-5 p-2.5 rounded-xl bg-white dark:bg-dark-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-1">
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                <span class="font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                    <i data-lucide="list-ordered" class="w-3 h-3 text-orange-500"></i>
-                    Eventos / Setores
-                </span>
-                <div class="flex items-center gap-2">
-                    <span id="stress-sector-count-label">Setores: 0</span>
-                    <span class="text-slate-600">&bull;</span>
-                    <span id="stress-sector-ram-tested">RAM: 0 MB</span>
+        <!-- ESTADO + CONTROLES -->
+        <div class="ws-card">
+            <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <div class="flex flex-col gap-1">
+                        <span class="ws-stat-label">Estado</span>
+                        <span id="stress-status-badge" class="ws-badge"><span class="w-1.5 h-1.5 rounded-full" id="stress-status-dot"></span><span id="stress-status-text">Pronto para testar</span></span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="ws-stat-label">Tempo</span>
+                        <span id="stress-elapsed-time" class="ws-mono ws-strong text-[18px] leading-none">00:00:00</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="ws-stat-label">Início</span>
+                        <span id="stress-test-started" class="ws-mono text-[12.5px]">—</span>
+                    </div>
+                    <div id="stress-throttling-card" class="flex items-center gap-2">
+                        <span id="stress-throttling-card-icon-box" class="ws-icon"><i data-lucide="gauge" id="stress-throttling-card-icon"></i></span>
+                        <div class="flex flex-col gap-0.5">
+                            <span class="ws-stat-label">Limitação de clock</span>
+                            <span id="stress-throttling-card-text" class="ws-mono text-[12.5px]">Aguardando teste</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="startStressTest()" id="stress-btn-start" class="ws-btn primary">Iniciar</button>
+                    <button onclick="stopStressTest()" id="stress-btn-stop" disabled class="ws-btn danger">Parar</button>
+                    <span class="w-px h-6 mx-1" style="background:var(--border-default)"></span>
+                    <button onclick="clearStressStats()" id="stress-btn-clear" class="ws-btn sm ghost" title="Limpar histórico e gráficos">Limpar</button>
+                    <button onclick="saveStressReport()" id="stress-btn-save" class="ws-btn sm ghost" title="Salvar relatório">Relatório</button>
+                    <button onclick="openSiliconMatrixModal()" id="stress-btn-cpuid" class="ws-btn sm ghost" title="Dados do processador">CPU</button>
+                    <button onclick="openStressPreferences()" id="stress-btn-prefs" class="ws-btn sm ghost" title="Threads, memória e duração">Configurar</button>
                 </div>
             </div>
 
-            <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-[#070b14] overflow-hidden">
-                <div id="stress-sector-log-box" class="h-11 overflow-y-auto divide-y divide-slate-800/40 font-mono text-[10px] p-1 text-slate-300">
-                    <div class="text-slate-500 italic text-center py-1 text-[10px]" id="stress-sector-log-empty">
-                        Nenhum teste em execução. Clique em "Start".
+            <div class="ws-divider my-4"></div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="ws-stat-label mr-1">Componentes em carga</span>
+                    <label class="ws-option !py-1.5"><input type="checkbox" id="stress-chk-cpu" checked class="stress-subsystem-chk"><span class="t">CPU</span></label>
+                    <label class="ws-option !py-1.5"><input type="checkbox" id="stress-chk-fpu" checked class="stress-subsystem-chk"><span class="t">FPU</span></label>
+                    <label class="ws-option !py-1.5"><input type="checkbox" id="stress-chk-cache" checked class="stress-subsystem-chk"><span class="t">Cache</span></label>
+                    <label class="ws-option !py-1.5"><input type="checkbox" id="stress-chk-memory" checked class="stress-subsystem-chk"><span class="t">RAM</span></label>
+                    <label class="ws-option !py-1.5"><input type="checkbox" id="stress-chk-disks" class="stress-subsystem-chk"><span class="t">Disco</span></label>
+                    <label class="ws-option !py-1.5" title="Carga real na placa de vídeo via WebGL2 (shader em 1920×1080)"><input type="checkbox" id="stress-chk-gpu" class="stress-subsystem-chk"><span class="t">GPU</span></label>
+                </div>
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] ws-muted">
+                    <span class="flex items-center gap-1.5"><span id="stress-cpu-top-label" class="truncate max-w-[220px]">—</span></span>
+                    <span class="flex items-center gap-1.5"><span id="stress-gpu-top-label" class="truncate max-w-[200px]">—</span></span>
+                    <span class="flex items-center gap-1.5"><span id="stress-disk-top-label" class="truncate max-w-[180px]">—</span></span>
+                    <span class="flex items-center gap-1.5"><span id="stress-battery-status">—</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERROS, TAXAS E FONTES -->
+        <div id="stress-health-strip" class="ws-health-strip"></div>
+
+        <!-- TELEMETRIA -->
+        <div class="ws-card ws-card-flush">
+            <div class="ws-tabs px-3" id="stress-main-tabs">
+                <button onclick="setStressTab('components')" id="stress-tab-components" class="active">Componentes</button>
+                <button onclick="setStressTab('temperatures')" id="stress-tab-temperatures">Temperaturas</button>
+                <button onclick="setStressTab('cooling_fans')" id="stress-tab-cooling_fans">Ventoinhas</button>
+                <button onclick="setStressTab('voltages')" id="stress-tab-voltages">Tensões</button>
+                <button onclick="setStressTab('powers')" id="stress-tab-powers">Potência</button>
+                <button onclick="setStressTab('clocks')" id="stress-tab-clocks">Clocks</button>
+                <button onclick="setStressTab('unified')" id="stress-tab-unified">Unificado</button>
+                <button onclick="setStressTab('statistics')" id="stress-tab-statistics">Estatísticas</button>
+            </div>
+
+            <div id="stress-components-container" class="p-4">
+                <div id="stress-components-body" class="flex flex-col"></div>
+                <p class="ws-stat-foot mt-3">Vazão medida a cada 1 s. Mínimo, média, máximo e variação consideram a execução inteira, ignorando os 5 s iniciais de alocação. Variação = desvio padrão ÷ média: valores baixos indicam carga constante; um aumento durante o teste aponta limitação térmica ou de energia. * RAM e disco variam por natureza do teste (padrões diferentes e fases de gravação/leitura).</p>
+            </div>
+
+            <div id="stress-visual-graphs-container" class="hidden p-4 flex flex-col gap-4">
+                <div id="stress-fans-notice" class="hidden ws-note warn">
+                    <span id="stress-fans-notice-text">—</span>
+                    <span class="flex gap-2 ml-auto flex-shrink-0">
+                        <button id="stress-lhm-start-btn" onclick="startLibreHardwareMonitor()" class="ws-btn sm hidden">Abrir LibreHardwareMonitor</button>
+                        <button onclick="openLibreHardwareMonitorSite()" class="ws-btn sm">Baixar (site oficial)</button>
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span id="stress-upper-title" class="ws-card-title">Temperaturas</span>
+                        <span id="stress-upper-scale-label" class="ws-mono text-[11px] ws-faint">—</span>
+                    </div>
+                    <div class="relative w-full rounded-lg overflow-hidden" style="border:1px solid var(--border-subtle)">
+                        <canvas id="stress-upper-canvas" height="170" class="w-full block" style="height:170px;max-height:170px"></canvas>
+                        <div id="stress-upper-overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300" style="background:var(--bg-surface-inner)">
+                            <span class="ws-muted text-[12.5px]">Aguardando telemetria…</span>
+                        </div>
+                    </div>
+                    <div id="stress-upper-legend-bar" class="pt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11.5px] ws-mono"></div>
+                </div>
+
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                        <span class="ws-card-title">Uso da CPU e limitação de clock</span>
+                        <div id="stress-throttling-headline" class="text-[12px]"></div>
+                    </div>
+                    <div class="relative w-full rounded-lg overflow-hidden" style="border:1px solid var(--border-subtle)">
+                        <canvas id="stress-lower-canvas" height="80" class="w-full block" style="height:80px;max-height:80px"></canvas>
+                    </div>
+                    <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                        <div class="flex items-center gap-4">
+                            <label class="ws-check"><input type="checkbox" id="stress-trace-cpu-usage" checked onchange="renderStressCharts()">Uso da CPU</label>
+                            <label class="ws-check"><input type="checkbox" id="stress-trace-cpu-throttling" checked onchange="renderStressCharts()">Limitação</label>
+                        </div>
+                        <div class="flex items-center gap-4 ws-muted">
+                            <span>Uso <b id="stress-live-cpu-usage-val" class="ws-mono">0%</b></span>
+                            <span>Limitação <b id="stress-live-cpu-throttling-val" class="ws-mono">—</b></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- 3. ABAS DE TELEMETRIA -->
-    <div class="flex items-center gap-1 overflow-x-auto pb-0.5 select-none" id="stress-main-tabs">
-        <button onclick="setStressTab('temperatures')" id="stress-tab-temperatures"
-            class="px-3 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-sm transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="thermometer" class="w-3.5 h-3.5"></i>
-            <span>Temperatures</span>
-        </button>
-        <button onclick="setStressTab('cooling_fans')" id="stress-tab-cooling_fans"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="fan" class="w-3.5 h-3.5"></i>
-            <span>Cooling Fans</span>
-        </button>
-        <button onclick="setStressTab('voltages')" id="stress-tab-voltages"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="battery-charging" class="w-3.5 h-3.5"></i>
-            <span>Voltages</span>
-        </button>
-        <button onclick="setStressTab('powers')" id="stress-tab-powers"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-            <span>Powers</span>
-        </button>
-        <button onclick="setStressTab('clocks')" id="stress-tab-clocks"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
-            <span>Clocks</span>
-        </button>
-        <button onclick="setStressTab('unified')" id="stress-tab-unified"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-            <span>Unified</span>
-        </button>
-        <button onclick="setStressTab('statistics')" id="stress-tab-statistics"
-            class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-800 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-            <i data-lucide="table" class="w-3.5 h-3.5"></i>
-            <span>Statistics</span>
-        </button>
-    </div>
-
-    <!-- 4. ÁREA VISUAL PRINCIPAL DO OSCILOSCÓPIO DUPLO -->
-    <div id="stress-visual-graphs-container" class="space-y-2.5">
-
-        <!-- 4A. GRÁFICO SUPERIOR -->
-        <div class="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-dark-900 border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-sm">
-            <div class="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800/80">
-                <div class="flex items-center gap-1.5">
-                    <i data-lucide="line-chart" class="w-3.5 h-3.5 text-orange-500"></i>
-                    <h3 id="stress-upper-title" class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                        Temperatures Oscilloscope
-                    </h3>
+            <div id="stress-statistics-container" class="hidden">
+                <div class="overflow-auto max-h-[380px]">
+                    <table class="ws-table">
+                        <thead><tr><th>Sensor</th><th class="text-right">Atual</th><th class="text-right">Mínimo</th><th class="text-right">Máximo</th><th class="text-right">Média</th></tr></thead>
+                        <tbody id="stress-statistics-tbody"></tbody>
+                    </table>
                 </div>
-                <span id="stress-upper-scale-label" class="text-[10px] font-mono text-slate-400">Escala Y: 0 °C &mdash; 100 °C</span>
-            </div>
-
-            <!-- CANVAS SUPERIOR (145px) -->
-            <div class="relative w-full rounded-lg bg-[#060a12] border border-slate-800 shadow-inner overflow-hidden">
-                <canvas id="stress-upper-canvas" height="145" class="w-full block" style="height: 145px; max-height: 145px;"></canvas>
-                <div id="stress-upper-overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none bg-slate-950/70 transition-opacity duration-300">
-                    <span class="px-3 py-1 rounded-lg bg-dark-900/90 border border-slate-700/80 text-[11px] font-semibold text-slate-300 shadow-lg flex items-center gap-1.5">
-                        <i data-lucide="activity" class="w-3.5 h-3.5 text-orange-500 animate-spin"></i>
-                        Aguardando telemetria em tempo real...
-                    </span>
-                </div>
-            </div>
-
-            <!-- LEGENDA INTERATIVA -->
-            <div id="stress-upper-legend-bar" class="pt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-mono">
-                <!-- Injetado dinamicamente via JS -->
             </div>
         </div>
 
-        <!-- 4B. GRÁFICO INFERIOR: CPU USAGE | CPU THROTTLING -->
-        <div class="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-dark-900 border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-sm">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 pb-1 border-b border-slate-200 dark:border-slate-800/80">
-                <div class="flex items-center gap-1.5">
-                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-emerald-500"></i>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                        CPU Usage &bull; CPU Throttling
-                    </h4>
-                </div>
-
-                <div id="stress-throttling-headline" class="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                    <i data-lucide="check-circle" class="w-3 h-3 text-emerald-500"></i>
-                    <span>CPU Throttling: 0% - Overheating Not Detected</span>
+        <!-- EVENTOS -->
+        <div class="ws-card">
+            <div class="ws-card-head">
+                <div class="ws-card-title">Eventos do teste</div>
+                <div class="flex items-center gap-3 text-[12px] ws-muted ws-mono">
+                    <span id="stress-sector-count-label">0 eventos</span>
+                    <span id="stress-sector-ram-tested">RAM: 0 MB</span>
                 </div>
             </div>
-
-            <!-- CANVAS INFERIOR (75px) -->
-            <div class="relative w-full rounded-lg bg-[#060a12] border border-slate-800 shadow-inner overflow-hidden">
-                <canvas id="stress-lower-canvas" height="75" class="w-full block" style="height: 75px; max-height: 75px;"></canvas>
+            <div id="stress-sector-log-box" class="ws-console h-36 !p-0">
+                <div class="ws-empty" id="stress-sector-log-empty">Nenhum teste em execução.</div>
             </div>
+        </div>
 
-            <!-- LEGENDA DO GRÁFICO INFERIOR -->
-            <div class="pt-0.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
-                <div class="flex items-center gap-3">
-                    <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                        <input type="checkbox" id="stress-trace-cpu-usage" checked onchange="renderStressCharts()" class="w-3 h-3 rounded accent-emerald-500">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span class="text-slate-700 dark:text-slate-300">CPU Usage</span>
+        <!-- MODAL: DADOS DO PROCESSADOR -->
+        <div id="stress-modal-cpuid" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" style="background:rgba(0,0,0,.55)">
+            <div class="ws-card w-full max-w-lg" style="box-shadow:var(--shadow-elevated)">
+                <div class="ws-card-head">
+                    <div class="ws-card-title">Processador</div>
+                    <button onclick="closeSiliconMatrixModal()" class="ws-icon-btn"></button>
+                </div>
+                <dl class="ws-kv">
+                    <dt>Modelo</dt><dd id="cpuid-proc-name">—</dd>
+                    <dt>Threads lógicas</dt><dd id="cpuid-threads-count" class="ws-mono">—</dd>
+                    <dt>Clock nominal</dt><dd id="cpuid-clock-speed" class="ws-mono">—</dd>
+                    <dt>Instruções</dt><dd id="cpuid-instructions" class="ws-mono text-[12px]">—</dd>
+                </dl>
+                <div class="flex justify-end mt-4"><button onclick="closeSiliconMatrixModal()" class="ws-btn">Fechar</button></div>
+            </div>
+        </div>
+
+        <!-- MODAL: CONFIGURAÇÕES -->
+        <div id="stress-modal-prefs" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" style="background:rgba(0,0,0,.55)">
+            <div class="ws-card w-full max-w-md" style="box-shadow:var(--shadow-elevated)">
+                <div class="ws-card-head">
+                    <div class="ws-card-title">Configurações do teste</div>
+                    <button onclick="closeStressPreferences()" class="ws-icon-btn"></button>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <label class="flex flex-col gap-1.5"><span class="ws-stat-label">Threads de carga</span>
+                        <select id="stress-pref-threads" class="ws-select w-full">
+                            <option value="auto">Automático (todas as threads)</option>
+                            <option value="1">1 thread</option><option value="2">2 threads</option><option value="4">4 threads</option>
+                            <option value="8">8 threads</option><option value="16">16 threads</option>
+                        </select>
                     </label>
-                    <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                        <input type="checkbox" id="stress-trace-cpu-throttling" checked onchange="renderStressCharts()" class="w-3 h-3 rounded accent-rose-500">
-                        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                        <span class="text-slate-700 dark:text-slate-300">CPU Throttling</span>
+                    <label class="flex flex-col gap-1.5"><span class="ws-stat-label">Memória testada</span>
+                        <select id="stress-pref-memory" class="ws-select w-full">
+                            <option value="1024">1 GB</option><option value="2048" selected>2 GB (recomendado)</option>
+                            <option value="4096">4 GB</option><option value="8192">8 GB</option>
+                        </select>
+                    </label>
+                    <label class="flex flex-col gap-1.5"><span class="ws-stat-label">Duração</span>
+                        <select id="stress-pref-duration" class="ws-select w-full">
+                            <option value="0">Contínuo (parar manualmente)</option><option value="300">5 minutos</option>
+                            <option value="600">10 minutos</option><option value="900">15 minutos</option>
+                            <option value="1800">30 minutos</option><option value="3600">1 hora</option>
+                        </select>
                     </label>
                 </div>
-
-                <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400">
-                    <span>Carga: <strong id="stress-live-cpu-usage-val" class="text-emerald-500">0%</strong></span>
-                    <span>Throttling: <strong id="stress-live-cpu-throttling-val" class="text-slate-400">0%</strong></span>
+                <div class="flex justify-end gap-2 mt-5">
+                    <button onclick="closeStressPreferences()" class="ws-btn ghost">Cancelar</button>
+                    <button onclick="applyStressPreferences()" class="ws-btn primary">Aplicar</button>
                 </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- 5. TABELA UNIFICADA DE ESTATÍSTICAS (ABA STATISTICS) -->
-    <div id="stress-statistics-container" class="hidden p-3 rounded-xl bg-white dark:bg-dark-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
-        <div class="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-800">
-            <div class="flex items-center gap-1.5">
-                <i data-lucide="table" class="w-3.5 h-3.5 text-orange-500"></i>
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                    Estatísticas Unificadas de Telemetria
-                </h3>
-            </div>
-            <span class="text-[10px] text-slate-400 font-mono">1 Hz Win32</span>
-        </div>
-
-        <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800 max-h-[280px]">
-            <table class="w-full text-left text-xs border-collapse">
-                <thead class="sticky top-0 z-10 bg-slate-50 dark:bg-dark-950">
-                    <tr class="text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-mono border-b border-slate-200 dark:border-slate-800">
-                        <th class="py-1.5 px-3">Sensor / Dispositivo</th>
-                        <th class="py-1.5 px-3 text-right">Atual</th>
-                        <th class="py-1.5 px-3 text-right">Mínimo</th>
-                        <th class="py-1.5 px-3 text-right">Máximo</th>
-                        <th class="py-1.5 px-3 text-right">Média</th>
-                    </tr>
-                </thead>
-                <tbody id="stress-statistics-tbody" class="divide-y divide-slate-200/60 dark:divide-slate-800/60 font-mono text-slate-800 dark:text-slate-200 text-xs">
-                    <!-- Injetado dinamicamente -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 6. BARRA INFERIOR DE CONTROLES: STATUS + AÇÕES -->
-    <div class="glass-card px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-dark-900/80 shadow-sm">
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
-
-            <!-- TELEMETRIA RÁPIDA (BATERIA, INÍCIO, TEMPO) -->
-            <div class="flex items-center gap-3 text-xs font-mono">
-                <!-- BATERIA -->
-                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-                    <i data-lucide="battery" class="w-3.5 h-3.5 text-slate-400"></i>
-                    <span class="text-[10px] uppercase text-slate-400 font-sans font-bold">Bat:</span>
-                    <span id="stress-battery-status" class="font-bold text-[11px]">No battery</span>
-                </div>
-
-                <span class="text-slate-300 dark:text-slate-700">|</span>
-
-                <!-- INÍCIO -->
-                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-                    <span class="text-[10px] uppercase text-slate-400 font-sans font-bold">Início:</span>
-                    <span id="stress-test-started" class="font-bold text-[11px]">--</span>
-                </div>
-
-                <span class="text-slate-300 dark:text-slate-700">|</span>
-
-                <!-- TEMPO DECORRIDO -->
-                <div class="flex items-center gap-1.5">
-                    <i data-lucide="timer" class="w-3.5 h-3.5 text-orange-500"></i>
-                    <span class="text-[10px] uppercase text-slate-400 font-sans font-bold">Tempo:</span>
-                    <span id="stress-elapsed-time" class="font-black text-sm text-emerald-500 tracking-wider">00:00:00</span>
-                </div>
-            </div>
-
-            <!-- BOTÕES DE AÇÃO: START, STOP, CLEAR, SAVE, CPUID, PREFERENCES -->
-            <div class="flex items-center gap-1.5 flex-wrap justify-end">
-                <!-- START -->
-                <button onclick="startStressTest()" id="stress-btn-start"
-                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/40 flex items-center gap-1.5 shadow-md shadow-emerald-950/30 cursor-pointer transition active:scale-95">
-                    <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i>
-                    <span>Start</span>
-                </button>
-
-                <!-- STOP -->
-                <button onclick="stopStressTest()" id="stress-btn-stop" disabled
-                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-400/30 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 cursor-not-allowed opacity-50 transition">
-                    <i data-lucide="square" class="w-3.5 h-3.5 fill-white"></i>
-                    <span>Stop</span>
-                </button>
-
-                <!-- CLEAR -->
-                <button onclick="clearStressStats()" id="stress-btn-clear" title="Limpar histórico e reiniciar gráficos"
-                    class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer transition">
-                    <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
-                    <span>Clear</span>
-                </button>
-
-                <!-- SAVE -->
-                <button onclick="saveStressReport()" id="stress-btn-save" title="Salvar relatório ou captura"
-                    class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer transition">
-                    <i data-lucide="download" class="w-3 h-3"></i>
-                    <span>Save</span>
-                </button>
-
-                <!-- CPUID -->
-                <button onclick="openSiliconMatrixModal()" id="stress-btn-cpuid" title="Informações detalhadas do processador"
-                    class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer transition">
-                    <i data-lucide="cpu" class="w-3 h-3"></i>
-                    <span>CPUID</span>
-                </button>
-
-                <!-- PREFERENCES -->
-                <button onclick="openStressPreferences()" id="stress-btn-prefs" title="Configurações do teste"
-                    class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer transition">
-                    <i data-lucide="sliders" class="w-3 h-3"></i>
-                    <span>Prefs</span>
-                </button>
             </div>
         </div>
     </div>
 
-    <!-- 7. MODAIS AUXILIARES: CPUID & PREFERENCES -->
-    <!-- MODAL CPUID -->
-    <div id="stress-modal-cpuid" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden">
-        <div class="glass-card w-full max-w-xl p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-dark-900 shadow-2xl space-y-3">
-            <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="cpu" class="w-4 h-4 text-orange-500"></i>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Silicon Core™ Matrix & Microarquitetura</h3>
+    <!-- ===================== STRESSBENCH: BENCHMARK DE ESTRESSE EM LOOPS ===================== -->
+    <div id="stab-mode-bench" class="hidden ws-page">
+
+        <div class="ws-hero">
+            <div class="flex flex-col 2xl:flex-row 2xl:items-center justify-between gap-6">
+                <div class="flex items-start gap-4 min-w-0">
+                    
+                    <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="ws-kicker">StressBench</span>
+                            <span id="sb-status-badge" class="ws-badge"><span class="dot"></span>Pronto</span>
+                        </div>
+                        <h2 class="ws-hero-title mt-1.5">Benchmark de estresse em loops</h2>
+                        <p class="ws-hero-sub">A mesma carga fixa roda em <b id="sb-threads">todas as</b> threads, sem pausas, por vários loops consecutivos.
+                            Cada resultado é conferido contra uma referência. Se o desempenho cair com o calor ou alguma conta der errado, o sistema é reprovado.</p>
+                    </div>
                 </div>
-                <button onclick="closeSiliconMatrixModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800">
-                    <span class="text-slate-400 block text-[10px] uppercase">Processador</span>
-                    <span class="font-bold text-slate-900 dark:text-white" id="cpuid-proc-name">x86-64 Family Microprocessor</span>
+                <div class="flex flex-col gap-3 flex-shrink-0">
+                    <div class="ws-seg" id="sb-preset-seg">
+                        <button data-preset="rapido" onclick="selectStressBenchPreset('rapido')">Rápido · 5 min</button>
+                        <button data-preset="padrao" class="active" onclick="selectStressBenchPreset('padrao')">Padrão · 20 min</button>
+                        <button data-preset="extremo" onclick="selectStressBenchPreset('extremo')">Extremo · 40 min</button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="sb-start-btn" onclick="startStressBench()" class="ws-btn primary lg flex-1">Iniciar benchmark</button>
+                        <button id="sb-stop-btn" onclick="stopStressBench()" class="ws-btn danger lg hidden">Parar</button>
+                    </div>
+                    <span class="ws-stat-foot text-right" id="sb-preset-desc">20 loops × 60 s · aprovação com estabilidade ≥ 97%</span>
                 </div>
-                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800">
-                    <span class="text-slate-400 block text-[10px] uppercase">Topologia de Threads</span>
-                    <span class="font-bold text-slate-900 dark:text-white" id="cpuid-threads-count">8 Cores / 16 Threads</span>
-                </div>
-                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800">
-                    <span class="text-slate-400 block text-[10px] uppercase">Frequência Base / Max</span>
-                    <span class="font-bold text-slate-900 dark:text-white" id="cpuid-clock-speed">3400 MHz</span>
-                </div>
-                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800">
-                    <span class="text-slate-400 block text-[10px] uppercase">Instruções Suportadas</span>
-                    <span class="font-bold text-emerald-500">AVX2, FMA3, SSE4.2, AES-NI</span>
-                </div>
-            </div>
-            <div class="flex justify-end pt-1">
-                <button onclick="closeSiliconMatrixModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition">
-                    Fechar
-                </button>
             </div>
         </div>
-    </div>
 
-    <!-- MODAL PREFERENCES -->
-    <div id="stress-modal-prefs" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden">
-        <div class="glass-card w-full max-w-lg p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-dark-900 shadow-2xl space-y-3">
-            <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-4 h-4 text-orange-500"></i>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">StressPulse™ Stability Preferences</h3>
-                </div>
-                <button onclick="closeStressPreferences()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
+        <!-- AO VIVO -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+            <div class="ws-card ws-card-tight ws-stat">
+                <span class="ws-stat-label">Loop</span>
+                <span class="ws-stat-value" id="sb-live-loop">—</span>
+                <div class="ws-meter mt-1.5"><span id="sb-live-loop-bar" style="width:0%"></span></div>
             </div>
-            <div class="space-y-2.5 text-xs">
-                <div class="space-y-1">
-                    <label class="font-bold text-slate-700 dark:text-slate-300">Threads Paralelas para Carga</label>
-                    <select id="stress-pref-threads" class="w-full rounded-lg px-2.5 py-1.5 bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none">
-                        <option value="auto">Automático (Todas as Threads Detectadas)</option>
-                        <option value="1">1 Thread</option>
-                        <option value="2">2 Threads</option>
-                        <option value="4">4 Threads</option>
-                        <option value="8">8 Threads</option>
-                        <option value="16">16 Threads</option>
-                    </select>
+            <div class="ws-card ws-card-tight ws-stat">
+                <span class="ws-stat-label">Pontuação instantânea</span>
+                <span class="ws-stat-value" id="sb-live-score">—</span>
+                <span class="ws-stat-foot">quadros/s × 10, todas as threads</span>
+            </div>
+            <div class="ws-card ws-card-tight ws-stat">
+                <span class="ws-stat-label">Temperatura da CPU</span>
+                <span class="ws-stat-value" id="sb-live-temp">—</span>
+                <span class="ws-stat-foot truncate" id="sb-live-temp-src">fonte: —</span>
+            </div>
+            <div class="ws-card ws-card-tight ws-stat">
+                <span class="ws-stat-label">Clock efetivo · uso</span>
+                <span class="ws-stat-value" id="sb-live-clock">—</span>
+                <span class="ws-stat-foot" id="sb-live-usage">uso da CPU: —</span>
+            </div>
+        </div>
+
+        <div class="ws-card ws-card-tight">
+            <div class="flex items-center justify-between text-xs mb-2">
+                <span class="ws-stat-label" id="sb-progress-text">Progresso total</span>
+                <span class="ws-mono ws-muted" id="sb-eta">—</span>
+            </div>
+            <div class="ws-meter"><span id="sb-progress-bar" style="width:0%"></span></div>
+        </div>
+
+        <div class="grid grid-cols-1 2xl:grid-cols-3 gap-4">
+            <!-- GRÁFICO -->
+            <div class="ws-card 2xl:col-span-2">
+                <div class="ws-card-head">
+                    <div>
+                        <div class="ws-card-title">Pontuação por loop</div>
+                        <div class="ws-card-sub">Barras = pontuação de cada loop · linha vermelha = temperatura média · tracejado = limite de 97% do melhor loop</div>
+                    </div>
                 </div>
-                <div class="space-y-1">
-                    <label class="font-bold text-slate-700 dark:text-slate-300">Alocação de Memória RAM para Teste</label>
-                    <select id="stress-pref-memory" class="w-full rounded-lg px-2.5 py-1.5 bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none">
-                        <option value="1024">1.024 MB (1 GB)</option>
-                        <option value="2048" selected>2.048 MB (2 GB - Recomendado)</option>
-                        <option value="4096">4.096 MB (4 GB)</option>
-                        <option value="8192">8.192 MB (8 GB)</option>
-                    </select>
+                <svg class="ws-chart" id="sb-chart" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+                <div class="ws-empty" id="sb-chart-empty">Os loops aparecem aqui conforme forem concluídos.</div>
+            </div>
+
+            <!-- RESULTADO -->
+            <div class="ws-card flex flex-col items-center text-center">
+                <div class="ws-card-title self-start">Resultado</div>
+                <div class="ws-ring mt-3" style="width:150px;height:150px">
+                    <svg viewBox="0 0 168 168">
+                        <circle class="track" cx="84" cy="84" r="72" fill="none" stroke-width="12" />
+                        <circle class="bar" id="sb-ring-arc" cx="84" cy="84" r="72" fill="none" stroke-width="12" stroke-dasharray="452.4" stroke-dashoffset="452.4" />
+                    </svg>
+                    <div class="ws-ring-center">
+                        <span class="ws-stat-value text-[26px]" id="sb-stability">—</span>
+                        <span class="ws-stat-foot">estabilidade</span>
+                    </div>
                 </div>
-                <div class="space-y-1">
-                    <label class="font-bold text-slate-700 dark:text-slate-300">Duração Programada do Teste</label>
-                    <select id="stress-pref-duration" class="w-full rounded-lg px-2.5 py-1.5 bg-slate-50 dark:bg-dark-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none">
-                        <option value="0">Contínuo (Parar manualmente)</option>
-                        <option value="300">5 Minutos (Rápido)</option>
-                        <option value="600">10 Minutos</option>
-                        <option value="900">15 Minutos (Padrão)</option>
-                        <option value="1800">30 Minutos</option>
-                        <option value="3600">1 Hora (Estresse Extremo)</option>
-                    </select>
+                <span id="sb-verdict" class="ws-badge mt-3">Aguardando execução</span>
+                <div class="grid grid-cols-2 gap-2 w-full mt-4 text-left">
+                    <div class="ws-tile ws-stat"><span class="ws-stat-label">Melhor loop</span><span class="ws-stat-value text-[17px]" id="sb-best">—</span></div>
+                    <div class="ws-tile ws-stat"><span class="ws-stat-label">Pior loop</span><span class="ws-stat-value text-[17px]" id="sb-worst">—</span></div>
+                    <div class="ws-tile ws-stat"><span class="ws-stat-label">Erros de cálculo</span><span class="ws-stat-value text-[17px]" id="sb-errors">0</span></div>
+                    <div class="ws-tile ws-stat"><span class="ws-stat-label">Queda de clock</span><span class="ws-stat-value text-[17px]" id="sb-clockdrop">—</span></div>
                 </div>
             </div>
-            <div class="flex justify-end gap-2 pt-1">
-                <button onclick="closeStressPreferences()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-dark-800 transition">
-                    Cancelar
-                </button>
-                <button onclick="applyStressPreferences()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition">
-                    Aplicar
-                </button>
+        </div>
+
+        <div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
+            <div class="ws-card">
+                <div class="ws-card-head"><div class="ws-card-title">Loops concluídos</div></div>
+                <div class="overflow-x-auto max-h-[320px] overflow-y-auto">
+                    <table class="ws-table">
+                        <thead><tr><th>#</th><th>Pontuação</th><th>Temp. média</th><th>Temp. máx.</th><th>Clock</th><th>Limitação</th><th>Erros</th></tr></thead>
+                        <tbody id="sb-loops-body"><tr><td colspan="7" class="ws-empty">Nenhum loop concluído ainda.</td></tr></tbody>
+                    </table>
+                </div>
             </div>
+            <div class="ws-card">
+                <div class="ws-card-head">
+                    <div>
+                        <div class="ws-card-title">Histórico neste PC</div>
+                        <div class="ws-card-sub">Resultados completos salvos localmente, para comparar antes/depois de mudanças (pasta térmica, plano de energia, overclock).</div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto max-h-[320px] overflow-y-auto">
+                    <table class="ws-table">
+                        <thead><tr><th>Data</th><th>Modo</th><th>Média</th><th>Estabilidade</th><th>Temp. máx.</th><th>Resultado</th></tr></thead>
+                        <tbody id="sb-history-body"><tr><td colspan="6" class="ws-empty">Sem execuções anteriores.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="ws-note">
+            
+            <span><b>Feche outros programas durante o teste</b> — qualquer carga paralela reduz a pontuação de algum loop e derruba a estabilidade.
+                <b>Como ler o resultado:</b> estabilidade = pior loop ÷ melhor loop. Abaixo de 97% indica que o processador perde desempenho sob carga contínua
+                (refrigeração insuficiente, limite de energia ou VRM). Qualquer erro de cálculo indica instabilidade (overclock/undervolt agressivo, RAM ou tensão).
+                A temperatura vem do LibreHardwareMonitor quando ele está aberto; sem ele, o Windows só oferece a zona térmica ACPI, que é aproximada.</span>
         </div>
     </div>
 

@@ -1,217 +1,86 @@
-<section id="view-devices" class="view-panel hidden space-y-6">
-                <!-- METRICAS DO TOPO -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <span class="text-xs text-slate-400 font-semibold uppercase"
-                            data-i18n="devices.total_card">Total de Dispositivos</span>
-                        <div class="mt-2 flex items-baseline justify-between">
-                            <h3 id="dev-total-val" class="text-3xl font-extrabold text-white">0</h3>
-                            <span
-                                class="text-xs font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">Mapeados</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mt-2 truncate">Plug & Play com drivers ativos</p>
-                    </div>
+<section id="view-devices" class="view-panel hidden ws-page">
 
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <span class="text-xs text-slate-400 font-semibold uppercase"
-                            data-i18n="devices.display_card">Placas de Vídeo</span>
-                        <div class="mt-2 flex items-baseline justify-between">
-                            <h3 id="dev-display-val" class="text-3xl font-extrabold text-indigo-400">0</h3>
-                            <span
-                                class="text-xs font-bold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">GPU</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mt-2 truncate">NVIDIA / AMD / Intel</p>
-                    </div>
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+                    <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="devices.total_card">Dispositivos</span><span id="dev-total-val" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">Plug and Play presentes</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="devices.display_card">Adaptadores de vídeo</span><span id="dev-display-val" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">classe Display</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="devices.third_card">Drivers de terceiros</span><span id="dev-third-val" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">fornecedor diferente da Microsoft</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label" data-i18n="devices.signed_card">Drivers assinados</span><span id="dev-signed-val" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">assinatura digital válida</span></div>
+                </div>
 
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <span class="text-xs text-slate-400 font-semibold uppercase"
-                            data-i18n="devices.third_card">Drivers de Terceiros</span>
-                        <div class="mt-2 flex items-baseline justify-between">
-                            <h3 id="dev-third-val" class="text-3xl font-extrabold text-emerald-400">0</h3>
-                            <span
-                                class="text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">OEM / Hardware</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mt-2 truncate">Fabricantes dedicados</p>
+                <div class="flex flex-wrap items-end justify-between gap-3">
+                    <div class="ws-tabs flex-1 min-w-0">
+                        <button onclick="switchDeviceSubTab('installed')" id="dev-subtab-installed" class="active"><span data-i18n="devices.tab_installed">Instalados</span></button>
+                        <button onclick="switchDeviceSubTab('updates')" id="dev-subtab-updates"><span data-i18n="devices.tab_updates">Atualizações</span><span id="dev-updates-count-badge" class="hidden ws-badge warn">0</span></button>
                     </div>
-
-                    <div class="bg-dark-850 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                        <span class="text-xs text-slate-400 font-semibold uppercase"
-                            data-i18n="devices.signed_card">Integridade de Drivers</span>
-                        <div class="mt-2 flex items-baseline justify-between">
-                            <h3 id="dev-signed-val" class="text-3xl font-extrabold text-cyan-400">100%</h3>
-                            <span
-                                class="text-xs font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">WHQL Assinado</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mt-2 truncate">Certificação oficial de driver</p>
+                    <div class="flex gap-2 mb-1.5">
+                        <button onclick="openDriverDownloadFolder()" class="ws-btn sm" title="Abrir a pasta dos drivers baixados">Pasta</button>
+                        <button onclick="backupAllDrivers()" class="ws-btn sm"><span data-i18n="devices.btn_backup">Backup (.inf)</span></button>
+                        <button onclick="loadDevicesInfo(true)" class="ws-btn sm"><span data-i18n="devices.btn_refresh">Atualizar</span></button>
                     </div>
                 </div>
 
-                <!-- PAINEL PRINCIPAL COM SUB-ABAS -->
-                <div class="bg-dark-850 rounded-2xl border border-slate-800 p-5 space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
-                        <div
-                            class="flex items-center gap-1.5 p-1 rounded-xl bg-dark-900 border border-slate-800 text-xs">
-                            <button onclick="switchDeviceSubTab('installed')" id="dev-subtab-installed"
-                                class="px-4 py-1.5 rounded-lg font-bold bg-blue-600 text-white transition flex items-center gap-1.5">
-                                <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-                                <span data-i18n="devices.tab_installed">Dispositivos & Drivers Instalados</span>
-                            </button>
-                            <button onclick="switchDeviceSubTab('updates')" id="dev-subtab-updates"
-                                class="px-4 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
-                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                                <span data-i18n="devices.tab_updates">Central de Atualização de Drivers</span>
-                                <span id="dev-updates-count-badge"
-                                    class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-500 text-white">0</span>
-                            </button>
+                <!-- INSTALADOS -->
+                <div id="dev-content-installed" class="ws-page">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="ws-chips" id="dev-category-pills">
+                            <button onclick="filterDevices('all')" class="dev-filter-pill ws-chip-btn active" data-category="all">Todos</button>
+                            <button onclick="filterDevices('display')" class="dev-filter-pill ws-chip-btn" data-category="display">Vídeo</button>
+                            <button onclick="filterDevices('net')" class="dev-filter-pill ws-chip-btn" data-category="net">Rede</button>
+                            <button onclick="filterDevices('storage')" class="dev-filter-pill ws-chip-btn" data-category="storage">Armazenamento</button>
+                            <button onclick="filterDevices('media')" class="dev-filter-pill ws-chip-btn" data-category="media">Áudio</button>
+                            <button onclick="filterDevices('usb')" class="dev-filter-pill ws-chip-btn" data-category="usb">USB</button>
+                            <button onclick="filterDevices('processor')" class="dev-filter-pill ws-chip-btn" data-category="processor">Processador</button>
+                            <button onclick="filterDevices('system')" class="dev-filter-pill ws-chip-btn" data-category="system">Sistema</button>
                         </div>
-
-                        <div class="flex items-center gap-2">
-                            <button onclick="openDriverDownloadFolder()"
-                                class="btn-action-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold border-slate-700 hover:border-cyan-400 text-slate-200 flex items-center gap-1.5 shadow-sm"
-                                title="Abrir pasta onde os drivers são baixados">
-                                <i data-lucide="folder" class="w-3.5 h-3.5 text-cyan-400"></i>
-                                <span>Pasta de Drivers</span>
-                            </button>
-                            <button onclick="backupAllDrivers()"
-                                class="btn-action-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold border-slate-700 hover:border-emerald-400 text-slate-200 flex items-center gap-1.5 shadow-sm">
-                                <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
-                                <span data-i18n="devices.btn_backup">Backup de Drivers (.inf)</span>
-                            </button>
-                            <button onclick="loadDevicesInfo(true)"
-                                class="btn-action-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold border-slate-700 hover:border-cyan-400 text-slate-200 flex items-center gap-1.5 shadow-sm">
-                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i>
-                                <span data-i18n="devices.btn_refresh">Atualizar</span>
-                            </button>
-                        </div>
+                        <input type="text" id="dev-search-input" oninput="renderDevicesTable()" placeholder="Buscar dispositivo ou fabricante" class="ws-input w-full sm:w-72">
                     </div>
-
-                    <!-- SUB-ABA 1: LISTA DE DISPOSITIVOS -->
-                    <div id="dev-content-installed" class="space-y-3">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="flex flex-wrap items-center gap-1.5 text-xs" id="dev-category-pills">
-                                <button onclick="filterDevices('all')"
-                                    class="dev-filter-pill active px-3 py-1 rounded-lg font-bold bg-blue-600 text-white transition"
-                                    data-category="all">Todos</button>
-                                <button onclick="filterDevices('display')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="display">Vídeo (GPU)</button>
-                                <button onclick="filterDevices('net')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="net">Rede & Wi-Fi</button>
-                                <button onclick="filterDevices('storage')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="storage">Armazenamento</button>
-                                <button onclick="filterDevices('media')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="media">Áudio</button>
-                                <button onclick="filterDevices('usb')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="usb">USB</button>
-                                <button onclick="filterDevices('processor')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="processor">Processador</button>
-                                <button onclick="filterDevices('system')"
-                                    class="dev-filter-pill px-3 py-1 rounded-lg font-semibold bg-dark-900 text-slate-400 hover:text-white transition"
-                                    data-category="system">Placa-Mãe</button>
-                            </div>
-                            <div class="w-full sm:w-64">
-                                <input type="text" id="dev-search-input" oninput="renderDevicesTable()"
-                                    placeholder="Buscar dispositivo ou fabricante..."
-                                    class="w-full bg-dark-950 border border-slate-700 rounded-xl px-3.5 py-1.5 text-xs text-cyan-300 focus:outline-none focus:border-cyan-500">
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs font-sans">
+                    <div class="ws-card ws-card-flush">
+                        <div class="overflow-auto max-h-[560px]">
+                            <table class="ws-table">
                                 <thead>
-                                    <tr
-                                        class="text-slate-400 border-b border-slate-800 text-[11px] uppercase tracking-wider">
-                                        <th class="py-3 px-3">Dispositivo / Hardware</th>
-                                        <th class="py-3 px-3">Categoria</th>
-                                        <th class="py-3 px-3">Fabricante</th>
-                                        <th class="py-3 px-3" data-i18n="vision.driver_ver">Versão do Driver</th>
-                                        <th class="py-3 px-3">Data do Driver</th>
-                                        <th class="py-3 px-3">Provedor</th>
-                                        <th class="py-3 px-3">Status</th>
-                                    </tr>
+                                    <tr><th>Dispositivo</th><th>Classe</th><th>Fabricante</th><th data-i18n="vision.driver_ver">Versão do driver</th><th>Data</th><th>Provedor</th><th>Estado</th></tr>
                                 </thead>
-                                <tbody id="dev-table-body"
-                                    class="divide-y divide-slate-800/60 font-mono text-slate-300">
-                                    <tr>
-                                        <td colspan="7" class="py-8 text-center text-slate-400 font-sans">Carregando
-                                            catálogo de dispositivos...</td>
-                                    </tr>
+                                <tbody id="dev-table-body">
+                                    <tr><td colspan="7" class="ws-empty">Carregando dispositivos…</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                </div>
 
-                    <!-- SUB-ABA 2: CENTRAL DE ATUALIZAÇÃO DE DRIVERS (SERVIDORES OFICIAIS & PAREAMENTO) -->
-                    <div id="dev-content-updates" class="hidden space-y-5">
-                        <!-- BANNER PRINCIPAL COM DISPARADOR DE CONSULTA -->
-                        <div
-                            class="p-5 rounded-2xl bg-gradient-to-r from-dark-900 via-indigo-950/30 to-dark-900 border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div class="space-y-1">
-                                <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-                                    <span>Servidores Oficiais de Fabricantes & Pareamento de Hardware</span>
-                                </h4>
-                                <p class="text-xs text-slate-400 max-w-2xl">
-                                    Conexão direta aos canais oficiais de download da <strong>NVIDIA</strong>, <strong>AMD</strong>, <strong>Intel</strong>, <strong>Realtek</strong> e <strong>Microsoft WHQL</strong>. Pareia o hardware instalado para baixar pacotes oficiais diretamente dentro da ferramenta.
-                                </p>
-                                <span id="dev-last-check-text"
-                                    class="text-[11px] text-slate-500 font-mono block">Nenhuma verificação recente</span>
+                <!-- ATUALIZAÇÕES -->
+                <div id="dev-content-updates" class="hidden ws-page">
+                    <div class="ws-card">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div>
+                                <div class="ws-card-title">Verificação de drivers</div>
+                                <div class="ws-card-sub">Consulta os canais oficiais (NVIDIA, AMD, Intel, Realtek), o Windows Update e o winget, e compara com a versão instalada.</div>
+                                <span id="dev-last-check-text" class="ws-stat-foot ws-mono block mt-1">Nenhuma verificação nesta sessão</span>
                             </div>
-                            <div class="flex items-center gap-2 flex-wrap flex-shrink-0">
-                                <button onclick="scanDriverUpdates()" id="btn-scan-driver-updates"
-                                    class="btn-action-primary btn-animated px-5 py-2.5 rounded-xl text-xs font-bold text-white flex items-center gap-2 shadow-lg shadow-blue-500/20">
-                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                                    <span data-i18n="devices.btn_scan_updates">Verificar Servidores Oficiais</span>
-                                </button>
+                            <button onclick="scanDriverUpdates()" id="btn-scan-driver-updates" class="ws-btn primary"><span data-i18n="devices.btn_scan_updates">Verificar agora</span></button>
+                        </div>
+                    </div>
+
+                    <div class="ws-section">
+                        <div class="ws-section-title">Hardware identificado</div>
+                        <div id="dev-pairing-container" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                            <div class="ws-card ws-empty sm:col-span-2 xl:col-span-4">Aguardando leitura do hardware…</div>
+                        </div>
+                    </div>
+
+                    <div class="ws-section">
+                        <div class="ws-section-head">
+                            <div class="ws-section-title">Atualizações disponíveis</div>
+                            <div class="ws-chips" id="dev-vendor-filter-pills">
+                                <button onclick="filterDriverVendor('all')" class="dev-vendor-pill ws-chip-btn active" data-vendor="all">Todos</button>
+                                <button onclick="filterDriverVendor('nvidia')" class="dev-vendor-pill ws-chip-btn" data-vendor="nvidia">NVIDIA</button>
+                                <button onclick="filterDriverVendor('amd')" class="dev-vendor-pill ws-chip-btn" data-vendor="amd">AMD</button>
+                                <button onclick="filterDriverVendor('intel')" class="dev-vendor-pill ws-chip-btn" data-vendor="intel">Intel</button>
+                                <button onclick="filterDriverVendor('windows')" class="dev-vendor-pill ws-chip-btn" data-vendor="windows">Windows Update</button>
                             </div>
                         </div>
-
-                        <!-- PAINEL DE PAREAMENTO DE HARDWARE DETECTADO -->
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                                    <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i>
-                                    <span>Pareamento com Hardware Instalado</span>
-                                </h5>
-                                <span class="text-[11px] text-slate-400 font-mono">Canais Oficiais Verificados</span>
-                            </div>
-                            <div id="dev-pairing-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                <div class="p-4 rounded-xl bg-dark-900/60 border border-slate-800/80 text-center text-xs text-slate-400">
-                                    <i data-lucide="cpu" class="w-5 h-5 mx-auto mb-1 text-slate-600"></i>
-                                    Aguardando auditoria de hardware...
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- RESULTADOS DAS ATUALIZAÇÕES & DOWNLOADS DIRETOS -->
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                                    <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-blue-400"></i>
-                                    <span>Drivers Oficiais Disponíveis para Download Direto</span>
-                                </h5>
-                                <div class="flex items-center gap-1.5 text-xs" id="dev-vendor-filter-pills">
-                                    <button onclick="filterDriverVendor('all')" class="dev-vendor-pill active px-2.5 py-0.5 rounded text-[11px] font-bold bg-blue-600 text-white transition" data-vendor="all">Todos</button>
-                                    <button onclick="filterDriverVendor('nvidia')" class="dev-vendor-pill px-2.5 py-0.5 rounded text-[11px] font-semibold bg-dark-900 text-slate-400 hover:text-white transition" data-vendor="nvidia">NVIDIA</button>
-                                    <button onclick="filterDriverVendor('amd')" class="dev-vendor-pill px-2.5 py-0.5 rounded text-[11px] font-semibold bg-dark-900 text-slate-400 hover:text-white transition" data-vendor="amd">AMD</button>
-                                    <button onclick="filterDriverVendor('intel')" class="dev-vendor-pill px-2.5 py-0.5 rounded text-[11px] font-semibold bg-dark-900 text-slate-400 hover:text-white transition" data-vendor="intel">Intel</button>
-                                    <button onclick="filterDriverVendor('windows')" class="dev-vendor-pill px-2.5 py-0.5 rounded text-[11px] font-semibold bg-dark-900 text-slate-400 hover:text-white transition" data-vendor="windows">Windows Update</button>
-                                </div>
-                            </div>
-
-                            <div id="dev-updates-results" class="space-y-3">
-                                <div
-                                    class="p-8 text-center text-slate-400 font-sans border border-dashed border-slate-800 rounded-2xl">
-                                    <i data-lucide="cloud-download" class="w-8 h-8 mx-auto mb-2 text-cyan-400/60"></i>
-                                    <p class="font-semibold text-white">Central Pronta para Consulta aos Servidores Oficiais</p>
-                                    <p class="text-xs text-slate-400 mt-1">Clique em "Verificar Servidores Oficiais" para buscar atualizações diretas da NVIDIA, AMD, Intel, Realtek e Windows Update com download direto na ferramenta.</p>
-                                </div>
-                            </div>
+                        <div id="dev-updates-results" class="flex flex-col gap-3">
+                            <div class="ws-card ws-empty">Clique em "Verificar agora" para consultar as versões disponíveis.</div>
                         </div>
                     </div>
                 </div>

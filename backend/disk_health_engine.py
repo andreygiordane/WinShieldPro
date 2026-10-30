@@ -8,6 +8,7 @@ Fontes de dados (todas nativas do Windows, sem programas externos):
   * IOCTL_STORAGE_QUERY_PROPERTY (NVMe log 0x02) .... SMART/Health Log completo de SSD NVMe
 """
 import ctypes
+import re
 import threading
 import time
 
@@ -382,6 +383,33 @@ def _host_bytes(model, attrs, nv):
     return w, r
 
 
+# Prefixo do modelo -> fabricante. O Windows não informa o fabricante do disco
+# (Win32_DiskDrive devolve "(Unidades de disco padrão)"); sem prefixo conhecido, retorna None.
+_VENDOR_PREFIXES = [
+    ("KINGSTON", "Kingston"), ("SAMSUNG", "Samsung"), ("MZ-", "Samsung"), ("WDC", "Western Digital"),
+    ("WD ", "Western Digital"), ("WDS", "Western Digital"), ("SEAGATE", "Seagate"), ("CRUCIAL", "Crucial"),
+    ("CT", "Crucial"), ("MICRON", "Micron"), ("SANDISK", "SanDisk"), ("TOSHIBA", "Toshiba"), ("KIOXIA", "Kioxia"),
+    ("INTEL", "Intel"), ("SSDPE", "Intel"), ("ADATA", "ADATA"), ("XPG", "ADATA"), ("SK HYNIX", "SK hynix"),
+    ("HYNIX", "SK hynix"), ("HFS", "SK hynix"), ("LITEON", "Lite-On"), ("LITE-ON", "Lite-On"), ("PNY", "PNY"),
+    ("TEAM", "TeamGroup"), ("T-FORCE", "TeamGroup"), ("LEXAR", "Lexar"), ("CORSAIR", "Corsair"),
+    ("GIGABYTE", "Gigabyte"), ("NETAC", "Netac"), ("KINGSPEC", "KingSpec"), ("HGST", "HGST"),
+    ("TRANSCEND", "Transcend"), ("PATRIOT", "Patriot"), ("MSI", "MSI"), ("APACER", "Apacer"),
+    ("SPCC", "Silicon Power"), ("SILICON POWER", "Silicon Power"), ("HP ", "HP"), ("SABRENT", "Sabrent"),
+]
+
+
+def _vendor_from_model(model):
+    m = (model or "").upper().strip()
+    for prefix, name in _VENDOR_PREFIXES:
+        if prefix == "CT" and not re.match(r"CT\d", m):
+            continue
+        if m.startswith(prefix):
+            return name
+    if re.match(r"ST\d{3,}", m):
+        return "Seagate"
+    return None
+
+
 def _nvme_details(nv):
     if not nv:
         return []
@@ -475,7 +503,7 @@ class DiskHealthEngine:
             elif 0x03 in attrs:
                 media = "HDD"
             else:
-                media = mtype or "SSD" if ("KINGSTON" in model.upper() or "SAMSUNG" in model.upper() or "SANDISK" in model.upper() or "CRUCIAL" in model.upper() or "WD" in model.upper()) else "Disco Local"
+                media = mtype if mtype and mtype != "Não especificado" else "Não identificado"
 
             temp = (nv or {}).get("temperature") or _temp_from_smart(attrs) or _nz(p.get("Temperature"))
             if nv:
@@ -512,6 +540,10 @@ class DiskHealthEngine:
                              "size": v.get("Size") or 0, "free": v.get("Free") or 0}
                             for v in parts if int(v.get("Disk") if v.get("Disk") is not None else -1) == idx],
             }
+            d["manufacturer"] = _vendor_from_model(model)
+            d["power_on_days"] = round(poh / 24, 1) if poh else None
+            # Desligamentos inesperados: NVMe "Unsafe Shutdowns" ou SMART C0 (power-off retract / unsafe shutdown)
+            d["unsafe_shutdowns"] = nv["unsafe_shutdowns"] if nv else (_raw32(attrs, 0xC0) if 0xC0 in attrs else None)
             compute_health(d)
             d["smart_list"] = sorted(attrs.values(), key=lambda a: a["id"])
             d["nvme_list"] = _nvme_details(nv)

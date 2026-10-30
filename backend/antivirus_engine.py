@@ -116,24 +116,24 @@ KNOWN_MALICIOUS_PATTERNS = {
     "winring0": {"category": "Driver Abusado", "severity": "ALTO", "desc": "Driver de hardware frequentemente abusado por mineradores (WinRing0)"},
 
     # Trojans, Backdoors & RATs
-    "asyncrat": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto de alta periculosidade (AsyncRAT)"},
-    "njrat": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto (njRAT) - Espionagem e controle total"},
-    "remcos": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto invasivo comercialmente abusado (Remcos)"},
-    "quasarrat": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto de código aberto em .NET (QuasarRAT)"},
-    "nanocore": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto modular (NanoCore RAT)"},
-    "warzone": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto com bypass UAC (Warzone RAT)"},
-    "netwire": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto e keylogger furtivo (NetWire)"},
-    "darkcomet": {"category": "Trojan.RAT (Nuvem)", "severity": "CRÍTICO", "desc": "Trojan clássico de Controle e Espionagem Remota (DarkComet)"},
+    "asyncrat": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto de alta periculosidade (AsyncRAT)"},
+    "njrat": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto (njRAT) - Espionagem e controle total"},
+    "remcos": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto invasivo comercialmente abusado (Remcos)"},
+    "quasarrat": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto de código aberto em .NET (QuasarRAT)"},
+    "nanocore": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto modular (NanoCore RAT)"},
+    "warzone": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto com bypass UAC (Warzone RAT)"},
+    "netwire": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan de Acesso Remoto e keylogger furtivo (NetWire)"},
+    "darkcomet": {"category": "Trojan.RAT", "severity": "CRÍTICO", "desc": "Trojan clássico de Controle e Espionagem Remota (DarkComet)"},
 
     # Infostealers, Keyloggers & Spywares
-    "redline": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Ladrão de credenciais, senhas salvas, cookies e carteiras cripto (RedLine)"},
-    "vidar": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Ladrão de informações confidenciais de navegadores e cartões (Vidar)"},
-    "raccoon": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Roubador de senhas e dados confidenciais de usuários (Raccoon Stealer)"},
-    "lumma": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Infostealer evasivo de alta propagação recente (LummaC2)"},
-    "stealc": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Ladrão furtivo de cookies de navegadores e contas (Stealc)"},
-    "agenttesla": {"category": "Spyware (Nuvem)", "severity": "CRÍTICO", "desc": "Keylogger e espião corporativo de dados confidenciais (AgentTesla)"},
-    "formbook": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Form grabber e keylogger injetor de navegadores (FormBook)"},
-    "lokibot": {"category": "Infostealer (Nuvem)", "severity": "CRÍTICO", "desc": "Roubador de senhas de clientes de e-mail e navegadores (LokiBot)"},
+    "redline": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Ladrão de credenciais, senhas salvas, cookies e carteiras cripto (RedLine)"},
+    "vidar": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Ladrão de informações confidenciais de navegadores e cartões (Vidar)"},
+    "raccoon": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Roubador de senhas e dados confidenciais de usuários (Raccoon Stealer)"},
+    "lumma": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Infostealer evasivo de alta propagação recente (LummaC2)"},
+    "stealc": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Ladrão furtivo de cookies de navegadores e contas (Stealc)"},
+    "agenttesla": {"category": "Spyware", "severity": "CRÍTICO", "desc": "Keylogger e espião corporativo de dados confidenciais (AgentTesla)"},
+    "formbook": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Form grabber e keylogger injetor de navegadores (FormBook)"},
+    "lokibot": {"category": "Infostealer", "severity": "CRÍTICO", "desc": "Roubador de senhas de clientes de e-mail e navegadores (LokiBot)"},
 
     # C2 Frameworks & Beacons
     "cobaltstrike": {"category": "C2 Beacon (Nuvem)", "severity": "CRÍTICO", "desc": "Beacon de Comando e Controle militar/malicioso (Cobalt Strike)"},
@@ -1264,11 +1264,11 @@ class AntivirusEngine:
     @staticmethod
     def scan_cloud_threats():
         """
-        Varredura de Inteligência em Nuvem (Cloud Threat Intelligence).
-        Audita todos os SERVIÇOS do Windows instalados e PROCESSOS ativos.
+        Auditoria local de serviços e processos.
+        Verifica todos os SERVIÇOS do Windows instalados e PROCESSOS ativos
+        (caminho, assinatura digital e localização). Não consulta serviços online.
         """
-        LogManager.add_log("=== VARREDURA DE INTELIGÊNCIA EM NUVEM (CLOUD THREAT INTELLIGENCE) ===")
-        LogManager.add_log("[NUVEM] Conectando aos Feeds de Inteligência Global contra Ameaças...")
+        LogManager.add_log("=== AUDITORIA DE SERVIÇOS E PROCESSOS ===")
         if not IS_WINDOWS:
             return []
 
@@ -1277,7 +1277,7 @@ class AntivirusEngine:
         sys32 = os.path.join(windir, "system32")
         syswow64 = os.path.join(windir, "syswow64")
 
-        LogManager.add_log("[NUVEM] Mapeando todos os serviços do Windows instalados na máquina...")
+        LogManager.add_log("[SERVIÇOS] Mapeando todos os serviços do Windows instalados na máquina...")
         ps_services = """
         $results = @()
         Get-CimInstance Win32_Service | ForEach-Object {
@@ -1324,7 +1324,7 @@ class AntivirusEngine:
         except Exception as e:
             LogManager.add_log(f"[AVISO] Falha ao coletar serviços via PowerShell: {e}")
 
-        LogManager.add_log(f"[NUVEM] Analisando {len(services_list)} serviços instalados...")
+        LogManager.add_log(f"[SERVIÇOS] Analisando {len(services_list)} serviços instalados...")
 
         for s in services_list:
             s_name = s.get("Name") or ""
@@ -1356,7 +1356,7 @@ class AntivirusEngine:
                     "severity": info["severity"],
                     "score": 98 if info["severity"] == "CRÍTICO" else 85,
                     "diagnostico": f"Serviço correspondente a ameaça global em nuvem: {info['desc']}.",
-                    "cloud_source": "WinShield Global Cloud Intel Feeds v2026",
+                    "cloud_source": "Assinaturas locais WinShield (lista de nomes conhecidos)",
                     "status": "Identificado na Nuvem",
                     "tipo": "Cloud Threat",
                     "is_service": True,
@@ -1383,7 +1383,7 @@ class AntivirusEngine:
                     "severity": "CRÍTICO",
                     "score": 96,
                     "diagnostico": f"Serviço configurado com argumentos de mineração de criptomoedas em pool ({matched_pool}).",
-                    "cloud_source": "WinShield Global Cloud Intel Feeds v2026",
+                    "cloud_source": "Assinaturas locais WinShield (lista de nomes conhecidos)",
                     "status": "Identificado na Nuvem",
                     "tipo": "Cloud Threat",
                     "is_service": True,
@@ -1406,7 +1406,7 @@ class AntivirusEngine:
                         "severity": "CRÍTICO",
                         "score": 100,
                         "diagnostico": f"Serviço camuflado usando nome oficial de sistema ({base_exe}) fora do System32. Técnica de persistência de malware.",
-                        "cloud_source": "WinShield Global Cloud Intel Feeds v2026",
+                        "cloud_source": "Assinaturas locais WinShield (lista de nomes conhecidos)",
                         "status": "Identificado na Nuvem",
                         "tipo": "Cloud Threat",
                         "is_service": True,
@@ -1428,7 +1428,7 @@ class AntivirusEngine:
                         "severity": "ALTO",
                         "score": 90,
                         "diagnostico": f"Serviço executando de diretório volátil ({sp}). Alto risco de persistência de cavalo de troia ou minerador furtivo.",
-                        "cloud_source": "WinShield Global Cloud Intel Feeds v2026",
+                        "cloud_source": "Assinaturas locais WinShield (lista de nomes conhecidos)",
                         "status": "Identificado na Nuvem",
                         "tipo": "Cloud Threat",
                         "is_service": True,
@@ -1439,7 +1439,7 @@ class AntivirusEngine:
                     })
                     break
 
-        LogManager.add_log("[NUVEM] Auditando processos ativos em execução na memória RAM...")
+        LogManager.add_log("[SERVIÇOS] Auditando processos ativos em execução na memória RAM...")
         procs_list = []
         try:
             raw_procs = run_ps_json("Get-Process | Where-Object { $_.Path } | Select-Object Name, Id, Path | ConvertTo-Json -Compress", timeout=20)
@@ -1470,7 +1470,7 @@ class AntivirusEngine:
                         "severity": info["severity"],
                         "score": 98 if info["severity"] == "CRÍTICO" else 85,
                         "diagnostico": f"Processo em execução identificado na nuvem: {info['desc']}.",
-                        "cloud_source": "WinShield Global Cloud Intel Feeds v2026",
+                        "cloud_source": "Assinaturas locais WinShield (lista de nomes conhecidos)",
                         "status": "Identificado na Nuvem",
                         "tipo": "Cloud Threat",
                         "is_service": False,
@@ -1481,7 +1481,7 @@ class AntivirusEngine:
                     })
                     break
 
-        LogManager.add_log(f"[OK] Varredura Cloud Threat Intel concluída: {len(services_list)} serviços instalados e {len(procs_list)} processos auditados. Total de ameaças: {len(threats)}.")
+        LogManager.add_log(f"[OK] Auditoria de serviços e processos concluída: {len(services_list)} serviços instalados e {len(procs_list)} processos auditados. Total de ameaças: {len(threats)}.")
         return threats
 
     @staticmethod

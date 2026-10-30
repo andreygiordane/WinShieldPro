@@ -1,15 +1,24 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
+
+# Janela nativa (pywebview + WebView2 via pythonnet): DLLs e dados precisam ir junto
+_extra_datas, _extra_bins, _extra_hidden = [], [], []
+for _pkg in ('webview', 'pythonnet', 'clr_loader'):
+    _d, _b, _h = collect_all(_pkg)
+    _extra_datas += _d
+    _extra_bins += _b
+    _extra_hidden += _h
 
 a = Analysis(
     ['winshield_app.py'],
     pathex=[],
-    binaries=[('backend/bin/DiskSpd64.exe', 'backend/bin')],
+    binaries=[('backend/bin/DiskSpd64.exe', 'backend/bin')] + _extra_bins,
     datas=[
         ('frontend/winshield_pro_dashboard.html', 'frontend'),
         ('frontend/winshield_pro_dashboard.html', '.'),
         ('backend', 'backend'),
         ('imagens', 'imagens'),
-    ],
+    ] + _extra_datas,
     hiddenimports=[
         'backend',
         'backend.core',
@@ -31,7 +40,15 @@ a = Analysis(
         'backend.network_engine',
         'backend.device_engine',
         'backend.stress_engine',
-    ],
+        'backend.stress_bench_engine',
+        'backend.telemetry',
+        'numpy',
+        'psutil',
+        'webview',
+        'webview.platforms.edgechromium',
+        'webview.platforms.winforms',
+        'clr',
+    ] + _extra_hidden,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

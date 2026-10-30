@@ -39,8 +39,8 @@ class AppsController:
 
     @staticmethod
     def start_memory_test(data: Dict[str, Any]) -> Dict[str, Any]:
-        pct = int(data.get("percent", 80))
-        ok, msg = MemoryEngine.start_memory_test(percent=pct)
+        ok, msg = MemoryEngine.start_memory_test(size_mb=data.get("size_mb", 0), passes=data.get("passes"),
+                                                 mode=data.get("mode", "quick"))
         return {"status": "success" if ok else "error", "message": msg}
 
     @staticmethod

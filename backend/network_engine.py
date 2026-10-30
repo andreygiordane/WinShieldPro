@@ -333,9 +333,9 @@ class NetworkEngine:
 
             # 2. Medição fina de Ping, Jitter e Perda de Pacotes contra o servidor
             ping_target = target_host if target_host not in ["8.8.8.8", "1.1.1.1"] else "1.1.1.1"
-            t_ping = cls.ping_host(ping_target, count=4)
-            ping_ms = t_ping.get("avg_ms") or initial_ping or 12
-            jitter_ms = t_ping.get("jitter_ms") or 2
+            t_ping = cls.ping_host(ping_target, count=10)
+            ping_ms = t_ping.get("avg_ms") or initial_ping or 0
+            jitter_ms = t_ping.get("jitter_ms") or 0
             loss_pct = t_ping.get("packet_loss") or 0
 
             cls._update_speed(
@@ -345,162 +345,23 @@ class NetworkEngine:
                 jitter_ms=jitter_ms,
                 packet_loss=loss_pct
             )
-            LogManager.add_log(f"[SPEEDTEST] Latência consolidada: {ping_ms} ms (Jitter: {jitter_ms} ms, Perda: {loss_pct}%)")
+            LogManager.add_log(f"[SPEEDTEST] Latência: {ping_ms} ms (jitter {jitter_ms} ms, perda {loss_pct}%) em 10 amostras")
 
-            # 2. Fase de DOWNLOAD Multi-Stream em Tempo Real (~4.2 segundos)
-            dl_duration = 4.2
-            dl_start = time.perf_counter()
-            dl_shared = {"bytes": 0, "stop": False}
-            dl_lock = threading.Lock()
-
-            dl_urls = [
-                "https://speed.cloudflare.com/__down?bytes=25000000",
-                "https://speed.cloudflare.com/__down?bytes=15000000",
-                "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
-            ]
-
-            def dl_stream_worker(worker_id):
-                url_idx = worker_id % len(dl_urls)
-                while not dl_shared["stop"] and (time.perf_counter() - dl_start) < dl_duration:
-                    target_url = f"{dl_urls[url_idx]}&r={time.perf_counter()}" if "?" in dl_urls[url_idx] else dl_urls[url_idx]
-                    try:
-                        req = urllib.request.Request(
-                            target_url,
-                            headers={
-                                "User-Agent": "Mozilla/5.0 WinShieldPro/5.0 SpeedTester",
-                                "Cache-Control": "no-cache"
-                            }
-                        )
-                        with urllib.request.urlopen(req, timeout=5) as resp:
-                            while not dl_shared["stop"] and (time.perf_counter() - dl_start) < dl_duration:
-                                chunk = resp.read(64 * 1024)
-                                if not chunk:
-                                    break
-                                with dl_lock:
-                                    dl_shared["bytes"] += len(chunk)
-                    except Exception:
-                        url_idx = (url_idx + 1) % len(dl_urls)
-                        time.sleep(0.05)
-
-            dl_threads = [threading.Thread(target=dl_stream_worker, args=(i,), daemon=True) for i in range(3)]
-            for th in dl_threads:
-                th.start()
-
-            samples_down = []
-            last_bytes = 0
-            last_ts = time.perf_counter()
-
-            while (time.perf_counter() - dl_start) < dl_duration:
-                time.sleep(0.18)
-                now = time.perf_counter()
-                elapsed_total = now - dl_start
-                dt = max(0.05, now - last_ts)
-                with dl_lock:
-                    curr_total_b = dl_shared["bytes"]
-                delta_b = max(0, curr_total_b - last_bytes)
-                last_bytes = curr_total_b
-                last_ts = now
-
-                inst_mbps = (delta_b * 8.0) / (dt * 1_000_000.0)
-                avg_mbps = (curr_total_b * 8.0) / (max(0.15, elapsed_total) * 1_000_000.0)
-                # Suavização exponencial para o ponteiro do velocímetro
-                live_mbps = round((inst_mbps * 0.45) + (avg_mbps * 0.55), 2)
-                if live_mbps > 0:
-                    samples_down.append(live_mbps)
-
-                sustained_dl = round(max(avg_mbps, sum(sorted(samples_down)[-4:]) / max(1, len(samples_down[-4:])) if samples_down else 0.0), 2)
-                pct = min(58, 16 + int((elapsed_total / dl_duration) * 42))
-                cls._update_speed(
-                    phase="download",
-                    percent=pct,
-                    current_mbps=live_mbps,
-                    download_mbps=sustained_dl,
-                    bytes_down=curr_total_b,
-                    samples_down=samples_down[-24:]
-                )
-
-            dl_shared["stop"] = True
-            final_dl_mbps = cls._speed_state.get("download_mbps") or 0.0
+            final_dl_mbps, dl_bytes = cls._throughput_phase(
+                "download", streams=6, duration=15.0, ramp=2.0, pct_from=20, pct_to=60)
             if final_dl_mbps <= 0:
                 final_dl_mbps = cls._measure_download_mbps()
             cls._update_speed(download_mbps=final_dl_mbps, current_mbps=0.0, phase="upload", percent=60)
-            LogManager.add_log(f"[SPEEDTEST] Download finalizado: {final_dl_mbps} Mbps")
+            LogManager.add_log(f"[SPEEDTEST] Download: {final_dl_mbps} Mbps ({dl_bytes / 1e6:.0f} MB transferidos, 6 conexões, 15 s)")
 
-            # 3. Fase de UPLOAD em Tempo Real (~3.4 segundos)
-            ul_duration = 3.4
-            ul_start = time.perf_counter()
-            ul_shared = {"bytes": 0, "stop": False}
-            ul_lock = threading.Lock()
-            chunk_payload = os.urandom(256 * 1024)  # 256 KB por bloco de envio rápido
-
-            ul_endpoints = [
-                "https://speed.cloudflare.com/__up",
-                "https://httpbingo.org/post",
-            ]
-
-            def ul_stream_worker(worker_id):
-                ep_idx = 0
-                while not ul_shared["stop"] and (time.perf_counter() - ul_start) < ul_duration:
-                    ep = ul_endpoints[ep_idx % len(ul_endpoints)]
-                    try:
-                        t_req0 = time.perf_counter()
-                        req = urllib.request.Request(
-                            ep,
-                            data=chunk_payload,
-                            headers={
-                                "User-Agent": "Mozilla/5.0 WinShieldPro/5.0 SpeedTester",
-                                "Content-Type": "application/octet-stream"
-                            },
-                            method="POST"
-                        )
-                        with urllib.request.urlopen(req, timeout=4) as resp:
-                            resp.read(64)
-                        with ul_lock:
-                            ul_shared["bytes"] += len(chunk_payload)
-                    except Exception:
-                        ep_idx += 1
-                        time.sleep(0.05)
-
-            ul_threads = [threading.Thread(target=ul_stream_worker, args=(i,), daemon=True) for i in range(2)]
-            for th in ul_threads:
-                th.start()
-
-            samples_up = []
-            last_ul_b = 0
-            last_ul_ts = time.perf_counter()
-
-            while (time.perf_counter() - ul_start) < ul_duration:
-                time.sleep(0.18)
-                now = time.perf_counter()
-                elapsed_ul = now - ul_start
-                dt = max(0.05, now - last_ul_ts)
-                with ul_lock:
-                    curr_ul_b = ul_shared["bytes"]
-                delta_b = max(0, curr_ul_b - last_ul_b)
-                last_ul_b = curr_ul_b
-                last_ul_ts = now
-
-                avg_ul_mbps = (curr_ul_b * 8.0) / (max(0.15, elapsed_ul) * 1_000_000.0)
-                inst_ul_mbps = (delta_b * 8.0) / (dt * 1_000_000.0) if delta_b > 0 else avg_ul_mbps
-                live_ul = round((inst_ul_mbps * 0.4) + (avg_ul_mbps * 0.6), 2)
-                if live_ul > 0:
-                    samples_up.append(live_ul)
-
-                sustained_ul = round(max(avg_ul_mbps, sum(sorted(samples_up)[-3:]) / max(1, len(samples_up[-3:])) if samples_up else 0.0), 2)
-                pct = min(98, 60 + int((elapsed_ul / ul_duration) * 38))
-                cls._update_speed(
-                    phase="upload",
-                    percent=pct,
-                    current_mbps=live_ul,
-                    upload_mbps=sustained_ul,
-                    bytes_up=curr_ul_b,
-                    samples_up=samples_up[-24:]
-                )
-
-            ul_shared["stop"] = True
-            final_ul_mbps = cls._speed_state.get("upload_mbps") or 0.0
-            if final_ul_mbps <= 0 and final_dl_mbps > 0:
-                final_ul_mbps = cls._estimate_upload_mbps(final_dl_mbps)
+            final_ul_mbps, ul_bytes = cls._throughput_phase(
+                "upload", streams=4, duration=12.0, ramp=2.0, pct_from=60, pct_to=98)
+            if final_ul_mbps <= 0:
+                final_ul_mbps = cls._measure_upload_mbps()
+            if final_ul_mbps <= 0:
+                LogManager.add_log("[SPEEDTEST] Upload não pôde ser medido (servidores recusaram o envio).")
+            else:
+                LogManager.add_log(f"[SPEEDTEST] Upload: {final_ul_mbps} Mbps ({ul_bytes / 1e6:.0f} MB enviados, 4 conexões, 12 s)")
 
             # Classificação de qualidade por perfil de uso (estilo nPerf / Speedtest)
             q_stream = "Ultra HD 4K / 8K" if final_dl_mbps >= 50 else ("Full HD 1080p" if final_dl_mbps >= 15 else "HD 720p")
@@ -525,6 +386,93 @@ class NetworkEngine:
         except Exception as e:
             LogManager.add_log(f"[ERRO SPEEDTEST] {e}")
             cls._update_speed(running=False, phase="completed", percent=100)
+
+    @classmethod
+    def _throughput_phase(cls, kind, streams, duration, ramp, pct_from, pct_to):
+        """
+        Mede a vazão sustentada com várias conexões simultâneas.
+        Os primeiros `ramp` segundos (aceleração do TCP) são descartados; o resultado
+        é o total de bytes transferidos depois disso dividido pelo tempo medido.
+        Retorna (Mbps, bytes_totais).
+        """
+        shared = {"bytes": 0, "stop": False}
+        lock = threading.Lock()
+        t0 = time.perf_counter()
+        payload = os.urandom(2 * 1024 * 1024) if kind == "upload" else None
+        headers = {"User-Agent": "Mozilla/5.0 WinShieldPro/7 SpeedTester", "Cache-Control": "no-cache"}
+
+        def add(n):
+            with lock:
+                shared["bytes"] += n
+
+        def dl_worker(wid):
+            while not shared["stop"]:
+                url = f"https://speed.cloudflare.com/__down?bytes=25000000&r={wid}{time.perf_counter()}"
+                try:
+                    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=8) as resp:
+                        while not shared["stop"]:
+                            chunk = resp.read(128 * 1024)
+                            if not chunk:
+                                break
+                            add(len(chunk))
+                except Exception:
+                    time.sleep(0.2)
+
+        def ul_worker(_wid):
+            endpoints = ["https://speed.cloudflare.com/__up", "https://httpbingo.org/post"]
+            i = 0
+            while not shared["stop"]:
+                try:
+                    req = urllib.request.Request(endpoints[i % 2], data=payload, method="POST",
+                                                 headers=dict(headers, **{"Content-Type": "application/octet-stream"}))
+                    with urllib.request.urlopen(req, timeout=10) as resp:
+                        resp.read(64)
+                    add(len(payload))
+                except Exception:
+                    i += 1
+                    time.sleep(0.2)
+
+        target = dl_worker if kind == "download" else ul_worker
+        threads = [threading.Thread(target=target, args=(i,), daemon=True) for i in range(streams)]
+        for th in threads:
+            th.start()
+
+        samples = []
+        last_b, last_t = 0, t0
+        ramp_bytes, ramp_t = None, None
+        key_now, key_total, key_samples = ("download_mbps", "bytes_down", "samples_down") if kind == "download" \
+            else ("upload_mbps", "bytes_up", "samples_up")
+        while True:
+            time.sleep(0.5)
+            now = time.perf_counter()
+            el = now - t0
+            with lock:
+                total = shared["bytes"]
+            inst = (total - last_b) * 8 / max(0.05, now - last_t) / 1e6
+            last_b, last_t = total, now
+            if ramp_bytes is None and el >= ramp:
+                ramp_bytes, ramp_t = total, now
+            sustained = 0.0
+            if ramp_bytes is not None and now - ramp_t > 0.4:
+                sustained = (total - ramp_bytes) * 8 / (now - ramp_t) / 1e6
+            samples.append(round(inst, 2))
+            cls._update_speed(**{
+                "phase": kind,
+                "percent": min(pct_to, pct_from + int(el / duration * (pct_to - pct_from))),
+                "current_mbps": round(inst, 2),
+                key_now: round(sustained, 2),
+                key_total: total,
+                key_samples: samples[-30:],
+            })
+            if el >= duration:
+                break
+        shared["stop"] = True
+        for th in threads:
+            th.join(timeout=1)
+        if ramp_bytes is None:
+            return 0.0, 0
+        measured = max(0.5, last_t - ramp_t)
+        return round((last_b - ramp_bytes) * 8 / measured / 1e6, 2), last_b
 
     @staticmethod
     def _calculate_throughput_mbps(bytes_count, elapsed_seconds):
@@ -747,7 +695,7 @@ class NetworkEngine:
         if not clean_host:
             return {"error": "Host inválido", "host": host}
 
-        code, out = run_hidden(f"ping -n {count} -w 1500 {clean_host}", timeout=10)
+        code, out = run_hidden(f"ping -n {count} -w 1500 {clean_host}", timeout=count * 2 + 6)
 
         sent = count
         recv = 0
@@ -782,7 +730,11 @@ class NetworkEngine:
                 recv = len(times)
                 loss_pct = round(((sent - recv) / sent) * 100)
 
-        jitter = max(0, max_ms - min_ms)
+        times = [int(m) for m in re.findall(r"[=<](\d+)ms\s+TTL", out, re.IGNORECASE)]
+        if len(times) >= 2:
+            jitter = round(sum(abs(times[i] - times[i - 1]) for i in range(1, len(times))) / (len(times) - 1), 1)
+        else:
+            jitter = 0
 
         if loss_pct >= 50 or recv == 0:
             rating = "Inacessível / Falha"

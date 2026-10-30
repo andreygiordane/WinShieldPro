@@ -7,9 +7,13 @@ Mede velocidade real de Leitura e Gravação com precisão de hardware de baixo 
   3. RND 4K Q32T1  (Aleatório 4 KiB, Fila/Queue Depth 32, 1 Thread)
   4. RND 4K Q1T1   (Aleatório 4 KiB, Fila/Queue Depth 1, 1 Thread - IOPS & Latência Real)
 
-Execução em Direct I/O sem cache do sistema operacional (FILE_FLAG_NO_BUFFERING e
-FILE_FLAG_WRITE_THROUGH), suporte a múltiplos passes com retenção de pico (padrão 5x),
-medição de MB/s, GB/s, IOPS e latência em microsegundos (μs).
+Metodologia padrão de mercado (motor DiskSpd da Microsoft):
+  * arquivo de teste pré-alocado e preenchido com dados aleatórios incompressíveis;
+  * 5 s de medição por teste (configurável), 1 s de aquecimento descartado;
+  * pausa de resfriamento entre testes para não somar o efeito de cache SLC/térmico;
+  * I/O sem cache do Windows (FILE_FLAG_NO_BUFFERING), cache de hardware do disco ativo;
+  * resultado = melhor passe (pico), como nas ferramentas de mercado. A média e o
+    desvio entre passes também são informados para mostrar a consistência.
 """
 
 import os
@@ -193,13 +197,18 @@ class DiskBenchmarkEngine:
         total_steps = len(tests_to_run) * total_passes
         completed_steps = 0
 
-        # Duração de cada sub-teste (em segundos por repetição)
-        # 2 segundos por repetição garante tempo realista de teste sem congelar o usuário
-        step_duration = 2 if total_passes > 1 else 3
+        # Duração de medição por sub-teste (padrão de mercado: 5 s) + pausa entre testes
+        step_duration = int(getattr(cls, "_measure_sec", 5) or 5)
+        interval_sec = 2
+        samples = {}
 
         try:
-            cls._update_status(phase="preparing", current_test="Preparando arquivo de teste", progress=4,
-                               log=f"Alocando arquivo de teste de {file_size_mb} MB em {drive}...")
+            cls._update_status(phase="preparing", current_test="Preparando arquivo de teste", progress=2,
+                               log=f"Criando arquivo de teste de {file_size_mb} MB com dados aleatórios em {drive}...")
+            cls._prepare_test_file(test_file_path, file_size_mb)
+            cls._status["method"] = ("Motor DiskSpd (Microsoft) — I/O sem cache do Windows" if bin_path
+                                     else "Motor nativo Win32 sem cache (DiskSpd não encontrado)")
+            cls._status["measure_sec"] = step_duration
 
             for current_pass in range(1, total_passes + 1):
                 if cls._cancel_requested:
@@ -237,8 +246,14 @@ class DiskBenchmarkEngine:
                     if cls._cancel_requested:
                         break
 
+                    samples.setdefault(key_prefix, []).append(mb_sec)
                     # Grava resultado mantendo o MAIOR (PICO) obtido entre todos os passes
                     with cls._lock:
+                        vals = samples[key_prefix]
+                        mean = sum(vals) / len(vals)
+                        sd = (sum((v - mean) ** 2 for v in vals) / len(vals)) ** 0.5
+                        cls._status["results"][f"{key_prefix}_avg"] = round(mean, 2)
+                        cls._status["results"][f"{key_prefix}_cv"] = round((sd / mean) * 100, 1) if mean else 0.0
                         curr_mb = cls._status["results"].get(key_prefix, 0.0)
                         if mb_sec > curr_mb:
                             cls._status["results"][key_prefix] = round(mb_sec, 2)
@@ -251,6 +266,11 @@ class DiskBenchmarkEngine:
                     )
 
                     completed_steps += 1
+                    # Pausa de resfriamento entre testes (evita medir cache SLC saturado/calor)
+                    for _ in range(interval_sec * 10):
+                        if cls._cancel_requested:
+                            break
+                        time.sleep(0.1)
 
             if not cls._cancel_requested:
                 cls._update_status(phase="finished", current_test="Concluído", progress=100,
@@ -293,16 +313,17 @@ class DiskBenchmarkEngine:
     @classmethod
     def _run_with_diskspd(cls, bin_path, test_file, size_mb, block_size, queue_depth, threads, is_write, is_random, duration_sec):
         """Executa teste de velocidade através do binário direto com flags de hardware."""
-        cmd = [
-            bin_path,
-            f"-c{size_mb}M",
+        cmd = [bin_path]
+        if not os.path.exists(test_file):
+            cmd.append(f"-c{size_mb}M")
+        cmd += [
             f"-b{block_size}",
             f"-o{queue_depth}",
             f"-t{threads}",
             f"-d{duration_sec}",
-            "-W0",
+            "-W1",     # 1 s de aquecimento (descartado da medição)
             "-L",      # Medir latência
-            "-Sh",     # Sem cache de software e com write-through imediato
+            "-Su",     # Sem cache do Windows (FILE_FLAG_NO_BUFFERING)
             "-Rxml",   # Relatório estruturado em XML
         ]
 
@@ -310,7 +331,7 @@ class DiskBenchmarkEngine:
             cmd.append("-r")
         if is_write:
             cmd.append("-w100")
-            cmd.append("-Z1M")  # Buffer de dados para gravação realista
+            cmd.append("-Z128M")  # Dados aleatórios incompressíveis (evita compressão/dedup do SSD)
 
         cmd.append(test_file)
 
@@ -378,46 +399,82 @@ class DiskBenchmarkEngine:
             return 0.0, 0.0, 0.0
 
     @classmethod
+    def _prepare_test_file(cls, path, size_mb):
+        """Cria o arquivo de teste com dados aleatórios reais (não esparso/zerado)."""
+        chunk = os.urandom(4 * 1024 * 1024)
+        written = 0
+        target = size_mb * 1024 * 1024
+        with open(path, "wb") as f:
+            while written < target and not cls._cancel_requested:
+                n = min(len(chunk), target - written)
+                f.write(chunk[:n])
+                written += n
+                if written % (64 * 1024 * 1024) == 0:
+                    chunk = os.urandom(4 * 1024 * 1024)
+                    cls._update_status(progress=2 + int(2 * written / target))
+            f.flush()
+            os.fsync(f.fileno())
+
+    @classmethod
     def _run_with_native_win32(cls, test_file, size_mb, block_size_str, queue_depth, threads, is_write, is_random, duration_sec):
-        """Fallback caso o binário não esteja disponível: Direct I/O multi-thread nativo Win32."""
+        """Fallback sem DiskSpd: I/O real sem cache (FILE_FLAG_NO_BUFFERING) com N threads = profundidade de fila."""
         import random
         block_bytes = 1024 * 1024 if "M" in block_size_str.upper() else 4096
-        total_file_bytes = size_mb * 1024 * 1024
+        file_bytes = os.path.getsize(test_file) if os.path.exists(test_file) else size_mb * 1024 * 1024
+        n_blocks = max(1, file_bytes // block_bytes)
+        workers = max(1, int(queue_depth) * int(threads))
+        results = []
+        lat_lock = threading.Lock()
+        deadline = time.perf_counter() + duration_sec
 
-        # Cria arquivo inicial se não existir
-        if not os.path.exists(test_file):
-            with open(test_file, "wb") as f:
-                f.seek(min(total_file_bytes, 128 * 1024 * 1024) - 1)
-                f.write(b"\0")
-
-        bytes_transferred = 0
-        total_ops = 0
-        t0 = time.perf_counter()
-
-        # Execução com simulação de Direct I/O
-        try:
-            mode = "r+b" if os.path.exists(test_file) else "w+b"
-            with open(test_file, mode, buffering=0) as f:
-                buf = b"W" * block_bytes
-                max_blocks = max(1, (os.path.getsize(test_file) - block_bytes) // block_bytes)
-                while (time.perf_counter() - t0) < duration_sec:
-                    if cls._cancel_requested:
-                        break
-                    off = random.randint(0, max_blocks) * block_bytes if is_random else (total_ops * block_bytes) % (max_blocks * block_bytes)
-                    f.seek(off)
-                    if is_write:
-                        f.write(buf)
+        def run(widx):
+            h, buf = _open_unbuffered(test_file, is_write, block_bytes)
+            if not h:
+                return
+            ops = 0
+            lat_total = 0.0
+            rnd = random.Random(widx)
+            seq_pos = (n_blocks // workers) * widx
+            payload = os.urandom(block_bytes)
+            ctypes.memmove(buf, payload, block_bytes)
+            n = wintypes.DWORD(0)
+            try:
+                while time.perf_counter() < deadline and not cls._cancel_requested:
+                    if is_random:
+                        off = rnd.randrange(n_blocks) * block_bytes
                     else:
-                        _ = f.read(block_bytes)
-                    bytes_transferred += block_bytes
-                    total_ops += 1
-        except Exception:
-            pass
+                        off = (seq_pos % n_blocks) * block_bytes
+                        seq_pos += 1
+                    k32.SetFilePointerEx(h, ctypes.c_longlong(off), None, 0)
+                    t0 = time.perf_counter()
+                    if is_write:
+                        ok = k32.WriteFile(h, buf, block_bytes, ctypes.byref(n), None)
+                    else:
+                        ok = k32.ReadFile(h, buf, block_bytes, ctypes.byref(n), None)
+                    lat_total += time.perf_counter() - t0
+                    if not ok:
+                        break
+                    ops += 1
+            finally:
+                k32.CloseHandle(h)
+                k32.VirtualFree(ctypes.c_void_p(buf), 0, 0x8000)
+            with lat_lock:
+                results.append((ops, lat_total))
 
-        dur = max(0.001, time.perf_counter() - t0)
-        mb_sec = (bytes_transferred / (1024 * 1024)) / dur
+        if not IS_WINDOWS:
+            return 0.0, 0.0, 0.0
+        t_start = time.perf_counter()
+        pool = [threading.Thread(target=run, args=(i,), daemon=True) for i in range(workers)]
+        for t in pool:
+            t.start()
+        for t in pool:
+            t.join()
+        dur = max(0.001, time.perf_counter() - t_start)
+        total_ops = sum(r[0] for r in results)
+        total_lat = sum(r[1] for r in results)
+        mb_sec = (total_ops * block_bytes / (1024 * 1024)) / dur
         iops = total_ops / dur
-        lat_us = (dur / max(1, total_ops)) * 1_000_000
+        lat_us = (total_lat / max(1, total_ops)) * 1_000_000
         return mb_sec, iops, lat_us
 
     @classmethod
@@ -431,3 +488,28 @@ class DiskBenchmarkEngine:
                 cls._status["progress_percent"] = progress
             if log:
                 cls._status["log_msg"] = log
+
+
+def _open_unbuffered(path, for_write, block_bytes):
+    """Abre o arquivo com FILE_FLAG_NO_BUFFERING e um buffer alinhado (VirtualAlloc)."""
+    if not IS_WINDOWS:
+        return None, None
+    k32.CreateFileW.restype = wintypes.HANDLE
+    k32.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, wintypes.LPVOID,
+                                wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+    k32.VirtualAlloc.restype = ctypes.c_void_p
+    k32.VirtualAlloc.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
+    k32.SetFilePointerEx.argtypes = [wintypes.HANDLE, ctypes.c_longlong, ctypes.c_void_p, wintypes.DWORD]
+    k32.ReadFile.argtypes = [wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), ctypes.c_void_p]
+    k32.WriteFile.argtypes = [wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD), ctypes.c_void_p]
+    k32.CloseHandle.argtypes = [wintypes.HANDLE]
+    k32.VirtualFree.argtypes = [ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD]
+    access = 0xC0000000 if for_write else 0x80000000
+    h = k32.CreateFileW(path, access, 0x3, None, 3, 0x20000000, None)  # OPEN_EXISTING, NO_BUFFERING
+    if not h or h == wintypes.HANDLE(-1).value:
+        return None, None
+    buf = k32.VirtualAlloc(None, block_bytes, 0x3000, 0x04)
+    if not buf:
+        k32.CloseHandle(h)
+        return None, None
+    return h, buf
