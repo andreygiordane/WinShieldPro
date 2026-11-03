@@ -18,6 +18,9 @@
     }
 })();
 
+// Se vendor/lucide.min.js não carregar, o app segue funcionando (só sem ícones)
+// em vez de o script inteiro parar no primeiro lucide.createIcons().
+if (!window.lucide) window.lucide = { createIcons() {}, icons: {} };
 lucide.createIcons();
 
         function enhanceButtonAnimations() {
@@ -61,6 +64,7 @@ lucide.createIcons();
                 "nav.vision": "Gráficos",
                 "nav.memory": "Memória",
                 "nav.devices": "Dispositivos",
+                "nav.updates": "Atualizações",
                 "nav.group_stability": "ESTABILIDADE",
                 "nav.stability": "Teste de Estresse",
                 "nav.group_storage": "DISCOS & REDE",
@@ -90,7 +94,7 @@ lucide.createIcons();
                 "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
@@ -338,7 +342,8 @@ lucide.createIcons();
                 "opt_modal.title": "{ const elapsed = ((Date.now() - optModalStartTime) / 1000).toFixed(1); document.getElementById('opt-modal-timer').innerText = `Tempo: ${elapsed}s`; }, 100); } function closeOptimizeModal() { const modal = document.getElementById('optimize-steps-modal'); const box = document.getElementById('optimize-modal-box'); if (optModalTimer) { clearInterval(optModalTimer); optModalTimer = null; } modal.classList.add('opacity-0', 'pointer-events-none'); modal.classList.remove('opacity-100'); box.classList.add('scale-95'); box.classList.remove('scale-100'); } function setOptimizeModalProgress(pct, statusText) { document.getElementById('opt-modal-pct').innerText = `${Math.round(pct)}%`; document.getElementById('opt-modal-progress-bar').style.width = `${pct}%`; if (statusText) document.getElementById('opt-modal-status-text').innerText = statusText; } function appendOptimizeModalLog(line) { const logBox = document.getElementById('opt-modal-log'); logBox.innerText += (logBox.innerText ? '\\n' : '') + line; logBox.scrollTop = logBox.scrollHeight; } let currentAdaptiveProfile = null; async function loadOptimizationProfile(manual = false) { try { const url = manual ? '/api/optimize/profile?force=1' : '/api/optimize/profile'; const res = await fetch(url); const data = await res.json(); if (!data || data.status !== 'success') return; const profObj = data.profile || data; currentAdaptiveProfile = profObj; const hw = profObj.hardware_summary || profObj.hardware || {}; const services = profObj.services || []; const titleEl = document.getElementById('opt-hw-profile-title'); const descEl = document.getElementById('opt-hw-profile-desc'); const chassisBadge = document.getElementById('opt-hw-chassis-badge'); const cpuEl = document.getElementById('opt-hw-cpu'); const threadsEl = document.getElementById('opt-hw-threads'); const ramEl = document.getElementById('opt-hw-ram'); const ramTierEl = document.getElementById('opt-hw-ram-tier'); const gpuEl = document.getElementById('opt-hw-gpu'); const gpuTypeEl = document.getElementById('opt-hw-gpu-type'); const storageEl = document.getElementById('opt-hw-storage'); const storageModelEl = document.getElementById('opt-hw-storage-model'); const recCountEl = document.getElementById('opt-recommended-count'); if (titleEl) titleEl.innerText = hw.profile_name || 'Perfil Adaptado ao Hardware'; if (descEl) descEl.innerText = hw.profile_description || 'Serviços calibrados para a configuração real desta máquina.'; if (chassisBadge) chassisBadge.innerText = `${hw.chassis || 'Desktop'} • ${hw.profile_badge || hw.cpu_vendor || 'x64'}`; if (cpuEl) cpuEl.innerText = hw.cpu || hw.cpu_name || 'Processador Detectado'; if (threadsEl) threadsEl.innerText = `${hw.cores || hw.cpu_cores || '--'} núcleos · ${hw.threads || hw.cpu_threads || '--'} threads`; if (ramEl) ramEl.innerText = `${hw.ram_gb || '--'} GB`; if (ramTierEl) ramTierEl.innerText = hw.ram_gb >= 15 ? 'Alta capacidade (16 GB+)' : 'Capacidade moderada'; if (gpuEl) gpuEl.innerText = hw.gpu || hw.gpu_name || 'GPU Detectada'; if (gpuTypeEl) gpuTypeEl.innerText = hw.is_dedicated_gpu ? 'Dedicada (PCIe)' : 'Integrada'; if (storageEl) storageEl.innerText = hw.storage_type || 'SSD / Disco'; if (storageModelEl) storageModelEl.innerText = 'Unidade do sistema'; if (recCountEl) { const recCnt = services.filter(s => s.recommended && !MAINTENANCE_TASKS.has(s.id || s.key)).length; recCountEl.innerText = `· ${recCnt} recomendados para esta máquina`; } await loadOptimizeStates(); renderOptimizeServices(); if (manual) { showToast(\"Hardware Reanalisado\", `Perfil adaptativo calibrado: ${hw.profile_name || 'OK'}`, \"success\", 2500); } } catch (e) { console.error(\"Erro ao carregar perfil adaptativo:\", e); } } // Ações pontuais (sem configuração gravada) ficam na página Manutenção const MAINTENANCE_TASKS = new Set(['clean_ram', 'trim', 'sfc', 'dism', 'dism_cleanup', 'chkdsk', 'restore_point', 'network_reset']); let optimizeStates = {}; let optimizeFilter = 'all'; async function loadOptimizeStates() { try { const res = await fetch('/api/optimize/state'); const data = await res.json(); optimizeStates = (data && data.state) || {}; } catch (e) { optimizeStates = {}; } } function setOptimizeFilter(f) { optimizeFilter = f; document.querySelectorAll('#opt-filter [data-filter]').forEach(b => b.classList.toggle('active', b.dataset.filter === f)); renderOptimizeServices(); } function renderOptimizeServices() { const gridEl = document.getElementById('opt-adaptive-services-grid'); const services = ((currentAdaptiveProfile && currentAdaptiveProfile.services) || []).filter(x => !MAINTENANCE_TASKS.has(x.id || x.key)); if (!gridEl || services.length === 0) return; const stateOf = s => (optimizeStates[s.id || s.key] || {}); const verifiable = services.filter(s => stateOf(s).applied === true || stateOf(s).applied === false); const applied = verifiable.filter(s => stateOf(s).applied === true); const pending = services.filter(s => stateOf(s).applied === false); const counts = { all: services.length, recommended: services.filter(s => s.recommended).length, pending: pending.length, applied: applied.length }; document.querySelectorAll('#opt-filter [data-count]').forEach(el => { el.innerText = counts[el.dataset.count] ?? 0; }); // Placar: ajustes verificáveis aplicados / total verificável const total = verifiable.length; const ratio = total ? applied.length / total : 0; const arc = document.getElementById('opt-score-arc'); if (arc) arc.style.strokeDashoffset = String(452.4 * (1 - ratio)); const sv = document.getElementById('opt-score-value'); if (sv) sv.innerText = total ? `${applied.length}/${total}` : '—'; const sf = document.getElementById('opt-score-foot'); if (sf) sf.innerText = total ? 'ajustes aplicados' : 'estado indisponível'; const list = services.filter(s => { const ap = stateOf(s).applied; if (optimizeFilter === 'recommended') return s.recommended; if (optimizeFilter === 'pending') return ap === false; if (optimizeFilter === 'applied') return ap === true; return true; }); if (list.length === 0) { gridEl.innerHTML = `",
                 "opt_modal.subtitle": "Executando sequência recomendada de serviços e debloat do Windows...",
                 "opt_modal.log_toggle": "Saída dos comandos",
-                "opt_modal.btn_done": "Aguarde…",
+                "opt_modal.btn_wait": "Aguarde…",
+                "opt_modal.btn_done": "Concluir",
                 "terminal.cmd_admin": "CMD",
                 "terminal.ps_admin": "PowerShell",
                 "terminal.elevated_badge": "Executado de forma oculta, com os privilégios do WinShield · limite de 60 s",
@@ -388,6 +393,7 @@ lucide.createIcons();
                 "nav.vision": "Graphics",
                 "nav.memory": "Memory",
                 "nav.devices": "Devices",
+                "nav.updates": "Updates",
                 "nav.group_stability": "STABILITY",
                 "nav.stability": "Stress Test",
                 "nav.group_storage": "STORAGE & NET",
@@ -417,7 +423,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -665,6 +671,7 @@ lucide.createIcons();
                 "opt_modal.title": "System Optimizer & Debloat Pipeline",
                 "opt_modal.subtitle": "Executing recommended sequence of Windows optimizations and debloat...",
                 "opt_modal.log_toggle": "Detailed Execution Output Log",
+                "opt_modal.btn_wait": "Please wait…",
                 "opt_modal.btn_done": "Done",
                 "terminal.cmd_admin": "Command Prompt (CMD Administrator)",
                 "terminal.ps_admin": "PowerShell 5.1 / 7+ (Administrator)",
@@ -715,6 +722,7 @@ lucide.createIcons();
                 "nav.vision": "Gráficos",
                 "nav.memory": "Memoria",
                 "nav.devices": "Dispositivos",
+                "nav.updates": "Actualizaciones",
                 "nav.group_stability": "ESTABILIDAD",
                 "nav.stability": "Prueba de Estrés",
                 "nav.group_storage": "DISCOS Y RED",
@@ -744,7 +752,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.0",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -992,6 +1000,7 @@ lucide.createIcons();
                 "opt_modal.title": "Optimizador del Sistema y Debloat",
                 "opt_modal.subtitle": "Ejecutando secuencia recomendada de servicios y debloat de Windows...",
                 "opt_modal.log_toggle": "Registro Detallado de Ejecución",
+                "opt_modal.btn_wait": "Espere…",
                 "opt_modal.btn_done": "Listo",
                 "terminal.cmd_admin": "Símbolo del Sistema (CMD Administrador)",
                 "terminal.ps_admin": "PowerShell 5.1 / 7+ (Administrador)",
@@ -1051,6 +1060,7 @@ lucide.createIcons();
                 'terminal': { title: 'Terminal', sub: 'Execução de comandos administrativos em segundo plano' },
                 'network': { title: 'Rede', sub: 'Diagnósticos de sinal, latência com servidores mundiais e teste de velocidade' },
                 'devices': { title: 'Dispositivos e drivers', sub: 'Mapeamento de hardware Plug & Play e central de atualização de drivers' },
+                'updates': { title: 'Atualizações', sub: 'Windows, drivers, programas e vídeo, de fontes oficiais' },
                 'stability': { title: 'Teste de estresse', sub: 'Estresse contínuo de CPU, FPU, Caches e Memória RAM com telemetria e detecção de Throttling' },
             },
             'en': {
@@ -1070,6 +1080,7 @@ lucide.createIcons();
                 'terminal': { title: 'CMD & PowerShell Terminal', sub: 'Administrative background command execution' },
                 'network': { title: 'Network, Wi-Fi & Ping Central', sub: 'Signal diagnostics, world server latency tests, and real bandwidth speed' },
                 'devices': { title: 'Device Manager & Driver Center', sub: 'Plug & Play hardware audit and OEM/Windows Update driver center' },
+                'updates': { title: 'Updates', sub: 'Windows, drivers, apps and graphics from official sources' },
                 'stability': { title: 'System Stability Test (StressPulse™)', sub: 'Continuous stress testing of CPU, FPU, Caches and Memory RAM with telemetry and Throttling detection' },
             },
             'es': {
@@ -1089,6 +1100,7 @@ lucide.createIcons();
                 'terminal': { title: 'Terminal CMD y PowerShell', sub: 'Ejecución de comandos administrativos en segundo plano' },
                 'network': { title: 'Central de Red, Wi-Fi y Ping', sub: 'Diagnóstico de señal, latencia con servidores mundiales y prueba de velocidad' },
                 'devices': { title: 'Gestor de Dispositivos y Drivers', sub: 'Auditoría de hardware Plug & Play y central de actualización de drivers' },
+                'updates': { title: 'Actualizaciones', sub: 'Windows, drivers, programas y video de fuentes oficiales' },
                 'stability': { title: 'Prueba de Estabilidad del Sistema (StressPulse™)', sub: 'Prueba de estrés continuo de CPU, FPU, Cachés y Memoria RAM con telemetría y detección de Throttling' },
             }
         };
@@ -1644,6 +1656,7 @@ lucide.createIcons();
             'vision': { key: 'nav.group_hardware', badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25' },
             'memory': { key: 'nav.group_hardware', badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/25' },
             'devices': { key: 'nav.group_hardware', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' },
+            'updates': { key: 'nav.group_hardware', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' },
             'stability': { key: 'nav.group_stability', badgeClass: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/25' },
             'disk-health': { key: 'nav.group_storage', badgeClass: 'bg-rose-500/10 text-rose-400 border-rose-500/25' },
             'disk-bench': { key: 'nav.group_storage', badgeClass: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25' },
@@ -1886,6 +1899,7 @@ lucide.createIcons();
             if (tabId === 'disk-bench') pollBenchmarkStatus();
             if (tabId === 'network') loadNetworkInfo();
             if (tabId === 'devices') loadDevicesInfo();
+            if (tabId === 'updates') loadUpdates();
             if (tabId === 'stability') {
                 loadStabilityInfo();
                 if (stabilityMode === 'bench') switchStabilityMode('bench');
@@ -2464,7 +2478,8 @@ lucide.createIcons();
             setT('dh-disk-type', [d.media, d.bus, d.rpm ? `${d.rpm} RPM` : null].filter(Boolean).join(' · ') || '—');
             setT('dh-disk-hours-kv', hours ? `${fmtInt(hours)} h` : 'N/D');
             setT('dh-disk-days-kv', daysTxt || 'N/D');
-            setT('dh-disk-wear', d.life !== undefined && d.life !== null ? `${100 - d.life}% usado · fonte: ${d.wear_source || 'S.M.A.R.T.'}` : 'N/D');
+            // Mostra as duas leituras juntas: "11% usado" sozinho era confundido com a saúde do disco
+            setT('dh-disk-wear', d.life !== undefined && d.life !== null ? `${d.life}% de vida restante (${100 - d.life}% já consumido) · fonte: ${d.wear_source || 'S.M.A.R.T.'}` : 'N/D');
             setT('dh-disk-life', d.life_remaining_days ? `≈ ${fmtInt(d.life_remaining_days)} dias (≈ ${(d.life_remaining_days / 365).toFixed(1)} anos)` : 'N/D');
             setT('dh-disk-volumes', (d.volumes || []).map(v => `${v.letter}: ${v.label || ''} (${v.fs || ''})`).join(' · ') || '—');
 
@@ -4580,7 +4595,7 @@ lucide.createIcons();
             const doneBtn = document.getElementById('opt-modal-done-btn');
             doneBtn.disabled = true;
             doneBtn.className = "ws-btn";
-            doneBtn.innerText = t('opt_modal.btn_done') || "Aguarde...";
+            doneBtn.innerText = t('opt_modal.btn_wait') || "Aguarde…";
 
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.classList.add('opacity-100');
@@ -5739,6 +5754,256 @@ lucide.createIcons();
             });
             list.innerHTML = html;
             lucide.createIcons();
+        }
+
+        // =====================================================================
+        // CENTRAL DE ATUALIZAÇÕES (Windows Update, drivers, winget e vídeo)
+        // =====================================================================
+        const UPDATE_GROUPS = [
+            { key: 'windows', icon: 'shield-check', title: 'Windows',
+              desc: 'Atualizações do próprio Windows, do .NET e do Microsoft Defender, direto dos servidores da Microsoft. As de segurança fecham brechas que já são exploradas por ataques, por isso vêm marcadas.' },
+            { key: 'drivers', icon: 'cpu', title: 'Drivers',
+              desc: 'Drivers certificados (WHQL) que a Microsoft associa ao ID exato de cada peça do PC, inclusive os opcionais que o Windows não instala sozinho. Só aparecem drivers mais novos que os instalados.' },
+            { key: 'apps', icon: 'package', title: 'Programas',
+              desc: 'Programas instalados que têm versão nova. O winget baixa do site de cada desenvolvedor e confere o hash SHA-256 antes de instalar, sem abrir janelas.' },
+            { key: 'gpu', icon: 'monitor', title: 'Placa de vídeo',
+              desc: 'Driver direto do fabricante da placa de vídeo. A NVIDIA informa a versão mais nova e o WinShield instala; AMD e Intel não têm essa consulta, então entram o assistente ou o site oficial deles.' },
+        ];
+        const UPDATE_LEVEL_BADGE = { critical: 'bad', important: 'warn', recommended: 'info', optional: '' };
+        const UPDATE_LEVEL_LABEL = { critical: 'Crítica', important: 'Importante', recommended: 'Recomendada', optional: 'Opcional' };
+        const UPDATE_SOURCE_LABEL = { windows: 'Windows Update', apps: 'winget', gpu: 'Fabricantes de vídeo' };
+        let updatesState = null;
+        let updatesSelection = {};   // id -> marcado? (a escolha do usuário sobrevive às atualizações da tela)
+        let updatesPollTimer = null;
+        let updatesRestoreAsked = false;
+
+        async function loadUpdates() {
+            await refreshUpdatesStatus();
+            if (updatesState && updatesState.phase === 'idle') scanUpdates();
+        }
+
+        async function refreshUpdatesStatus() {
+            try {
+                const res = await fetch('/api/updates/status');
+                updatesState = await res.json();
+            } catch (e) {
+                return;
+            }
+            (updatesState.items || []).forEach(it => {
+                if (!(it.id in updatesSelection)) updatesSelection[it.id] = !!it.selected;
+            });
+            renderUpdates();
+
+            const busy = ['scanning', 'installing'].includes(updatesState.phase);
+            if (busy && !updatesPollTimer) updatesPollTimer = setInterval(refreshUpdatesStatus, 1500);
+            if (!busy && updatesPollTimer) { clearInterval(updatesPollTimer); updatesPollTimer = null; }
+            if (updatesState.phase === 'needs_confirmation' && !updatesRestoreAsked) {
+                updatesRestoreAsked = true;
+                askInstallWithoutRestorePoint();
+            }
+        }
+
+        async function postUpdates(path, body = {}) {
+            const res = await fetch(path, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            return res.json();
+        }
+
+        async function scanUpdates() {
+            const data = await postUpdates('/api/updates/scan');
+            if (data.status !== 'success') showToast('Atualizações', data.message, 'warning');
+            refreshUpdatesStatus();
+        }
+
+        function selectedUpdateIds() {
+            return (updatesState?.items || []).filter(it => it.selectable && updatesSelection[it.id]).map(it => it.id);
+        }
+
+        function toggleUpdate(input) {
+            updatesSelection[input.dataset.id] = input.checked;
+            renderUpdates();
+        }
+
+        function toggleUpdateGroup(group, checked) {
+            (updatesState?.items || []).filter(it => it.group === group && it.selectable)
+                .forEach(it => { updatesSelection[it.id] = checked; });
+            renderUpdates();
+        }
+
+        async function installSelectedUpdates(skipRestorePoint = false) {
+            const ids = selectedUpdateIds();
+            if (!ids.length) return;
+            if (!skipRestorePoint) {
+                const items = updatesState.items.filter(it => ids.includes(it.id));
+                const reboot = items.some(it => it.reboot);
+                const ok = await showConfirmModal({
+                    title: 'Instalar atualizações',
+                    message: `${ids.length} atualização(ões) serão instaladas nesta ordem: Windows, drivers, programas e vídeo. Antes de começar, o WinShield cria um ponto de restauração do sistema.`,
+                    warningText: 'Pode levar bastante tempo. Deixe o PC ligado na tomada e salve seus arquivos'
+                        + (reboot ? '; algumas atualizações vão pedir reinício no final.' : '.'),
+                    itemIcon: 'refresh-cw',
+                    confirmText: 'Instalar',
+                    type: 'info'
+                });
+                if (!ok) return;
+            }
+            updatesRestoreAsked = false;
+            const data = await postUpdates('/api/updates/install', { ids, skip_restore_point: skipRestorePoint });
+            if (data.status !== 'success') showToast('Atualizações', data.message, 'warning');
+            refreshUpdatesStatus();
+        }
+
+        async function askInstallWithoutRestorePoint() {
+            const ok = await showConfirmModal({
+                title: 'Ponto de restauração não foi criado',
+                message: updatesState.message || 'Não foi possível criar o ponto de restauração.',
+                warningText: 'Sem ele, se uma atualização causar problema, não dá para voltar o Windows ao estado anterior. Para ativar: Iniciar → "Criar ponto de restauração" → Configurar → Ativar a proteção do sistema.',
+                confirmText: 'Instalar mesmo assim',
+                type: 'warning'
+            });
+            if (ok) installSelectedUpdates(true);
+        }
+
+        async function cancelUpdates() {
+            const data = await postUpdates('/api/updates/cancel');
+            showToast('Atualizações', data.message, 'info', 5000);
+        }
+
+        async function openUpdatePage(btn) {
+            const data = await postUpdates('/api/updates/open_page', { id: btn.dataset.id });
+            if (data.status !== 'success') showToast('Atualizações', data.message, 'warning');
+        }
+
+        async function rebootForUpdates() {
+            const ok = await showConfirmModal({
+                title: 'Reiniciar o PC',
+                message: 'O PC reinicia em 30 segundos para concluir as atualizações.',
+                warningText: 'Salve e feche seus arquivos antes de continuar.',
+                itemIcon: 'power',
+                confirmText: 'Reiniciar',
+                type: 'warning'
+            });
+            if (!ok) return;
+            const data = await postUpdates('/api/updates/reboot');
+            showToast('Reinício', data.message, data.status === 'success' ? 'info' : 'error', 8000);
+        }
+
+        function renderUpdates() {
+            const st = updatesState;
+            if (!st) return;
+            const items = st.items || [];
+            const busy = ['scanning', 'installing'].includes(st.phase);
+            const scanned = !!st.scanned_at;
+            const selected = selectedUpdateIds();
+            const pending = items.filter(it => it.selectable).length;
+
+            UPDATE_GROUPS.forEach(g => {
+                const el = document.getElementById(`upd-count-${g.key}`);
+                if (el) el.innerText = scanned ? items.filter(it => it.group === g.key && it.selectable).length : '—';
+            });
+            ['nav-updates-badge', 'dev-updates-count-badge'].forEach(id => {
+                const b = document.getElementById(id);
+                if (b) { b.innerText = pending; b.classList.toggle('hidden', pending <= 0); }
+            });
+
+            const last = document.getElementById('upd-last-check');
+            if (last) last.innerText = st.phase === 'scanning' ? 'Verificando… a consulta ao Windows Update pode levar alguns minutos'
+                : (scanned ? `Última verificação: ${st.scanned_at}` : 'Nenhuma verificação nesta sessão');
+            const btnScan = document.getElementById('upd-btn-scan');
+            if (btnScan) btnScan.disabled = busy;
+            const btnInstall = document.getElementById('upd-btn-install');
+            if (btnInstall) {
+                btnInstall.disabled = busy || selected.length === 0;
+                btnInstall.innerText = selected.length ? `Atualizar selecionadas (${selected.length})` : 'Atualizar selecionadas';
+            }
+
+            // Progresso
+            const pBox = document.getElementById('upd-progress');
+            const p = st.progress;
+            if (pBox) pBox.classList.toggle('hidden', !(st.phase === 'installing' && p));
+            if (st.phase === 'installing' && p) {
+                document.getElementById('upd-progress-step').innerText = p.step || 'Preparando…';
+                document.getElementById('upd-progress-current').innerText = p.current || '';
+                document.getElementById('upd-progress-count').innerText = `${p.done}/${p.total}` + (p.percent != null ? ` · ${p.percent}%` : '');
+                const pct = p.percent != null ? p.percent : (p.total ? (p.done / p.total) * 100 : 0);
+                document.getElementById('upd-progress-bar').style.width = `${pct}%`;
+            }
+
+            // Avisos
+            const notes = [];
+            const note = (cls, icon, html) => `<div class="ws-note ${cls}"><i data-lucide="${icon}"></i><span>${html}</span></div>`;
+            if (st.phase === 'scanning') notes.push(note('', 'loader', 'Consultando Windows Update, winget e fabricantes de vídeo…'));
+            Object.entries(st.source_errors || {}).forEach(([src, msg]) => {
+                notes.push(note('warn', 'alert-triangle', `<b>${escapeHtml(UPDATE_SOURCE_LABEL[src] || src)} não pôde ser consultado:</b> ${escapeHtml(msg)}. As outras fontes funcionaram normalmente.`));
+            });
+            if (st.hidden_older_drivers > 0) {
+                notes.push(note('', 'eye-off', `${st.hidden_older_drivers} driver(s) oferecido(s) pelo Windows Update são iguais ou mais antigos que os instalados e foram ocultados para não regredir.`));
+            }
+            if (st.phase === 'done' && st.message) {
+                const fails = Object.entries(st.results || {}).filter(([, r]) => !r.ok);
+                notes.push(note(fails.length ? 'warn' : '', fails.length ? 'alert-triangle' : 'check-circle',
+                    `<b>${escapeHtml(st.message)}</b>` + fails.map(([id, r]) => `<br>• ${escapeHtml(id.replace(/^\w+:/, ''))}: ${escapeHtml(r.message)}`).join('')));
+            }
+            if (st.reboot_required) {
+                notes.push(`<div class="ws-note warn flex items-center justify-between gap-3"><span class="flex items-center gap-2"><i data-lucide="power"></i><span><b>Reinício necessário</b> para concluir as atualizações instaladas.</span></span><button onclick="rebootForUpdates()" class="ws-btn sm">Reiniciar agora</button></div>`);
+            }
+            const notesEl = document.getElementById('upd-notes');
+            if (notesEl) notesEl.innerHTML = notes.join('');
+
+            // Lista por grupo
+            const groupsEl = document.getElementById('upd-groups');
+            if (!groupsEl) return;
+            if (!scanned) {
+                if (st.phase === 'scanning') groupsEl.innerHTML = '';
+                lucide.createIcons();
+                return;
+            }
+            groupsEl.innerHTML = UPDATE_GROUPS.map(g => {
+                const list = items.filter(it => it.group === g.key);
+                const selectable = list.filter(it => it.selectable);
+                const failed = (st.source_errors || {})[g.key === 'drivers' ? 'windows' : g.key];
+                const allOn = selectable.length > 0 && selectable.every(it => updatesSelection[it.id]);
+                const body = list.length ? list.map(it => renderUpdateItem(it, busy)).join('')
+                    : `<div class="ws-card ws-empty">${failed ? 'Não foi possível consultar esta fonte.' : 'Tudo em dia.'}</div>`;
+                return `
+                    <div class="ws-section">
+                        <div class="ws-section-head">
+                            <div class="ws-section-title flex items-center gap-2"><i data-lucide="${g.icon}"></i>${g.title}
+                                <span class="ws-badge">${selectable.length}</span></div>
+                            ${selectable.length ? `<label class="ws-check"><input type="checkbox" ${allOn ? 'checked' : ''} ${busy ? 'disabled' : ''} onchange="toggleUpdateGroup('${g.key}', this.checked)">Marcar todas</label>` : ''}
+                        </div>
+                        <div class="ws-card-sub mb-2">${g.desc}</div>
+                        <div class="flex flex-col gap-2">${body}</div>
+                    </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function renderUpdateItem(it, busy) {
+            const id = escapeHtml(it.id);
+            const level = `<span class="ws-badge ${UPDATE_LEVEL_BADGE[it.level] || ''}">${UPDATE_LEVEL_LABEL[it.level] || ''}</span>`;
+            const info = `
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="t">${escapeHtml(it.title)}</span>${level}
+                        ${it.reboot ? '<span class="ws-badge">pede reinício</span>' : ''}
+                    </div>
+                    ${it.subtitle ? `<div class="ws-mono text-[11.5px] ws-muted mt-0.5">${escapeHtml(it.subtitle)}</div>` : ''}
+                    <div class="d mt-1">${escapeHtml(it.why)}</div>
+                    <div class="ws-stat-foot mt-0.5">Fonte: ${escapeHtml(it.source)}</div>
+                </div>`;
+            if (it.selectable) {
+                return `<label class="ws-option !items-start">
+                    <input type="checkbox" class="mt-0.5" data-id="${id}" ${updatesSelection[it.id] ? 'checked' : ''} ${busy ? 'disabled' : ''} onchange="toggleUpdate(this)">
+                    ${info}</label>`;
+            }
+            const side = it.action === 'open_page'
+                ? `<button class="ws-btn sm flex-shrink-0" data-id="${id}" onclick="openUpdatePage(this)"><i data-lucide="external-link"></i>Abrir site oficial</button>`
+                : '<span class="ws-badge ok flex-shrink-0">Em dia</span>';
+            return `<div class="ws-option !items-start !cursor-default">${info}${side}</div>`;
         }
 
         // =====================================================================

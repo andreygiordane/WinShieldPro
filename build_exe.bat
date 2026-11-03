@@ -1,9 +1,9 @@
 @echo off
 :: ============================================================================
-:: WinShield Pro v7.0 Enterprise - Compilador Executável Standalone (.EXE)
+:: WinShield Pro v7.5 Enterprise - Compilador Executável Standalone (.EXE)
 :: Inclui Manifesto de Administrador Nativo (--uac-admin) e Modo 100% Windowed
 :: ============================================================================
-title Compilando WinShield Pro v7.0 para Executável Standalone (.exe)...
+title Compilando WinShield Pro v7.5 para Executável Standalone (.exe)...
 
 cd /d "%~dp0"
 set "PROJECT_DIR=%~dp0"
@@ -16,7 +16,7 @@ set "FINAL_EXE=%PROJECT_DIR%dist\WinShieldPro.exe"
 set "PATH=%APPDATA%\Python\Python315\Scripts;%LOCALAPPDATA%\Programs\Python\Python315\Scripts;%PATH%"
 
 echo =====================================================================
-echo       COMPILADOR WINSHIELD PRO v7.0 ENTERPRISE PARA WINDOWS
+echo       COMPILADOR WINSHIELD PRO v7.5 ENTERPRISE PARA WINDOWS
 echo =====================================================================
 echo.
 
@@ -30,7 +30,7 @@ if %errorlevel% neq 0 (
 )
 
 :: 2. Instalar PyInstaller se nao estiver presente
-echo [1/4] Verificando instalacao do PyInstaller...
+echo [1/3] Verificando instalacao do PyInstaller...
 python -m pip install pyinstaller
 
 :: 3. Encerrar instâncias anteriores em execução para liberar o arquivo final
@@ -52,11 +52,17 @@ if not exist "%PROJECT_DIR%dist" mkdir "%PROJECT_DIR%dist"
 
 :: 4. Compilar em um diretório temporário estável para evitar bloqueios do arquivo final
 echo.
-echo [2/4] Recompilando frontend modular (HTML/JS/CSS)...
+echo [2/3] Recompilando frontend modular (HTML/JS/CSS)...
 python "%PROJECT_DIR%scripts\build_frontend.py"
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERRO] Falha no build do frontend. Rode: python scripts\fetch_vendor.py
+    pause
+    exit /b
+)
 
 echo.
-echo [3/4] Compilando WinShieldPro.exe via WinShieldPro.spec...
+echo [3/3] Compilando WinShieldPro.exe via WinShieldPro.spec...
 echo       Modo Janela Puro (sem console) + UAC Admin embutido.
 echo.
 
@@ -79,20 +85,16 @@ if %errorlevel% neq 0 (
 
 rmdir /s /q "%BUILD_ROOT%" >nul 2>&1
 
-:: 5. Assinar digitalmente com o Certificado Oficial de Andrey Giordane
-echo.
-echo [4/4] Assinando digitalmente com Andrey Giordane...
-set "SIGN_SCRIPT=%PROJECT_DIR%scripts\sign_app.ps1"
-if not exist "%SIGN_SCRIPT%" set "SIGN_SCRIPT=%PROJECT_DIR%sign_app.ps1"
-powershell -NoProfile -ExecutionPolicy Bypass -File "%SIGN_SCRIPT%" -TargetExe "%FINAL_EXE%"
+:: Sem assinatura: um certificado autoassinado so e confiavel no PC onde foi instalado.
+:: Para o Windows mostrar "Andrey Giordane" como fornecedor em qualquer PC e preciso
+:: um certificado de assinatura de codigo emitido por uma autoridade (CA) reconhecida.
 
 echo.
 echo =====================================================================
-echo SUCESSO! Executavel oficial v7.0 gerado e assinado em:
+echo SUCESSO! Executavel v7.5 gerado em:
 echo       %FINAL_EXE%
 echo =====================================================================
 echo.
-echo O arquivo "WinShieldPro.exe" agora possui todos os modulos integrados (v7.0)
-echo e esta assinado digitalmente por Andrey Giordane (Sem alertas de Fornecedor Desconhecido).
+echo O arquivo "WinShieldPro.exe" possui todos os modulos integrados (v7.5).
 echo.
 pause

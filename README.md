@@ -2,7 +2,7 @@
   <img src="imagens/logo.png" alt="WinShield Pro Enterprise Logo" width="360">
 </p>
 
-<h1 align="center">WinShield Pro v7.0 Enterprise Edition</h1>
+<h1 align="center">WinShield Pro v7.5 Enterprise Edition</h1>
 
 <p align="center">
   <strong>Central Definitiva de Diagnóstico de Hardware, Saúde de Discos, Drivers Oficiais, Benchmark, Segurança Forense e Otimização Avançada para Windows 10 e 11.</strong>
@@ -10,15 +10,14 @@
 
 <p align="center">
   <a href="https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe">
-    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.0_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
+    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.5_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
   </a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versão-7.0.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
+  <img src="https://img.shields.io/badge/Versão-7.5.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
   <img src="https://img.shields.io/badge/Plataforma-Windows_10_%7C_11_(x64)-0078D6?style=flat-square&logo=windows11&logoColor=white" alt="Plataforma">
   <img src="https://img.shields.io/badge/Python-3.15.1_Nativo-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Assinatura-Authenticode_Andrey_Giordane-22C55E?style=flat-square&logo=checkmarx&logoColor=white" alt="Assinatura Digital">
   <img src="https://img.shields.io/badge/Licen%C3%A7a-Propriet%C3%A1ria_%2F_Enterprise-F59E0B?style=flat-square" alt="Licença">
 </p>
 
@@ -26,13 +25,25 @@
 
 ## 🌟 Visão Geral
 
-O **WinShield Pro v7.0 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
+O **WinShield Pro v7.5 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
 
 A versão **7.0** traz uma interface totalmente redesenhada, testes com metodologia documentada e motores de hardware de nível baixo (**Silicon Core™**, **Vision Engine™**, **RAMGuard™** e **DiskGuard™**), download direto de drivers de servidores oficiais (**NVIDIA, AMD, Intel, Realtek**) com pareamento inteligente, benchmark físico real e um gerenciador de processos reconstruído para tempo de resposta instantâneo.
 
 ---
 
 ## 📥 Download Direto do Executável
+
+### Novidades da versão 7.5
+
+* **Central de Atualizações** — um só lugar para tudo o que o PC deveria ter atualizado, sempre de fontes oficiais e com explicação de cada item:
+  * **Windows Update** (segurança, cumulativas, .NET, Defender e opcionais), direto dos servidores da Microsoft;
+  * **Drivers por hardware** (WHQL, casados pelo ID de cada peça) — drivers iguais ou mais antigos que o instalado são ocultados para nunca regredir;
+  * **Programas** via winget, com verificação do hash SHA-256 do instalador;
+  * **Placa de vídeo**: driver NVIDIA pela API oficial (assinatura digital conferida), assistente oficial da Intel e site oficial da AMD.
+  * "Atualizar selecionadas" cria um **ponto de restauração** antes e instala na ordem Windows → drivers → programas → vídeo, com resultado item a item.
+* **Funciona offline** — a interface não depende mais de CDNs (Tailwind, ícones e fontes vêm embutidos). Corrige a tela branca com texto desalinhado em PCs sem internet, com firewall/proxy ou antivírus bloqueando CDNs. Também abre mais rápido.
+* **Saúde dos discos** — o desgaste agora mostra "vida restante" e "já consumido" juntos, evitando confundir o desgaste (ex.: 11%) com a saúde (89%).
+* **Otimização** — o botão do modal mostra "Concluir" ao terminar (antes ficava em "Aguarde…").
 
 ### Novidades da versão 7.0
 
@@ -50,8 +61,8 @@ A metodologia de cada medição está em [METODOLOGIA_DOS_TESTES.md](METODOLOGIA
 
 Não é necessário instalar Python, dependências ou compiladores para utilizar o WinShield Pro:
 
-* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.0 Standalone)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe)**
-* 🔒 **Assinado Digitalmente:** Binário assinado via certificado Authenticode por *Andrey Giordane*.
+* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.5 Standalone)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe)**
+* ⚠️ **Aviso do Windows:** o executável ainda não tem assinatura de código de uma autoridade certificadora, então o SmartScreen pode mostrar "Fornecedor desconhecido". Clique em **Mais informações → Executar assim mesmo**.
 * 🛡️ **Zero Dependências Externas:** Executável portátil integrado (*Single File*) pronto para rodar.
 
 ---
@@ -288,7 +299,7 @@ WinShieldPro/
 ├── tests/                             # Bateria completa de testes automatizados (pytest)
 ├── build_exe.bat                      # Script 1-clique de compilação do executável .EXE
 ├── run_as_admin.bat                   # Inicializador seguro com elevação UAC
-├── version_info.txt                   # Metadados oficiais do executável (v7.0.0.0)
+├── version_info.txt                   # Metadados oficiais do executável (v7.5.0.0)
 └── winshield_app.py                   # Ponto de entrada da aplicação desktop
 ```
 
@@ -339,8 +350,7 @@ O script realizará automaticamente:
 1. Validação do ambiente Python e instalação do PyInstaller.
 2. Recompilação modular de todos os arquivos HTML/JS/CSS do frontend.
 3. Empacotamento em modo Windowed puro (`--windowed`) com manifesto UAC embutido via `WinShieldPro.spec`.
-4. Assinatura digital Authenticode com certificado emitido para **Andrey Giordane**.
-5. Geração do executável final em `dist/WinShieldPro.exe`.
+4. Geração do executável final em `dist/WinShieldPro.exe`.
 
 ---
 

@@ -1,5 +1,5 @@
 """
-WinShield Pro v7.0 Enterprise - Servidor Desktop & API Central.
+WinShield Pro v7.5 Enterprise - Servidor Desktop & API Central.
 Gerencia a interface Web Desktop, rotas REST e integra todos os motores de sistema.
 """
 
@@ -35,6 +35,7 @@ from backend.network_engine import NetworkEngine
 from backend.device_engine import DeviceEngine
 from backend.stress_engine import StressEngine
 from backend.stress_bench_engine import StressBenchEngine
+from backend.update_engine import UpdateEngine
 
 
 class WinShieldRequestHandler(BaseHTTPRequestHandler):
@@ -189,6 +190,9 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             force = any(k in self.path for k in ("force=1", "force=true", "refresh=1", "refresh=true"))
             paired = DeviceEngine.get_hardware_pairing(force=force)
             self._send_json({"status": "success", "paired_hardware": paired})
+
+        elif url_path == "/api/updates/status":
+            self._send_json(UpdateEngine.status())
 
         elif url_path == "/api/devices/download_status":
             driver_id = None
@@ -525,6 +529,21 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             ok, msg = DeviceEngine.backup_drivers(dest)
             self._send_json({"status": "success" if ok else "error", "message": msg})
 
+        # --- CENTRAL DE ATUALIZAÇÕES ---
+        elif url_path in ("/api/updates/scan", "/api/updates/install", "/api/updates/cancel",
+                          "/api/updates/open_page", "/api/updates/reboot"):
+            if url_path == "/api/updates/scan":
+                ok, msg = UpdateEngine.scan()
+            elif url_path == "/api/updates/install":
+                ok, msg = UpdateEngine.install(data.get("ids") or [], bool(data.get("skip_restore_point")))
+            elif url_path == "/api/updates/cancel":
+                ok, msg = UpdateEngine.cancel()
+            elif url_path == "/api/updates/open_page":
+                ok, msg = UpdateEngine.open_page(data.get("id"))
+            else:
+                ok, msg = UpdateEngine.reboot()
+            self._send_json({"status": "success" if ok else "error", "message": msg})
+
         # --- TESTE DE ESTABILIDADE DO SISTEMA (STRESSPULSE) ---
         elif url_path == "/api/sensors/lhm/start":
             from backend.telemetry import find_lhm
@@ -612,6 +631,7 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
         candidates = [
             resource_path(filename),
             os.path.join(os.getcwd(), filename),
+            resource_path("frontend", filename),  # ex.: vendor/tailwind.css
             resource_path("frontend", os.path.basename(filename)),
             os.path.join(os.getcwd(), "frontend", os.path.basename(filename)),
             resource_path("imagens", os.path.basename(filename)),

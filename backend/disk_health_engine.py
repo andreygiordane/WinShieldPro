@@ -419,7 +419,7 @@ def _nvme_details(nv):
         ("Temperatura composta", f"{nv['temperature']} °C" if nv["temperature"] is not None else "—", ""),
         ("Reserva disponível", f"{nv['available_spare']} %", "bad" if nv["available_spare"] < nv["spare_threshold"] else "ok"),
         ("Limite de reserva", f"{nv['spare_threshold']} %", ""),
-        ("Percentual usado (desgaste)", f"{nv['percentage_used']} %", "warn" if nv["percentage_used"] >= 50 else ""),
+        ("Vida já consumida (desgaste)", f"{nv['percentage_used']} %", "warn" if nv["percentage_used"] >= 50 else ""),
         ("Dados lidos", ("bytes", gb(nv["data_units_read"])), ""),
         ("Dados gravados", ("bytes", gb(nv["data_units_written"])), ""),
         ("Comandos de leitura do host", f"{nv['host_reads']:,}".replace(",", "."), ""),

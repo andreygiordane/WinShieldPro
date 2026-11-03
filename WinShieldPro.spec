@@ -16,6 +16,7 @@ a = Analysis(
     datas=[
         ('frontend/winshield_pro_dashboard.html', 'frontend'),
         ('frontend/winshield_pro_dashboard.html', '.'),
+        ('frontend/vendor', 'frontend/vendor'),  # tailwind.css + lucide (sem CDN)
         ('backend', 'backend'),
         ('imagens', 'imagens'),
     ] + _extra_datas,
@@ -42,6 +43,7 @@ a = Analysis(
         'backend.stress_engine',
         'backend.stress_bench_engine',
         'backend.telemetry',
+        'backend.update_engine',
         'numpy',
         'psutil',
         'webview',

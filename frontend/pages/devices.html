@@ -10,7 +10,7 @@
                 <div class="flex flex-wrap items-end justify-between gap-3">
                     <div class="ws-tabs flex-1 min-w-0">
                         <button onclick="switchDeviceSubTab('installed')" id="dev-subtab-installed" class="active"><span data-i18n="devices.tab_installed">Instalados</span></button>
-                        <button onclick="switchDeviceSubTab('updates')" id="dev-subtab-updates"><span data-i18n="devices.tab_updates">Atualizações</span><span id="dev-updates-count-badge" class="hidden ws-badge warn">0</span></button>
+                        <button onclick="switchTab('updates')" id="dev-subtab-updates" title="Abre a Central de atualizações"><span data-i18n="devices.tab_updates">Atualizações</span><span id="dev-updates-count-badge" class="hidden ws-badge warn">0</span></button>
                     </div>
                     <div class="flex gap-2 mb-1.5">
                         <button onclick="openDriverDownloadFolder()" class="ws-btn sm" title="Abrir a pasta dos drivers baixados">Pasta</button>
@@ -48,40 +48,4 @@
                     </div>
                 </div>
 
-                <!-- ATUALIZAÇÕES -->
-                <div id="dev-content-updates" class="hidden ws-page">
-                    <div class="ws-card">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <div class="ws-card-title">Verificação de drivers</div>
-                                <div class="ws-card-sub">Consulta os canais oficiais (NVIDIA, AMD, Intel, Realtek), o Windows Update e o winget, e compara com a versão instalada.</div>
-                                <span id="dev-last-check-text" class="ws-stat-foot ws-mono block mt-1">Nenhuma verificação nesta sessão</span>
-                            </div>
-                            <button onclick="scanDriverUpdates()" id="btn-scan-driver-updates" class="ws-btn primary"><span data-i18n="devices.btn_scan_updates">Verificar agora</span></button>
-                        </div>
-                    </div>
-
-                    <div class="ws-section">
-                        <div class="ws-section-title">Hardware identificado</div>
-                        <div id="dev-pairing-container" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-                            <div class="ws-card ws-empty sm:col-span-2 xl:col-span-4">Aguardando leitura do hardware…</div>
-                        </div>
-                    </div>
-
-                    <div class="ws-section">
-                        <div class="ws-section-head">
-                            <div class="ws-section-title">Atualizações disponíveis</div>
-                            <div class="ws-chips" id="dev-vendor-filter-pills">
-                                <button onclick="filterDriverVendor('all')" class="dev-vendor-pill ws-chip-btn active" data-vendor="all">Todos</button>
-                                <button onclick="filterDriverVendor('nvidia')" class="dev-vendor-pill ws-chip-btn" data-vendor="nvidia">NVIDIA</button>
-                                <button onclick="filterDriverVendor('amd')" class="dev-vendor-pill ws-chip-btn" data-vendor="amd">AMD</button>
-                                <button onclick="filterDriverVendor('intel')" class="dev-vendor-pill ws-chip-btn" data-vendor="intel">Intel</button>
-                                <button onclick="filterDriverVendor('windows')" class="dev-vendor-pill ws-chip-btn" data-vendor="windows">Windows Update</button>
-                            </div>
-                        </div>
-                        <div id="dev-updates-results" class="flex flex-col gap-3">
-                            <div class="ws-card ws-empty">Clique em "Verificar agora" para consultar as versões disponíveis.</div>
-                        </div>
-                    </div>
-                </div>
             </section>

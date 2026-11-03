@@ -1,0 +1,51 @@
+<section id="view-updates" class="view-panel hidden ws-page">
+
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+                    <div class="ws-card ws-stat"><span class="ws-stat-label">Windows</span><span id="upd-count-windows" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">segurança, cumulativas, Defender</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label">Drivers</span><span id="upd-count-drivers" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">por ID de hardware (WHQL)</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label">Programas</span><span id="upd-count-apps" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">via winget</span></div>
+                    <div class="ws-card ws-stat"><span class="ws-stat-label">Vídeo</span><span id="upd-count-gpu" class="ws-stat-value ws-mono">—</span><span class="ws-stat-foot">NVIDIA, AMD, Intel</span></div>
+                </div>
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="ws-card-title">Central de atualizações</div>
+                            <div class="ws-card-sub">Procura tudo o que este PC deveria ter atualizado: Windows, drivers, programas e vídeo. Tudo vem de fontes oficiais (Microsoft, winget e fabricantes) e nada é instalado sem você escolher.</div>
+                            <span id="upd-last-check" class="ws-stat-foot ws-mono block mt-1">Nenhuma verificação nesta sessão</span>
+                        </div>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="scanUpdates()" id="upd-btn-scan" class="ws-btn">Verificar agora</button>
+                            <button onclick="installSelectedUpdates()" id="upd-btn-install" class="ws-btn primary" disabled>Atualizar selecionadas</button>
+                        </div>
+                    </div>
+
+                    <div id="upd-progress" class="hidden mt-4">
+                        <div class="flex items-center justify-between gap-3 text-[12px] mb-1.5">
+                            <span class="min-w-0 truncate"><span id="upd-progress-step" class="ws-strong">Preparando…</span> <span id="upd-progress-current" class="ws-muted"></span></span>
+                            <span class="flex items-center gap-3 flex-shrink-0">
+                                <span id="upd-progress-count" class="ws-mono ws-muted"></span>
+                                <button onclick="cancelUpdates()" id="upd-btn-cancel" class="ws-btn sm ghost">Parar após o item atual</button>
+                            </span>
+                        </div>
+                        <div class="ws-meter"><span id="upd-progress-bar" style="width:0%"></span></div>
+                    </div>
+                </div>
+
+                <div id="upd-notes" class="flex flex-col gap-2"></div>
+
+                <details class="ws-card">
+                    <summary class="ws-card-title cursor-pointer">Como o WinShield escolhe e instala as atualizações</summary>
+                    <ul class="ws-card-sub list-disc pl-5 mt-3 space-y-1.5">
+                        <li><b>Ponto de restauração antes de tudo.</b> Se algo der errado, dá para voltar o Windows ao estado anterior em "Criar ponto de restauração" → "Restauração do Sistema".</li>
+                        <li><b>Só fontes oficiais.</b> Windows e drivers vêm dos servidores da Microsoft, os programas vêm do winget (que confere o hash SHA-256 do instalador) e o vídeo vem do site da NVIDIA ou da Intel, com a assinatura digital do fabricante conferida antes de executar.</li>
+                        <li><b>Drivers nunca regridem.</b> O Windows Update às vezes oferece drivers mais antigos que o instalado. Esses ficam ocultos.</li>
+                        <li><b>Ordem segura:</b> Windows → drivers → programas → vídeo. O driver de vídeo vem desmarcado porque a tela pisca durante a instalação.</li>
+                        <li><b>Parar é seguro:</b> o botão de parar espera o item atual terminar, porque interromper uma instalação no meio pode corromper o sistema.</li>
+                    </ul>
+                </details>
+
+                <div id="upd-groups" class="flex flex-col gap-5">
+                    <div class="ws-card ws-empty">Clique em "Verificar agora" para procurar atualizações. A primeira consulta ao Windows Update pode levar alguns minutos.</div>
+                </div>
+            </section>
