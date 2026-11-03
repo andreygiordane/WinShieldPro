@@ -77,6 +77,9 @@ lucide.createIcons();
                 "nav.audit": "Auditoria",
                 "nav.antivirus": "Antivírus",
                 "nav.group_system": "SISTEMA",
+                "nav.group_support": "SUPORTE TÉCNICO",
+                "nav.support_licenses": "Licenças",
+                "nav.support_email": "E-mails",
                 "nav.clean": "Limpeza",
                 "nav.power": "Energia",
                 "nav.optimize": "Otimização",
@@ -94,7 +97,7 @@ lucide.createIcons();
                 "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
@@ -406,6 +409,9 @@ lucide.createIcons();
                 "nav.audit": "Audit",
                 "nav.antivirus": "Antivirus",
                 "nav.group_system": "SYSTEM",
+                "nav.group_support": "TECH SUPPORT",
+                "nav.support_licenses": "Licenses",
+                "nav.support_email": "E-mail",
                 "nav.clean": "Cleaner",
                 "nav.power": "Power",
                 "nav.optimize": "Optimization",
@@ -423,7 +429,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -735,6 +741,9 @@ lucide.createIcons();
                 "nav.audit": "Auditoría",
                 "nav.antivirus": "Antivirus",
                 "nav.group_system": "SISTEMA",
+                "nav.group_support": "SOPORTE TÉCNICO",
+                "nav.support_licenses": "Licencias",
+                "nav.support_email": "Correos",
                 "nav.clean": "Limpieza",
                 "nav.power": "Energía",
                 "nav.optimize": "Optimización",
@@ -752,7 +761,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.5",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -1061,6 +1070,8 @@ lucide.createIcons();
                 'network': { title: 'Rede', sub: 'Diagnósticos de sinal, latência com servidores mundiais e teste de velocidade' },
                 'devices': { title: 'Dispositivos e drivers', sub: 'Mapeamento de hardware Plug & Play e central de atualização de drivers' },
                 'updates': { title: 'Atualizações', sub: 'Windows, drivers, programas e vídeo, de fontes oficiais' },
+                'support-licenses': { title: 'Licenças', sub: 'Chaves do Windows, ativação, Office e programas antes de formatar' },
+                'support-email': { title: 'E-mails', sub: 'Contas, servidores, PST/OST e credenciais antes de formatar' },
                 'stability': { title: 'Teste de estresse', sub: 'Estresse contínuo de CPU, FPU, Caches e Memória RAM com telemetria e detecção de Throttling' },
             },
             'en': {
@@ -1081,6 +1092,8 @@ lucide.createIcons();
                 'network': { title: 'Network, Wi-Fi & Ping Central', sub: 'Signal diagnostics, world server latency tests, and real bandwidth speed' },
                 'devices': { title: 'Device Manager & Driver Center', sub: 'Plug & Play hardware audit and OEM/Windows Update driver center' },
                 'updates': { title: 'Updates', sub: 'Windows, drivers, apps and graphics from official sources' },
+                'support-licenses': { title: 'Licenses', sub: 'Windows keys, activation, Office and apps before formatting' },
+                'support-email': { title: 'E-mail', sub: 'Accounts, servers, PST/OST and credentials before formatting' },
                 'stability': { title: 'System Stability Test (StressPulse™)', sub: 'Continuous stress testing of CPU, FPU, Caches and Memory RAM with telemetry and Throttling detection' },
             },
             'es': {
@@ -1101,6 +1114,8 @@ lucide.createIcons();
                 'network': { title: 'Central de Red, Wi-Fi y Ping', sub: 'Diagnóstico de señal, latencia con servidores mundiales y prueba de velocidad' },
                 'devices': { title: 'Gestor de Dispositivos y Drivers', sub: 'Auditoría de hardware Plug & Play y central de actualización de drivers' },
                 'updates': { title: 'Actualizaciones', sub: 'Windows, drivers, programas y video de fuentes oficiales' },
+                'support-licenses': { title: 'Licencias', sub: 'Claves de Windows, activación, Office y programas antes de formatear' },
+                'support-email': { title: 'Correos', sub: 'Cuentas, servidores, PST/OST y credenciales antes de formatear' },
                 'stability': { title: 'Prueba de Estabilidad del Sistema (StressPulse™)', sub: 'Prueba de estrés continuo de CPU, FPU, Cachés y Memoria RAM con telemetría y detección de Throttling' },
             }
         };
@@ -1668,7 +1683,9 @@ lucide.createIcons();
             'power': { key: 'nav.group_system', badgeClass: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25' },
             'optimize': { key: 'nav.group_system', badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/25' },
             'maintenance': { key: 'nav.group_system', badgeClass: '' },
-            'terminal': { key: 'nav.group_system', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' }
+            'terminal': { key: 'nav.group_system', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' },
+            'support-licenses': { key: 'nav.group_support', badgeClass: '' },
+            'support-email': { key: 'nav.group_support', badgeClass: '' }
         };
 
         function updatePageCategoryBadge(tabId) {
@@ -1900,6 +1917,8 @@ lucide.createIcons();
             if (tabId === 'network') loadNetworkInfo();
             if (tabId === 'devices') loadDevicesInfo();
             if (tabId === 'updates') loadUpdates();
+            if (tabId === 'support-licenses') loadSupportLicenses();
+            if (tabId === 'support-email') loadSupportEmail();
             if (tabId === 'stability') {
                 loadStabilityInfo();
                 if (stabilityMode === 'bench') switchStabilityMode('bench');
@@ -5754,6 +5773,251 @@ lucide.createIcons();
             });
             list.innerHTML = html;
             lucide.createIcons();
+        }
+
+        // =====================================================================
+        // SUPORTE DE TI (licenças e e-mail antes de formatar)
+        // =====================================================================
+        let supportFolder = '';
+        let supportLicensesData = null;
+        let supportEmailData = null;
+        let supportBackupTimer = null;
+
+        async function ensureSupportFolder() {
+            if (supportFolder) return;
+            try {
+                const data = await (await fetch('/api/support/backup_folder')).json();
+                supportFolder = data.path || '';
+                document.querySelectorAll('.sup-folder-note').forEach(el => {
+                    el.innerText = data.note || '';
+                    el.style.color = data.on_system_drive ? 'var(--warn)' : '';
+                });
+            } catch (e) { /* o técnico digita a pasta */ }
+            document.querySelectorAll('.sup-folder-input').forEach(el => { el.value = supportFolder; });
+        }
+
+        function setSupportFolder(value) {
+            supportFolder = value;
+            document.querySelectorAll('.sup-folder-input').forEach(el => { if (el.value !== value) el.value = value; });
+        }
+
+        async function supportPost(path, body) {
+            const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            return res.json();
+        }
+
+        async function openSupportFolder() {
+            const data = await supportPost('/api/support/open_folder', { path: supportFolder });
+            if (data.status !== 'success') showToast('Pasta de backup', data.message, 'warning');
+        }
+
+        async function exportSupportReport(kind) {
+            if (!supportFolder) { showToast('Pasta de backup', 'Informe a pasta de backup.', 'warning'); return; }
+            showToast('Relatório', 'Gerando relatório…', 'info', 2000);
+            const data = await supportPost('/api/support/export', { kind, folder: supportFolder });
+            if (data.status === 'success') {
+                showToast('Relatório salvo', (data.files || []).join('\n'), 'success', 7000);
+            } else {
+                showToast('Relatório', data.message, 'error');
+            }
+        }
+
+        function supKv(rows) {
+            return `<dl class="ws-kv">${rows.filter(r => r[1]).map(([k, v, mono]) =>
+                `<dt>${escapeHtml(k)}</dt><dd class="${mono ? 'ws-mono' : ''}">${escapeHtml(v)}</dd>`).join('')}</dl>`;
+        }
+
+        function supKeyBlock(label, key, note) {
+            if (!key) return '';
+            return `<div class="flex flex-col gap-1.5">
+                <span class="ws-stat-label">${escapeHtml(label)}</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="ws-mono ws-strong text-[15px] select-all">${escapeHtml(key)}</span>
+                    <button class="ws-btn sm ghost" data-key="${escapeHtml(key)}" onclick="navigator.clipboard.writeText(this.dataset.key); showToast('Copiado', 'Chave copiada.', 'success', 1500)"><i data-lucide="copy"></i>Copiar</button>
+                </div>
+                ${note ? `<span class="ws-stat-foot">${escapeHtml(note)}</span>` : ''}
+            </div>`;
+        }
+
+        function supLicenseList(items, empty) {
+            if (!items.length) return `<div class="ws-card ws-empty">${empty}</div>`;
+            return items.map(it => `
+                <div class="ws-card ws-card-tight flex flex-wrap items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="ws-strong text-[13px]">${escapeHtml(it.name)}</div>
+                        <div class="ws-stat-foot">${escapeHtml([it.channel, it.source].filter(Boolean).join(' · '))}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        ${it.partial_key ? `<span class="ws-mono text-[12px]">final ${escapeHtml(it.partial_key)}</span>` : ''}
+                        <span class="ws-badge ${it.activated || /licensed|ativad/i.test(it.status || '') ? 'ok' : 'warn'}">${escapeHtml(it.status || '—')}</span>
+                    </div>
+                </div>`).join('');
+        }
+
+        async function loadSupportLicenses(force = false) {
+            ensureSupportFolder();
+            if (supportLicensesData && !force) return renderSupportLicenses();
+            const body = document.getElementById('sup-lic-body');
+            if (body) body.innerHTML = '<div class="ws-card ws-empty">Lendo licenças…</div>';
+            try {
+                supportLicensesData = await (await fetch('/api/support/licenses')).json();
+            } catch (e) {
+                if (body) body.innerHTML = `<div class="ws-note warn"><span>Falha ao ler licenças: ${escapeHtml(String(e))}</span></div>`;
+                return;
+            }
+            renderSupportLicenses();
+        }
+
+        function renderSupportLicenses() {
+            const d = supportLicensesData;
+            const body = document.getElementById('sup-lic-body');
+            if (!d || !body) return;
+            if (d.status !== 'success') { body.innerHTML = `<div class="ws-note warn"><span>${escapeHtml(d.message || 'Erro')}</span></div>`; return; }
+            document.getElementById('sup-lic-scanned').innerText = `${d.computer} · lido em ${d.scanned_at}`;
+            const w = d.windows;
+            const search = (document.getElementById('sup-lic-search')?.value || '').toLowerCase();
+            const programs = d.programs.filter(p => !search || `${p.name} ${p.publisher}`.toLowerCase().includes(search));
+            body.innerHTML = `
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                    <div class="ws-card flex flex-col gap-4">
+                        <div class="ws-card-title">Windows</div>
+                        ${supKv([['Edição', w.edition], ['Versão', `${w.display_version} (build ${w.build})`, true], ['ID do produto', w.product_id, true], ['Proprietário', w.registered_owner]])}
+                        ${supKeyBlock('Chave instalada (decodificada do registro)', w.installed_key, w.installed_key_note)}
+                        ${w.backup_key && w.backup_key !== w.installed_key ? supKeyBlock('Chave de backup (Proteção de Software)', w.backup_key, w.backup_key_note) : ''}
+                    </div>
+                    <div class="ws-card flex flex-col gap-4">
+                        <div class="ws-card-title">Chave OEM da BIOS/UEFI</div>
+                        ${d.oem.key ? supKeyBlock(d.oem.description || 'Chave do fabricante', d.oem.key, d.oem.note) : `<div class="ws-stat-foot">${escapeHtml(d.oem.note)}</div>`}
+                    </div>
+                </div>
+                <div class="ws-section"><div class="ws-section-title">Ativação do Windows</div>
+                    <div class="flex flex-col gap-2">${supLicenseList(d.activation, 'Nenhuma licença do Windows encontrada.')}</div></div>
+                <div class="ws-section"><div class="ws-section-title">Licenças do Office</div>
+                    <div class="ws-card-sub mb-2">Por segurança o Windows só guarda os 5 últimos caracteres da chave do Office. Assinaturas Microsoft 365 não têm chave: basta entrar com a conta após formatar.</div>
+                    <div class="flex flex-col gap-2">${supLicenseList(d.office, d.office_installs.length ? 'O Office está instalado, mas sem chave registrada (assinatura Microsoft 365 ou ativado pela conta).' : 'Nenhum Office instalado.')}</div></div>
+                <div class="ws-section">
+                    <div class="ws-section-head"><div class="ws-section-title">Programas instalados <span class="ws-badge">${d.programs.length}</span></div>
+                        <input type="text" id="sup-lic-search" class="ws-input w-full sm:w-72" placeholder="Buscar programa ou fabricante" value="${escapeHtml(search)}" oninput="renderSupportLicenses(); this.focus(); this.setSelectionRange(this.value.length, this.value.length)"></div>
+                    <div class="ws-card-sub mb-2">Não existe um local padrão para as chaves de programas de terceiros. Use esta lista para saber o que reinstalar e quais licenças pedir ao cliente.</div>
+                    <div class="ws-card ws-card-flush"><div class="overflow-auto max-h-[480px]"><table class="ws-table">
+                        <thead><tr><th>Programa</th><th>Versão</th><th>Fabricante</th><th>Instalado em</th></tr></thead>
+                        <tbody>${programs.map(p => `<tr><td class="ws-strong">${escapeHtml(p.name)}</td><td class="ws-mono">${escapeHtml(p.version || '—')}</td><td>${escapeHtml(p.publisher || '—')}</td><td class="ws-mono">${escapeHtml(p.install_date || '—')}</td></tr>`).join('')}</tbody>
+                    </table></div></div>
+                </div>`;
+            lucide.createIcons();
+        }
+
+        async function loadSupportEmail(force = false) {
+            ensureSupportFolder();
+            if (supportEmailData && !force) return renderSupportEmail();
+            const body = document.getElementById('sup-mail-body');
+            if (body) body.innerHTML = '<div class="ws-card ws-empty">Lendo contas de e-mail…</div>';
+            try {
+                supportEmailData = await (await fetch('/api/support/email')).json();
+            } catch (e) {
+                if (body) body.innerHTML = `<div class="ws-note warn"><span>Falha ao ler e-mails: ${escapeHtml(String(e))}</span></div>`;
+                return;
+            }
+            renderSupportEmail();
+            pollEmailBackup();
+        }
+
+        function supServer(s) {
+            if (!s || !s.host) return '—';
+            return `${s.host}:${s.port || '?'} · ${s.security} · ${s.user || 'sem usuário'}`;
+        }
+
+        function supAccountCard(a) {
+            return `<div class="ws-card ws-card-tight flex flex-col gap-2">
+                <div class="flex items-center gap-2 flex-wrap"><span class="ws-strong text-[13px]">${escapeHtml(a.email || a.name)}</span><span class="ws-badge info">${escapeHtml(a.type)}</span></div>
+                ${supKv([['Nome exibido', a.display_name], ['Entrada', a.incoming ? supServer(a.incoming) : '', true], ['Saída (SMTP)', a.outgoing ? supServer(a.outgoing) : '', true]])}
+                ${a.note ? `<span class="ws-stat-foot">${escapeHtml(a.note)}</span>` : ''}
+            </div>`;
+        }
+
+        function renderSupportEmail() {
+            const d = supportEmailData;
+            const body = document.getElementById('sup-mail-body');
+            if (!d || !body) return;
+            if (d.status !== 'success') { body.innerHTML = `<div class="ws-note warn"><span>${escapeHtml(d.message || 'Erro')}</span></div>`; return; }
+            document.getElementById('sup-mail-scanned').innerText = `${d.computer} · usuário ${d.user} · lido em ${d.scanned_at}`;
+
+            const dataFiles = d.outlook_profiles.flatMap(p => p.data_files).concat(d.outlook_loose_files);
+            const sum = list => list.reduce((t, f) => t + (f.size || 0), 0);
+            const options = [
+                ['outlook_data', 'Arquivos de dados do Outlook (PST/OST)', dataFiles.length ? `${dataFiles.length} arquivo(s) · ${formatBytes(sum(dataFiles))}. O OST é baixado de novo do servidor; o PST só existe aqui.` : 'Nenhum encontrado.', dataFiles.length > 0],
+                ['signatures', 'Assinaturas do Outlook', d.folders[0].exists ? formatBytes(d.folders[0].size) : 'Pasta não existe.', d.folders[0].exists],
+                ['roamcache', 'Autocompletar do Outlook (RoamCache)', d.folders[1].exists ? formatBytes(d.folders[1].size) : 'Pasta não existe.', d.folders[1].exists],
+                ['thunderbird', 'Perfis do Thunderbird (pasta inteira)', d.thunderbird.length ? `${d.thunderbird.length} perfil(is) · ${formatBytes(sum(d.thunderbird))}` : 'Nenhum perfil.', d.thunderbird.length > 0],
+            ];
+            document.getElementById('sup-mail-backup-options').innerHTML = options.map(([id, t, desc, avail]) => `
+                <label class="ws-option !items-start ${avail ? '' : 'opacity-50'}">
+                    <input type="checkbox" class="sup-mail-opt mt-0.5" value="${id}" ${avail ? 'checked' : 'disabled'}>
+                    <span class="min-w-0"><span class="t block">${t}</span><span class="d">${escapeHtml(desc)}</span></span>
+                </label>`).join('');
+            const running = [d.outlook_running ? 'Outlook' : '', d.thunderbird_running ? 'Thunderbird' : ''].filter(Boolean);
+            const btext = document.getElementById('sup-mail-backup-text');
+            if (btext) {
+                btext.innerText = running.length ? `Feche ${running.join(' e ')} antes de copiar.` : '';
+                btext.style.color = running.length ? 'var(--warn)' : '';
+            }
+
+            const outlook = d.outlook_profiles.length ? d.outlook_profiles.map(p => `
+                <div class="ws-section"><div class="ws-section-title">Outlook — perfil "${escapeHtml(p.name)}" <span class="ws-badge">Office ${escapeHtml(p.outlook_version)}</span></div>
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">${p.accounts.map(supAccountCard).join('') || '<div class="ws-card ws-empty">Nenhuma conta neste perfil.</div>'}</div>
+                </div>`).join('') : '<div class="ws-card ws-empty">Nenhum perfil do Outlook para este usuário.</div>';
+            const files = dataFiles.length ? `<div class="ws-card ws-card-flush"><div class="overflow-auto"><table class="ws-table">
+                    <thead><tr><th>Tipo</th><th>Caminho</th><th>Tamanho</th><th>Modificado</th></tr></thead>
+                    <tbody>${dataFiles.map(f => `<tr><td><span class="ws-badge">${f.kind}</span></td><td class="ws-mono text-[11.5px] break-all">${escapeHtml(f.path)}</td><td class="ws-mono">${escapeHtml(f.size_text)}</td><td class="ws-mono">${escapeHtml(f.modified || '—')}</td></tr>`).join('')}</tbody>
+                </table></div></div>` : '<div class="ws-card ws-empty">Nenhum arquivo PST/OST encontrado.</div>';
+            const tb = d.thunderbird.length ? d.thunderbird.map(t => `
+                <div class="ws-section"><div class="ws-section-title">Thunderbird — ${escapeHtml(t.name)} <span class="ws-badge">${escapeHtml(t.size_text)}</span></div>
+                    <div class="ws-stat-foot ws-mono mb-2">${escapeHtml(t.path)}</div>
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">${t.accounts.map(supAccountCard).join('') || '<div class="ws-card ws-empty">Nenhuma conta.</div>'}</div>
+                </div>`).join('') : '';
+            const creds = d.credentials.length ? `<div class="ws-card ws-card-flush"><div class="overflow-auto max-h-[360px]"><table class="ws-table">
+                    <thead><tr><th>Destino</th><th>Categoria</th><th>Tipo</th><th>Usuário</th></tr></thead>
+                    <tbody>${d.credentials.map(c => `<tr><td class="ws-mono text-[11.5px] break-all">${escapeHtml(c.target)}</td><td>${escapeHtml(c.category)}</td><td>${escapeHtml(c.type)}</td><td>${escapeHtml(c.user || '—')}</td></tr>`).join('')}</tbody>
+                </table></div></div>` : '<div class="ws-card ws-empty">Nenhuma credencial salva.</div>';
+
+            body.innerHTML = `
+                ${outlook}
+                <div class="ws-section"><div class="ws-section-title">Arquivos de dados do Outlook</div>${files}</div>
+                ${tb}
+                <div class="ws-section"><div class="ws-section-title">Gerenciador de Credenciais <span class="ws-badge">${d.credentials.length}</span></div>
+                    <div class="ws-card-sub mb-2">Logins salvos no Windows que precisarão ser digitados de novo após formatar. Só o destino e o usuário são mostrados; as senhas nunca são lidas.</div>${creds}</div>`;
+            lucide.createIcons();
+        }
+
+        async function startEmailBackup() {
+            if (!supportFolder) { showToast('Pasta de backup', 'Informe a pasta de backup.', 'warning'); return; }
+            const include = [...document.querySelectorAll('.sup-mail-opt:checked')].map(el => el.value);
+            const data = await supportPost('/api/support/backup', { folder: supportFolder, include });
+            if (data.status !== 'success') { showToast('Backup de e-mail', data.message, 'warning', 6000); return; }
+            showToast('Backup de e-mail', data.message, 'info');
+            pollEmailBackup();
+        }
+
+        async function pollEmailBackup() {
+            let st;
+            try { st = await (await fetch('/api/support/backup_status')).json(); } catch (e) { return; }
+            const box = document.getElementById('sup-mail-backup-progress');
+            const btn = document.getElementById('sup-mail-backup-btn');
+            if (btn) btn.disabled = st.running;
+            if (box) box.classList.toggle('hidden', !st.running && st.ok === null);
+            const pct = st.total_bytes ? Math.min(100, (st.done_bytes / st.total_bytes) * 100) : (st.running ? 0 : 100);
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+            set('sup-mail-backup-pct', `${pct.toFixed(0)}% · ${formatBytes(st.done_bytes)} de ${formatBytes(st.total_bytes)}`);
+            set('sup-mail-backup-current', st.running ? st.current : st.message);
+            const bar = document.getElementById('sup-mail-backup-bar');
+            if (bar) bar.style.width = `${pct}%`;
+            if (st.running) {
+                if (!supportBackupTimer) supportBackupTimer = setInterval(pollEmailBackup, 1000);
+            } else if (supportBackupTimer) {
+                clearInterval(supportBackupTimer);
+                supportBackupTimer = null;
+                showToast('Backup de e-mail', st.message + (st.errors.length ? '\n' + st.errors.slice(0, 3).join('\n') : ''), st.ok ? 'success' : 'warning', 8000);
+            }
         }
 
         // =====================================================================

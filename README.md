@@ -2,20 +2,20 @@
   <img src="imagens/logo.png" alt="WinShield Pro Enterprise Logo" width="360">
 </p>
 
-<h1 align="center">WinShield Pro v7.5 Enterprise Edition</h1>
+<h1 align="center">WinShield Pro v7.6 Enterprise Edition</h1>
 
 <p align="center">
   <strong>Central Definitiva de Diagnóstico de Hardware, Saúde de Discos, Drivers Oficiais, Benchmark, Segurança Forense e Otimização Avançada para Windows 10 e 11.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe">
-    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.5_(.exe)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
+  <a href="https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro-Setup.exe">
+    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.6_(Instalador)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
   </a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versão-7.5.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
+  <img src="https://img.shields.io/badge/Versão-7.6.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
   <img src="https://img.shields.io/badge/Plataforma-Windows_10_%7C_11_(x64)-0078D6?style=flat-square&logo=windows11&logoColor=white" alt="Plataforma">
   <img src="https://img.shields.io/badge/Python-3.15.1_Nativo-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Licen%C3%A7a-Propriet%C3%A1ria_%2F_Enterprise-F59E0B?style=flat-square" alt="Licença">
@@ -25,13 +25,21 @@
 
 ## 🌟 Visão Geral
 
-O **WinShield Pro v7.5 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
+O **WinShield Pro v7.6 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
 
 A versão **7.0** traz uma interface totalmente redesenhada, testes com metodologia documentada e motores de hardware de nível baixo (**Silicon Core™**, **Vision Engine™**, **RAMGuard™** e **DiskGuard™**), download direto de drivers de servidores oficiais (**NVIDIA, AMD, Intel, Realtek**) com pareamento inteligente, benchmark físico real e um gerenciador de processos reconstruído para tempo de resposta instantâneo.
 
 ---
 
 ## 📥 Download Direto do Executável
+
+### Novidades da versão 7.6
+
+* **Suporte técnico (pré-formatação e migração)** — nova seção no menu:
+  * **Licenças**: chave OEM gravada na BIOS/UEFI, chave do Windows decodificada do registro (com aviso quando é genérica de licença digital), status de ativação, licenças do Office (5 últimos caracteres) e lista de programas instalados;
+  * **E-mails**: contas do Outlook e do Thunderbird com servidores, portas e criptografia, arquivos PST/OST, assinaturas, autocompletar e entradas do Gerenciador de Credenciais. Nenhuma senha é lida;
+  * Relatórios em **TXT e HTML** e cópia dos arquivos de e-mail para a pasta de backup do cliente, sugerida automaticamente em outro disco ou pendrive.
+* **Instalador** — `WinShieldPro-Setup.exe` instala em `C:\Program Files\WinShield Pro` (ou na pasta escolhida), cria atalhos, instala o WebView2 se faltar e oferece, desmarcada, a exclusão da pasta no Windows Defender. O app abre bem mais rápido que o antigo executável de arquivo único.
 
 ### Novidades da versão 7.5
 
@@ -59,11 +67,11 @@ A versão **7.0** traz uma interface totalmente redesenhada, testes com metodolo
 A metodologia de cada medição está em [METODOLOGIA_DOS_TESTES.md](METODOLOGIA_DOS_TESTES.md).
 
 
-Não é necessário instalar Python, dependências ou compiladores para utilizar o WinShield Pro:
+Basta baixar e executar o instalador. Não é necessário instalar Python, dependências ou compiladores:
 
-* 🚀 **[Clique aqui para Baixar o WinShieldPro.exe (v7.5 Standalone)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro.exe)**
+* 🚀 **[Clique aqui para baixar o instalador (WinShieldPro-Setup.exe, v7.6)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro-Setup.exe)**
 * ⚠️ **Aviso do Windows:** o executável ainda não tem assinatura de código de uma autoridade certificadora, então o SmartScreen pode mostrar "Fornecedor desconhecido". Clique em **Mais informações → Executar assim mesmo**.
-* 🛡️ **Zero Dependências Externas:** Executável portátil integrado (*Single File*) pronto para rodar.
+* 📁 **Instalação:** padrão em `C:\Program Files\WinShield Pro`, com opção de escolher outra pasta. Desinstale por Configurações → Aplicativos.
 
 ---
 
@@ -299,7 +307,7 @@ WinShieldPro/
 ├── tests/                             # Bateria completa de testes automatizados (pytest)
 ├── build_exe.bat                      # Script 1-clique de compilação do executável .EXE
 ├── run_as_admin.bat                   # Inicializador seguro com elevação UAC
-├── version_info.txt                   # Metadados oficiais do executável (v7.5.0.0)
+├── version_info.txt                   # Metadados oficiais do executável (v7.6.0.0)
 └── winshield_app.py                   # Ponto de entrada da aplicação desktop
 ```
 

@@ -1,5 +1,5 @@
 """
-WinShield Pro v7.5 Enterprise - Servidor Desktop & API Central.
+WinShield Pro v7.6 Enterprise - Servidor Desktop & API Central.
 Gerencia a interface Web Desktop, rotas REST e integra todos os motores de sistema.
 """
 
@@ -36,6 +36,7 @@ from backend.device_engine import DeviceEngine
 from backend.stress_engine import StressEngine
 from backend.stress_bench_engine import StressBenchEngine
 from backend.update_engine import UpdateEngine
+from backend import support_engine
 
 
 class WinShieldRequestHandler(BaseHTTPRequestHandler):
@@ -193,6 +194,19 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
 
         elif url_path == "/api/updates/status":
             self._send_json(UpdateEngine.status())
+
+        # --- SUPORTE DE TI ---
+        elif url_path == "/api/support/licenses":
+            self._send_json(support_engine.scan_licenses())
+
+        elif url_path == "/api/support/email":
+            self._send_json(support_engine.scan_email())
+
+        elif url_path == "/api/support/backup_folder":
+            self._send_json(dict(support_engine.suggest_backup_folder(), status="success"))
+
+        elif url_path == "/api/support/backup_status":
+            self._send_json(support_engine.SupportBackupJob.status())
 
         elif url_path == "/api/devices/download_status":
             driver_id = None
@@ -528,6 +542,28 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             dest = data.get("folder")
             ok, msg = DeviceEngine.backup_drivers(dest)
             self._send_json({"status": "success" if ok else "error", "message": msg})
+
+        # --- SUPORTE DE TI ---
+        elif url_path == "/api/support/export":
+            try:
+                export = support_engine.export_email if data.get("kind") == "email" else support_engine.export_licenses
+                files = export(data.get("folder") or "")
+                self._send_json({"status": "success", "files": files,
+                                 "message": "Relatório salvo em TXT e HTML."})
+            except (ValueError, OSError) as ex:
+                self._send_json({"status": "error", "message": str(ex)})
+
+        elif url_path == "/api/support/backup":
+            ok, msg = support_engine.SupportBackupJob.start(data.get("folder") or "", data.get("include") or [])
+            self._send_json({"status": "success" if ok else "error", "message": msg})
+
+        elif url_path == "/api/support/open_folder":
+            folder = data.get("path") or ""
+            if os.path.isdir(folder):
+                subprocess.Popen(["explorer.exe", os.path.normpath(folder)])
+                self._send_json({"status": "success", "message": "Pasta aberta."})
+            else:
+                self._send_json({"status": "error", "message": "A pasta ainda não existe."})
 
         # --- CENTRAL DE ATUALIZAÇÕES ---
         elif url_path in ("/api/updates/scan", "/api/updates/install", "/api/updates/cancel",

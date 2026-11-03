@@ -35,8 +35,7 @@ certs/
 
 # --- COMPILAÇÃO & BUILD ARTIFACTS (PyInstaller / Executáveis) ---
 build/
-dist/*
-!dist/WinShieldPro.exe
+dist/
 *.spec.bak
 WinShieldProBuild/
 *.dll

@@ -1,0 +1,48 @@
+<section id="view-support-email" class="view-panel hidden ws-page">
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="ws-card-title">Contas de e-mail</div>
+                            <div class="ws-card-sub">Contas do Outlook e do Thunderbird com servidores, portas e criptografia, arquivos PST/OST, assinaturas e credenciais salvas no Windows. Nenhuma senha é lida ou exportada.</div>
+                            <span id="sup-mail-scanned" class="ws-stat-foot ws-mono block mt-1">—</span>
+                        </div>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="loadSupportEmail(true)" class="ws-btn">Ler novamente</button>
+                            <button onclick="exportSupportReport('email')" class="ws-btn primary">Salvar relatório (TXT + HTML)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ws-card sup-folder-card">
+                    <div class="flex flex-wrap items-end gap-3">
+                        <label class="flex-1 min-w-[280px]">
+                            <span class="ws-stat-label block mb-1">Pasta de backup do cliente</span>
+                            <input type="text" class="ws-input w-full ws-mono sup-folder-input" oninput="setSupportFolder(this.value)" placeholder="D:\SuporteTI_Backups\PC01">
+                        </label>
+                        <button onclick="openSupportFolder()" class="ws-btn">Abrir pasta</button>
+                    </div>
+                    <div class="ws-stat-foot mt-2 sup-folder-note"></div>
+                </div>
+
+                <div class="ws-card">
+                    <div class="ws-card-title">Copiar arquivos de e-mail para o backup</div>
+                    <div class="ws-card-sub">Os arquivos vão para a subpasta "Email" da pasta de backup. Feche o Outlook e o Thunderbird antes de copiar.</div>
+                    <div id="sup-mail-backup-options" class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3"></div>
+                    <div class="flex items-center justify-between gap-3 mt-3">
+                        <span id="sup-mail-backup-text" class="ws-stat-foot"></span>
+                        <button onclick="startEmailBackup()" id="sup-mail-backup-btn" class="ws-btn primary">Copiar selecionados</button>
+                    </div>
+                    <div id="sup-mail-backup-progress" class="hidden mt-3">
+                        <div class="flex items-center justify-between gap-3 text-[12px] mb-1.5">
+                            <span id="sup-mail-backup-current" class="ws-muted truncate min-w-0"></span>
+                            <span id="sup-mail-backup-pct" class="ws-mono ws-strong">0%</span>
+                        </div>
+                        <div class="ws-meter"><span id="sup-mail-backup-bar" style="width:0%"></span></div>
+                    </div>
+                </div>
+
+                <div id="sup-mail-body" class="flex flex-col gap-5">
+                    <div class="ws-card ws-empty">Lendo contas de e-mail…</div>
+                </div>
+            </section>

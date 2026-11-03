@@ -1,100 +1,100 @@
 @echo off
 :: ============================================================================
-:: WinShield Pro v7.5 Enterprise - Compilador Executável Standalone (.EXE)
-:: Inclui Manifesto de Administrador Nativo (--uac-admin) e Modo 100% Windowed
+:: WinShield Pro - Build completo: frontend -> PyInstaller (pasta) -> Instalador
+:: Resultado:
+::   dist\WinShieldPro\                     app pronto (pasta, modo onedir)
+::   dist\WinShieldPro-Setup.exe             instalador (se o Inno Setup estiver instalado)
 :: ============================================================================
-title Compilando WinShield Pro v7.5 para Executável Standalone (.exe)...
-
+setlocal
 cd /d "%~dp0"
 set "PROJECT_DIR=%~dp0"
 set "BUILD_ROOT=%TEMP%\WinShieldProBuild"
 set "TEMP_DIST=%BUILD_ROOT%\dist"
 set "TEMP_WORK=%BUILD_ROOT%\build"
-set "FINAL_EXE=%PROJECT_DIR%dist\WinShieldPro.exe"
+set "APP_DIR=%PROJECT_DIR%dist\WinShieldPro"
 
 :: Garante que pastas de scripts do Python estejam no PATH da sessão
 set "PATH=%APPDATA%\Python\Python315\Scripts;%LOCALAPPDATA%\Programs\Python\Python315\Scripts;%PATH%"
 
-echo =====================================================================
-echo       COMPILADOR WINSHIELD PRO v7.5 ENTERPRISE PARA WINDOWS
-echo =====================================================================
-echo.
-
-:: 1. Verificar se o Python está presente
 where python >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERRO] Python nao foi localizado no PATH do sistema.
-    echo Instale o Python 3.8+ em https://www.python.org/
     pause
-    exit /b
+    exit /b 1
 )
+for /f "delims=" %%V in ('python -c "from backend.core import APP_VERSION; print(APP_VERSION)"') do set "APP_VERSION=%%V"
+title Compilando WinShield Pro v%APP_VERSION%...
 
-:: 2. Instalar PyInstaller se nao estiver presente
-echo [1/3] Verificando instalacao do PyInstaller...
-python -m pip install pyinstaller
+echo =====================================================================
+echo       COMPILADOR WINSHIELD PRO v%APP_VERSION%
+echo =====================================================================
+echo.
 
-:: 3. Encerrar instâncias anteriores em execução para liberar o arquivo final
+echo [1/4] Verificando instalacao do PyInstaller...
+python -m pip install --quiet pyinstaller
+
 echo Encerrando possiveis instancias ativas do WinShieldPro...
-for /f "skip=1" %%P in ('wmic process where "name='WinShieldPro.exe'" get processid 2^>nul') do (
-    taskkill /PID %%P /F /T >nul 2>&1
-)
 taskkill /F /IM WinShieldPro.exe /T >nul 2>&1
 timeout /t 2 /nobreak >nul
-
-if exist "%FINAL_EXE%" (
-    attrib -h -s -r "%FINAL_EXE%" >nul 2>&1
-    del /f /q "%FINAL_EXE%" >nul 2>&1
-)
-if exist "%BUILD_ROOT%" (
-    rmdir /s /q "%BUILD_ROOT%" >nul 2>&1
-)
+if exist "%BUILD_ROOT%" rmdir /s /q "%BUILD_ROOT%" >nul 2>&1
 if not exist "%PROJECT_DIR%dist" mkdir "%PROJECT_DIR%dist"
 
-:: 4. Compilar em um diretório temporário estável para evitar bloqueios do arquivo final
 echo.
-echo [2/3] Recompilando frontend modular (HTML/JS/CSS)...
+echo [2/4] Recompilando frontend modular (HTML/JS/CSS)...
 python "%PROJECT_DIR%scripts\build_frontend.py"
 if %errorlevel% neq 0 (
     echo.
     echo [ERRO] Falha no build do frontend. Rode: python scripts\fetch_vendor.py
     pause
-    exit /b
+    exit /b 1
 )
 
 echo.
-echo [3/3] Compilando WinShieldPro.exe via WinShieldPro.spec...
-echo       Modo Janela Puro (sem console) + UAC Admin embutido.
-echo.
-
+echo [3/4] Compilando o app com PyInstaller (modo pasta, sem console, UAC embutido)...
 python -m PyInstaller --noconfirm --clean --distpath "%TEMP_DIST%" --workpath "%TEMP_WORK%" WinShieldPro.spec
-
 if %errorlevel% neq 0 (
     echo.
     echo [ERRO] Ocorreu uma falha durante a compilacao com PyInstaller.
     pause
-    exit /b
+    exit /b 1
 )
-
-copy /Y "%TEMP_DIST%\WinShieldPro.exe" "%FINAL_EXE%" >nul
-if %errorlevel% neq 0 (
+:: Espelha a pasta gerada em dist\WinShieldPro (remove arquivos de builds antigos)
+robocopy "%TEMP_DIST%\WinShieldPro" "%APP_DIR%" /MIR /NFL /NDL /NJH /NJS /NP >nul
+if %errorlevel% geq 8 (
     echo.
-    echo [ERRO] Falha ao copiar o executavel final para a pasta dist.
+    echo [ERRO] Falha ao copiar o app para %APP_DIR%.
     pause
-    exit /b
+    exit /b 1
 )
-
 rmdir /s /q "%BUILD_ROOT%" >nul 2>&1
 
-:: Sem assinatura: um certificado autoassinado so e confiavel no PC onde foi instalado.
-:: Para o Windows mostrar "Andrey Giordane" como fornecedor em qualquer PC e preciso
-:: um certificado de assinatura de codigo emitido por uma autoridade (CA) reconhecida.
+echo.
+echo [4/4] Gerando o instalador com Inno Setup...
+set "ISCC="
+for %%P in ("%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" "%ProgramFiles%\Inno Setup 6\ISCC.exe" "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe") do (
+    if exist %%P set "ISCC=%%~P"
+)
+if not defined ISCC (
+    echo [AVISO] Inno Setup 6 nao encontrado. O app foi gerado em:
+    echo       %APP_DIR%
+    echo Para gerar o instalador, instale o Inno Setup e rode este script de novo:
+    echo       winget install JRSoftware.InnoSetup
+    pause
+    exit /b 0
+)
+"%ISCC%" /Q /DAppVersion=%APP_VERSION% "%PROJECT_DIR%installer\WinShieldPro.iss"
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERRO] Falha ao gerar o instalador.
+    pause
+    exit /b 1
+)
 
 echo.
 echo =====================================================================
-echo SUCESSO! Executavel v7.5 gerado em:
-echo       %FINAL_EXE%
+echo SUCESSO! WinShield Pro v%APP_VERSION%
+echo   Instalador: %PROJECT_DIR%dist\WinShieldPro-Setup.exe
+echo   App (pasta): %APP_DIR%
 echo =====================================================================
-echo.
-echo O arquivo "WinShieldPro.exe" possui todos os modulos integrados (v7.5).
 echo.
 pause

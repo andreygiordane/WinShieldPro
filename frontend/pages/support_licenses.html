@@ -1,0 +1,33 @@
+<section id="view-support-licenses" class="view-panel hidden ws-page">
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="ws-card-title">Licenças instaladas</div>
+                            <div class="ws-card-sub">Chaves do Windows (registro e BIOS/UEFI), ativação, licenças do Office e programas instalados. Gere o relatório antes de formatar para reativar tudo depois.</div>
+                            <span id="sup-lic-scanned" class="ws-stat-foot ws-mono block mt-1">—</span>
+                        </div>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="loadSupportLicenses(true)" class="ws-btn">Ler novamente</button>
+                            <button onclick="exportSupportReport('licenses')" class="ws-btn primary">Salvar relatório (TXT + HTML)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ws-card sup-folder-card">
+                    <div class="flex flex-wrap items-end gap-3">
+                        <label class="flex-1 min-w-[280px]">
+                            <span class="ws-stat-label block mb-1">Pasta de backup do cliente</span>
+                            <input type="text" class="ws-input w-full ws-mono sup-folder-input" oninput="setSupportFolder(this.value)" placeholder="D:\SuporteTI_Backups\PC01">
+                        </label>
+                        <button onclick="openSupportFolder()" class="ws-btn">Abrir pasta</button>
+                    </div>
+                    <div class="ws-stat-foot mt-2 sup-folder-note"></div>
+                </div>
+
+                <div class="ws-note warn"><i data-lucide="key-round"></i><span>O relatório contém chaves de produto completas. Guarde-o em local seguro e não o envie por canais abertos.</span></div>
+
+                <div id="sup-lic-body" class="flex flex-col gap-5">
+                    <div class="ws-card ws-empty">Lendo licenças…</div>
+                </div>
+            </section>
