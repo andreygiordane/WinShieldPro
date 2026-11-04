@@ -803,6 +803,21 @@ class VisionEngine:
         except Exception:
             pass
 
+        # Temperatura, ventoinha e clock de memória informados pelo driver de vídeo ao Windows
+        # (mesma fonte do Gerenciador de Tarefas): vale para AMD, Intel e NVIDIA sem nvidia-smi
+        try:
+            from backend.telemetry import _WddmGpuSensors
+            wd = _WddmGpuSensors.read() or {}
+            if wd.get("temp") is not None:
+                sensors["temperature_gpu"] = int(round(wd["temp"]))
+                sensors["sensor_source"] = "Driver de vídeo (Windows)"
+            if wd.get("fan_rpm") and wd.get("fan_max_rpm"):
+                sensors["fan_speed_percent"] = int(round(wd["fan_rpm"] * 100 / wd["fan_max_rpm"]))
+            if wd.get("mem_clock_mhz"):
+                sensors["clock_memory_mhz"] = wd["mem_clock_mhz"]
+        except Exception:
+            pass
+
         return sensors
 
 

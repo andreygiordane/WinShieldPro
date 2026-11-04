@@ -1,5 +1,5 @@
 """
-WinShield Pro v7.7 Enterprise - Servidor Desktop & API Central.
+WinShield Pro v7.7.1 Enterprise - Servidor Desktop & API Central.
 Gerencia a interface Web Desktop, rotas REST e integra todos os motores de sistema.
 """
 
@@ -754,7 +754,7 @@ def app_about():
         "install_dir": install_dir,
         "data_dir": _app_data_dir(),
         "admin": bool(is_admin()),
-        "build": "Instalado" if getattr(sys, "frozen", False) else "Código-fonte (desenvolvimento)",
+        "build": "Executável portátil (.exe)" if getattr(sys, "frozen", False) else "Código-fonte (desenvolvimento)",
         "python": sys.version.split()[0],
         "windows": (lambda i: f"{i.get('os_caption') or i.get('os') or 'Windows'} · {i.get('os_version', '')} (build {i.get('os_build', '')})")(SystemEngine.static_info()) if IS_WINDOWS else sys.platform,
     }

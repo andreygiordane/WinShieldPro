@@ -100,7 +100,7 @@ lucide.createIcons();
                 "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
@@ -435,7 +435,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -770,7 +770,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -5950,7 +5950,7 @@ lucide.createIcons();
                 [`Disco ${fmt(disk.drive)} sequencial (leitura / gravação)`, `${fmt(disk.seq_read)} / ${fmt(disk.seq_write)} MB/s`],
                 [`Disco ${fmt(disk.drive)} aleatório 4 KB (leitura / gravação)`, `${fmt(disk.rnd_read_q1)} / ${fmt(disk.rnd_write_q1)} MB/s`],
                 ['Estabilidade sob carga', `${fmt(stab.stability)}% em ${fmt(stab.loops)} ciclo(s) · queda de clock ${fmt(stab.clock_drop_pct)}%`],
-                ['Temperatura máxima do CPU', stab.temp_max != null ? `${stab.temp_max} °C` : 'Sem sensor (ative o LibreHardwareMonitor no Teste de Estresse)'],
+                ['Temperatura máxima do CPU', stab.temp_max != null ? `${stab.temp_max} °C` : 'Sem sensor (o Windows não expõe a temperatura do processador nesta máquina)'],
             ];
             document.getElementById('apt-measures').innerHTML = rows.map(([k, v]) =>
                 `<dt>${escapeHtml(k)}</dt><dd class="ws-mono">${escapeHtml(v)}</dd>`).join('');
@@ -5971,7 +5971,7 @@ lucide.createIcons();
             try {
                 const d = await (await fetch('/api/app/about')).json();
                 const rows = [['Versão', d.version], ['Desenvolvedor', d.developer], ['Tipo de execução', d.build],
-                    ['Pasta de instalação', d.install_dir], ['Pasta de dados e relatórios', d.data_dir],
+                    ['Pasta do executável', d.install_dir], ['Pasta de dados e relatórios', d.data_dir],
                     ['Privilégios', d.admin ? 'Administrador' : 'Usuário comum (alguns módulos ficam limitados)'],
                     ['Windows', d.windows], ['Python', d.python]];
                 document.getElementById('about-details').innerHTML = rows.map(([k, v]) =>
@@ -6435,7 +6435,7 @@ lucide.createIcons();
             if (st.phase === 'done' && st.message) {
                 const fails = Object.entries(st.results || {}).filter(([, r]) => !r.ok);
                 notes.push(note(fails.length ? 'warn' : '', fails.length ? 'alert-triangle' : 'check-circle',
-                    `<b>${escapeHtml(st.message)}</b>` + fails.map(([id, r]) => `<br>• ${escapeHtml(id.replace(/^\w+:/, ''))}: ${escapeHtml(r.message)}`).join('')));
+                    `<b>${escapeHtml(st.message)}</b>` + fails.map(([id, r]) => `<br>• ${escapeHtml(r.title || id.replace(/^\w+:/, ''))}: ${escapeHtml(r.message)}`).join('')));
             }
             if (st.reboot_required) {
                 notes.push(`<div class="ws-note warn flex items-center justify-between gap-3"><span class="flex items-center gap-2"><i data-lucide="power"></i><span><b>Reinício necessário</b> para concluir as atualizações instaladas.</span></span><button onclick="rebootForUpdates()" class="ws-btn sm">Reiniciar agora</button></div>`);
@@ -6990,7 +6990,7 @@ lucide.createIcons();
                 chip('Disco', r.disk_w_mb_s != null ? `${r.disk_w_mb_s} / ${r.disk_r_mb_s} MB/s` : '—', 'info'),
                 chip('GPU (WebGL2)', cur.gpu_fps != null ? `${cur.gpu_fps} quadros/s` : '—', 'info'),
                 chip('Sensores', src.board ? 'LibreHardwareMonitor' : (src.temperatures || 'Windows'), noBoard ? 'warn' : 'ok'),
-            ].join('') + (noBoard ? `<div class="ws-hint">Ventoinhas, tensões e potência só aparecem com o LibreHardwareMonitor aberto (o Windows não expõe o chip Super I/O). Sem ele, esses campos ficam como <b>N/D</b> — nenhum valor é estimado.</div>` : '');
+            ].join('') + (noBoard ? `<div class="ws-hint">Ventoinhas, tensões e potência da placa-mãe não são expostos pelo Windows (ficam no chip Super I/O). Esses campos aparecem como <b>N/D</b> — nenhum valor é estimado.</div>` : '');
         }
 
 
@@ -7090,23 +7090,8 @@ lucide.createIcons();
             box.classList.toggle('hidden', !show);
             if (!show) return;
             const gpuTxt = cur.gpu_fan_pct !== null && cur.gpu_fan_pct !== undefined ? ` A ventoinha da GPU é lida pelo driver NVIDIA (${cur.gpu_fan_pct}% agora; 0% = parada em repouso).` : '';
-            const lhm = (st && st.lhm) || {};
             document.getElementById('stress-fans-notice-text').innerHTML =
-                `<b>Ventoinhas da placa-mãe indisponíveis.</b> O Windows não expõe o chip de controle (Super I/O); a leitura exige o LibreHardwareMonitor aberto como administrador.${gpuTxt}` +
-                (lhm.installed_path ? ` <span class="ws-mono">Encontrado: ${escapeHtml(lhm.installed_path)}</span>` : ' Não foi encontrado instalado neste PC.');
-            const btn = document.getElementById('stress-lhm-start-btn');
-            if (btn) btn.classList.toggle('hidden', !lhm.installed_path);
-        }
-
-        async function startLibreHardwareMonitor() {
-            try {
-                const data = await (await fetch('/api/sensors/lhm/start', { method: 'POST' })).json();
-                showToast('LibreHardwareMonitor', data.message, data.status === 'success' ? 'success' : 'warning', 5000);
-            } catch (e) { showToast('Erro', String(e), 'error'); }
-        }
-
-        async function openLibreHardwareMonitorSite() {
-            try { await fetch('/api/sensors/lhm/site', { method: 'POST' }); } catch (e) { }
+                `<b>Ventoinhas da placa-mãe indisponíveis.</b> O Windows não expõe o chip de controle das ventoinhas (Super I/O) sem drivers de terceiros.${gpuTxt}`;
         }
 
         function setStressTab(tabId) {

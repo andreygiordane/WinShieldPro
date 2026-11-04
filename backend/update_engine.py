@@ -277,7 +277,8 @@ $items = foreach ($u in $result.Updates) {
 
 # Instala na ordem recebida; cada etapa vira uma linha "@@{json}" lida em tempo real pelo Python
 _PS_WU_INSTALL = r"""
-$ids = @(%IDS% | ConvertFrom-Json)
+# Lista literal do PowerShell: no PS 5.1, ConvertFrom-Json devolve um array JSON como UM objeto só
+$ids = @(%IDS%)
 $cancelFile = %CANCEL%
 function Emit($h) { [Console]::Out.WriteLine('@@' + ($h | ConvertTo-Json -Compress)); [Console]::Out.Flush() }
 try {
@@ -583,7 +584,8 @@ class UpdateEngine:
     @classmethod
     def _result(cls, item_id, ok, message, reboot=False):
         with cls._lock:
-            cls._state["results"][item_id] = {"ok": ok, "message": message}
+            title = (cls._items.get(item_id) or {}).get("title") or item_id.split(":", 1)[-1]
+            cls._state["results"][item_id] = {"ok": ok, "message": message, "title": title}
             cls._state["progress"]["done"] = len(cls._state["results"])
             if reboot:
                 cls._state["reboot_required"] = True
@@ -636,7 +638,7 @@ class UpdateEngine:
             os.remove(cancel_file)
         update_ids = [i.split(":", 1)[1] for i in ids]
         script = (_PS_WU_INSTALL
-                  .replace("%IDS%", _ps_quote(json.dumps(update_ids)))
+                  .replace("%IDS%", ", ".join(_ps_quote(i) for i in update_ids))
                   .replace("%CANCEL%", _ps_quote(cancel_file)))
         titles = {i: cls._items[i]["title"] for i in ids if i in cls._items}
         cls._progress(current="Windows Update", step="Consultando os servidores da Microsoft")

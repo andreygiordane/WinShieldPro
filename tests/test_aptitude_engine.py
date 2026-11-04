@@ -46,3 +46,13 @@ def test_windows_home_fails_only_corporate():
 def test_low_ram_thresholds():
     v = _verdicts(_res(ram=4, threads=4))
     assert v["home"] == "warn" and v["business"] == "fail"
+
+
+def test_acpi_zone_used_only_when_it_behaves_like_a_sensor():
+    from backend.telemetry import _AcpiCpuTemp as A
+    A._range.clear()
+    assert [A.update({"TZ": 16.9}) for _ in range(3)] == [None, None, None]   # fixo e implausível
+    A._range.clear()
+    assert [A.update({"TZ": 27.8}) for _ in range(3)] == [None, None, None]   # fixo (comum em desktops)
+    A._range.clear()
+    assert [A.update({"CPU": v}) for v in (45.0, 46.0, 52.5)] == [None, None, 52.5]  # acompanha a carga

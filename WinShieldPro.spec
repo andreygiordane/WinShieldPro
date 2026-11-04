@@ -63,19 +63,20 @@ a = Analysis(
 )
 pyz = PYZ(a.pure)
 
-# Modo pasta (onedir): o instalador copia a pasta pronta, então o app abre direto,
-# sem extrair ~28 MB no %TEMP% a cada execução como no modo arquivo único.
+# Executável único e portátil (não precisa instalar): tudo vai dentro do WinShieldPro.exe.
 # Sem UPX: executáveis comprimidos com UPX disparam muito mais falsos positivos de antivírus.
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='WinShieldPro',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
+    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -85,13 +86,4 @@ exe = EXE(
     uac_admin=True,
     icon='imagens/icone.ico',
     version='version_info.txt',
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=False,
-    name='WinShieldPro',
 )

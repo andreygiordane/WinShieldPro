@@ -134,6 +134,8 @@ class StressBenchEngine:
         # Só sensor real do processador (LibreHardwareMonitor). Zonas térmicas ACPI medem um
         # ponto da placa-mãe (às vezes um valor fixo) e não são usadas como temperatura do CPU.
         temp_source = sens.get("external_source") if temp is not None else None
+        if temp is None and cpu.get("acpi_cpu_temp") is not None:
+            temp, temp_source = cpu["acpi_cpu_temp"], "Zona térmica ACPI (acompanha a carga)"
         lim = [v for v in (cpu.get("performance_limit_pct"), cpu.get("thermal_passive_limit_pct")) if v is not None]
         return {
             "temp": round(temp, 1) if temp is not None else None,

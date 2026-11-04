@@ -319,6 +319,126 @@ def _num_suffix(name):
 # ==============================================================================
 # NVIDIA (nvidia-smi)
 # ==============================================================================
+class _AcpiCpuTemp:
+    """
+    Zona térmica ACPI usada como temperatura do processador SOMENTE quando se comporta
+    como sensor real: valor plausível (25 a 110 °C) e que já variou pelo menos 2 °C
+    durante o uso. Em muitos notebooks a zona acompanha o CPU; em vários desktops é um
+    valor fixo do firmware (ex.: 16,9 °C parado) e nunca é aceita.
+    """
+    _range = {}  # zona -> (mínimo, máximo) observados nesta sessão
+
+    @classmethod
+    def update(cls, zones):
+        valid = []
+        for name, value in (zones or {}).items():
+            lo, hi = cls._range.get(name, (value, value))
+            lo, hi = min(lo, value), max(hi, value)
+            cls._range[name] = (lo, hi)
+            if 25.0 <= value <= 110.0 and hi - lo >= 2.0:
+                valid.append(value)
+        return max(valid) if valid else None
+
+
+class _WddmGpuSensors:
+    """
+    Sensores da GPU informados pelo próprio driver de vídeo ao Windows (WDDM), a mesma
+    fonte da temperatura da GPU no Gerenciador de Tarefas. Funciona para NVIDIA, AMD e
+    Intel sem programa de terceiros (requer Windows 10 2004+ e driver com suporte).
+    """
+    _cache, _ts = None, 0.0
+
+    @classmethod
+    def read(cls):
+        if not IS_WINDOWS:
+            return None
+        now = time.time()
+        if now - cls._ts < 1.0:
+            return cls._cache
+        cls._ts = now
+        try:
+            cls._cache = _wddm_query()
+        except Exception:
+            cls._cache = None
+        return cls._cache
+
+
+def _wddm_query():
+    import ctypes
+    from ctypes import wintypes as w
+
+    class LUID(ctypes.Structure):
+        _fields_ = [("LowPart", w.DWORD), ("HighPart", w.LONG)]
+
+    class ADAPTERINFO(ctypes.Structure):
+        _fields_ = [("hAdapter", ctypes.c_uint), ("AdapterLuid", LUID), ("NumOfSources", ctypes.c_ulong),
+                    ("bPrecisePresentRegionsPreferred", w.BOOL)]
+
+    class ENUMADAPTERS2(ctypes.Structure):
+        _fields_ = [("NumAdapters", ctypes.c_ulong), ("pAdapters", ctypes.POINTER(ADAPTERINFO))]
+
+    class QUERYADAPTERINFO(ctypes.Structure):
+        _fields_ = [("hAdapter", ctypes.c_uint), ("Type", ctypes.c_int), ("pPrivateDriverData", ctypes.c_void_p),
+                    ("PrivateDriverDataSize", ctypes.c_uint)]
+
+    class PERFDATA(ctypes.Structure):  # D3DKMT_ADAPTER_PERFDATA
+        _fields_ = [("PhysicalAdapterIndex", ctypes.c_uint), ("MemoryFrequency", ctypes.c_ulonglong),
+                    ("MaxMemoryFrequency", ctypes.c_ulonglong), ("MaxMemoryFrequencyOC", ctypes.c_ulonglong),
+                    ("MemoryBandwidth", ctypes.c_ulonglong), ("PCIEBandwidth", ctypes.c_ulonglong),
+                    ("FanRPM", ctypes.c_ulong), ("Power", ctypes.c_ulong), ("Temperature", ctypes.c_ulong),
+                    ("PowerStateOverride", ctypes.c_ubyte)]
+
+    class PERFDATACAPS(ctypes.Structure):  # D3DKMT_ADAPTER_PERFDATACAPS
+        _fields_ = [("PhysicalAdapterIndex", ctypes.c_uint), ("MaxMemoryBandwidth", ctypes.c_ulonglong),
+                    ("MaxPCIEBandwidth", ctypes.c_ulonglong), ("MaxFanRPM", ctypes.c_ulong),
+                    ("TemperatureMax", ctypes.c_ulong), ("TemperatureWarning", ctypes.c_ulong)]
+
+    class DEVICEIDS(ctypes.Structure):
+        _fields_ = [("PhysicalAdapterIndex", ctypes.c_uint), ("VendorID", ctypes.c_uint), ("DeviceID", ctypes.c_uint),
+                    ("SubVendorID", ctypes.c_uint), ("SubSystemID", ctypes.c_uint), ("RevisionID", ctypes.c_uint),
+                    ("BusType", ctypes.c_uint)]
+
+    gdi = ctypes.WinDLL("gdi32")
+
+    def query(handle, qtype, buf):
+        q = QUERYADAPTERINFO(handle, qtype, ctypes.cast(ctypes.byref(buf), ctypes.c_void_p), ctypes.sizeof(buf))
+        return gdi.D3DKMTQueryAdapterInfo(ctypes.byref(q)) == 0
+
+    enum = ENUMADAPTERS2(0, None)
+    if gdi.D3DKMTEnumAdapters2(ctypes.byref(enum)) != 0 or not enum.NumAdapters:
+        return None
+    adapters = (ADAPTERINFO * enum.NumAdapters)()
+    enum.pAdapters = adapters
+    if gdi.D3DKMTEnumAdapters2(ctypes.byref(enum)) != 0:
+        return None
+    result = None
+    for a in adapters[:enum.NumAdapters]:
+        try:
+            ids, perf, caps = DEVICEIDS(), PERFDATA(), PERFDATACAPS()
+            # 0x1414 = renderizador por software da Microsoft (sem sensores)
+            if not query(a.hAdapter, 31, ids) or ids.VendorID == 0x1414:
+                continue
+            if not query(a.hAdapter, 62, perf) or not perf.Temperature:
+                continue
+            has_caps = query(a.hAdapter, 63, caps)
+            entry = {
+                "pci_id": f"{ids.VendorID:04X}:{ids.DeviceID:04X}",
+                "temp": round(perf.Temperature / 10.0, 1),
+                "fan_rpm": perf.FanRPM or None,
+                "fan_max_rpm": (caps.MaxFanRPM or None) if has_caps else None,
+                "power_pct": round(perf.Power / 10.0, 1) if perf.Power else None,
+                "mem_clock_mhz": round(perf.MemoryFrequency / 1e6) if perf.MemoryFrequency else None,
+                "temp_max": round(caps.TemperatureMax / 10.0, 1) if has_caps and caps.TemperatureMax else None,
+                "temp_warning": round(caps.TemperatureWarning / 10.0, 1) if has_caps and caps.TemperatureWarning else None,
+            }
+            # Fica com a GPU mais quente (a dedicada, quando há integrada também)
+            if result is None or entry["temp"] > result["temp"]:
+                result = entry
+        finally:
+            gdi.D3DKMTCloseAdapter(ctypes.byref(ctypes.c_uint(a.hAdapter)))
+    return result
+
+
 class _NvidiaSensors:
     _lock = threading.Lock()
     _last = 0.0
@@ -484,6 +604,7 @@ class Telemetry:
             "clock_source": clock_source,
             "performance_limit_pct": perf_limit,   # % do clock permitido (100 = sem limitação)
             "thermal_zones": tz_temps,             # {nome_da_zona: °C}
+            "acpi_cpu_temp": _AcpiCpuTemp.update(tz_temps),  # só quando a zona se comporta como sensor real
             "thermal_passive_limit_pct": round(passive_min, 1) if passive_min is not None else None,
             "logical_cpus": os.cpu_count() or len(per_core_usage) or 1,
         }
@@ -493,7 +614,8 @@ class Telemetry:
         """Sensores de placa-mãe/CPU/GPU quando houver fonte real disponível."""
         ext = _ExternalSensors.request()
         nv = _NvidiaSensors.read()
-        return {"external": ext, "external_source": _ExternalSensors.source(), "nvidia": nv}
+        return {"external": ext, "external_source": _ExternalSensors.source(), "nvidia": nv,
+                "wddm_gpu": _WddmGpuSensors.read()}
 
     @staticmethod
     def memory():

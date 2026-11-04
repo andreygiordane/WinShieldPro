@@ -327,12 +327,16 @@ class StressEngine:
         sens = Telemetry.sensors()
         ext = sens.get("external") or {}
         nv = sens.get("nvidia") or {}
+        wddm = sens.get("wddm_gpu") or {}
         mem = Telemetry.memory()
         batt_status, batt_pct = Telemetry.battery()
 
-        # Só sensor real do processador; zonas térmicas ACPI medem a placa-mãe, não o CPU
+        # Sensor do processador: LibreHardwareMonitor (se já estiver aberto) ou zona térmica ACPI
+        # do Windows apenas quando ela acompanha a carga (ver _AcpiCpuTemp). Nunca um valor fixo.
         cpu_temp = ext.get("cpu_temp")
         temp_source = "LibreHardwareMonitor" if cpu_temp is not None else None
+        if cpu_temp is None and cpu.get("acpi_cpu_temp") is not None:
+            cpu_temp, temp_source = cpu["acpi_cpu_temp"], "Zona térmica ACPI (acompanha a carga)"
 
         disk_temp = (ext.get("disk_temps") or [None])[0]
         if disk_temp is None and getattr(cls, "_disk_is_nvme", False):
@@ -379,7 +383,8 @@ class StressEngine:
             "mobo_temp": ext.get("mobo_temp"),
             "disk_temp": disk_temp,
             "disk_name": cls._disk_model_name,
-            "gpu_temp": nv.get("temp") if nv.get("temp") is not None else ext.get("gpu_temp"),
+            # GPU: nvidia-smi → sensor do driver de vídeo no Windows (qualquer fabricante) → LibreHardwareMonitor
+            "gpu_temp": nv.get("temp") if nv.get("temp") is not None else (wddm.get("temp") if wddm.get("temp") is not None else ext.get("gpu_temp")),
             "gpu_hotspot": ext.get("gpu_hotspot"),
             "gpu_name": cls._gpu_model_name,
             "gpu_usage": nv.get("usage"),
@@ -420,7 +425,8 @@ class StressEngine:
             "sensor_sources": {
                 "temperatures": temp_source,
                 "board": sens.get("external_source"),
-                "gpu": "nvidia-smi" if nv else (sens.get("external_source") if ext.get("gpu_temp") is not None else None),
+                "gpu": "nvidia-smi" if nv else ("Driver de vídeo (Windows)" if wddm.get("temp") is not None else
+                                                (sens.get("external_source") if ext.get("gpu_temp") is not None else None)),
                 "clocks": cpu.get("clock_source"),
             },
         }
