@@ -1,11 +1,12 @@
 """
-WinShield Pro v7.6 Enterprise - Servidor Desktop & API Central.
+WinShield Pro v7.7 Enterprise - Servidor Desktop & API Central.
 Gerencia a interface Web Desktop, rotas REST e integra todos os motores de sistema.
 """
 
 import os
 import sys
 import json
+import re
 import socket
 import threading
 import subprocess
@@ -37,6 +38,8 @@ from backend.stress_engine import StressEngine
 from backend.stress_bench_engine import StressBenchEngine
 from backend.update_engine import UpdateEngine
 from backend import support_engine
+from backend import pc_sheet_engine
+from backend.aptitude_engine import AptitudeEngine, export_report as export_aptitude_report
 
 
 class WinShieldRequestHandler(BaseHTTPRequestHandler):
@@ -194,6 +197,20 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
 
         elif url_path == "/api/updates/status":
             self._send_json(UpdateEngine.status())
+
+        # --- FICHA DO PC E TESTE DE APTIDÃO ---
+        elif url_path == "/api/sheet":
+            self._send_json(pc_sheet_engine.build_sheet("private=1" in self.path))
+
+        elif url_path == "/api/aptitude/status":
+            self._send_json(AptitudeEngine.status())
+
+        # --- SOBRE ---
+        elif url_path == "/api/app/about":
+            self._send_json(app_about())
+
+        elif url_path == "/api/app/latest":
+            self._send_json(app_latest_release())
 
         # --- SUPORTE DE TI ---
         elif url_path == "/api/support/licenses":
@@ -543,6 +560,32 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
             ok, msg = DeviceEngine.backup_drivers(dest)
             self._send_json({"status": "success" if ok else "error", "message": msg})
 
+        elif url_path in ("/api/sheet/export", "/api/aptitude/export"):
+            try:
+                if url_path == "/api/sheet/export":
+                    files, folder = pc_sheet_engine.export_sheet(bool(data.get("private")))
+                else:
+                    files, folder = export_aptitude_report()
+                self._send_json({"status": "success", "files": files, "folder": folder})
+            except (ValueError, OSError) as ex:
+                self._send_json({"status": "error", "message": str(ex)})
+
+        elif url_path == "/api/aptitude/start":
+            ok, msg = AptitudeEngine.start(data.get("preset") or "rapido")
+            self._send_json({"status": "success" if ok else "error", "message": msg})
+
+        elif url_path == "/api/aptitude/cancel":
+            ok, msg = AptitudeEngine.cancel()
+            self._send_json({"status": "success", "message": msg})
+
+        elif url_path == "/api/app/open_link":
+            # Só links fixos do projeto (nunca uma URL vinda da página)
+            link = APP_LINKS.get(data.get("link"))
+            if link:
+                import webbrowser
+                webbrowser.open(link)
+            self._send_json({"status": "success" if link else "error"})
+
         # --- SUPORTE DE TI ---
         elif url_path == "/api/support/export":
             try:
@@ -691,6 +734,49 @@ class WinShieldRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(content)))
         self.end_headers()
         self.wfile.write(content)
+
+
+APP_REPO = "andreygiordane/WinShieldPro"
+APP_LINKS = {
+    "repo": f"https://github.com/{APP_REPO}",
+    "releases": f"https://github.com/{APP_REPO}/releases",
+    "issues": f"https://github.com/{APP_REPO}/issues",
+}
+
+
+def app_about():
+    install_dir = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else base_dir()
+    return {
+        "status": "success",
+        "name": "WinShield Pro",
+        "version": APP_VERSION,
+        "developer": "Andrey Giordane",
+        "install_dir": install_dir,
+        "data_dir": _app_data_dir(),
+        "admin": bool(is_admin()),
+        "build": "Instalado" if getattr(sys, "frozen", False) else "Código-fonte (desenvolvimento)",
+        "python": sys.version.split()[0],
+        "windows": (lambda i: f"{i.get('os_caption') or i.get('os') or 'Windows'} · {i.get('os_version', '')} (build {i.get('os_build', '')})")(SystemEngine.static_info()) if IS_WINDOWS else sys.platform,
+    }
+
+
+def app_latest_release():
+    """Compara a versão instalada com a Release mais recente publicada no GitHub."""
+    import ssl
+    import urllib.request
+    try:
+        req = urllib.request.Request(f"https://api.github.com/repos/{APP_REPO}/releases/latest",
+                                     headers={"User-Agent": "WinShieldPro", "Accept": "application/vnd.github+json"})
+        with urllib.request.urlopen(req, context=ssl.create_default_context(), timeout=10) as r:
+            rel = json.loads(r.read().decode("utf-8"))
+    except Exception as ex:
+        return {"status": "error", "message": f"Não foi possível consultar o GitHub ({ex.__class__.__name__})."}
+    latest = (rel.get("tag_name") or "").lstrip("vV")
+    # "7.6" e "7.6.0" são a mesma versão: completa com zeros antes de comparar
+    as_tuple = lambda v: tuple((list(int(x) for x in re.findall(r"\d+", v)[:3]) + [0, 0, 0])[:3])
+    newer = bool(latest) and as_tuple(latest) > as_tuple(APP_VERSION)
+    return {"status": "success", "latest": latest, "current": APP_VERSION, "newer": newer,
+            "published_at": (rel.get("published_at") or "")[:10], "name": rel.get("name") or ""}
 
 
 def find_free_port(preferred=None):

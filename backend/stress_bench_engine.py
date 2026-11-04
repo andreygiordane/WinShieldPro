@@ -131,11 +131,9 @@ class StressBenchEngine:
         sens = Telemetry.sensors()
         ext = sens.get("external") or {}
         temp = ext.get("cpu_temp")
+        # Só sensor real do processador (LibreHardwareMonitor). Zonas térmicas ACPI medem um
+        # ponto da placa-mãe (às vezes um valor fixo) e não são usadas como temperatura do CPU.
         temp_source = sens.get("external_source") if temp is not None else None
-        if temp is None:
-            tz = cpu.get("thermal_zones") or {}
-            temp = max(tz.values()) if tz else None
-            temp_source = "Zona térmica ACPI (aproximada)" if temp is not None else None
         lim = [v for v in (cpu.get("performance_limit_pct"), cpu.get("thermal_passive_limit_pct")) if v is not None]
         return {
             "temp": round(temp, 1) if temp is not None else None,

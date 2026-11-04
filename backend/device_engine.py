@@ -12,7 +12,7 @@ import ssl
 import threading
 import urllib.request
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 
 from backend.core import IS_WINDOWS
@@ -78,6 +78,15 @@ NVIDIA_PFID_MAP = {
 }
 
 
+# Códigos do Gerenciador de Dispositivos (ConfigManagerErrorCode) mais comuns
+DEVICE_ERRORS = {
+    0: "Operacional", 1: "Configuração incorreta", 3: "Driver corrompido", 10: "Não pode ser iniciado",
+    12: "Sem recursos livres", 18: "Reinstalar o driver", 19: "Registro corrompido", 22: "Desativado",
+    24: "Não presente", 28: "Driver não instalado", 31: "Não funciona corretamente", 39: "Driver ausente ou corrompido",
+    43: "Parou por um problema", 45: "Desconectado", 52: "Assinatura do driver inválida",
+}
+
+
 class DeviceEngine:
     _cached_devices = None
     _cached_devices_time = 0.0
@@ -104,7 +113,16 @@ class DeviceEngine:
             return []
 
         ps_script = r"""
-        Get-CimInstance Win32_PnPSignedDriver | Where-Object DeviceName | Select-Object -Property DeviceName, DeviceClass, Manufacturer, DriverVersion, DriverDate, IsSigned | ConvertTo-Json -Compress
+        # Código de erro real do Gerenciador de Dispositivos (0 = funcionando) por dispositivo
+        $err = @{}
+        Get-CimInstance Win32_PnPEntity | ForEach-Object { $err[$_.PNPDeviceID] = [int]$_.ConfigManagerErrorCode }
+        Get-CimInstance Win32_PnPSignedDriver | Where-Object DeviceName | ForEach-Object {
+            [pscustomobject]@{
+                DeviceName = $_.DeviceName; DeviceClass = $_.DeviceClass; Manufacturer = $_.Manufacturer
+                DriverVersion = $_.DriverVersion; DriverDate = $_.DriverDate; IsSigned = $_.IsSigned
+                ErrorCode = if ($err.ContainsKey($_.DeviceID)) { $err[$_.DeviceID] } else { $null }
+            }
+        } | ConvertTo-Json -Compress
         """
 
         devices = []
@@ -151,7 +169,7 @@ class DeviceEngine:
                         m = re.search(r"/Date\((\d+)\)/", d_date)
                         if m:
                             try:
-                                dt = datetime.fromtimestamp(int(m.group(1)) / 1000)
+                                dt = datetime.fromtimestamp(int(m.group(1)) / 1000, tz=timezone.utc)
                                 fmt_date = dt.strftime("%d/%m/%Y")
                             except Exception:
                                 fmt_date = d_date[:10]
@@ -167,9 +185,10 @@ class DeviceEngine:
                         "manufacturer": mfg,
                         "driver_version": version,
                         "driver_date": fmt_date,
-                        "is_signed": bool(d.get("IsSigned", True)),
+                        "is_signed": bool(d.get("IsSigned")),
                         "is_third_party": is_third,
-                        "status": "Operacional"
+                        "status": DEVICE_ERRORS.get(d.get("ErrorCode"), f"Erro {d.get('ErrorCode')}")
+                        if d.get("ErrorCode") is not None else "Desconhecido"
                     })
         except Exception as e:
             LogManager.add_log(f"[AVISO] Falha ao coletar dispositivos: {e}")
@@ -518,7 +537,7 @@ class DeviceEngine:
             elif "3060" in gpu_name: pf_id = 957
             elif "3070" in gpu_name: pf_id = 949
             elif "3080" in gpu_name: pf_id = 948
-            else: pf_id = 1022  # Padrão desktop moderno
+            else: return None  # Modelo não mapeado: não chuta um pfid de outra placa
 
         # Consulta a API oficial AJAX da GeForce/NVIDIA
         headers = {
@@ -571,139 +590,27 @@ class DeviceEngine:
         except Exception as e:
             LogManager.add_log(f"[AVISO] Falha ao consultar API NVIDIA: {e}")
 
-        # Fallback para link oficial determinístico
-        fallback_ver = "621.01"
-        return {
-            "id": f"nvidia_generic",
-            "name": f"NVIDIA GeForce Game Ready Driver (Canal Oficial NVIDIA WHQL)",
-            "vendor": "NVIDIA",
-            "hardware_matched": gpu_name,
-            "category": "Vídeo (GPU)",
-            "installed_version": installed_ver,
-            "available_version": fallback_ver,
-            "release_date": "Outubro 2026",
-            "download_url": f"https://us.download.nvidia.com/Windows/{fallback_ver}/{fallback_ver}-desktop-win10-win11-64bit-international-dch-whql.exe",
-            "filename": f"NVIDIA-GeForce-Desktop-v{fallback_ver}-WHQL.exe",
-            "size_mb": 699.0,
-            "official_server": "us.download.nvidia.com (Servidor Oficial NVIDIA)",
-            "official_domain": "nvidia.com",
-            "is_newer": True,
-            "status": "Atualização Disponível",
-            "action_type": "download"
-        }
+        # Sem resposta da NVIDIA não há versão para mostrar (antes exibia uma versão fixa)
+        return None
 
     @staticmethod
     def _query_amd_official(has_gpu, has_cpu, paired_hw):
-        """Consulta o servidor oficial da AMD para chipset e drivers de vídeo."""
-        target_hw = "AMD Ryzen Chipset & Adrenalin"
-        for hw in paired_hw:
-            if hw.get("vendor") == "AMD":
-                target_hw = hw.get("hardware_name")
-                break
-
-        # Tenta raspar a versão mais recente diretamente do portal oficial da AMD
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-        }
-        official_url = None
-        version_label = "26.10.1"
-
-        try:
-            req = urllib.request.Request("https://www.amd.com/en/support", headers=headers)
-            with urllib.request.urlopen(req, context=_ssl_ctx, timeout=8) as r:
-                html = r.read().decode('utf-8', errors='ignore')
-                exes = re.findall(r'https?://drivers\.amd\.com/drivers/installer/[^\s\"\'<>]+\.exe', html)
-                if exes:
-                    official_url = exes[0]
-                    v_match = re.search(r'edition-([\d\.]+)-minimalsetup', official_url)
-                    if v_match:
-                        version_label = v_match.group(1)
-        except Exception:
-            pass
-
-        if not official_url:
-            official_url = "https://drivers.amd.com/drivers/installer/26.20/whql/amd-software-adrenalin-edition-26.10.1-minimalsetup-261018_web.exe"
-
-        return {
-            "id": "amd_software_official",
-            "name": f"AMD Software Adrenalin & Chipset Auto-Detect v{version_label}",
-            "vendor": "AMD",
-            "hardware_matched": target_hw,
-            "category": "Processador / GPU / Chipset",
-            "installed_version": "Suíte / Drivers Instalados",
-            "available_version": f"v{version_label} Oficial WHQL",
-            "release_date": "Canal Oficial AMD",
-            "download_url": official_url,
-            "filename": f"AMD-Software-Adrenalin-v{version_label}-AutoDetect.exe",
-            "size_mb": 45.6,
-            "official_server": "drivers.amd.com (Servidor Oficial AMD)",
-            "official_domain": "amd.com",
-            "is_newer": True,
-            "status": "Atualização Disponível",
-            "action_type": "download"
-        }
+        """Sem API pública de versão: nada é afirmado aqui. A Central de Atualizações
+        oferece o assistente/site oficial do fabricante."""
+        return None
 
     @staticmethod
     def _query_intel_official(paired_hw):
-        """Consulta o servidor oficial da Intel para o Driver & Support Assistant e drivers de rede/gráficos."""
-        intel_hw = "Intel Hardware & Chipset"
-        for hw in paired_hw:
-            if hw.get("vendor") == "Intel":
-                intel_hw = hw.get("hardware_name")
-                break
-
-        url = "https://downloadmirror.intel.com/28425/Intel-Driver-and-Support-Assistant-Installer.exe"
-        return {
-            "id": "intel_dsa_official",
-            "name": "Intel® Driver & Support Assistant (Instalador Oficial Intel)",
-            "vendor": "Intel",
-            "hardware_matched": intel_hw,
-            "category": "Processador / Wi-Fi / Gráficos",
-            "installed_version": "Hardware Intel Detectado",
-            "available_version": "Versão Oficial Mais Recente (Canal Intel)",
-            "release_date": "Canal Oficial Intel",
-            "download_url": url,
-            "filename": "Intel-Driver-and-Support-Assistant-Installer.exe",
-            "size_mb": 8.4,
-            "official_server": "downloadmirror.intel.com (Servidor Oficial Intel)",
-            "official_domain": "intel.com",
-            "is_newer": True,
-            "status": "Atualização Disponível",
-            "action_type": "download"
-        }
+        """Sem API pública de versão: nada é afirmado aqui. A Central de Atualizações
+        oferece o assistente/site oficial do fabricante."""
+        return None
 
     @staticmethod
     def _query_realtek_official(paired_hw):
-        """Consulta o canal oficial de homologação Realtek para adaptadores PCIe de Rede ou Wi-Fi."""
-        realtek_hw = "Realtek PCIe GbE Controller"
-        for hw in paired_hw:
-            if hw.get("vendor") == "Realtek":
-                realtek_hw = hw.get("hardware_name")
-                break
+        """Sem API pública de versão: nada é afirmado aqui. A Central de Atualizações
+        oferece o assistente/site oficial do fabricante."""
+        return None
 
-        return {
-            "id": "realtek_official",
-            "name": "Realtek PCIe Network & Wi-Fi Diagnostic Suite (WHQL)",
-            "vendor": "Realtek",
-            "hardware_matched": realtek_hw,
-            "category": "Rede & Comunicação",
-            "installed_version": "Controlador Ativo",
-            "available_version": "Pacote Oficial Certificado WHQL",
-            "release_date": "Canal Oficial Realtek / WHQL",
-            "download_url": "https://download.lenovo.com/consumer/mobiles/r100a08w.exe",
-            "filename": "Realtek-PCIe-Network-WHQL-Driver.exe",
-            "size_mb": 12.5,
-            "official_server": "Catálogo de Distribuição Homologado Realtek",
-            "official_domain": "realtek.com",
-            "is_newer": False,
-            "status": "Dispositivo Operacional",
-            "action_type": "download"
-        }
-
-    # =========================================================================
-    # GERENCIADOR DE DOWNLOADS DIRETOS NA FERRAMENTA
-    # =========================================================================
     @staticmethod
     def start_driver_download(driver_id, url=None, filename=None, name=None):
         """
@@ -904,7 +811,7 @@ class DeviceEngine:
         m = re.search(r"/Date\((\d+)\)/", s)
         if m:
             try:
-                dt = datetime.fromtimestamp(int(m.group(1)) / 1000)
+                dt = datetime.fromtimestamp(int(m.group(1)) / 1000, tz=timezone.utc)
                 return dt.strftime("%d/%m/%Y")
             except Exception:
                 return s[:10]

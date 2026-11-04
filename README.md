@@ -2,7 +2,7 @@
   <img src="imagens/logo.png" alt="WinShield Pro Enterprise Logo" width="360">
 </p>
 
-<h1 align="center">WinShield Pro v7.6 Enterprise Edition</h1>
+<h1 align="center">WinShield Pro v7.7 Enterprise Edition</h1>
 
 <p align="center">
   <strong>Central Definitiva de Diagnóstico de Hardware, Saúde de Discos, Drivers Oficiais, Benchmark, Segurança Forense e Otimização Avançada para Windows 10 e 11.</strong>
@@ -10,12 +10,12 @@
 
 <p align="center">
   <a href="https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro-Setup.exe">
-    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.6_(Instalador)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
+    <img src="https://img.shields.io/badge/Download-WinShield_Pro_v7.7_(Instalador)-00E5FF?style=for-the-badge&logo=windows&logoColor=black" alt="Baixar WinShield Pro Executável">
   </a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versão-7.6.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
+  <img src="https://img.shields.io/badge/Versão-7.7.0.0_Enterprise-0070F3?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Versão">
   <img src="https://img.shields.io/badge/Plataforma-Windows_10_%7C_11_(x64)-0078D6?style=flat-square&logo=windows11&logoColor=white" alt="Plataforma">
   <img src="https://img.shields.io/badge/Python-3.15.1_Nativo-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Licen%C3%A7a-Propriet%C3%A1ria_%2F_Enterprise-F59E0B?style=flat-square" alt="Licença">
@@ -25,13 +25,27 @@
 
 ## 🌟 Visão Geral
 
-O **WinShield Pro v7.6 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
+O **WinShield Pro v7.7 Enterprise** é uma suíte desktop profissional projetada para usuários exigentes, técnicos, analistas de suporte, gamers e administradores de TI. Desenvolvida nativamente para Windows com **arquitetura de alto desempenho**, **interface moderna reativa** e execução de comandos com privilégios de Administrador (UAC) de forma **100% invisível** — sem janelas pretas de CMD ou PowerShell piscando na tela.
 
 A versão **7.0** traz uma interface totalmente redesenhada, testes com metodologia documentada e motores de hardware de nível baixo (**Silicon Core™**, **Vision Engine™**, **RAMGuard™** e **DiskGuard™**), download direto de drivers de servidores oficiais (**NVIDIA, AMD, Intel, Realtek**) com pareamento inteligente, benchmark físico real e um gerenciador de processos reconstruído para tempo de resposta instantâneo.
 
 ---
 
 ## 📥 Download Direto do Executável
+
+### Novidades da versão 7.7
+
+* **Teste de aptidão** — bateria de testes com animação em três níveis (**Rápido ≈ 3 min**, **Moderado ≈ 6 min** e **Intenso ≈ 15 min**): processador, memória, disco do sistema e estabilidade sob carga total. Gera um laudo dizendo se a máquina atende uso **doméstico**, **comercial** ou de **escritório/corporativo**, com cada critério explicado (OK, Atenção ou Falha). Salva em TXT e HTML.
+* **Ficha do PC** — a configuração completa da máquina pronta para copiar ou salvar: resumo de uma linha, processador, placa-mãe, memória pente a pente, vídeo e monitores, discos com saúde, rede e áudio. Números de série e MAC só entram se você pedir.
+* **Menu Sobre** — versão, pastas de instalação e de dados, e aviso quando há versão nova no GitHub.
+* **Dados 100% reais** — auditoria de todos os motores; tudo o que era estimado, fixo ou presumido foi removido ou trocado por leitura real:
+  * datas de driver e BIOS (apareciam um dia antes);
+  * temperatura do CPU nos testes de estresse (vinha de um sensor da placa-mãe que não mede o processador);
+  * especificações e recursos da placa de vídeo (tabela que inventava para modelos parecidos) — agora VBIOS, PCIe, clocks e limite de energia lidos do driver;
+  * codinome do processador pelo CPUID, sem TDP genérico;
+  * vazão de cada algoritmo do benchmark de CPU agora medida separadamente;
+  * status real dos dispositivos, disco do sistema correto na Otimização, colunas da auditoria de serviços, nomes dos programas em execução;
+  * portas, usuários e criptografia de e-mail que não estão gravados aparecem como "porta padrão"/"não informado" em vez de valores presumidos.
 
 ### Novidades da versão 7.6
 
@@ -69,7 +83,7 @@ A metodologia de cada medição está em [METODOLOGIA_DOS_TESTES.md](METODOLOGIA
 
 Basta baixar e executar o instalador. Não é necessário instalar Python, dependências ou compiladores:
 
-* 🚀 **[Clique aqui para baixar o instalador (WinShieldPro-Setup.exe, v7.6)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro-Setup.exe)**
+* 🚀 **[Clique aqui para baixar o instalador (WinShieldPro-Setup.exe, v7.7)](https://github.com/andreygiordane/WinShieldPro/releases/latest/download/WinShieldPro-Setup.exe)**
 * ⚠️ **Aviso do Windows:** o executável ainda não tem assinatura de código de uma autoridade certificadora, então o SmartScreen pode mostrar "Fornecedor desconhecido". Clique em **Mais informações → Executar assim mesmo**.
 * 📁 **Instalação:** padrão em `C:\Program Files\WinShield Pro`, com opção de escolher outra pasta. Desinstale por Configurações → Aplicativos.
 
@@ -307,7 +321,7 @@ WinShieldPro/
 ├── tests/                             # Bateria completa de testes automatizados (pytest)
 ├── build_exe.bat                      # Script 1-clique de compilação do executável .EXE
 ├── run_as_admin.bat                   # Inicializador seguro com elevação UAC
-├── version_info.txt                   # Metadados oficiais do executável (v7.6.0.0)
+├── version_info.txt                   # Metadados oficiais do executável (v7.7.0.0)
 └── winshield_app.py                   # Ponto de entrada da aplicação desktop
 ```
 

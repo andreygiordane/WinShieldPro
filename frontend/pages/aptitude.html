@@ -1,0 +1,76 @@
+<section id="view-aptitude" class="view-panel hidden ws-page">
+
+                <!-- ESCOLHA DO NÍVEL -->
+                <div id="apt-setup" class="ws-page">
+                    <div class="ws-card">
+                        <div class="ws-card-title">Teste de aptidão</div>
+                        <div class="ws-card-sub">Coloca processador, memória, disco e refrigeração sob carga e diz se a máquina está funcionando bem para uso doméstico, comercial ou de escritório, explicando cada critério. Feche programas pesados antes de começar.</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <label class="ws-option !items-start">
+                            <input type="radio" name="apt-preset" value="rapido" checked class="mt-0.5">
+                            <span><span class="t block">Rápido · ≈ 3 min</span><span class="d">Verificação geral: CPU, 512 MB de memória, disco e 3 ciclos de carga total.</span></span>
+                        </label>
+                        <label class="ws-option !items-start">
+                            <input type="radio" name="apt-preset" value="moderado" class="mt-0.5">
+                            <span><span class="t block">Moderado · ≈ 6 min</span><span class="d">Mais preciso: 2 GB de memória com mais padrões, 1 GB no disco e 6 ciclos.</span></span>
+                        </label>
+                        <label class="ws-option !items-start">
+                            <input type="radio" name="apt-preset" value="intenso" class="mt-0.5">
+                            <span><span class="t block">Intenso · ≈ 15 min</span><span class="d">Para achar defeitos intermitentes: metade da memória livre (2 passes), 2 GB no disco e 10 ciclos longos.</span></span>
+                        </label>
+                    </div>
+                    <div class="flex justify-end"><button onclick="startAptitude()" class="ws-btn primary lg">Iniciar teste</button></div>
+                </div>
+
+                <!-- EM ANDAMENTO (animação) -->
+                <div id="apt-running" class="hidden ws-card">
+                    <div class="flex flex-col lg:flex-row items-center gap-8 py-4">
+                        <div class="relative w-56 h-56 flex-shrink-0">
+                            <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-spin" style="animation-duration:6s">
+                                <circle cx="100" cy="100" r="94" fill="none" stroke="var(--brand)" stroke-width="2" stroke-dasharray="4 10" opacity=".45"/>
+                            </svg>
+                            <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full -rotate-90">
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="var(--border-default)" stroke-width="12"/>
+                                <circle id="apt-ring" cx="100" cy="100" r="80" fill="none" stroke="var(--brand)" stroke-width="12" stroke-linecap="round"
+                                        stroke-dasharray="502.7" stroke-dashoffset="502.7" style="transition: stroke-dashoffset .9s ease"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                                <span id="apt-pct" class="ws-mono ws-strong text-[34px]">0%</span>
+                                <span id="apt-phase-label" class="ws-stat-foot animate-pulse">Preparando…</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full min-w-0 flex flex-col gap-3">
+                            <div id="apt-phase-list" class="flex flex-col gap-1.5"></div>
+                            <div class="grid grid-cols-2 gap-3 mt-1">
+                                <div><span class="ws-stat-label">Uso do processador</span>
+                                    <div class="ws-meter mt-1"><span id="apt-live-usage-bar" style="width:0%"></span></div>
+                                    <span id="apt-live-usage" class="ws-mono text-[12px] ws-muted">—</span></div>
+                                <div><span class="ws-stat-label">Clock médio</span>
+                                    <div class="ws-meter mt-1"><span id="apt-live-clock-bar" style="width:0%"></span></div>
+                                    <span id="apt-live-clock" class="ws-mono text-[12px] ws-muted">—</span></div>
+                            </div>
+                            <div class="flex justify-end"><button onclick="cancelAptitude()" class="ws-btn sm ghost">Cancelar</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LAUDO -->
+                <div id="apt-result" class="hidden ws-page">
+                    <div class="ws-card flex flex-wrap items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="ws-card-title">Laudo de aptidão</div>
+                            <div id="apt-result-sub" class="ws-card-sub"></div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="showAptitudeSetup()" class="ws-btn">Testar novamente</button>
+                            <button onclick="exportAptitude()" class="ws-btn primary">Salvar laudo (TXT + HTML)</button>
+                        </div>
+                    </div>
+                    <div id="apt-profiles" class="grid grid-cols-1 xl:grid-cols-3 gap-3"></div>
+                    <div class="ws-card">
+                        <div class="ws-card-title mb-1">Medições</div>
+                        <dl id="apt-measures" class="ws-kv"></dl>
+                    </div>
+                </div>
+            </section>

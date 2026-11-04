@@ -1,11 +1,11 @@
 ; ============================================================================
 ; WinShield Pro - Instalador (Inno Setup 6.3+)
-; Compilado pelo build_exe.bat:  ISCC /DAppVersion=7.6 installer\WinShieldPro.iss
+; Compilado pelo build_exe.bat:  ISCC /DAppVersion=7.7 installer\WinShieldPro.iss
 ; Empacota a pasta gerada pelo PyInstaller (dist\WinShieldPro) num único Setup.exe.
 ; ============================================================================
 
 #ifndef AppVersion
-  #define AppVersion "7.6"
+  #define AppVersion "7.7"
 #endif
 #ifndef SourceDir
   #define SourceDir "..\dist\WinShieldPro"

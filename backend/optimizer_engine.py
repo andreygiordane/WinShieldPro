@@ -247,7 +247,10 @@ class OptimizerEngine:
         is_laptop = False
         try:
             ps_check = r"""
-            $disk = Get-PhysicalDisk -ErrorAction SilentlyContinue | Sort-Object DeviceId | Select-Object -First 1
+            # Disco onde o Windows está instalado (não o primeiro da lista)
+            $sysNum = (Get-Partition -DriveLetter $env:SystemDrive[0] -ErrorAction SilentlyContinue).DiskNumber
+            $disk = Get-PhysicalDisk -ErrorAction SilentlyContinue | Where-Object { [string]$_.DeviceId -eq [string]$sysNum } | Select-Object -First 1
+            if (-not $disk) { $disk = Get-PhysicalDisk -ErrorAction SilentlyContinue | Sort-Object DeviceId | Select-Object -First 1 }
             $bat = Get-CimInstance Win32_Battery -ErrorAction SilentlyContinue | Select-Object -First 1
             [pscustomobject]@{
                 MediaType = if ($disk) { [string]$disk.MediaType } else { 'SSD' }

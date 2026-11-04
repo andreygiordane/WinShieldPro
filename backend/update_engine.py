@@ -267,7 +267,7 @@ $items = foreach ($u in $result.Updates) {
         $inst = if ($u.DriverHardwareID) { $map[([string]$u.DriverHardwareID).ToUpper()] } else { $null }
         if ($inst) {
             $o.device_name = $inst.DeviceName; $o.installed_version = $inst.DriverVersion
-            $o.installed_date = if ($inst.DriverDate) { ([datetime]$inst.DriverDate).ToString('yyyy-MM-dd') } else { '' }
+            $o.installed_date = if ($inst.DriverDate) { ([datetime]$inst.DriverDate).ToUniversalTime().ToString('yyyy-MM-dd') } else { '' }
         }
     }
     [PSCustomObject]$o

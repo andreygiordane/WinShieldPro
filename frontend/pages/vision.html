@@ -20,30 +20,15 @@
                     </div>
                     <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
                         <div class="ws-card">
-                            <div class="ws-card-head"><div class="ws-card-title">Chip gráfico</div></div>
-                            <dl class="ws-kv">
-                                <dt data-i18n="vision.architecture">Arquitetura</dt><dd id="vision-card-arch">—</dd>
-                                <dt>Litografia</dt><dd id="vision-card-process">—</dd>
-                                <dt data-i18n="vision.transistors">Transistores</dt><dd id="vision-card-transistors" class="ws-mono">—</dd>
-                                <dt>Shaders / unidades</dt><dd id="vision-card-cores" class="ws-mono">—</dd>
-                            </dl>
+                            <div class="ws-card-head"><div class="ws-card-title">Hardware</div></div>
+                            <dl id="vision-hw-list" class="ws-kv"><dt>—</dt><dd>Detectando…</dd></dl>
                         </div>
                         <div class="ws-card">
-                            <div class="ws-card-head"><div class="ws-card-title">Memória, driver e tela</div></div>
-                            <dl class="ws-kv">
-                                <dt data-i18n="vision.bus_width">Barramento de memória</dt><dd id="vision-card-bus" class="ws-mono">—</dd>
-                                <dt data-i18n="vision.bandwidth">Largura de banda</dt><dd id="vision-card-bandwidth" class="ws-mono">—</dd>
-                                <dt data-i18n="vision.driver_ver">Versão do driver</dt><dd id="vision-card-driver" class="ws-mono">—</dd>
-                                <dt data-i18n="vision.resolution">Resolução</dt><dd id="vision-card-res" class="ws-mono">—</dd>
-                            </dl>
+                            <div class="ws-card-head"><div class="ws-card-title">Driver e tela</div></div>
+                            <dl id="vision-display-list" class="ws-kv"><dt>—</dt><dd>Detectando…</dd></dl>
                         </div>
                     </div>
-                    <div class="ws-card">
-                        <div class="ws-card-head"><div class="ws-card-title" data-i18n="vision.features">Recursos suportados</div></div>
-                        <div id="vision-features-grid" class="flex flex-wrap gap-1.5">
-                            <span class="ws-muted text-[12.5px]">Detectando…</span>
-                        </div>
-                    </div>
+                    <p class="ws-stat-foot">Somente dados informados pelo Windows e pelo driver da placa. Especificações que o sistema não expõe (núcleos, litografia, ROPs) não são exibidas.</p>
                 </div>
 
                 <!-- SENSORES -->

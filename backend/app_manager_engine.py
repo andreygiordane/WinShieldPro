@@ -150,6 +150,65 @@ def _resolve_icon_and_category(exe_name, path, session, user, has_window, is_mat
     return category, icon, brand_color
 
 
+
+def _match_installed(installed_index, path, exe_dir_low, clean_exe_base):
+    r"""
+    Associa um processo ao programa instalado só com evidência concreta:
+      1. o ícone registrado do programa (DisplayIcon) é exatamente este executável;
+      2. a pasta de instalação mais longa que contém o executável, respeitando o limite de
+         pasta (para "C:\Program Files\Google" não capturar o Chrome).
+    Sem evidência, devolve None e o nome vem das informações de versão do próprio .exe.
+    Não se usa o comando de desinstalação (jogos da Steam desinstalam pelo steam.exe) nem
+    semelhança de nomes (o python.exe do 3.15 era associado ao "Python 2.7.18").
+    """
+    path_low = os.path.normcase(path or "")
+    best, best_len = None, 0
+    for inst in installed_index.values():
+        icon = (inst.get("display_icon") or "").split(",")[0].strip().strip('"')
+        if path_low and icon and os.path.normcase(icon) == path_low:
+            return inst
+        loc = (inst.get("install_location") or "").strip('" ').rstrip("\\/").lower()
+        if exe_dir_low and len(loc) > 3 and (exe_dir_low == loc or exe_dir_low.startswith(loc + "\\")) and len(loc) > best_len:
+            best, best_len = inst, len(loc)
+    return best
+
+
+_product_name_cache = {}
+
+
+def _exe_product_name(path):
+    """Nome do produto gravado no próprio executável (o mesmo do Gerenciador de Tarefas)."""
+    if not path or not IS_WINDOWS or ctypes is None:
+        return ""
+    if path in _product_name_cache:
+        return _product_name_cache[path]
+    name = ""
+    try:
+        ver = ctypes.WinDLL("version")
+        size = ver.GetFileVersionInfoSizeW(path, None)
+        if size:
+            buf = ctypes.create_string_buffer(size)
+            if ver.GetFileVersionInfoW(path, 0, size, buf):
+                ptr, length = ctypes.c_void_p(), ctypes.c_uint()
+                langs = []
+                if ver.VerQueryValueW(buf, "\\VarFileInfo\\Translation", ctypes.byref(ptr), ctypes.byref(length)) and length.value:
+                    raw = ctypes.string_at(ptr.value, length.value)
+                    langs = [f"{int.from_bytes(raw[i:i+2], 'little'):04x}{int.from_bytes(raw[i+2:i+4], 'little'):04x}"
+                             for i in range(0, len(raw), 4)]
+                for lang in langs + ["040904b0", "041604b0"]:
+                    for field in ("FileDescription", "ProductName"):
+                        if ver.VerQueryValueW(buf, f"\\StringFileInfo\\{lang}\\{field}", ctypes.byref(ptr), ctypes.byref(length)) and length.value:
+                            value = ctypes.wstring_at(ptr.value, length.value).strip("\x00 ").strip()
+                            if value:
+                                name = value
+                                break
+                    if name:
+                        break
+    except Exception:
+        name = ""
+    _product_name_cache[path] = name
+    return name
+
 class AppsManagerEngine:
     """Gerenciamento de programas abertos e desinstalação integrada."""
     _cached_installed_index = None
@@ -213,18 +272,7 @@ class AppsManagerEngine:
                     clean_exe_base = re.sub(r'[^a-z0-9]', '', lower_exe.replace(".exe", ""))
                     exe_dir_low = os.path.dirname(path).lower() if path else ""
 
-                    for k, inst in installed_index.items():
-                        inst_loc = (inst.get("install_location") or "").strip('" ').rstrip("\\/").lower()
-                        inst_path = (inst.get("caminho") or "").lower()
-                        if exe_dir_low and inst_loc and len(inst_loc) > 3 and exe_dir_low.startswith(inst_loc):
-                            matched_app = inst
-                            break
-                        if path and path.lower() in inst_path:
-                            matched_app = inst
-                            break
-                        if len(clean_exe_base) >= 4 and len(k) >= 4 and (clean_exe_base in k or k in clean_exe_base):
-                            matched_app = inst
-                            break
+                    matched_app = _match_installed(installed_index, path, exe_dir_low, clean_exe_base)
 
                     app_key = lower_exe
                     category, icon_hint, brand_color = _resolve_icon_and_category(
@@ -232,7 +280,7 @@ class AppsManagerEngine:
                     )
 
                     if app_key not in apps_dict:
-                        display_name = matched_app.get("nome") if matched_app else exe_name.replace(".exe", "").capitalize()
+                        display_name = (matched_app.get("nome") if matched_app else None) or _exe_product_name(path) or exe_name.replace(".exe", "").capitalize()
                         apps_dict[app_key] = {
                             "exe": exe_name,
                             "name": display_name,
@@ -346,18 +394,7 @@ class AppsManagerEngine:
             clean_exe_base = re.sub(r'[^a-z0-9]', '', lower_exe.replace(".exe", ""))
             exe_dir_low = os.path.dirname(path).lower() if path else ""
 
-            for k, inst in installed_index.items():
-                inst_loc = (inst.get("install_location") or "").strip('" ').rstrip("\\/").lower()
-                inst_path = (inst.get("caminho") or "").lower()
-                if exe_dir_low and inst_loc and len(inst_loc) > 3 and exe_dir_low.startswith(inst_loc):
-                    matched_app = inst
-                    break
-                if path and path.lower() in inst_path:
-                    matched_app = inst
-                    break
-                if len(clean_exe_base) >= 4 and len(k) >= 4 and (clean_exe_base in k or k in clean_exe_base):
-                    matched_app = inst
-                    break
+            matched_app = _match_installed(installed_index, path, exe_dir_low, clean_exe_base)
 
             app_key = lower_exe
             mem_kb = clean_mem_kb(mem_str)
@@ -367,7 +404,7 @@ class AppsManagerEngine:
             )
 
             if app_key not in apps_dict:
-                display_name = matched_app.get("nome") if matched_app else exe_name.replace(".exe", "").capitalize()
+                display_name = (matched_app.get("nome") if matched_app else None) or _exe_product_name(path) or exe_name.replace(".exe", "").capitalize()
                 apps_dict[app_key] = {
                     "exe": exe_name,
                     "name": display_name,

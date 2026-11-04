@@ -37,41 +37,66 @@ except ImportError:
 # ==============================================================================
 # TABELA DE ARQUITETURAS E INSTRUÇÕES DE CPU
 # ==============================================================================
+# Codinome e litografia pelo CPUID (família/modelo informados pelo Windows), que
+# identificam o silício exatamente. Comparar pedaços do nome confundia, por exemplo,
+# o Ryzen 7 5700X (Vermeer) com o 5700G/5600H (Cezanne). Modelo desconhecido = "—".
+CPU_CODENAMES = {
+    ("AMD", 23, 1): ("Summit Ridge / Naples (Zen)", "14 nm"),
+    ("AMD", 23, 8): ("Pinnacle Ridge (Zen+)", "12 nm"),
+    ("AMD", 23, 17): ("Raven Ridge (Zen)", "14 nm"),
+    ("AMD", 23, 24): ("Picasso (Zen+)", "12 nm"),
+    ("AMD", 23, 32): ("Dali (Zen)", "14 nm"),
+    ("AMD", 23, 49): ("Rome / Castle Peak (Zen 2)", "7 nm"),
+    ("AMD", 23, 96): ("Renoir (Zen 2)", "7 nm"),
+    ("AMD", 23, 104): ("Lucienne (Zen 2)", "7 nm"),
+    ("AMD", 23, 113): ("Matisse (Zen 2)", "7 nm"),
+    ("AMD", 23, 144): ("Van Gogh (Zen 2)", "7 nm"),
+    ("AMD", 23, 160): ("Mendocino (Zen 2)", "6 nm"),
+    ("AMD", 25, 1): ("Milan (Zen 3)", "7 nm"),
+    ("AMD", 25, 8): ("Chagall (Zen 3)", "7 nm"),
+    ("AMD", 25, 17): ("Genoa (Zen 4)", "5 nm"),
+    ("AMD", 25, 24): ("Storm Peak (Zen 4)", "5 nm"),
+    ("AMD", 25, 33): ("Vermeer (Zen 3)", "7 nm"),
+    ("AMD", 25, 68): ("Rembrandt (Zen 3+)", "6 nm"),
+    ("AMD", 25, 80): ("Cezanne (Zen 3)", "7 nm"),
+    ("AMD", 25, 97): ("Raphael (Zen 4)", "5 nm"),
+    ("AMD", 25, 116): ("Phoenix (Zen 4)", "4 nm"),
+    ("AMD", 25, 117): ("Hawk Point (Zen 4)", "4 nm"),
+    ("AMD", 25, 120): ("Phoenix 2 (Zen 4)", "4 nm"),
+    ("AMD", 26, 36): ("Strix Point (Zen 5)", "4 nm"),
+    ("AMD", 26, 68): ("Granite Ridge (Zen 5)", "4 nm"),
+    ("INTEL", 6, 78): ("Skylake (U)", "14 nm"),
+    ("INTEL", 6, 94): ("Skylake (S)", "14 nm"),
+    ("INTEL", 6, 126): ("Ice Lake (U)", "10 nm"),
+    ("INTEL", 6, 140): ("Tiger Lake (U)", "10 nm SuperFin"),
+    ("INTEL", 6, 141): ("Tiger Lake (H)", "10 nm SuperFin"),
+    ("INTEL", 6, 142): ("Kaby Lake / Coffee Lake / Whiskey Lake (U)", "14 nm"),
+    ("INTEL", 6, 151): ("Alder Lake (S)", "Intel 7"),
+    ("INTEL", 6, 154): ("Alder Lake (P)", "Intel 7"),
+    ("INTEL", 6, 158): ("Kaby Lake / Coffee Lake (S)", "14 nm"),
+    ("INTEL", 6, 165): ("Comet Lake (S)", "14 nm"),
+    ("INTEL", 6, 166): ("Comet Lake (U)", "14 nm"),
+    ("INTEL", 6, 167): ("Rocket Lake", "14 nm"),
+    ("INTEL", 6, 170): ("Meteor Lake", "Intel 4"),
+    ("INTEL", 6, 183): ("Raptor Lake (S)", "Intel 7"),
+    ("INTEL", 6, 186): ("Raptor Lake (P)", "Intel 7"),
+    ("INTEL", 6, 189): ("Lunar Lake", "TSMC N3B"),
+    ("INTEL", 6, 190): ("Alder Lake-N", "Intel 7"),
+    ("INTEL", 6, 191): ("Raptor Lake (S)", "Intel 7"),
+    ("INTEL", 6, 197): ("Arrow Lake (H)", "TSMC N3B"),
+    ("INTEL", 6, 198): ("Arrow Lake (S)", "TSMC N3B"),
+}
+
+
 def _detect_cpu_architecture(name, caption=""):
-    n = (name or "").upper()
-    if "RYZEN" in n:
-        if any(x in n for x in ("9000", "9950", "9900", "9800", "9700", "9600")):
-            return {"codename": "Granite Ridge (Zen 5)", "process": "4 nm TSMC", "socket": "Socket AM5", "tdp": "65 W - 170 W"}
-        if any(x in n for x in ("8700", "8600", "8500")):
-            return {"codename": "Phoenix / Hawk Point (Zen 4)", "process": "4 nm TSMC", "socket": "Socket AM5", "tdp": "65 W"}
-        if any(x in n for x in ("7950", "7900", "7800", "7700", "7600", "7500")):
-            return {"codename": "Raphael (Zen 4)", "process": "5 nm TSMC", "socket": "Socket AM5", "tdp": "65 W - 170 W"}
-        if any(x in n for x in ("5950", "5900", "5800", "5700", "5600", "5500")):
-            return {"codename": "Vermeer / Cezanne (Zen 3)", "process": "7 nm TSMC", "socket": "Socket AM4", "tdp": "65 W - 105 W"}
-        if any(x in n for x in ("4600", "4500", "4300", "4700")):
-            return {"codename": "Renoir (Zen 2)", "process": "7 nm TSMC", "socket": "Socket AM4", "tdp": "65 W"}
-        if any(x in n for x in ("3950", "3900", "3800", "3700", "3600", "3500", "3300", "3100")):
-            return {"codename": "Matisse (Zen 2)", "process": "7 nm TSMC", "socket": "Socket AM4", "tdp": "65 W - 105 W"}
-        if any(x in n for x in ("2700", "2600", "2400", "2200")):
-            return {"codename": "Pinnacle Ridge (Zen+)", "process": "12 nm", "socket": "Socket AM4", "tdp": "65 W - 105 W"}
-        return {"codename": "AMD Zen Architecture", "process": "TSMC FinFET", "socket": "AM4 / AM5", "tdp": "65 W"}
-    if "EPYC" in n or "THREADRIPPER" in n:
-        return {"codename": "AMD EPYC / Threadripper", "process": "TSMC FinFET", "socket": "SP3 / sTRX4", "tdp": "180 W+"}
-    if "INTEL" in n:
-        if "ULTRA" in n:
-            return {"codename": "Meteor Lake / Arrow Lake", "process": "Intel 4 / TSMC N3B", "socket": "LGA1851 / FCBGA", "tdp": "28 W - 125 W"}
-        if any(x in n for x in ("14900", "14700", "14600", "14500", "14400", "14100")):
-            return {"codename": "Raptor Lake Refresh (14th Gen)", "process": "Intel 7 (10 nm)", "socket": "LGA1700", "tdp": "65 W - 125 W"}
-        if any(x in n for x in ("13900", "13700", "13600", "13500", "13400", "13100")):
-            return {"codename": "Raptor Lake (13th Gen)", "process": "Intel 7 (10 nm)", "socket": "LGA1700", "tdp": "65 W - 125 W"}
-        if any(x in n for x in ("12900", "12700", "12600", "12500", "12400", "12100")):
-            return {"codename": "Alder Lake (12th Gen)", "process": "Intel 7 (10 nm)", "socket": "LGA1700", "tdp": "65 W - 125 W"}
-        if any(x in n for x in ("11900", "11700", "11600", "11400")):
-            return {"codename": "Rocket Lake / Tiger Lake (11th Gen)", "process": "14 nm / 10 nm SuperFin", "socket": "LGA1200", "tdp": "65 W - 125 W"}
-        if any(x in n for x in ("10900", "10700", "10600", "10400", "10100")):
-            return {"codename": "Comet Lake (10th Gen)", "process": "14 nm", "socket": "LGA1200", "tdp": "65 W - 125 W"}
-        return {"codename": "Intel Core Architecture", "process": "Intel FinFET", "socket": "LGA / BGA", "tdp": "65 W"}
-    return {"codename": caption or "x86-64 Architecture", "process": "—", "socket": "—", "tdp": "—"}
+    vendor = "AMD" if "AMD" in (caption or "").upper() or "AMD" in (name or "").upper() else (
+        "INTEL" if "INTEL" in (caption or "").upper() or "INTEL" in (name or "").upper() else "")
+    fam = re.search(r"Family\s+(\d+)", caption or "", re.I)
+    mod = re.search(r"Model\s+(\d+)", caption or "", re.I)
+    codename, process = CPU_CODENAMES.get((vendor, int(fam.group(1)) if fam else -1, int(mod.group(1)) if mod else -1),
+                                         ("—", "—"))
+    # O Windows não informa o TDP; uma faixa genérica não seria o TDP deste processador
+    return {"codename": codename, "process": process, "socket": "—", "tdp": None}
 
 
 def _parse_cpu_caption(caption):
@@ -201,7 +226,7 @@ class CoreEngine:
             BoardVersion = $bb.Version
             BiosMan = $bios.Manufacturer
             BiosVer = $bios.SMBIOSBIOSVersion
-            BiosDate = if ($bios.ReleaseDate) { $bios.ReleaseDate.ToString("dd/MM/yyyy") } else { "" }
+            BiosDate = if ($bios.ReleaseDate) { $bios.ReleaseDate.ToUniversalTime().ToString("dd/MM/yyyy") } else { "" }
             MemoryDevices = if ($arr) { [int]$arr.MemoryDevices } else { 0 }
             MemModules = @($mem | ForEach-Object {
                 [pscustomobject]@{
@@ -384,7 +409,9 @@ class CoreBenchmarkEngine:
     _lock = threading.Lock()
     _running = False
     WARMUP_SEC = 3.0
-    MEASURE_SEC = 20.0
+    MEASURE_SEC = 20.0          # padrão por fase (1 thread e todas as threads)
+    MIN_SEC, MAX_SEC = 5.0, 120.0
+    _measure_sec = MEASURE_SEC  # duração da execução atual
     _last_results = {
         "single_thread": 0.0, "multi_thread": 0.0, "ratio": 0.0, "running": False,
         "phase": "idle", "progress": 0, "reference_cpu": "", "timestamp": None, "details": {},
@@ -405,14 +432,20 @@ class CoreBenchmarkEngine:
             if cls._running:
                 return False, "Benchmark de CPU já está em execução."
             cls._running = True
+            # Duração de medição por fase pedida pela chamada (limitada para seguir confiável)
+            try:
+                cls._measure_sec = min(cls.MAX_SEC, max(cls.MIN_SEC, float(duration_sec))) if duration_sec else cls.MEASURE_SEC
+            except (TypeError, ValueError):
+                cls._measure_sec = cls.MEASURE_SEC
             cpu_name = SystemEngine.static_info().get("cpu", "CPU")
             cls._last_results = {
                 "single_thread": 0.0, "multi_thread": 0.0, "ratio": 0.0, "running": True,
                 "phase": "single", "progress": 1, "reference_cpu": cpu_name, "timestamp": None, "details": {},
-                "measure_sec": cls.MEASURE_SEC,
+                "measure_sec": cls._measure_sec,
             }
         threading.Thread(target=cls._worker, daemon=True).start()
-        return True, "Benchmark de CPU iniciado (≈ 50 s)."
+        total = round(2 * (cls.WARMUP_SEC + cls._measure_sec))
+        return True, f"Benchmark de CPU iniciado (≈ {total} s)."
 
     @classmethod
     def _worker(cls):
@@ -452,7 +485,9 @@ class CoreBenchmarkEngine:
             import numpy as np
         except ImportError:
             np = None
-        counters = [dict(sha=0, z=0, b2=0, fp=0) for _ in range(n_threads)]
+        # Bytes processados e tempo gasto em CADA operação, por thread: assim a vazão de
+        # cada algoritmo é medida de verdade (antes o tempo do laço inteiro era dividido igualmente)
+        counters = [dict(sha=0, z=0, b2=0, fp=0, t_sha=0.0, t_z=0.0, t_b2=0.0, t_fp=0.0) for _ in range(n_threads)]
         state = {"measuring": False, "stop": False}
 
         def work(idx):
@@ -461,24 +496,30 @@ class CoreBenchmarkEngine:
             text = (b"WinShield benchmark " * 13108)[:262144]                      # 256 KiB compressível
             arr = np.linspace(0.1, 100.0, 65536) if np is not None else None
             c = counters[idx]
+            clock = time.perf_counter
             while not state["stop"]:
+                t0 = clock()
                 hashlib.sha256(raw).digest()
+                t1 = clock()
                 hashlib.blake2b(raw).digest()
+                t2 = clock()
                 zlib.compress(text, 6)
+                t3 = clock()
                 if arr is not None:
                     np.sqrt(np.sin(arr) * np.cos(arr) + arr)
+                t4 = clock()
                 if state["measuring"]:
-                    c["sha"] += len(raw)
-                    c["b2"] += len(raw)
-                    c["z"] += len(text)
+                    c["sha"] += len(raw); c["t_sha"] += t1 - t0
+                    c["b2"] += len(raw); c["t_b2"] += t2 - t1
+                    c["z"] += len(text); c["t_z"] += t3 - t2
                     if arr is not None:
-                        c["fp"] += arr.size
+                        c["fp"] += arr.size; c["t_fp"] += t4 - t3
 
         pool = [threading.Thread(target=work, args=(i,), daemon=True) for i in range(n_threads)]
         for t in pool:
             t.start()
         t0 = time.perf_counter()
-        total = cls.WARMUP_SEC + cls.MEASURE_SEC
+        total = cls.WARMUP_SEC + cls._measure_sec
         measure_t0 = None
         per_sec = []            # vazão SHA-256 (MB/s) a cada segundo medido
         last_mark = None
@@ -486,7 +527,7 @@ class CoreBenchmarkEngine:
             el = time.perf_counter() - t0
             if el >= cls.WARMUP_SEC and not state["measuring"]:
                 for c in counters:
-                    c.update(sha=0, z=0, b2=0, fp=0)
+                    c.update(sha=0, z=0, b2=0, fp=0, t_sha=0.0, t_z=0.0, t_b2=0.0, t_fp=0.0)
                 state["measuring"] = True
                 measure_t0 = time.perf_counter()
                 last_mark = (measure_t0, 0)
@@ -504,10 +545,10 @@ class CoreBenchmarkEngine:
         dur = time.perf_counter() - (measure_t0 or t0)
         for t in pool:
             t.join(timeout=2)
-        sha = sum(c["sha"] for c in counters) / dur / 1e6
-        b2 = sum(c["b2"] for c in counters) / dur / 1e6
-        z = sum(c["z"] for c in counters) / dur / 1e6
-        fp = sum(c["fp"] for c in counters) / dur / 1e6
+        def rate(key):
+            # Vazão de cada thread (bytes ÷ tempo gasto nessa operação) somada entre as threads
+            return sum(c[key] / c["t_" + key] for c in counters if c["t_" + key] > 0) / 1e6
+        sha, b2, z, fp = rate("sha"), rate("b2"), rate("z"), rate("fp")
         # Pontuação: soma ponderada das taxas (MB/s), escala 1x = referência interna
         score = round(sha * 0.35 + b2 * 0.25 + z * 0.6 + fp * 0.8, 1)
         # Consistência: coeficiente de variação das amostras de 1 s (baixo = resultado confiável)
@@ -522,74 +563,29 @@ class CoreBenchmarkEngine:
                 "samples": len(per_sec), "variation_pct": cv}
 
 
-def _detect_gpu_architecture(name):
-    n = (name or "").upper()
-    if "5090" in n or "5080" in n or "5070" in n:
-        return {"chip": "NVIDIA Blackwell", "technology": "4 nm TSMC", "die_size": "—", "transistors": "—", "cuda_cores": "CUDA Cores (Blackwell)", "tmus": "—", "rops": "—", "memory_type": "GDDR7", "bus_width": "256-bit+", "bandwidth": "PCIe 5.0", "directx": "12 Ultimate"}
-    elif "4090" in n:
-        return {"chip": "AD102 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "608 mm²", "transistors": "76.300 Milhões", "cuda_cores": "16384 CUDA Cores", "tmus": "512", "rops": "176", "memory_type": "GDDR6X", "bus_width": "384-bit", "bandwidth": "1008 GB/s", "directx": "12 Ultimate"}
-    elif "4080" in n:
-        return {"chip": "AD103 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "379 mm²", "transistors": "45.900 Milhões", "cuda_cores": "9728 CUDA Cores", "tmus": "304", "rops": "112", "memory_type": "GDDR6X", "bus_width": "256-bit", "bandwidth": "716.8 GB/s", "directx": "12 Ultimate"}
-    elif "4070" in n:
-        return {"chip": "AD104 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "294 mm²", "transistors": "35.800 Milhões", "cuda_cores": "5888+ CUDA Cores", "tmus": "184", "rops": "64", "memory_type": "GDDR6X", "bus_width": "192-bit", "bandwidth": "504.2 GB/s", "directx": "12 Ultimate"}
-    elif "4060 TI" in n:
-        return {"chip": "AD106 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "188 mm²", "transistors": "22.900 Milhões", "cuda_cores": "4352 CUDA Cores", "tmus": "136", "rops": "48", "memory_type": "GDDR6", "bus_width": "128-bit", "bandwidth": "288.0 GB/s", "directx": "12 Ultimate"}
-    elif "4060" in n:
-        return {"chip": "AD107 (Ada Lovelace)", "technology": "5 nm (TSMC 4N)", "die_size": "159 mm²", "transistors": "18.900 Milhões", "cuda_cores": "3072 CUDA Cores", "tmus": "96", "rops": "32", "memory_type": "GDDR6", "bus_width": "128-bit", "bandwidth": "272.0 GB/s", "directx": "12 Ultimate"}
-    elif "3080" in n or "3090" in n:
-        return {"chip": "GA102 (Ampere)", "technology": "8 nm (Samsung)", "die_size": "628 mm²", "transistors": "28.300 Milhões", "cuda_cores": "8704+ CUDA Cores", "tmus": "272", "rops": "96", "memory_type": "GDDR6X", "bus_width": "320-bit", "bandwidth": "760+ GB/s", "directx": "12 Ultimate"}
-    elif "3070" in n:
-        return {"chip": "GA104 (Ampere)", "technology": "8 nm (Samsung)", "die_size": "392 mm²", "transistors": "17.400 Milhões", "cuda_cores": "5888 CUDA Cores", "tmus": "184", "rops": "96", "memory_type": "GDDR6", "bus_width": "256-bit", "bandwidth": "448.0 GB/s", "directx": "12 Ultimate"}
-    elif "3060" in n:
-        return {"chip": "GA106 (Ampere)", "technology": "8 nm (Samsung)", "die_size": "276 mm²", "transistors": "12.000 Milhões", "cuda_cores": "3584+ CUDA Cores", "tmus": "112", "rops": "48", "memory_type": "GDDR6", "bus_width": "192-bit", "bandwidth": "360.0 GB/s", "directx": "12 Ultimate"}
-    elif "3050" in n:
-        return {"chip": "GA106 / GA107 (Ampere)", "technology": "8 nm (Samsung)", "die_size": "200 mm²", "transistors": "8.700 Milhões", "cuda_cores": "2560 CUDA Cores", "tmus": "80", "rops": "32", "memory_type": "GDDR6", "bus_width": "128-bit", "bandwidth": "224.0 GB/s", "directx": "12 Ultimate"}
-    elif "1660" in n or "1650" in n or "2060" in n or "2070" in n or "2080" in n:
-        return {"chip": "NVIDIA Turing Architecture", "technology": "12 nm (TSMC)", "die_size": "284 mm²", "transistors": "6.600+ Milhões", "cuda_cores": "Turing Shading Units", "tmus": "—", "rops": "—", "memory_type": "GDDR6", "bus_width": "128/192/256-bit", "bandwidth": "PCIe 3.0 x16", "directx": "12"}
-    elif "NVIDIA" in n or "GEFORCE" in n or "QUADRO" in n:
-        return {"chip": "NVIDIA GPU Architecture", "technology": "TSMC / Samsung FinFET", "die_size": "—", "transistors": "—", "cuda_cores": "NVIDIA CUDA Cores", "tmus": "—", "rops": "—", "memory_type": "GDDR", "bus_width": "PCIe", "bandwidth": "PCIe Bus", "directx": "12"}
-    elif "RADEON" in n or "RX " in n or "AMD" in n:
-        return {"chip": "AMD Radeon Architecture", "technology": "TSMC FinFET (7nm/6nm/5nm)", "die_size": "—", "transistors": "—", "cuda_cores": "Stream Processors", "tmus": "—", "rops": "—", "memory_type": "GDDR6 / VRAM", "bus_width": "PCIe Bus", "bandwidth": "PCIe x16", "directx": "12 Ultimate"}
-    elif "INTEL" in n or "IRIS" in n or "ARC" in n or "UHD" in n or "HD GRAPHICS" in n:
-        return {"chip": "Intel Graphics Architecture", "technology": "Intel FinFET / Xe", "die_size": "Integrada / Dedicada", "transistors": "—", "cuda_cores": "Execution Units (EUs)", "tmus": "—", "rops": "—", "memory_type": "VRAM / Memória Compartilhada", "bus_width": "Dual-Channel / PCIe", "bandwidth": "System Memory / PCIe", "directx": "12"}
-    else:
-        return {"chip": "Controlador Gráfico do Sistema", "technology": "—", "die_size": "—", "transistors": "—", "cuda_cores": "Shading Units", "tmus": "—", "rops": "—", "memory_type": "VRAM", "bus_width": "—", "bandwidth": "PCIe / Integrado", "directx": "12"}
-
-
-def _detect_gpu_features(name):
-    """Retorna lista de recursos técnicos reais compatíveis com o fabricante da GPU detectada."""
-    n = (name or "").upper()
-    if "NVIDIA" in n or "GEFORCE" in n or "RTX" in n or "GTX" in n:
-        is_rtx = "RTX" in n
-        return [
-            {"label": "DirectX / Vulkan", "value": "DirectX 12 Ultimate / Vulkan 1.3" if is_rtx else "DirectX 12 / Vulkan 1.3"},
-            {"label": "Aceleração de IA / Upscaling", "value": "NVIDIA DLSS & Tensor Cores" if is_rtx else "NVIDIA CUDA & Shader Scaling"},
-            {"label": "Computação Paralela", "value": "NVIDIA CUDA / OpenCL 3.0 / DirectCompute"},
-            {"label": "Codificação de Vídeo", "value": "NVIDIA NVENC / NVDEC Hardware Codec"},
-            {"label": "Barramento Gráfico", "value": "PCI Express x16 / Resizable BAR"}
-        ]
-    elif "AMD" in n or "RADEON" in n or "RX " in n:
-        return [
-            {"label": "DirectX / Vulkan", "value": "DirectX 12 Ultimate / Vulkan 1.3"},
-            {"label": "Upscaling & Frame Gen", "value": "AMD FidelityFX Super Resolution (FSR)"},
-            {"label": "Computação Paralela", "value": "OpenCL 2.2 / DirectCompute / Smart Access Memory"},
-            {"label": "Codificação de Vídeo", "value": "AMD AMF / VCN Hardware Media Engine"},
-            {"label": "Barramento Gráfico", "value": "PCI Express / AMD Smart Access Memory"}
-        ]
-    elif "INTEL" in n or "IRIS" in n or "UHD" in n or "ARC" in n:
-        return [
-            {"label": "DirectX / Vulkan", "value": "DirectX 12 / Vulkan 1.3"},
-            {"label": "Upscaling Gráfico", "value": "Intel XeSS / Adaptive Sync"},
-            {"label": "Computação Paralela", "value": "OpenCL 3.0 / DirectCompute / OneAPI"},
-            {"label": "Codificação de Vídeo", "value": "Intel Quick Sync Video (Hardware Codec)"},
-            {"label": "Arquitetura de Memória", "value": "Memória Dinâmica Compartilhada / PCIe"}
-        ]
-    return [
-        {"label": "API Gráfica", "value": "DirectX 12 / OpenGL 4.6"},
-        {"label": "Computação", "value": "DirectCompute / WDDM"},
-        {"label": "Aceleração de Mídia", "value": "DXVA2 / Direct3D Video Acceleration"},
-        {"label": "Interface", "value": "PCI Express / Interno"}
-    ]
+def _nvidia_static():
+    """Dados fixos reais da GPU NVIDIA via nvidia-smi (vazio se indisponível)."""
+    fields = "vbios_version,pcie.link.gen.max,pcie.link.width.max,pcie.link.gen.current,pcie.link.width.current,clocks.max.graphics,clocks.max.memory,power.limit,driver_version"
+    try:
+        code, out = run_hidden(f"nvidia-smi --query-gpu={fields} --format=csv,noheader,nounits", timeout=6)
+    except Exception:
+        return {}
+    line = (out or "").strip().splitlines()[0] if code == 0 and out else ""
+    parts = [p.strip() for p in line.split(",")]
+    if len(parts) < 9:
+        return {}
+    ok = lambda v: v and "N/A" not in v and "Not Supported" not in v
+    vb, gmax, wmax, gcur, wcur, ccore, cmem, plim, drv = parts[:9]
+    return {
+        "vbios": vb if ok(vb) else "",
+        "pcie_max": f"{gmax}.0 x{wmax}" if ok(gmax) and ok(wmax) else "",
+        # Em repouso a GPU baixa a geração do link para economizar energia
+        "pcie_cur": f"{gcur}.0 x{wcur} (varia com a carga)" if ok(gcur) and ok(wcur) else "",
+        "clock_core": f"{ccore} MHz" if ok(ccore) else "",
+        "clock_mem": f"{cmem} MHz" if ok(cmem) else "",
+        "power_limit": f"{float(plim):.0f} W" if ok(plim) else "",
+        "driver": drv if ok(drv) else "",
+    }
 
 
 # ==============================================================================
@@ -638,9 +634,12 @@ class VisionEngine:
                 VideoProcessor = $g.VideoProcessor
                 AdapterRAM = [int64]$g.AdapterRAM
                 DriverVersion = $g.DriverVersion
-                DriverDate = if ($g.DriverDate) { $g.DriverDate.ToString("dd/MM/yyyy") } else { "" }
+                DriverDate = if ($g.DriverDate) { $g.DriverDate.ToUniversalTime().ToString("dd/MM/yyyy") } else { "" }
                 RefreshRate = $g.CurrentRefreshRate
-                Resolution = $g.VideoModeDescription
+                Width = $g.CurrentHorizontalResolution
+                Height = $g.CurrentVerticalResolution
+                Vendor = $g.AdapterCompatibility
+                PnpId = $g.PNPDeviceID
                 Status = $g.Status
             } | ConvertTo-Json -Compress
         }
@@ -665,39 +664,46 @@ class VisionEngine:
 
         driver_ver = raw.get("DriverVersion") or (reg_gpus[0].get("driver_version") if reg_gpus else "") or "—"
         driver_date = raw.get("DriverDate") or (reg_gpus[0].get("driver_date") if reg_gpus else "") or "—"
-        refresh = raw.get("RefreshRate") or 60
-        resolution = raw.get("Resolution") or "Detectado pelo Sistema"
+        # Resolução pelos campos numéricos: VideoModeDescription vem traduzido e com a
+        # quantidade de cores ("1920 x 1080 x 4294967296 cores")
+        width, height, refresh = raw.get("Width"), raw.get("Height"), raw.get("RefreshRate")
+        resolution = f"{width} x {height}" if width and height else "—"
+        if refresh and resolution != "—":
+            resolution += f" @ {refresh} Hz"
 
-        arch = _detect_gpu_architecture(name)
-        features = _detect_gpu_features(name)
-
-        n_up = name.upper()
-        subvendor = "NVIDIA Corporation" if ("NVIDIA" in n_up or "GEFORCE" in n_up) else (
-            "AMD / ATI" if ("AMD" in n_up or "RADEON" in n_up) else (
-                "Intel Corporation" if "INTEL" in n_up else "Fabricante OEM"
-            )
-        )
+        # Só dados lidos do Windows/driver. Especificações que o sistema não informa
+        # (núcleos, ROPs, litografia...) não são exibidas em vez de estimadas por tabela.
+        hardware = [
+            {"label": "Fabricante", "value": (raw.get("Vendor") or "").strip() or "—"},
+            {"label": "Memória de vídeo", "value": f"{vram_mb:,} MB".replace(",", ".") if vram_mb else "—"},
+        ]
+        pnp = raw.get("PnpId") or ""
+        m = re.search(r"VEN_([0-9A-F]{4})&DEV_([0-9A-F]{4})", pnp, re.I)
+        if m:
+            hardware.append({"label": "ID PCI (fabricante:dispositivo)", "value": f"{m.group(1)}:{m.group(2)}".upper()})
+        public_driver = ""
+        if "NVIDIA" in name.upper() or "GEFORCE" in name.upper():
+            smi = _nvidia_static()
+            public_driver = smi.get("driver", "")
+            for label, key in (("VBIOS", "vbios"), ("PCI Express (máximo)", "pcie_max"), ("PCI Express (atual)", "pcie_cur"),
+                               ("Clock máximo do núcleo", "clock_core"), ("Clock máximo da memória", "clock_mem"),
+                               ("Limite de energia", "power_limit")):
+                if smi.get(key):
+                    hardware.append({"label": label, "value": smi[key]})
+        display = [
+            {"label": "Versão do driver", "value": f"{public_driver} ({driver_ver})" if public_driver else driver_ver},
+            {"label": "Data do driver", "value": driver_date},
+            {"label": "Resolução", "value": resolution},
+        ]
 
         info = {
             "name": name,
-            "architecture": arch.get("chip", "—"),
-            "process": arch.get("technology", "—"),
-            "die_size": arch.get("die_size", "—"),
-            "transistors": arch.get("transistors", "—"),
-            "cuda_cores": arch.get("cuda_cores", "—"),
-            "tmus": arch.get("tmus", "—"),
-            "rops": arch.get("rops", "—"),
-            "memory_type": arch.get("memory_type", "VRAM"),
-            "bus_width": arch.get("bus_width", "—"),
             "memory_size_mb": vram_mb,
-            "bandwidth": arch.get("bandwidth", "—"),
-            "directx": arch.get("directx", "DirectX 12"),
             "driver_version": driver_ver,
             "driver_date": driver_date,
-            "display_resolution": f"{resolution} @ {refresh} Hz" if resolution != "Detectado pelo Sistema" else f"{refresh} Hz",
-            "subvendor": subvendor,
-            "bus_interface": "PCI Express",
-            "features": features
+            "display_resolution": resolution,
+            "hardware": hardware,
+            "display": display,
         }
 
         cls._cached_static = info

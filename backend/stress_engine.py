@@ -330,12 +330,9 @@ class StressEngine:
         mem = Telemetry.memory()
         batt_status, batt_pct = Telemetry.battery()
 
-        tz = cpu.get("thermal_zones") or {}
+        # Só sensor real do processador; zonas térmicas ACPI medem a placa-mãe, não o CPU
         cpu_temp = ext.get("cpu_temp")
         temp_source = "LibreHardwareMonitor" if cpu_temp is not None else None
-        if cpu_temp is None and tz:
-            cpu_temp = max(tz.values())
-            temp_source = "Zona térmica ACPI"
 
         disk_temp = (ext.get("disk_temps") or [None])[0]
         if disk_temp is None and getattr(cls, "_disk_is_nvme", False):

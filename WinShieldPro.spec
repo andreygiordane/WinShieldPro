@@ -45,6 +45,8 @@ a = Analysis(
         'backend.telemetry',
         'backend.update_engine',
         'backend.support_engine',
+        'backend.pc_sheet_engine',
+        'backend.aptitude_engine',
         'numpy',
         'psutil',
         'webview',

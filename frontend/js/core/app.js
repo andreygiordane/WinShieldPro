@@ -80,6 +80,9 @@ lucide.createIcons();
                 "nav.group_support": "SUPORTE TÉCNICO",
                 "nav.support_licenses": "Licenças",
                 "nav.support_email": "E-mails",
+                "nav.about": "Sobre",
+                "nav.pc_sheet": "Ficha do PC",
+                "nav.aptitude": "Teste de aptidão",
                 "nav.clean": "Limpeza",
                 "nav.power": "Energia",
                 "nav.optimize": "Otimização",
@@ -97,7 +100,7 @@ lucide.createIcons();
                 "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
@@ -266,7 +269,7 @@ lucide.createIcons();
                 "antivirus.heuristics_title": "Processos suspeitos",
                 "antivirus.heuristics_desc": "Processos ativos rodando de AppData, Temp e pastas públicas.",
                 "antivirus.btn_scan_heuristics": "Analisar processos",
-                "antivirus.card_cloud": "Nuvem Global",
+                "antivirus.card_cloud": "Serviços e processos",
                 "antivirus.cloud_title": "Serviços e processos",
                 "antivirus.cloud_desc": "Auditoria local de todos os serviços instalados e processos: caminho, assinatura e nomes conhecidos de malware.",
                 "antivirus.btn_scan_cloud": "Auditar serviços",
@@ -412,6 +415,9 @@ lucide.createIcons();
                 "nav.group_support": "TECH SUPPORT",
                 "nav.support_licenses": "Licenses",
                 "nav.support_email": "E-mail",
+                "nav.about": "About",
+                "nav.pc_sheet": "PC spec sheet",
+                "nav.aptitude": "Aptitude test",
                 "nav.clean": "Cleaner",
                 "nav.power": "Power",
                 "nav.optimize": "Optimization",
@@ -429,7 +435,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -598,15 +604,15 @@ lucide.createIcons();
                 "antivirus.heuristics_title": "Hidden Miners & Rogue Tasks",
                 "antivirus.heuristics_desc": "Detects abnormal background behaviors, rogue scripts, and miner patterns.",
                 "antivirus.btn_scan_heuristics": "Scan Heuristics",
-                "antivirus.card_cloud": "Cloud Threat Intelligence",
-                "antivirus.cloud_title": "Hash Verification & Digital Signature",
-                "antivirus.cloud_desc": "Cross-checks process hashes against global threat intelligence databases.",
-                "antivirus.btn_scan_cloud": "Cloud Scan",
+                "antivirus.card_cloud": "Services & Processes",
+                "antivirus.cloud_title": "Services & processes",
+                "antivirus.cloud_desc": "Local audit of every installed service and running process: path, digital signature and known malware names.",
+                "antivirus.btn_scan_cloud": "Audit services",
                 "antivirus.btn_quick": "Full Quick Scan",
                 "antivirus.tab_all_threats": "All Threats",
                 "antivirus.tab_system32": "System32 Anomalies",
                 "antivirus.tab_heuristics": "Heuristics",
-                "antivirus.tab_cloud": "Cloud / Hash",
+                "antivirus.tab_cloud": "Services",
                 "antivirus.no_scan": "No scan executed yet. Please select an option above.",
                 "antivirus.th_threat": "Threat / Process",
                 "antivirus.th_risk": "Severity",
@@ -744,6 +750,9 @@ lucide.createIcons();
                 "nav.group_support": "SOPORTE TÉCNICO",
                 "nav.support_licenses": "Licencias",
                 "nav.support_email": "Correos",
+                "nav.about": "Acerca de",
+                "nav.pc_sheet": "Ficha del PC",
+                "nav.aptitude": "Prueba de aptitud",
                 "nav.clean": "Limpieza",
                 "nav.power": "Energía",
                 "nav.optimize": "Optimización",
@@ -761,7 +770,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.6",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -930,15 +939,15 @@ lucide.createIcons();
                 "antivirus.heuristics_title": "Procesos y Mineros Ocultos",
                 "antivirus.heuristics_desc": "Detecta comportamientos anómalos en segundo plano y scripts maliciosos.",
                 "antivirus.btn_scan_heuristics": "Escanear Heurística",
-                "antivirus.card_cloud": "Inteligencia en la Nube",
-                "antivirus.cloud_title": "Verificación de Hash y Firma Digital",
-                "antivirus.cloud_desc": "Compara hashes de procesos con bases de datos globales de amenazas.",
-                "antivirus.btn_scan_cloud": "Escaneo en Nube",
+                "antivirus.card_cloud": "Servicios y procesos",
+                "antivirus.cloud_title": "Servicios y procesos",
+                "antivirus.cloud_desc": "Auditoría local de todos los servicios instalados y procesos: ruta, firma digital y nombres conocidos de malware.",
+                "antivirus.btn_scan_cloud": "Auditar servicios",
                 "antivirus.btn_quick": "Escaneo Rápido Completo",
                 "antivirus.tab_all_threats": "Todas las Amenazas",
                 "antivirus.tab_system32": "Anomalías System32",
                 "antivirus.tab_heuristics": "Heurística",
-                "antivirus.tab_cloud": "Nube / Hash",
+                "antivirus.tab_cloud": "Servicios",
                 "antivirus.no_scan": "Ningún escaneo ejecutado aún. Seleccione una opción arriba.",
                 "antivirus.th_threat": "Amenaza / Proceso",
                 "antivirus.th_risk": "Gravedad",
@@ -1061,7 +1070,7 @@ lucide.createIcons();
                 'disk-bench': { title: 'Velocidade dos discos', sub: 'Benchmark de Alta Performance (Direct I/O Multi-Pass & Fila Assíncrona de Hardware)' },
                 'running-apps': { title: 'Programas em execução', sub: 'Mapeamento de janelas ativas, separação de serviços e desinstalação de softwares' },
                 'audit': { title: 'Auditoria de software', sub: 'Mapeamento no Registro, AppX da Store, Serviços e Inicialização' },
-                'antivirus': { title: 'Antivírus', sub: 'Varredura heurística, scanner profundo de System32 e inteligência em nuvem' },
+                'antivirus': { title: 'Antivírus', sub: 'Microsoft Defender, varredura heurística, System32, processos e serviços (análise local)' },
                 'clean': { title: 'Limpeza', sub: 'Exclusão segura de temporários, Lixeira do Windows e caches de navegadores' },
                 'power': { title: 'Energia', sub: 'Desempenho Máximo nativo, criador de esquemas e powercfg' },
                 'optimize': { title: 'Otimização', sub: 'Reparos SFC/DISM, TRIM SSD, desativação de telemetria e rede' },
@@ -1072,6 +1081,9 @@ lucide.createIcons();
                 'updates': { title: 'Atualizações', sub: 'Windows, drivers, programas e vídeo, de fontes oficiais' },
                 'support-licenses': { title: 'Licenças', sub: 'Chaves do Windows, ativação, Office e programas antes de formatar' },
                 'support-email': { title: 'E-mails', sub: 'Contas, servidores, PST/OST e credenciais antes de formatar' },
+                'about': { title: 'Sobre', sub: 'Versão, instalação e atualizações do WinShield Pro' },
+                'pc-sheet': { title: 'Ficha do PC', sub: 'Configuração completa da máquina para copiar ou salvar' },
+                'aptitude': { title: 'Teste de aptidão', sub: 'Testa a máquina sob carga e avalia o uso doméstico, comercial e de escritório' },
                 'stability': { title: 'Teste de estresse', sub: 'Estresse contínuo de CPU, FPU, Caches e Memória RAM com telemetria e detecção de Throttling' },
             },
             'en': {
@@ -1083,7 +1095,7 @@ lucide.createIcons();
                 'disk-bench': { title: 'WinShield DiskSpeed Turbo', sub: 'High-Performance Benchmark (Direct I/O Multi-Pass & Asynchronous Hardware Queue)' },
                 'running-apps': { title: 'Running Applications & Manager', sub: 'Active desktop window mapping, services isolation, and uninstaller' },
                 'audit': { title: 'Hidden Apps & System Audit', sub: 'Registry uninstaller mapping, Windows Store AppX, Services and Startup' },
-                'antivirus': { title: 'Antivirus & Threat Hunter', sub: 'Heuristic anomaly scan, deep System32 inspection, and cloud threat intelligence' },
+                'antivirus': { title: 'Antivirus', sub: 'Microsoft Defender, heuristic scan, System32, processes and services (local analysis)' },
                 'clean': { title: 'Deep System Cleaner', sub: 'Secure deletion of temporary files, Windows Recycle Bin, and browser caches' },
                 'power': { title: 'Power Plans & Hardware Turbo', sub: 'Native Maximum Performance schemes, custom creator and powercfg' },
                 'optimize': { title: 'System Optimizations & Debloat', sub: 'SFC/DISM repairs, SSD TRIM, telemetry debloat and network tweaks' },
@@ -1094,6 +1106,9 @@ lucide.createIcons();
                 'updates': { title: 'Updates', sub: 'Windows, drivers, apps and graphics from official sources' },
                 'support-licenses': { title: 'Licenses', sub: 'Windows keys, activation, Office and apps before formatting' },
                 'support-email': { title: 'E-mail', sub: 'Accounts, servers, PST/OST and credentials before formatting' },
+                'about': { title: 'About', sub: 'WinShield Pro version, installation and updates' },
+                'pc-sheet': { title: 'PC spec sheet', sub: 'Full machine configuration to copy or save' },
+                'aptitude': { title: 'Aptitude test', sub: 'Tests the machine under load and rates home, business and office use' },
                 'stability': { title: 'System Stability Test (StressPulse™)', sub: 'Continuous stress testing of CPU, FPU, Caches and Memory RAM with telemetry and Throttling detection' },
             },
             'es': {
@@ -1105,7 +1120,7 @@ lucide.createIcons();
                 'disk-bench': { title: 'WinShield DiskSpeed Turbo', sub: 'Benchmark de Alto Rendimiento (Direct I/O Multi-Pass y Cola Asíncrona)' },
                 'running-apps': { title: 'Programas en Ejecución y Gestor', sub: 'Mapeo de ventanas activas, separación de servicios y desinstalación oficial' },
                 'audit': { title: 'Apps Ocultas y Auditoría', sub: 'Mapeo en Registro, AppX de la Store, Servicios e Inicio automático' },
-                'antivirus': { title: 'Antivirus y Caza de Amenazas', sub: 'Escaneo heurístico, escáner profundo de System32 e inteligencia en la nube' },
+                'antivirus': { title: 'Antivirus', sub: 'Microsoft Defender, escaneo heurístico, System32, procesos y servicios (análisis local)' },
                 'clean': { title: 'Limpieza Profunda del Sistema', sub: 'Eliminación segura de archivos temporales, Papelera de Windows y cachés' },
                 'power': { title: 'Planes de Energía y Turbo', sub: 'Esquemas de Máximo Rendimiento, creador personalizado y powercfg' },
                 'optimize': { title: 'Optimizaciones del Sistema y Debloat', sub: 'Reparaciones SFC/DISM, TRIM SSD, desactivación de telemetría y red' },
@@ -1116,6 +1131,9 @@ lucide.createIcons();
                 'updates': { title: 'Actualizaciones', sub: 'Windows, drivers, programas y video de fuentes oficiales' },
                 'support-licenses': { title: 'Licencias', sub: 'Claves de Windows, activación, Office y programas antes de formatear' },
                 'support-email': { title: 'Correos', sub: 'Cuentas, servidores, PST/OST y credenciales antes de formatear' },
+                'about': { title: 'Acerca de', sub: 'Versión, instalación y actualizaciones de WinShield Pro' },
+                'pc-sheet': { title: 'Ficha del PC', sub: 'Configuración completa del equipo para copiar o guardar' },
+                'aptitude': { title: 'Prueba de aptitud', sub: 'Prueba el equipo bajo carga y evalúa uso doméstico, comercial y de oficina' },
                 'stability': { title: 'Prueba de Estabilidad del Sistema (StressPulse™)', sub: 'Prueba de estrés continuo de CPU, FPU, Cachés y Memoria RAM con telemetría y detección de Throttling' },
             }
         };
@@ -1685,7 +1703,10 @@ lucide.createIcons();
             'maintenance': { key: 'nav.group_system', badgeClass: '' },
             'terminal': { key: 'nav.group_system', badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25' },
             'support-licenses': { key: 'nav.group_support', badgeClass: '' },
-            'support-email': { key: 'nav.group_support', badgeClass: '' }
+            'support-email': { key: 'nav.group_support', badgeClass: '' },
+            'about': { key: 'nav.group_system', badgeClass: '' },
+            'pc-sheet': { key: 'nav.group_hardware', badgeClass: '' },
+            'aptitude': { key: 'nav.group_stability', badgeClass: '' }
         };
 
         function updatePageCategoryBadge(tabId) {
@@ -1919,6 +1940,9 @@ lucide.createIcons();
             if (tabId === 'updates') loadUpdates();
             if (tabId === 'support-licenses') loadSupportLicenses();
             if (tabId === 'support-email') loadSupportEmail();
+            if (tabId === 'about') loadAbout();
+            if (tabId === 'pc-sheet') loadPcSheet();
+            if (tabId === 'aptitude') loadAptitude();
             if (tabId === 'stability') {
                 loadStabilityInfo();
                 if (stabilityMode === 'bench') switchStabilityMode('bench');
@@ -2958,25 +2982,12 @@ lucide.createIcons();
                 const s = data.vision.sensors || {};
 
                 // Estáticos
-                document.getElementById('vision-card-name').innerText = g.name || 'Adaptador Gráfico Detectado';
-                document.getElementById('vision-card-vram').innerText = `${g.memory_size_mb || 0} MB ${g.memory_type || ''}`.trim();
-                document.getElementById('vision-card-arch').innerText = g.architecture || '--';
-                document.getElementById('vision-card-process').innerText = g.process || '--';
-                document.getElementById('vision-card-transistors').innerText = g.transistors || '--';
-                document.getElementById('vision-card-cores').innerText = g.cuda_cores || '--';
-                document.getElementById('vision-card-bus').innerText = `${g.bus_width || '--'} (${g.memory_type || '--'})`;
-                document.getElementById('vision-card-bandwidth').innerText = g.bandwidth || '--';
-                document.getElementById('vision-card-driver').innerText = g.driver_version || '--';
-                document.getElementById('vision-card-res').innerText = g.display_resolution || '--';
-
-                // Recursos dinâmicos da GPU real
-                const featGrid = document.getElementById('vision-features-grid');
-                if (featGrid && Array.isArray(g.features) && g.features.length > 0) {
-                    featGrid.innerHTML = g.features.map(f => `
-                        <span class="ws-badge">${escapeHtml(f)}</span>
-                    `).join('');
-                    lucide.createIcons();
-                }
+                document.getElementById('vision-card-name').innerText = g.name || '—';
+                document.getElementById('vision-card-vram').innerText = g.memory_size_mb ? `${g.memory_size_mb} MB` : '— MB';
+                const kv = rows => (rows || []).map(r => `<dt>${escapeHtml(r.label)}</dt><dd class="ws-mono">${escapeHtml(r.value)}</dd>`).join('')
+                    || '<dt>—</dt><dd>Não informado pelo sistema</dd>';
+                document.getElementById('vision-hw-list').innerHTML = kv(g.hardware);
+                document.getElementById('vision-display-list').innerHTML = kv(g.display);
 
                 // Sensores
                 updateVisionSensorsUI(s);
@@ -5776,6 +5787,220 @@ lucide.createIcons();
         }
 
         // =====================================================================
+        // FICHA DO PC (configuração completa para copiar ou salvar)
+        // =====================================================================
+        let pcSheetData = null;
+
+        async function loadPcSheet(force = false) {
+            if (pcSheetData && !force) return renderPcSheet();
+            const priv = document.getElementById('sheet-private')?.checked ? '?private=1' : '';
+            document.getElementById('sheet-summary').innerText = 'Lendo o hardware…';
+            try {
+                pcSheetData = await (await fetch('/api/sheet' + priv)).json();
+            } catch (e) {
+                document.getElementById('sheet-summary').innerText = 'Falha ao ler o hardware.';
+                return;
+            }
+            renderPcSheet();
+        }
+
+        function renderPcSheet() {
+            const d = pcSheetData;
+            if (!d || d.status !== 'success') return;
+            document.getElementById('sheet-summary').innerText = d.summary;
+            document.getElementById('sheet-sections').innerHTML = d.sections.map(([title, rows]) => `
+                <div class="ws-card">
+                    <div class="ws-card-title mb-1">${escapeHtml(title)}</div>
+                    <dl class="ws-kv">${rows.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd class="ws-mono">${escapeHtml(v)}</dd>`).join('')}</dl>
+                </div>`).join('');
+        }
+
+        function pcSheetText(full) {
+            const d = pcSheetData;
+            if (!full) return d.summary;
+            return [`Ficha do PC — ${d.scanned_at}`, '', d.summary, '']
+                .concat(d.sections.flatMap(([title, rows]) => [`[${title}]`, ...rows.map(([k, v]) => `  ${k}: ${v}`), '']))
+                .join('\n');
+        }
+
+        async function copyPcSheet(full) {
+            if (!pcSheetData) return;
+            try {
+                await navigator.clipboard.writeText(pcSheetText(full));
+                showToast('Ficha do PC', full ? 'Ficha completa copiada.' : 'Resumo copiado.', 'success', 2000);
+            } catch (e) {
+                showToast('Ficha do PC', 'Não foi possível copiar. Use "Salvar TXT + HTML".', 'warning');
+            }
+        }
+
+        async function exportPcSheet() {
+            const priv = !!document.getElementById('sheet-private')?.checked;
+            const data = await supportPost('/api/sheet/export', { private: priv });
+            if (data.status !== 'success') { showToast('Ficha do PC', data.message, 'error'); return; }
+            showToast('Ficha salva', data.folder, 'success', 6000);
+            supportPost('/api/support/open_folder', { path: data.folder });
+        }
+
+        // =====================================================================
+        // TESTE DE APTIDÃO (com animação e laudo por tipo de uso)
+        // =====================================================================
+        let aptitudeTimer = null;
+        let aptitudeMaxClock = 0;
+
+        async function loadAptitude() {
+            const st = await (await fetch('/api/aptitude/status')).json();
+            renderAptitude(st);
+            if (st.running && !aptitudeTimer) aptitudeTimer = setInterval(pollAptitude, 1000);
+        }
+
+        async function startAptitude() {
+            const preset = document.querySelector('input[name="apt-preset"]:checked')?.value || 'rapido';
+            const data = await supportPost('/api/aptitude/start', { preset });
+            if (data.status !== 'success') { showToast('Teste de aptidão', data.message, 'warning', 6000); return; }
+            aptitudeMaxClock = 0;
+            showToast('Teste de aptidão', data.message, 'info');
+            if (!aptitudeTimer) aptitudeTimer = setInterval(pollAptitude, 1000);
+            pollAptitude();
+        }
+
+        async function cancelAptitude() {
+            await supportPost('/api/aptitude/cancel', {});
+        }
+
+        async function pollAptitude() {
+            let st;
+            try { st = await (await fetch('/api/aptitude/status')).json(); } catch (e) { return; }
+            renderAptitude(st);
+            if (!st.running && aptitudeTimer) {
+                clearInterval(aptitudeTimer);
+                aptitudeTimer = null;
+                if (st.phase === 'error') showToast('Teste de aptidão', st.message, 'error', 8000);
+            }
+        }
+
+        function showAptitudeSetup() {
+            ['apt-running', 'apt-result'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('apt-setup').classList.remove('hidden');
+        }
+
+        function renderAptitude(st) {
+            const show = id => ['apt-setup', 'apt-running', 'apt-result'].forEach(x =>
+                document.getElementById(x).classList.toggle('hidden', x !== id));
+            if (st.running) {
+                show('apt-running');
+                const pct = st.progress || 0;
+                document.getElementById('apt-ring').style.strokeDashoffset = 502.7 * (1 - pct / 100);
+                document.getElementById('apt-pct').innerText = `${Math.round(pct)}%`;
+                document.getElementById('apt-phase-label').innerText = st.message || '';
+                const order = st.phases.map(p => p.key);
+                const cur = order.indexOf(st.phase);
+                document.getElementById('apt-phase-list').innerHTML = st.phases.map((p, i) => {
+                    const state = i < cur ? 'done' : (i === cur ? 'now' : 'next');
+                    const color = state === 'done' ? 'var(--ok)' : (state === 'now' ? 'var(--brand)' : 'var(--border-strong)');
+                    const extra = state === 'now' ? `<span class="ws-mono text-[11.5px] ws-muted ml-auto">${Math.round(st.phase_progress || 0)}%</span>`
+                        : (state === 'done' ? '<span class="ws-mono text-[11.5px] ml-auto" style="color:var(--ok)">concluído</span>' : '');
+                    return `<div class="flex items-center gap-2.5 text-[13px] ${state === 'next' ? 'ws-muted' : 'ws-strong'}">
+                        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${state === 'now' ? 'animate-pulse' : ''}" style="background:${color}"></span>
+                        <span>${escapeHtml(p.label)}</span>${extra}</div>`;
+                }).join('');
+                const live = st.live || {};
+                if (live.usage != null) {
+                    document.getElementById('apt-live-usage').innerText = `${live.usage.toFixed(0)}%`;
+                    document.getElementById('apt-live-usage-bar').style.width = `${live.usage}%`;
+                }
+                if (live.clock) {
+                    aptitudeMaxClock = Math.max(aptitudeMaxClock, live.clock);
+                    document.getElementById('apt-live-clock').innerText = `${live.clock} MHz`;
+                    document.getElementById('apt-live-clock-bar').style.width = `${(live.clock / aptitudeMaxClock) * 100}%`;
+                }
+                lucide.createIcons();
+                return;
+            }
+            if (st.phase === 'done' && st.results) {
+                show('apt-result');
+                renderAptitudeResult(st.results);
+                return;
+            }
+            show('apt-setup');
+        }
+
+        function renderAptitudeResult(r) {
+            const tone = { ok: 'ok', warn: 'warn', fail: 'bad' };
+            const label = { ok: 'OK', warn: 'Atenção', fail: 'Falha' };
+            document.getElementById('apt-result-sub').innerText = `Teste ${r.preset} concluído em ${r.finished_at} · ${r.facts.cpu} · ${r.facts.ram_gb} GB RAM`;
+            document.getElementById('apt-profiles').innerHTML = r.profiles.map(p => `
+                <div class="ws-card flex flex-col gap-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="ws-card-title">${escapeHtml(p.title)}</div>
+                        <span class="ws-badge ${tone[p.level]}">${escapeHtml(p.verdict)}</span>
+                    </div>
+                    <div class="ws-card-sub">${escapeHtml(p.desc)}</div>
+                    <div class="flex flex-col gap-2">${p.criteria.map(c => `
+                        <div class="flex items-start gap-2.5">
+                            <span class="ws-badge ${tone[c.status]} flex-shrink-0 mt-0.5">${label[c.status]}</span>
+                            <div class="min-w-0"><div class="text-[12.5px] ws-strong">${escapeHtml(c.label)}</div>
+                            <div class="ws-stat-foot">${escapeHtml(c.detail)}</div></div>
+                        </div>`).join('')}</div>
+                </div>`).join('');
+            const cpu = r.cpu || {}, mem = r.memory || {}, disk = r.disk || {}, stab = r.stability || {};
+            const fmt = v => (v == null ? '—' : v);
+            const rows = [
+                ['Pontuação do CPU (1 thread / todas)', `${fmt(cpu.single)} / ${fmt(cpu.multi)}`],
+                ['Memória verificada', `${fmt(mem.tested_mb)} MB · ${fmt(mem.errors)} erro(s) · ${fmt(mem.speed_mb_s)} MB/s`],
+                [`Disco ${fmt(disk.drive)} sequencial (leitura / gravação)`, `${fmt(disk.seq_read)} / ${fmt(disk.seq_write)} MB/s`],
+                [`Disco ${fmt(disk.drive)} aleatório 4 KB (leitura / gravação)`, `${fmt(disk.rnd_read_q1)} / ${fmt(disk.rnd_write_q1)} MB/s`],
+                ['Estabilidade sob carga', `${fmt(stab.stability)}% em ${fmt(stab.loops)} ciclo(s) · queda de clock ${fmt(stab.clock_drop_pct)}%`],
+                ['Temperatura máxima do CPU', stab.temp_max != null ? `${stab.temp_max} °C` : 'Sem sensor (ative o LibreHardwareMonitor no Teste de Estresse)'],
+            ];
+            document.getElementById('apt-measures').innerHTML = rows.map(([k, v]) =>
+                `<dt>${escapeHtml(k)}</dt><dd class="ws-mono">${escapeHtml(v)}</dd>`).join('');
+            lucide.createIcons();
+        }
+
+        async function exportAptitude() {
+            const data = await supportPost('/api/aptitude/export', {});
+            if (data.status !== 'success') { showToast('Laudo', data.message, 'error'); return; }
+            showToast('Laudo salvo', data.folder, 'success', 6000);
+            supportPost('/api/support/open_folder', { path: data.folder });
+        }
+
+        // =====================================================================
+        // SOBRE (versão, instalação e atualizações do próprio app)
+        // =====================================================================
+        async function loadAbout() {
+            try {
+                const d = await (await fetch('/api/app/about')).json();
+                const rows = [['Versão', d.version], ['Desenvolvedor', d.developer], ['Tipo de execução', d.build],
+                    ['Pasta de instalação', d.install_dir], ['Pasta de dados e relatórios', d.data_dir],
+                    ['Privilégios', d.admin ? 'Administrador' : 'Usuário comum (alguns módulos ficam limitados)'],
+                    ['Windows', d.windows], ['Python', d.python]];
+                document.getElementById('about-details').innerHTML = rows.map(([k, v]) =>
+                    `<dt>${escapeHtml(k)}</dt><dd class="ws-mono break-all">${escapeHtml(v || '—')}</dd>`).join('');
+            } catch (e) { /* mantém "Carregando…" */ }
+            checkAppLatest();
+        }
+
+        async function checkAppLatest() {
+            const txt = document.getElementById('about-update-text');
+            const btn = document.getElementById('about-update-btn');
+            if (txt) txt.innerText = 'Consultando o GitHub…';
+            try {
+                const d = await (await fetch('/api/app/latest')).json();
+                if (d.status !== 'success') { txt.innerText = d.message; return; }
+                txt.innerText = d.newer
+                    ? `Nova versão disponível: ${d.latest} (publicada em ${d.published_at}). Você está na ${d.current}.`
+                    : `Você está na versão mais recente (${d.current}).`;
+                if (btn) { btn.className = d.newer ? 'ws-btn primary' : 'ws-btn'; btn.innerText = d.newer ? 'Baixar nova versão' : 'Ver versões'; }
+            } catch (e) {
+                if (txt) txt.innerText = 'Não foi possível consultar o GitHub.';
+            }
+        }
+
+        function openAppLink(link) {
+            fetch('/api/app/open_link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ link }) });
+        }
+
+        // =====================================================================
         // SUPORTE DE TI (licenças e e-mail antes de formatar)
         // =====================================================================
         let supportFolder = '';
@@ -5924,7 +6149,8 @@ lucide.createIcons();
 
         function supServer(s) {
             if (!s || !s.host) return '—';
-            return `${s.host}:${s.port || '?'} · ${s.security} · ${s.user || 'sem usuário'}`;
+            // Porta/usuário não gravados pelo cliente de e-mail aparecem como tal, nunca presumidos
+            return `${s.host}:${s.port || 'porta padrão'} · criptografia: ${s.security} · usuário: ${s.user || 'não informado'}`;
         }
 
         function supAccountCard(a) {

@@ -66,7 +66,9 @@ SIGNATURES_DIR = r"%APPDATA%\Microsoft\Signatures"
 ROAMCACHE_DIR = r"%LOCALAPPDATA%\Microsoft\Outlook\RoamCache"
 OUTLOOK_SECURITY = {0: "Nenhuma", 1: "SSL/TLS", 2: "STARTTLS", 3: "Automática"}
 THUNDERBIRD_SOCKET = {0: "Nenhuma", 1: "STARTTLS (se disponível)", 2: "STARTTLS", 3: "SSL/TLS"}
-DEFAULT_PORTS = {("imap", False): 143, ("imap", True): 993, ("pop3", False): 110, ("pop3", True): 995}
+# Nada é presumido: porta, usuário ou criptografia que o cliente de e-mail não gravou
+# aparecem como None ("porta padrão" / "não informado"), nunca como um valor inventado.
+NOT_SET = "não informado"
 
 
 # =============================================================================
@@ -420,24 +422,27 @@ def _outlook_account(v):
             return None
         ssl_flag = _int(v.get(f"{prefix} Use SSL"))
         secure = _int(v.get(f"{prefix} Secure Connection"))
-        security = OUTLOOK_SECURITY.get(secure) if secure is not None else ("SSL/TLS" if ssl_flag else "Nenhuma")
-        port = _int(v.get(f"{prefix} Port"))
-        if port is None:
-            port = {"IMAP": 993 if ssl_flag else 143, "POP3": 995 if ssl_flag else 110,
-                    "SMTP": 587}.get(prefix)
-        return {"host": host, "port": port, "security": security,
-                "user": _text(v.get(f"{prefix} User")) or email}
+        if secure is not None:
+            security = OUTLOOK_SECURITY.get(secure, NOT_SET)
+        elif ssl_flag is not None:
+            security = "SSL/TLS" if ssl_flag else "Nenhuma"
+        else:
+            security = NOT_SET
+        # O Outlook só grava a porta quando ela foge do padrão do protocolo
+        return {"host": host, "port": _int(v.get(f"{prefix} Port")), "security": security,
+                "user": _text(v.get(f"{prefix} User"))}
 
     incoming = server("IMAP") or server("POP3")
     kind = "IMAP" if _text(v.get("IMAP Server")) else ("POP3" if _text(v.get("POP3 Server")) else "")
     if not kind:
         if "@" not in (email or name):
             return None  # catálogo de endereços e outros serviços internos
-        kind = "Exchange / Microsoft 365"
+        kind = "Exchange / Microsoft 365 (provável)"
     return {"name": name or email, "email": email, "display_name": _text(v.get("Display Name")),
             "type": kind, "incoming": incoming, "outgoing": server("SMTP"),
-            "note": ("Servidor configurado automaticamente (Autodiscover): após formatar, basta entrar com o "
-                     "e-mail e a senha.") if kind.startswith("Exchange") else ""}
+            "note": ("Conta sem servidor IMAP/POP gravado no perfil, o que costuma indicar Exchange ou "
+                     "Microsoft 365. Nesse caso, após formatar, o Outlook encontra o servidor sozinho ao "
+                     "entrar com o e-mail e a senha.") if kind.startswith("Exchange") else ""}
 
 
 def _outlook_loose_files():
@@ -483,8 +488,9 @@ def _thunderbird():
             host = pref.get(p + "hostname")
             if not host:
                 return None
-            return {"host": host, "port": _int(pref.get(p + "port")) or 587,
-                    "security": THUNDERBIRD_SOCKET.get(_int(pref.get(p + "try_ssl")) or 0, "?"),
+            try_ssl = _int(pref.get(p + "try_ssl"))
+            return {"host": host, "port": _int(pref.get(p + "port")),
+                    "security": THUNDERBIRD_SOCKET.get(try_ssl, NOT_SET) if try_ssl is not None else NOT_SET,
                     "user": pref.get(p + "username", "")}
 
         accounts = []
@@ -496,15 +502,16 @@ def _thunderbird():
                 continue  # Pastas locais, feeds e newsgroups
             ident = (pref.get(f"mail.account.{acc}.identities") or "").split(",")[0]
             i = f"mail.identity.{ident}."
-            socket_type = _int(pref.get(s + "socketType")) or 0
-            port = _int(pref.get(s + "port")) or DEFAULT_PORTS.get((kind, socket_type == 3))
+            socket_type = _int(pref.get(s + "socketType"))
+            port = _int(pref.get(s + "port"))
             accounts.append({
                 "name": pref.get(s + "name") or pref.get(i + "useremail", ""),
                 "email": pref.get(i + "useremail", ""),
                 "display_name": pref.get(i + "fullName", ""),
                 "type": kind.upper(),
                 "incoming": {"host": pref.get(s + "hostname", ""), "port": port,
-                             "security": THUNDERBIRD_SOCKET.get(socket_type, "?"), "user": pref.get(s + "userName", "")},
+                             "security": THUNDERBIRD_SOCKET.get(socket_type, NOT_SET) if socket_type is not None else NOT_SET,
+                             "user": pref.get(s + "userName", "")},
                 "outgoing": smtp(pref.get(i + "smtpServer")),
                 "note": "",
             })
@@ -631,7 +638,8 @@ def _email_sections(d):
     def server_txt(s):
         if not s:
             return "—"
-        return f"{s['host']}:{s['port']} · {s['security']} · usuário: {s['user'] or '—'}"
+        port = s["port"] if s["port"] else "porta padrão"
+        return f"{s['host']}:{port} · criptografia: {s['security']} · usuário: {s['user'] or NOT_SET}"
 
     def account_rows(a):
         return [("Conta", a["name"]), ("E-mail", a["email"]), ("Nome exibido", a["display_name"]),
@@ -663,7 +671,11 @@ def _email_sections(d):
 
 def _write_reports(folder, basename, title, d, sections):
     folder = _validate_folder(folder)
-    header = f"{title}\nComputador: {d.get('computer', '')}   Gerado em: {d.get('scanned_at', '')}   WinShield Pro\n"
+    # "Computador" só aparece quando informado (a Ficha do PC o omite por privacidade)
+    meta = [f"Computador: {d['computer']}" if d.get("computer") else "",
+            f"Gerado em {d.get('scanned_at', '')}", "WinShield Pro"]
+    meta = [m for m in meta if m]
+    header = f"{title}\n" + "   ".join(meta) + "\n"
     txt = [header, "=" * 78]
     for name, rows in sections:
         txt.append(f"\n[{name}]")
@@ -684,7 +696,7 @@ def _write_reports(folder, basename, title, d, sections):
 .meta{{color:#666;margin:4px 0 24px}}h2{{font-size:15px;margin:26px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px}}
 table{{border-collapse:collapse;width:100%;font-size:13px}}th{{text-align:left;width:32%;color:#555;font-weight:600;vertical-align:top}}
 th,td{{padding:4px 8px;border-bottom:1px solid #f0f0f0;word-break:break-all}}</style></head><body>
-<h1>{e(title)}</h1><div class="meta">Computador: {e(d.get('computer', ''))} · Gerado em {e(d.get('scanned_at', ''))} · WinShield Pro</div>
+<h1>{e(title)}</h1><div class="meta">{e(" · ".join(meta))}</div>
 {''.join(body)}</body></html>"""
     html_path = os.path.join(folder, basename + ".html")
     with open(html_path, "w", encoding="utf-8") as f:

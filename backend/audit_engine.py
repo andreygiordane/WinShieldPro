@@ -12,6 +12,12 @@ except ImportError:  # pragma: no cover
     winreg = None
 
 
+SERVICE_STATES = {"Running": "Em execução", "Stopped": "Parado", "Paused": "Pausado",
+                  "Start Pending": "Iniciando", "Stop Pending": "Parando"}
+SERVICE_START = {"Auto": "automático", "Manual": "manual", "Disabled": "desativado",
+                 "Boot": "na inicialização", "System": "pelo sistema"}
+
+
 class AuditEngine:
     """Auditoria de softwares instalados, componentes ocultos, AppX, serviços e inicialização."""
 
@@ -65,6 +71,7 @@ class AuditEngine:
                             "status": "Oculto (SystemComponent=1)" if is_hidden else "Visível",
                             "caminho": uninstall,
                             "install_location": install_loc,
+                            "display_icon": AuditEngine._get(ak, "DisplayIcon") or "",
                             "is_hidden": is_hidden,
                             "root": root_name,
                             "subkey": full,
@@ -129,11 +136,15 @@ class AuditEngine:
             if len(p) >= 4:
                 low = p[3].lower()
                 sus = ("\\temp" in low) or ("\\appdata" in low)
+                state = SERVICE_STATES.get(p[1], p[1])
+                start = SERVICE_START.get(p[2], p[2])
                 results.append({
+                    # Serviços não têm versão nem editor nesta consulta: estado e tipo de
+                    # início ficam na coluna de status, onde pertencem
                     "nome": p[4] if len(p) > 4 and p[4] else p[0], "service": p[0],
-                    "versao": p[2], "editor": p[1], "instalado": "—", "tamanho": 0,
+                    "versao": "—", "editor": "—", "instalado": "—", "tamanho": 0,
                     "origem": "Serviço Windows",
-                    "status": "Suspeito (AppData/Temp)" if sus else f"Serviço ({p[1]})",
+                    "status": "Suspeito (AppData/Temp)" if sus else f"{state} · início {start}",
                     "caminho": p[3], "is_hidden": sus, "kind": "service",
                 })
         LogManager.add_log(f"[OK] {len(results)} serviços de terceiros mapeados.")

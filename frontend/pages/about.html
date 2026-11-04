@@ -1,0 +1,36 @@
+<section id="view-about" class="view-panel hidden ws-page">
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <img src="imagens/logo.png" alt="" class="w-14 h-14 object-contain flex-shrink-0">
+                            <div class="min-w-0">
+                                <h2 class="ws-hero-title">WinShield Pro <span id="about-version" class="ws-app-version">—</span></h2>
+                                <div class="ws-card-sub">Diagnóstico, manutenção e suporte técnico para Windows · Desenvolvido por Andrey Giordane</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="openAppLink('repo')" class="ws-btn">GitHub</button>
+                            <button onclick="openAppLink('issues')" class="ws-btn">Relatar problema</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ws-card">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="ws-card-title">Versão mais recente</div>
+                            <div id="about-update-text" class="ws-card-sub">Consultando o GitHub…</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="checkAppLatest()" class="ws-btn">Verificar novamente</button>
+                            <button onclick="openAppLink('releases')" id="about-update-btn" class="ws-btn">Ver versões</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ws-card">
+                    <div class="ws-card-title mb-1">Instalação</div>
+                    <dl id="about-details" class="ws-kv"><dt>—</dt><dd>Carregando…</dd></dl>
+                </div>
+            </section>

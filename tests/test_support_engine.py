@@ -29,8 +29,16 @@ def test_outlook_account_imap_from_registry_values():
         "SMTP Server": utf16("smtp.empresa.com.br"), "SMTP Port": 587, "SMTP Secure Connection": 2,
     })
     assert acc["type"] == "IMAP"
-    assert acc["incoming"] == {"host": "imap.empresa.com.br", "port": 993, "security": "SSL/TLS", "user": "joao@empresa.com.br"}
+    assert acc["incoming"] == {"host": "imap.empresa.com.br", "port": 993, "security": "SSL/TLS", "user": ""}
     assert acc["outgoing"]["security"] == "STARTTLS"
+
+
+def test_outlook_account_values_not_set_are_not_invented():
+    utf16 = lambda t: (t + "\x00").encode("utf-16-le")
+    acc = s._outlook_account({"Account Name": utf16("a@b.com"), "Email": utf16("a@b.com"),
+                              "POP3 Server": utf16("pop.b.com"), "SMTP Server": utf16("smtp.b.com")})
+    assert acc["incoming"] == {"host": "pop.b.com", "port": None, "security": s.NOT_SET, "user": ""}
+    assert acc["outgoing"]["port"] is None and acc["outgoing"]["user"] == ""
 
 
 def test_outlook_account_exchange_inferred_and_internal_services_skipped():
@@ -62,7 +70,8 @@ def test_thunderbird_prefs(tmp_path, monkeypatch):
     profiles = s._thunderbird()
     assert len(profiles) == 1 and len(profiles[0]["accounts"]) == 1  # "Pastas locais" fica de fora
     acc = profiles[0]["accounts"][0]
-    assert acc["incoming"] == {"host": "imap.gmail.com", "port": 993, "security": "SSL/TLS", "user": "ana@gmail.com"}
+    # Porta não gravada no prefs.js = None (porta padrão), nunca um número presumido
+    assert acc["incoming"] == {"host": "imap.gmail.com", "port": None, "security": "SSL/TLS", "user": "ana@gmail.com"}
     assert acc["outgoing"]["host"] == "smtp.gmail.com" and acc["outgoing"]["port"] == 465
 
 
