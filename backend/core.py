@@ -8,7 +8,7 @@ except ImportError:  # pragma: no cover
 
 IS_WINDOWS = (sys.platform == "win32")
 APP_NAME = "WinShield Pro"
-APP_VERSION = "7.7.1"
+APP_VERSION = "7.8.0"
 
 
 def is_admin():

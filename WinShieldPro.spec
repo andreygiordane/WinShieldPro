@@ -63,20 +63,20 @@ a = Analysis(
 )
 pyz = PYZ(a.pure)
 
-# Executável único e portátil (não precisa instalar): tudo vai dentro do WinShieldPro.exe.
+# Dois modos de build (o build_exe.bat gera os dois):
+#  - padrão (pasta/onedir): usado pelo instalador. O app abre direto, sem extrair
+#    dezenas de MB no %TEMP% a cada execução -> abertura bem mais rápida.
+#  - WINSHIELD_PORTABLE=1 (arquivo único): WinShieldPro.exe portátil, para pendrive.
 # Sem UPX: executáveis comprimidos com UPX disparam muito mais falsos positivos de antivírus.
-exe = EXE(
-    pyz,
-    a.scripts,
-    a.binaries,
-    a.datas,
-    [],
+import os
+PORTABLE = os.environ.get('WINSHIELD_PORTABLE') == '1'
+
+_exe_options = dict(
     name='WinShieldPro',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -87,3 +87,9 @@ exe = EXE(
     icon='imagens/icone.ico',
     version='version_info.txt',
 )
+
+if PORTABLE:
+    exe = EXE(pyz, a.scripts, a.binaries, a.datas, [], runtime_tmpdir=None, **_exe_options)
+else:
+    exe = EXE(pyz, a.scripts, [], exclude_binaries=True, **_exe_options)
+    coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='WinShieldPro')

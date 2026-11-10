@@ -100,7 +100,7 @@ lucide.createIcons();
                 "console.save": "Salvar .log",
                 "console.clear": "Limpar",
                 "splash.welcome": "Bem-vindo ao WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.8.0",
                 "splash.lang_title": "Selecione seu Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetria de hardware e sensores...",
@@ -435,7 +435,7 @@ lucide.createIcons();
                 "console.save": "Save Log (.log)",
                 "console.clear": "Clear",
                 "splash.welcome": "Welcome to WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.8.0",
                 "splash.lang_title": "Select your Language",
                 "splash.status_loading1": "INITIALIZING SYSTEM...",
                 "splash.status_loading2": "Syncing hardware telemetry and sensors...",
@@ -770,7 +770,7 @@ lucide.createIcons();
                 "console.save": "Guardar Registro (.log)",
                 "console.clear": "Limpiar",
                 "splash.welcome": "Bienvenido a WinShield Pro",
-                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.7.1",
+                "splash.badge": "WINSHIELD PRO ENTERPRISE v7.8.0",
                 "splash.lang_title": "Seleccione su Idioma",
                 "splash.status_loading1": "INICIANDO SISTEMA...",
                 "splash.status_loading2": "Sincronizando telemetría de hardware y sensores...",
@@ -1267,12 +1267,21 @@ lucide.createIcons();
             const pctText = document.getElementById('splash-pct-text');
             const statusText = document.getElementById('splash-status-text');
 
-            runSplashChecks();
+            const checks = runSplashChecks();
 
             if (!manual) {
+                // Limite de segurança, caso alguma leitura do sistema demore demais
                 splashTimer = setTimeout(() => {
                     closeStartupBanner();
                 }, 10000);
+                // Fecha logo após os dados reais terminarem de carregar
+                checks.finally(() => {
+                    if (!splashTimer) return;
+                    clearTimeout(splashTimer);
+                    splashTimer = setTimeout(() => {
+                        closeStartupBanner();
+                    }, 1200);
+                });
             }
         }
 

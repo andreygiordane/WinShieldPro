@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "winshield-pro"
-version = "7.7.1"
+version = "7.8.0"
 description = "WinShield Pro Enterprise - Sistema Profissional de Otimização e Estabilidade para Windows"
 authors = [{ name = "Andrey Giordane" }]
 license = { text = "Proprietary" }
